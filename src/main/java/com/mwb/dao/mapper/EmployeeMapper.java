@@ -1,4 +1,4 @@
-package com.mwb.dao.mappers;
+package com.mwb.dao.mapper;
 
 import com.mwb.dao.model.Employee;
 

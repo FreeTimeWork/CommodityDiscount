@@ -1,9 +1,12 @@
 package com.mwb.dao.model;
 
+import java.io.Serializable;
+
 /**
  * Created by MengWeiBo on 2017-03-28
  */
-public class Employee {
+public class Employee implements Serializable{
+    private static final long serialVersionUID = 1L;
 
     private String password;
 

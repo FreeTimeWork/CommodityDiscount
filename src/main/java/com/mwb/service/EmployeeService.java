@@ -1,6 +1,6 @@
 package com.mwb.service;
 
-import com.mwb.dao.mappers.EmployeeMapper;
+import com.mwb.dao.mapper.EmployeeMapper;
 import com.mwb.dao.model.Employee;
 import com.mwb.service.api.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
-package com.mwb.controller;
+package com.mwb.controller.employee;
 
-import com.alibaba.fastjson.JSONObject;
-import com.mwb.dao.model.ContentType;
+import com.mwb.controller.employee.api.EmployeeResponse;
+import com.mwb.controller.api.ContentType;
 import com.mwb.dao.model.Employee;
 import com.mwb.dao.model.Log;
 import com.mwb.service.api.IEmployeeService;
@@ -44,11 +44,12 @@ public class EmployeeController {
     }
     @ResponseBody
     @RequestMapping(value = "/login1", produces = ContentType.APPLICATION_JSON_UTF8)
-    public String  Login() {
+    public EmployeeResponse Login() {
+        EmployeeResponse response = new EmployeeResponse();
         Employee employee1 = new Employee();
         employee1.setPassword("12");
-
-        return JSONObject.toJSONString(employee1);
+        response.setEmployee(employee1);
+        return response;
     }
 
 }
