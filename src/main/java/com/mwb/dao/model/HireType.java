@@ -3,5 +3,5 @@ package com.mwb.dao.model;
 /**
  * Created by MengWeiBo on 2017-03-29
  */
-public enum ProductType {
+public class HireType {
 }
