@@ -1,9 +1,9 @@
 package com.mwb.service.api;
 
-import com.mwb.dao.model.Employee;
+import com.mwb.dao.model.AdminEmployee;
 
 public interface IEmployeeService {
 
-	public Employee login(Employee admin);
+	public AdminEmployee login(AdminEmployee admin);
 
 }
