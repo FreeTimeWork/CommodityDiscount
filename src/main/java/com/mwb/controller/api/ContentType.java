@@ -1,4 +1,4 @@
-package com.mwb.dao.model;
+package com.mwb.controller.api;
 
 /**
  * Created by MengWeiBo on 2017-03-28
