@@ -1,17 +1,17 @@
 package com.mwb.controller.employee;
 
-import com.mwb.controller.employee.api.EmployeeResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import com.mwb.controller.api.ContentType;
-import com.mwb.dao.model.Employee;
+import com.mwb.controller.employee.api.EmployeeResponse;
+import com.mwb.dao.model.AdminEmployee;
 import com.mwb.dao.model.Log;
 import com.mwb.service.api.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * 后台
@@ -26,10 +26,10 @@ public class EmployeeController {
     private IEmployeeService adminService;
 
     @RequestMapping("/login")
-    public String Login(Employee employee, HttpServletRequest request) {
+    public String Login(AdminEmployee adminEmployee, HttpServletRequest request) {
         LOG.info("Login into ");
-//        employee.setPassword(Md5);
-        Employee manager = adminService.login(employee);
+//        adminEmployee.setPassword(Md5);
+        AdminEmployee manager = adminService.login(adminEmployee);
         if (manager == null) {
             LOG.info("admin =null ");
             request.setAttribute("err", "err");
@@ -46,9 +46,9 @@ public class EmployeeController {
     @RequestMapping(value = "/login1", produces = ContentType.APPLICATION_JSON_UTF8)
     public EmployeeResponse Login() {
         EmployeeResponse response = new EmployeeResponse();
-        Employee employee1 = new Employee();
-        employee1.setPassword("12");
-        response.setEmployee(employee1);
+        AdminEmployee adminEmployee1 = new AdminEmployee();
+        adminEmployee1.setPassword("12");
+        response.setAdminEmployee(adminEmployee1);
         return response;
     }
 
