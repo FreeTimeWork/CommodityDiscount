@@ -1,6 +1,6 @@
 package com.mwb.service;
 
-import com.mwb.dao.mapper.EmployeeMapper;
+import com.mwb.dao.mapper.AdminEmployeeMapper;
 import com.mwb.dao.model.AdminEmployee;
 import com.mwb.service.api.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class EmployeeService implements IEmployeeService {
 
     @Autowired
-    private EmployeeMapper employeeMapper;
+    private AdminEmployeeMapper adminEmployeeMapper;
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     public AdminEmployee login(AdminEmployee adminEmployee) {
