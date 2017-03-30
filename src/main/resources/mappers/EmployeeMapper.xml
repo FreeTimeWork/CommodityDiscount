@@ -58,7 +58,6 @@
 			keyProperty="id" >
 
 		INSERT INTO t_employee (
-		id,
 		full_name,
 		gender,
 		mobile,
@@ -68,14 +67,15 @@
 		position_id,
 		status_id
 		) VALUES (
-		#{id, javaType=string, jdbcType=CHAR},
 		#{fullName, javaType=string, jdbcType=CHAR},
 		#{gender.code, javaType=string, jdbcType=CHAR},
 		#{mobile, javaType=string, jdbcType=CHAR},
 		#{password, javaType=string, jdbcType=CHAR},
 		#{createTime, javaType=date, jdbcType=TIMESTAMP},
-		#{group.id, javaType=int, jdbcType=INTEGER}
-		#{position.id, javaType=int, jdbcType=INTEGER}
+		<if test="group == null">
+			NULL ,
+		</if>
+		#{position.id, javaType=int, jdbcType=INTEGER},
 		#{status.id, javaType=int, jdbcType=INTEGER}
 		)
 	</insert>

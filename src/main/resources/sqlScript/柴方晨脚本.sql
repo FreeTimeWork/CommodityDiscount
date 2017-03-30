@@ -35,7 +35,7 @@ CREATE TABLE `t_position` (
 -- 小组
 DROP TABLE IF EXISTS `t_group`;
 CREATE TABLE `t_group` (
-  `id` char(16) NOT NULL,
+  `id` int(16) unsigned NOT NULL AUTO_INCREMENT,
   `code` char(64) NOT NULL,
   `name` char(32) NOT NULL,
   PRIMARY KEY (`id`),
@@ -46,12 +46,12 @@ CREATE TABLE `t_group` (
 -- 用户表
 DROP TABLE IF EXISTS `t_employee`;
 CREATE TABLE `t_employee` (
-  `id` char(16) NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `full_name` varchar(32) NOT NULL,
   `gender` char(1) NOT NULL,
 	`mobile` char(16) NOT NULL,
 	`password` char(128) NOT NULL,
-	`group_id` char(16) DEFAULT NULL,
+	`group_id` int(16) unsigned DEFAULT NULL,
 	`position_id` int(10) unsigned NOT NULL,
   `create_time` datetime NOT NULL,
   `status_id` int(10) unsigned NOT NULL,
