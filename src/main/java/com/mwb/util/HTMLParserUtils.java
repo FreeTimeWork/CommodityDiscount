@@ -1,9 +1,7 @@
 package com.mwb.util;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.tools.doclets.internal.toolkit.util.TextTag;
 import org.htmlparser.Parser;
 import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.nodes.TagNode;

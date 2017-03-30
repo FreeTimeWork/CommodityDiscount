@@ -7,6 +7,15 @@ import com.mwb.dao.model.AdminEmployee;
  */
 public class EmployeeResponse {
     private AdminEmployee adminEmployee;
+    private String object;
+
+    public String getObject() {
+        return object;
+    }
+
+    public void setObject(String object) {
+        this.object = object;
+    }
 
     public AdminEmployee getAdminEmployee() {
         return adminEmployee;

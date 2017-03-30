@@ -3,10 +3,12 @@ package com.mwb.controller.employee;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.alibaba.fastjson.JSONArray;
 import com.mwb.controller.api.ContentType;
 import com.mwb.controller.employee.api.EmployeeResponse;
 import com.mwb.dao.model.AdminEmployee;
 import com.mwb.dao.model.Log;
+import com.mwb.dao.model.employee.Employee;
 import com.mwb.service.api.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,6 +50,9 @@ public class EmployeeController {
         EmployeeResponse response = new EmployeeResponse();
         AdminEmployee adminEmployee1 = new AdminEmployee();
         adminEmployee1.setPassword("12");
+        Employee employee = adminService.getEmployeeById();
+        String str = JSONArray.toJSONString(employee);
+        response.setObject(str);
         response.setAdminEmployee(adminEmployee1);
         return response;
     }

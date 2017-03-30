@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mwb.dao.mapper.EmployeeMapper">
+
+
+	<resultMap
+			id="employeeResult"
+			type="Employee" >
+		<id property="id" column="employee_id" />
+		<result property="fullName" column="employee_full_name" />
+		<result property="gender" column="employee_gender" jdbcType="CHAR" javaType="Gender" />
+		<result property="mobile" column="employee_mobile" />
+		<result property="password" column="employee_password" />
+		<result property="createTime" column="employee_create_time" />
+		<result property="status" column="employee_status" javaType="EmployeeStatus" typeHandler="EnumIdTypeHandler" />
+
+		<!--<association property="group" column="employee_group"-->
+					 <!--javaType="Group" resultMap="groupResult" />-->
+		<!--<association property="position" column="employee_position"-->
+					 <!--javaType="Position" resultMap="positionResult" />-->
+	</resultMap>
+
+
+	
+	<sql id="pagingLimit">
+		<include refid="com.mwb.dao.mapper.CommonMapper.pagingLimit"/>
+	</sql>
+
+
+	<sql id="employeeColumns">
+		ae.id AS employee_id,
+		ae.full_name AS employee_full_name,
+		ae.gender AS employee_gender,
+		ae.mobile AS employee_mobile,
+		ae.password AS employee_password,
+		ae.create_time AS employee_create_time,
+		ae.group_id AS employee_group,
+		ae.position_id AS employee_position,
+		ae.status_id AS employee_status
+	</sql>
+
+<select id="selectEmployeeById" resultMap="employeeResult" parameterType="map">
+	SELECT
+	<include refid="employeeColumns"/>
+	FROM
+		t_employee ae
+	<where>
+		ae.id = #{id, javaType=string, jdbcType=CHAR}
+	</where>
+
+</select>
+	<insert
+			id="insertEmployee"
+			parameterType="Employee"
+			useGeneratedKeys="true"
+			keyProperty="id" >
+
+		INSERT INTO t_employee (
+		full_name,
+		gender,
+		mobile,
+		password,
+		create_time,
+		group_id,
+		position_id,
+		status_id
+		) VALUES (
+		#{fullName, javaType=string, jdbcType=CHAR},
+		#{gender.code, javaType=string, jdbcType=CHAR},
+		#{mobile, javaType=string, jdbcType=CHAR},
+		#{password, javaType=string, jdbcType=CHAR},
+		#{createTime, javaType=date, jdbcType=TIMESTAMP},
+		<if test="group == null">
+			NULL ,
+		</if>
+		#{position.id, javaType=int, jdbcType=INTEGER},
+		#{status.id, javaType=int, jdbcType=INTEGER}
+		)
+	</insert>
+
+	<update
+			id="updateEmployee"
+			parameterType="Employee" >
+
+		UPDATE
+		t_employee
+		<set>
+			<if test="fullName != null">
+				full_name = #{fullName, javaType=string, jdbcType=CHAR},
+			</if>
+			<if test="gender != null">
+				gender = #{gender.code, javaType=string, jdbcType=CHAR},
+			</if>
+			<if test="mobile != null">
+				mobile = #{mobile, javaType=string, jdbcType=CHAR},
+			</if>
+			<if test="password != null">
+				password = #{password, javaType=string, jdbcType=CHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime, javaType=date, jdbcType=TIMESTAMP},
+			</if>
+			<if test="position != null">
+				position_id = #{position.id, javaType=int, jdbcType=INTEGER},
+			</if>
+			<if test="group != null">
+				group_id = #{group.id, javaType=string, jdbcType=CHAR},
+			</if>
+			<if test="status != null">
+				status_id = #{status.id, javaType=int, jdbcType=INTEGER},
+			</if>
+		</set>
+		WHERE
+		id = #{id, javaType=string, jdbcType=CHAR}
+	</update>
+	
+</mapper>   
