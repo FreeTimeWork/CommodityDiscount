@@ -210,13 +210,14 @@ public class ParserService {
         String url = new String("https://item.taobao.com/item.htm?id=546128980616&ali_refid=a3_430676_1006:1108619018:N:%E7%94%B7%E5%A4%B9%E5%85%8B:b894320bfe3f73f89beec3bc62ea1ac6&ali_trackid=1_b894320bfe3f73f89beec3bc62ea1ac6&spm=a231o.7712113/a.1004.245.MItKnY&ali_refid=a3_430676_1006:1108619018:N:%E7%94%B7%E5%A4%B9%E5%85%8B:b894320bfe3f73f89beec3bc62ea1ac6&ali_trackid=1_b894320bfe3f73f89beec3bc62ea1ac6&spm=a231o.7712113/a.1004.245.MItKnY");
 //        url = "https://detail.tmall.com/item.htm?spm=a222r.8295401.7232537034.2.HkcdqB&acm=lb-zebra-223892-1815928.1003.4.1549547&id=544701354389&scm=1003.4.lb-zebra-223892-1815928.ITEM_544701354389_1549547&sku_properties=5919063:6536025";
 //        url = "https://detail.tmall.com/item.htm?spm=a220o.1000855.1998025129.1.sgOfpO&abtest=_AB-LR32-PR32&pvid=2d85f8f3-f8e2-4f33-80db-704408bcfb6f&pos=1&abbucket=_AB-M32_B15&acm=03054.1003.1.1539344&id=530414781951&scm=1007.12144.78696.23864_42343&sku_properties=5919063:6536025;12304035:116177;122216431:27772";
+       url ="https://uland.taobao.com/coupon/edetail?activityId=38ab6234272945bf912906efbe1d293e&pid=mm_54519761_6274140_21634502&itemId=545129332754&src=mlz_mlztk&dx=1&ali_trackid=2:mm_54519761_6274140_21634502:1490882477_3k9_1290267276";
 //        ParserService parserService = new ParserService(url);
-//        Product product = new Product();
-//
+        Product product = new Product();
+
 //        parserService.setTmallProductName(product);
-////        parserService.setTaoBaoStoreScore(product);
+//        parserService.setTaoBaoStoreScore(product);
 //        parserService.setProductUrl(product);
-////        System.out.println(product.toString());
+//        System.out.println(product.toString());
 
 
         getContent(url);
