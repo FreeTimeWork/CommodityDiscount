@@ -23,9 +23,9 @@
     <!-- 配置文件所在位置 -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:spring.xml,
-            classpath:mybatis-config.xml,
-            classpath:spring-mybatis.xml</param-value>
+        <param-value>classpath:config/spring.xml,
+            classpath:config/mybatis-config.xml,
+            classpath:config/spring-mybatis.xml</param-value>
     </context-param>
     <!-- Spring配置（监听器） -->
     <listener>
@@ -38,7 +38,7 @@
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>classpath:spring-mvc.xml</param-value>
+            <param-value>classpath:config/spring-mvc.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>

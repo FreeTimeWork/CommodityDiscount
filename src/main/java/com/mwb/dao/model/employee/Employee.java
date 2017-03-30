@@ -14,8 +14,8 @@ public class Employee {
     private Gender gender;
     private String mobile;
     private String password;
-    private String groupId;
-    private Position positionId;
+    private String group;
+    private Position position;
     private Date createTime;
     private EmployeeStatus status;
 
@@ -59,20 +59,20 @@ public class Employee {
         this.password = password;
     }
 
-    public String getGroupId() {
-        return groupId;
+    public String getGroup() {
+        return group;
     }
 
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
+    public void setGroup(String group) {
+        this.group = group;
     }
 
-    public Position getPositionId() {
-        return positionId;
+    public Position getPosition() {
+        return position;
     }
 
-    public void setPositionId(Position positionId) {
-        this.positionId = positionId;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     public Date getCreateTime() {
