@@ -14,9 +14,9 @@ public class Employee {
     private Gender gender;
     private String mobile;
     private String password;
+    private Date createTime;
     private String group;
     private Position position;
-    private Date createTime;
     private EmployeeStatus status;
 
     public String getId() {

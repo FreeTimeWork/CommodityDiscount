@@ -16,11 +16,12 @@
 		<result property="createTime" column="employee_create_time" />
 		<result property="status" column="employee_status" javaType="EmployeeStatus" typeHandler="EnumIdTypeHandler" />
 
-		<association property="group" column="employee_group"
-					 javaType="Group" resultMap="groupResult" />
-		<association property="position" column="employee_position"
-					 javaType="Position" resultMap="positionResult" />
+		<!--<association property="group" column="employee_group"-->
+					 <!--javaType="Group" resultMap="groupResult" />-->
+		<!--<association property="position" column="employee_position"-->
+					 <!--javaType="Position" resultMap="positionResult" />-->
 	</resultMap>
+
 
 	
 	<sql id="pagingLimit">
@@ -28,19 +29,28 @@
 	</sql>
 
 
-	<sql id="employeeColumns"> 
+	<sql id="employeeColumns">
 		ae.id AS employee_id,
 		ae.full_name AS employee_full_name,
 		ae.gender AS employee_gender,
 		ae.mobile AS employee_mobile,
 		ae.password AS employee_password,
 		ae.create_time AS employee_create_time,
-		ae.status_id AS employee_status,
 		ae.group_id AS employee_group,
 		ae.position_id AS employee_position,
+		ae.status_id AS employee_status
 	</sql>
 
+<select id="selectEmployeeById" resultMap="employeeResult" parameterType="map">
+	SELECT
+	<include refid="employeeColumns"/>
+	FROM
+		t_employee ae
+	<where>
+		ae.id = #{id, javaType=string, jdbcType=CHAR}
+	</where>
 
+</select>
 	<insert
 			id="insertEmployee"
 			parameterType="Employee"
