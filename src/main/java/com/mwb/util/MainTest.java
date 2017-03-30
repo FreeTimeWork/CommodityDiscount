@@ -41,7 +41,7 @@ public class MainTest {
 //            url = new URL(uul);
 //
 ////            //天猫
-//            url = new URL("https://detail.tmall.com/item.htm?spm=a3211.0-7235607.commonSinglePic_1490172710949_24.3.cZNCa7&id=529213042920&rn=ba7b37c6cc996baa465ea750f4acb665&abbucket=3&gccpm=8062126.300.2.subject-1008&sta=gccpm:8062126.300.2.subject-1008&track_params={%22gccpm%22:%228062126.300.2.subject-1008%22}");
+            url = new URL("https://detail.tmall.com/item.htm?spm=a3211.0-7235607.commonSinglePic_1490172710949_24.3.cZNCa7&id=529213042920&rn=ba7b37c6cc996baa465ea750f4acb665&abbucket=3&gccpm=8062126.300.2.subject-1008&sta=gccpm:8062126.300.2.subject-1008&track_params={%22gccpm%22:%228062126.300.2.subject-1008%22}");
 
 
             //打开URL
@@ -61,11 +61,11 @@ public class MainTest {
                 StringBuffer sb = new StringBuffer();
                 while ((line = reader.readLine()) != null) {
 
-//                    System.out.println(line);
+                    System.out.println(line);
                     sb.append(line);
                 }
 //                System.out.println(HTMLParserUtils.getClickUrlFromReqUrl(sb.toString()));
-                System.out.println(HTMLParserUtils.getClickUrlListFromIFrame(sb.toString()));
+//                System.out.println(HTMLParserUtils.getClickUrlListFromIFrame(sb.toString()));
 
             } else {
 

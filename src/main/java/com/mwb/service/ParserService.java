@@ -7,8 +7,8 @@ import org.htmlparser.Parser;
 import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.nodes.TagNode;
 import org.htmlparser.tags.LinkTag;
+import org.htmlparser.tags.Span;
 import org.htmlparser.util.NodeList;
-import org.htmlparser.util.ParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,19 +50,20 @@ public class ParserService {
                 reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "gbk"));
                 while ((line = reader.readLine()) != null) {
                     sb.append(line);
+                    System.out.println(line);
                 }
             } else {
                 LOG.error("获取不到网页的源码，服务器响应代码为：" + responseCode);
 
                 throw new RuntimeException();
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             LOG.error("获取不到网页的源码,出现异常：" + e);
         }
         return sb.toString();
     }
 
-    public void setStoreScore(Product product) throws Exception {
+    public void setTaoBaoStoreScore(Product product) throws Exception {
         if (product.getStore() == null) {
             Store store = new Store();
             product.setStore(store);
@@ -88,9 +89,39 @@ public class ParserService {
 
                 if (title.contains("描述")) {
                     store.setDescriptionScore(new BigDecimal(score));
-                }else if (title.contains("服务")) {
+                } else if (title.contains("服务")) {
                     store.setServiceScore(new BigDecimal(score));
-                }else if (title.contains("物流")) {
+                } else if (title.contains("物流")) {
+                    store.setSpeedScore(new BigDecimal(score));
+                }
+            }
+        }
+    }
+
+    public void setTmallStoreScore(Product product) throws Exception {
+
+        Store store = product.getStore();
+
+        Parser parser = Parser.createParser(htmlBody, "UTF-8");
+        TagNameFilter filter = new TagNameFilter("span");
+
+        NodeList nodes = parser.extractAllNodesThatMatch(filter);
+
+        for (int i = 0; i < nodes.size(); ++i) {
+            TagNode tn = (TagNode) nodes.elementAt(i);
+            String clkUrl = tn.getAttribute("class");
+
+            if ("shopdsr-score-con".equals(clkUrl)) {
+                String score = ((Span) tn).getChild(0).getText().trim();
+
+                TagNode tagNode = (TagNode) tn.getParent().getParent();
+                String title = tagNode.toString();
+                System.out.println(title);
+                if (title.contains("描 述")) {
+                    store.setDescriptionScore(new BigDecimal(score));
+                } else if (title.contains("服 务")) {
+                    store.setServiceScore(new BigDecimal(score));
+                } else if (title.contains("物 流")) {
                     store.setSpeedScore(new BigDecimal(score));
                 }
             }
@@ -99,6 +130,10 @@ public class ParserService {
 
     public void setProductUrl(Product product) {
         String id = "";
+        if (product.getStore() == null) {
+            Store store = new Store();
+            product.setStore(store);
+        }
         if (urlStr.contains("&id=")) {
             String urlSpilts[] = urlStr.split("&id=");
             id = urlSpilts[urlSpilts.length - 1].split("&")[0];
@@ -107,7 +142,7 @@ public class ParserService {
             String urlSpilts[] = urlStr.split("\\?id=");
             id = urlSpilts[urlSpilts.length - 1].split("&")[0];
             product.getStore().setType(StoreType.TAOBAO);
-        }else {
+        } else {
             product.getStore().setType(StoreType.OTHER);
         }
         product.setProductId(id);
@@ -119,8 +154,9 @@ public class ParserService {
         ParserService parserService = new ParserService(url);
         Product product = new Product();
 
-        parserService.setStoreScore(product);
+        parserService.setTaoBaoStoreScore(product);
         parserService.setProductUrl(product);
+        parserService.setTmallStoreScore(product);
         System.out.println(product.toString());
     }
 }
