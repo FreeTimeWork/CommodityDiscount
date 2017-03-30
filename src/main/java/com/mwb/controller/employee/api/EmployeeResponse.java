@@ -1,18 +1,27 @@
 package com.mwb.controller.employee.api;
 
-import com.mwb.dao.model.Employee;
+import com.mwb.dao.model.AdminEmployee;
 
 /**
  * Created by MengWeiBo on 2017-03-28
  */
 public class EmployeeResponse {
-    private Employee employee;
+    private AdminEmployee adminEmployee;
+    private String object;
 
-    public Employee getEmployee() {
-        return employee;
+    public String getObject() {
+        return object;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setObject(String object) {
+        this.object = object;
+    }
+
+    public AdminEmployee getAdminEmployee() {
+        return adminEmployee;
+    }
+
+    public void setAdminEmployee(AdminEmployee adminEmployee) {
+        this.adminEmployee = adminEmployee;
     }
 }
