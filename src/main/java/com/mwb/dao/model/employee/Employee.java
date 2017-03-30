@@ -90,4 +90,19 @@ public class Employee {
     public void setStatus(EmployeeStatus status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id='" + id + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", gender=" + gender +
+                ", mobile='" + mobile + '\'' +
+                ", password='" + password + '\'' +
+                ", createTime=" + createTime +
+                ", group='" + group + '\'' +
+                ", position=" + position +
+                ", status=" + status +
+                '}';
+    }
 }

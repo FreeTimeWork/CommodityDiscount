@@ -1,4 +1,5 @@
 import com.mwb.dao.mapper.EmployeeMapper;
+import com.mwb.dao.model.employee.Employee;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,8 +13,8 @@ public class EmployeeMapperTest extends AbstractPersistenceTest {
 
     @Test
     public  void  test(){
-        employeeMapper.selectEmployeeById("1");
-        System.out.println("hello");
+        Employee employee = employeeMapper.selectEmployeeById("1");
+        System.out.println(employee);
     }
 
 

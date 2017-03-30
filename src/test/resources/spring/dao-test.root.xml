@@ -14,7 +14,7 @@
 	
 	<context:annotation-config />
 	
-	<context:component-scan base-package="com.mwb.dao.mapper" />
+	<context:component-scan base-package="com.mwb" />
 
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -27,8 +27,7 @@
 	
 	<bean 
 		id="dataSource" 
-		class="com.mchange.v2.c3p0.ComboPooledDataSource"
-		destroy-method="close" >
+		class="com.mchange.v2.c3p0.ComboPooledDataSource" >
 
 		<property name="driverClass">
 			<value>${database.driver.class}</value>
@@ -89,6 +88,11 @@
 		<property name="configLocation" value="classpath:configs/mybatis-config.xml" />
 		<property name="mapperLocations" value="classpath*:mappers/**/*.xml" />
 	</bean>
+	<bean
+			id="mapperScannerConfigurer"
+			class="com.mwb.util.mybatis.BasePackageRetrievableMapperScannerConfigurer">
 
+		<property name="basePackage" value="com.mwb.dao.mapper" />
+	</bean>
 
 </beans>
