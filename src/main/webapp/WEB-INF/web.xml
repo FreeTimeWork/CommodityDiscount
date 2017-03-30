@@ -25,6 +25,7 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:configs/spring.xml,
             classpath:configs/mybatis-config.xml,
+            classpath:configs/scheduler.xml,
             classpath:configs/spring-mybatis.xml</param-value>
     </context-param>
     <!-- Spring配置（监听器） -->
