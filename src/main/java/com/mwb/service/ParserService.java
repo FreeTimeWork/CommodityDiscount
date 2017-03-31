@@ -1,8 +1,10 @@
 package com.mwb.service;
 
-import com.mwb.dao.model.Product;
-import com.mwb.dao.model.Store;
-import com.mwb.dao.model.StoreType;
+import com.alibaba.fastjson.JSONObject;
+import com.mwb.dao.model.product.Product;
+import com.mwb.dao.model.product.Store;
+import com.mwb.dao.model.product.StoreType;
+import com.mwb.http.SimpleHttpClient;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
@@ -28,6 +30,8 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by MengWeiBo on 2017-03-29
@@ -198,8 +202,6 @@ public class ParserService {
             String urlSpilts[] = urlStr.split("\\?id=");
             id = urlSpilts[urlSpilts.length - 1].split("&")[0];
             product.getStore().setType(StoreType.TAOBAO);
-        } else {
-            product.getStore().setType(StoreType.OTHER);
         }
         product.setProductId(id);
 
@@ -217,10 +219,20 @@ public class ParserService {
 ////        parserService.setTaoBaoStoreScore(product);
 //        parserService.setProductUrl(product);
 ////        System.out.println(product.toString());
+        SimpleHttpClient httpClient = new SimpleHttpClient(1, 10000, 10000);
+        Map<String, String> params = new HashMap<String, String>();
 
+        String sss = "https://uland.taobao.com/cp/coupon?activityId=38ab6234272945bf912906efbe1d293e&pid=mm_54519761_6274140_21634502&itemId=545129332754&src=mlz_mlztk&dx=1&ali_trackid=2%3Amm_54519761_6274140_21634502%3A1490936012_2k1_161224176";
+        String httpResponse = httpClient.get(sss, params, null);
+        JSONObject jsonObject = (JSONObject) JSONObject.parse(httpResponse);
+        jsonObject.get("");
+        System.out.println(jsonObject);
 
-        getContent(url);
+//        getContent(url);
     }
+
+
+
 
     //http://blog.csdn.net/sang1203/article/details/51286221
     public static String getContent(String url){
@@ -245,4 +257,5 @@ public class ParserService {
         }
         return content;
     }
+
 }

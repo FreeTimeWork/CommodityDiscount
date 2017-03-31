@@ -1,7 +1,7 @@
 package com.mwb.dao.filter;
 
 
-import com.mwb.dao.model.PagingData;
+import com.mwb.dao.model.comm.PagingData;
 
 /**
  * Created by MengWeiBo on 2017-03-28

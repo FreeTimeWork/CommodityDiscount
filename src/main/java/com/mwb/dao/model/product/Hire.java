@@ -1,4 +1,4 @@
-package com.mwb.dao.model;
+package com.mwb.dao.model.product;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -11,10 +11,13 @@ public class Hire implements Serializable {
 
     private Integer id;
     private BigDecimal ratio;           //佣金比例
+    private String planUrl;             //计划链接
+    private HireType type;              //佣金类型
+
+    //// TODO: 2017/3/31
     private BigDecimal receiveAmount;   //应收金额
     private BigDecimal paymentAmount;   //付款金额
     private BigDecimal useRatio;        //使用率
-    private HireType type;              //佣金类型
 
     public Integer getId() {
         return id;

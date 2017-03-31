@@ -1,4 +1,4 @@
-package com.mwb.dao.model;
+package com.mwb.dao.model.comm;
 
 import java.util.HashMap;
 import java.util.Map;
