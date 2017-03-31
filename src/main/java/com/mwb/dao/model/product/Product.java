@@ -1,6 +1,7 @@
 package com.mwb.dao.model.product;
 
 import com.mwb.dao.model.comm.Bool;
+import com.mwb.dao.model.employee.Employee;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
 import java.io.Serializable;
@@ -41,6 +42,7 @@ public class Product implements Serializable{
     private String createByName;        //提交人
     private Date createByTime;          //提交时间
 
+    private Employee employee;          //员工
     private Hire hire;                  //佣金
     private Store store;                //店铺
     private ProductStatus status;       //状态
@@ -238,6 +240,22 @@ public class Product implements Serializable{
 
     public void setHire(Hire hire) {
         this.hire = hire;
+    }
+
+    public Date getActivityTime() {
+        return activityTime;
+    }
+
+    public void setActivityTime(Date activityTime) {
+        this.activityTime = activityTime;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public Store getStore() {
