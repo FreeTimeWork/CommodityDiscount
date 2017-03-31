@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 实例化bean -->
+    <bean id= "testMethodQuartz" class ="com.mwb.scheduler.TestQuartz"/>
+
+    <!-- 配置MethodInvokingJobDetailFactoryBean -->
+    <bean id= "testTaskMethod"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="testMethodQuartz"/>
+        <property name="targetMethod" value="TestMethod"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+
+    <!-- 配置定时表达式 -->
+    <bean id= "testTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean" >
+        <property name="jobDetail" ref="testTaskMethod" />
+        <!-- 每一分钟执行一次 -->
+        <property name="cronExpression" value="0 0/1 * * * ?" />
+    </bean>
+
+
+    <!-- 实例化bean -->
+    <bean id= "secondMethodQuartz" class ="com.mwb.scheduler.SecondQuartz"/>
+
+    <!-- 配置MethodInvokingJobDetailFactoryBean -->
+    <bean id= "secondTaskMethod"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="secondMethodQuartz"/>
+        <property name="targetMethod" value="TestMethod"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+
+    <!-- 配置定时表达式 -->
+    <bean id= "secondTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean" >
+        <property name="jobDetail" ref="secondTaskMethod" />
+        <!-- 每一分钟执行一次 -->
+        <property name="cronExpression" value="0 0/1 * * * ?" />
+    </bean>
+
+    <!-- 配置调度工厂 -->
+    <bean id= "testSchedulerFactoryBean"
+          class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers" >
+            <list>
+                <ref bean="testTaskTrigger" />
+                <ref bean="secondTaskTrigger" />
+            </list>
+        </property>
+    </bean>
+</beans>
