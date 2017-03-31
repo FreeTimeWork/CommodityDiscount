@@ -1,6 +1,6 @@
-package com.mwb.dao.model;
+package com.mwb.dao.model.comm;
 
-import com.mwb.dao.model.IdInterface;
+import com.mwb.dao.model.comm.IdInterface;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 

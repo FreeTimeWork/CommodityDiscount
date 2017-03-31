@@ -1,4 +1,6 @@
-package com.mwb.dao.model;
+package com.mwb.dao.model.product;
+
+import com.mwb.dao.model.comm.IdInterface;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,8 +10,7 @@ import java.util.Map;
  */
 public enum StoreType implements IdInterface {
     TAOBAO(1, "TAOBAO", "淘宝"),
-    TMALL(2, "TMALL", "天猫"),
-    OTHER(3, "OTHER", "其他");
+    TMALL(2, "TMALL", "天猫");
 
     private static final Map<String, StoreType> code2StoreType;
 

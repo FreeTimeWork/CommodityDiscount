@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class EmployeeMapperTest extends AbstractPersistenceTest {
 
-    @Autowired
+//    @Autowired
     private EmployeeMapper employeeMapper;
 
 //    @Test
