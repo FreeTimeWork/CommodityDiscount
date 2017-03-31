@@ -9,7 +9,6 @@
 			id="positionResult"
 			type="Position" >
 		<id property="id" column="employee_id" />
-		<result property="code" column="position_code" />
 		<result property="name" column="position_name" />
 	</resultMap>
 
@@ -22,7 +21,6 @@
 
 	<sql id="positionColumns">
 		ap.id AS position_id,
-		ap.code AS position_code,
 		ap.name AS position_name
 	</sql>
 
@@ -43,10 +41,8 @@
 			keyProperty="id" >
 
 		INSERT INTO t_position (
-		code,
 		name
 		) VALUES (
-		#{code, javaType=string, jdbcType=CHAR},
 		#{name, javaType=string, jdbcType=CHAR}
 		)
 	</insert>
@@ -58,11 +54,8 @@
 		UPDATE
 		t_position
 		<set>
-			<if test="code != null">
-				code = #{code, javaType=string, jdbcType=CHAR},
-			</if>
 			<if test="name != null">
-				name = #{name, javaType=string, jdbcType=CHAR},
+				name = #{name, javaType=string, jdbcType=CHAR}
 			</if>
 		</set>
 		WHERE
