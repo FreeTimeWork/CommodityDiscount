@@ -12,7 +12,7 @@ public class Store implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
-    private Integer storeId; //卖家id
+    private String storeId; //卖家id
     private String qq;
     private BigDecimal descriptionScore;
     private BigDecimal serviceScore;
@@ -27,11 +27,11 @@ public class Store implements Serializable {
         this.id = id;
     }
 
-    public Integer getStoreId() {
+    public String getStoreId() {
         return storeId;
     }
 
-    public void setStoreId(Integer storeId) {
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
 

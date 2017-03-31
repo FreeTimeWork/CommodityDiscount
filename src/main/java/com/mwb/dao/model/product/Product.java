@@ -16,13 +16,15 @@ public class Product implements Serializable{
     private static final long serialVersionUID = 1L;
 
     private Integer id;                 //编号
-    private String productId;           //商品id
+    private String taoKeId;             //大淘客id
+    private String productId;           //淘宝id
     private String name;                //商品名称
     private String picture;             //商品主图
     private BigDecimal reservePrice;    //商品正常价格
     private Integer sales;              //商品月销量
     private String url;                 //商品链接
     private Date activityTime;          //活动开始时间
+    private BigDecimal descriptionScore; //商品描述分
 
     private Bool immediately;           //是否拍立减
     private BigDecimal discountPrice;   //卷后价格
@@ -42,12 +44,16 @@ public class Product implements Serializable{
     private String createByName;        //提交人
     private Date createByTime;          //提交时间
 
+    private BigDecimal ratio;           //佣金比例
+    private String planUrl;             //计划链接
+    private HireType hireType;          //佣金类型
+
     private Employee employee;          //员工
     private Hire hire;                  //佣金
     private Store store;                //店铺
     private ProductStatus status;       //状态
     private Activity activity;          //活动类别
-    private ProductType type;           //商品类型
+    private ProductType productType;           //商品类型
     private List<ProductPicture> pictures;
 
     public Integer getId() {
@@ -72,6 +78,22 @@ public class Product implements Serializable{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public BigDecimal getDescriptionScore() {
+        return descriptionScore;
+    }
+
+    public void setDescriptionScore(BigDecimal descriptionScore) {
+        this.descriptionScore = descriptionScore;
+    }
+
+    public String getTaoKeId() {
+        return taoKeId;
+    }
+
+    public void setTaoKeId(String taoKeId) {
+        this.taoKeId = taoKeId;
     }
 
     public String getPicture() {
@@ -282,12 +304,36 @@ public class Product implements Serializable{
         this.activity = activity;
     }
 
-    public ProductType getType() {
-        return type;
+    public BigDecimal getRatio() {
+        return ratio;
     }
 
-    public void setType(ProductType type) {
-        this.type = type;
+    public void setRatio(BigDecimal ratio) {
+        this.ratio = ratio;
+    }
+
+    public HireType getHireType() {
+        return hireType;
+    }
+
+    public void setHireType(HireType hireType) {
+        this.hireType = hireType;
+    }
+
+    public String getPlanUrl() {
+        return planUrl;
+    }
+
+    public void setPlanUrl(String planUrl) {
+        this.planUrl = planUrl;
+    }
+
+    public ProductType getProductType() {
+        return productType;
+    }
+
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
     }
 
     public List<ProductPicture> getPictures() {
