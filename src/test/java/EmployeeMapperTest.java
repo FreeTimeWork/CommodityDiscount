@@ -5,7 +5,6 @@ import com.mwb.dao.model.employee.Employee;
 import com.mwb.dao.model.employee.EmployeeStatus;
 import com.mwb.dao.model.employee.Gender;
 import com.mwb.dao.model.position.Position;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -22,7 +21,7 @@ public class EmployeeMapperTest extends AbstractPersistenceTest {
         System.out.println(employee);
     }
 
-    @Test
+//    @Test
     public  void  insertEmployeeTest(){
 
         Employee employee = new Employee();
