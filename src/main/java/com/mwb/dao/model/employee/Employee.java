@@ -15,7 +15,7 @@ public class Employee {
     private String mobile;
     private String password;
     private Date createTime;
-    private String group;
+    private Group group;
     private Position position;
     private EmployeeStatus status;
 
@@ -59,11 +59,11 @@ public class Employee {
         this.password = password;
     }
 
-    public String getGroup() {
+    public Group getGroup() {
         return group;
     }
 
-    public void setGroup(String group) {
+    public void setGroup(Group group) {
         this.group = group;
     }
 
