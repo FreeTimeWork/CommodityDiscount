@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mwb.dao.mapper.PositionMapper">
+
+
+	<resultMap
+			id="positionResult"
+			type="Position" >
+		<id property="id" column="employee_id" />
+		<result property="name" column="position_name" />
+	</resultMap>
+
+
+	
+	<sql id="pagingLimit">
+		<include refid="com.mwb.dao.mapper.CommonMapper.pagingLimit"/>
+	</sql>
+
+
+	<sql id="positionColumns">
+		ap.id AS position_id,
+		ap.name AS position_name
+	</sql>
+
+<select id="selectPositionById" resultMap="positionResult" parameterType="map">
+	SELECT
+	<include refid="positionColumns"/>
+	FROM
+		t_position ap
+	<where>
+		ap.id = #{id, javaType=int, jdbcType=INTEGER}
+	</where>
+
+</select>
+	<insert
+			id="insertPosition"
+			parameterType="Position"
+			useGeneratedKeys="true"
+			keyProperty="id" >
+
+		INSERT INTO t_position (
+		name
+		) VALUES (
+		#{name, javaType=string, jdbcType=CHAR}
+		)
+	</insert>
+
+	<update
+			id="updatePosition"
+			parameterType="Position" >
+
+		UPDATE
+		t_position
+		<set>
+			<if test="name != null">
+				name = #{name, javaType=string, jdbcType=CHAR}
+			</if>
+		</set>
+		WHERE
+		id = #{id, javaType=int, jdbcType=INTEGER}
+	</update>
+	
+</mapper>   

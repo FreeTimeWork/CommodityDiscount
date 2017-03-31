@@ -13,6 +13,7 @@
          <log4j.version>1.2.17</log4j.version>
         <c3p0.version>0.9.5.2</c3p0.version>
         <org.quartz-scheduler.version>1.8.6</org.quartz-scheduler.version>
+        <commons-httpclient.version>3.1</commons-httpclient.version>
 
         <!-- other version properties -->
         <compile.encoding>UTF8</compile.encoding>
@@ -83,6 +84,12 @@
             <groupId>commons-dbutils</groupId>
             <artifactId>commons-dbutils</artifactId>
             <version>1.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>${commons-httpclient.version}</version>
         </dependency>
         <!-- spring核心包 -->
         <dependency>
@@ -229,6 +236,17 @@
             <version>1.9.13</version>
         </dependency>
 
+        <!-- web magic -->
+        <dependency>
+            <groupId>us.codecraft</groupId>
+            <artifactId>webmagic-core</artifactId>
+            <version>0.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>us.codecraft</groupId>
+            <artifactId>webmagic-extension</artifactId>
+            <version>0.6.1</version>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
@@ -237,6 +255,8 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+
     <!--<build>-->
         <!--<finalName>CommodityDiscount</finalName>-->
 

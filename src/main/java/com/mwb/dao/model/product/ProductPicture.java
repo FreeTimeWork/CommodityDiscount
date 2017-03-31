@@ -1,4 +1,4 @@
-package com.mwb.dao.model;
+package com.mwb.dao.model.product;
 
 import java.io.Serializable;
 

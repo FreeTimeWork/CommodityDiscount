@@ -3,7 +3,7 @@ package com.mwb.dao.model.employee;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mwb.dao.model.IdInterface;
+import com.mwb.dao.model.comm.IdInterface;
 
 /**
  * Created by Fangchen.chai on 2017/3/29.

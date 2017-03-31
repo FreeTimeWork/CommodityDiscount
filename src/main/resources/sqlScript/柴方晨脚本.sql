@@ -25,10 +25,8 @@ CREATE TABLE `t_employee_status` (
 DROP TABLE IF EXISTS `t_position`;
 CREATE TABLE `t_position` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `code` char(64) NOT NULL,
   `name` char(32) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_position_code` (`code`),
   UNIQUE KEY `uk_position_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -36,10 +34,8 @@ CREATE TABLE `t_position` (
 DROP TABLE IF EXISTS `t_group`;
 CREATE TABLE `t_group` (
   `id` int(16) unsigned NOT NULL AUTO_INCREMENT,
-  `code` char(64) NOT NULL,
   `name` char(32) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_group_code` (`code`),
   UNIQUE KEY `uk_group_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.mwb.controller.api.ContentType;
 import com.mwb.controller.employee.api.EmployeeResponse;
 import com.mwb.dao.model.AdminEmployee;
-import com.mwb.dao.model.Log;
+import com.mwb.dao.model.comm.Log;
 import com.mwb.dao.model.employee.Employee;
 import com.mwb.service.api.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;

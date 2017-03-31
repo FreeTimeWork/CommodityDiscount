@@ -1,4 +1,4 @@
-package com.mwb.dao.model;
+package com.mwb.dao.model.product;
 
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
@@ -12,6 +12,7 @@ public class Store implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
+    private Integer storeId; //卖家id
     private String qq;
     private BigDecimal descriptionScore;
     private BigDecimal serviceScore;
@@ -24,6 +25,14 @@ public class Store implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Integer storeId) {
+        this.storeId = storeId;
     }
 
     public String getQq() {

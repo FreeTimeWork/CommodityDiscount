@@ -47,7 +47,7 @@
 	FROM
 		t_employee ae
 	<where>
-		ae.id = #{id, javaType=string, jdbcType=CHAR}
+		ae.id = #{id, javaType=int, jdbcType=INTEGER}
 	</where>
 
 </select>
@@ -113,7 +113,7 @@
 			</if>
 		</set>
 		WHERE
-		id = #{id, javaType=string, jdbcType=CHAR}
+		id = #{id, javaType=int, jdbcType=INTEGER}
 	</update>
 	
 </mapper>   

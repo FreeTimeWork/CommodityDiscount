@@ -1,4 +1,4 @@
-package com.mwb.util;
+package com.mwb.dao.model.comm;
 
 public class Constants {
 	private Constants() {}
