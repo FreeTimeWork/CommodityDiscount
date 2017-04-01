@@ -13,21 +13,27 @@ public enum StoreType implements IdInterface {
     TMALL(2, "TMALL", "天猫");
 
     private static final Map<String, StoreType> code2StoreType;
+    private static final Map<Integer, StoreType> id2StoreType;
 
     private int id;
     private String code;
     private String description;
 
     static {
-        code2StoreType = new HashMap<String, StoreType>();
+        code2StoreType = new HashMap<>();
+        id2StoreType = new HashMap<>();
 
         for (StoreType appDeviceType : StoreType.values()) {
             code2StoreType.put(appDeviceType.getCode(), appDeviceType);
+            id2StoreType.put(appDeviceType.getId(), appDeviceType);
         }
     }
 
     public static StoreType fromCode(String code) {
         return code2StoreType.get(code);
+    }
+    public static StoreType fromId(Integer id) {
+        return id2StoreType.get(id);
     }
 
     StoreType(int id, String code, String description) {

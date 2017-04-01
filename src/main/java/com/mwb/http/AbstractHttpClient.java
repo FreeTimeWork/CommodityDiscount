@@ -2,6 +2,10 @@ package com.mwb.http;
 
 import java.util.Map;
 
+/**
+ * Created by MengWeiBo on 2017-03-29
+ */
+
 public abstract class AbstractHttpClient {
     private SimpleHttpClient httpClient;
 

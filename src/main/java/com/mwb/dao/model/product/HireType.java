@@ -14,21 +14,27 @@ public enum  HireType implements IdInterface {
     Magpie(3, "Magpie", "鹊桥");
 
     private static final Map<String, HireType> code2HireType;
+    private static final Map<Integer, HireType> id2HireType;
 
     private int id;
     private String code;
     private String description;
 
     static {
-        code2HireType = new HashMap<String, HireType>();
+        code2HireType = new HashMap<>();
+        id2HireType = new HashMap<>();
 
         for (HireType appDeviceType : HireType.values()) {
             code2HireType.put(appDeviceType.getCode(), appDeviceType);
+            id2HireType.put(appDeviceType.getId(), appDeviceType);
         }
     }
 
     public static HireType fromCode(String code) {
         return code2HireType.get(code);
+    }
+    public static HireType fromId(Integer id) {
+        return id2HireType.get(id);
     }
 
     HireType(int id, String code, String description) {
