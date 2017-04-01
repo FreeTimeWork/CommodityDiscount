@@ -10,50 +10,52 @@ import com.mwb.service.dataoke.api.ProductMO;
 import com.mwb.util.DateTimeUtility;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 /**
- *  Created by mwb on 2017/3/31 0031.
+ * Created by MengWeiBo on 2017-03-29
  */
 
-public class DaoLaoKeService extends AbstractHttpClient implements IDaoLaoKeService{
+@Service("daoLaoKeService")
+public class DaoLaoKeService extends AbstractHttpClient implements IDaoLaoKeService {
     private static final Log LOG = Log.getLog(DaoLaoKeService.class);
 
-    @Value("${app.key:8jdrk90okh}")
+    @Value("8jdrk90okh")
     private String appKey;
 
     private static String detailUrl = "http://api.dataoke.com/index.php?r=port/index";
 
-    public Product getParsProduct(String productId){
+    public void setDaTaoKeProduct(Product product) {
         LOG.info("get productId discount info.");
-        ProductMO mo = getProductMO(productId);
-        Product product;
+        ProductMO mo = getProductMO(product.getProductId());
         try {
-            product = toProduct(mo);
+            toProduct(mo, product);
         } catch (Exception e) {
             LOG.error("get productId discount info toProduct is err:{}", mo);
             e.printStackTrace();
-
-            product = new Product();
         }
 
-        return product;
     }
 
-    private ProductMO getProductMO(String productId){
+    private ProductMO getProductMO(String productId) {
         try {
-            String jsonResult = get(getUrl(productId),null,null);
+            if (StringUtils.isBlank(productId)) {
+                return null;
+            }
+
+            String jsonResult = get(getUrl(productId), null, null);
             JSONObject jsonObject = JSON.parseObject(jsonResult);
 
             String result = jsonObject.getString("result");
-            if (StringUtils.isBlank(result)){
+            if (StringUtils.isBlank(result)) {
                 return null;
             }
 
             ProductMO mo = JSONObject.parseObject(result, ProductMO.class);
 
-            LOG.error("get productId discount info mo:{}", mo);
+            LOG.info("get productId discount info mo:{}", mo);
             return mo;
         } catch (Exception e) {
             LOG.error("get productId discount info is err.");
@@ -62,25 +64,34 @@ public class DaoLaoKeService extends AbstractHttpClient implements IDaoLaoKeServ
         }
     }
 
-    private Product toProduct(ProductMO mo) throws Exception {
-        Product product = new Product();
-        Store store = new Store();
+    private void toProduct(ProductMO mo, Product product) throws Exception {
+        if (mo == null) {
+            return;
+        }
+        if (product == null) {
+            product = new Product();
+        }
+
+        Store store = product.getStore();
+        if (store == null) {
+            store = new Store();
+            product.setStore(store);
+        }
 
         product.setTaoKeId(mo.getTaoKeId());
         product.setProductId(mo.getProductId());
         product.setName(mo.getName());
-        product.setPicture(mo.getPicture());
+        product.setPictureUrl(mo.getPicture());
         product.setProductType(ProductType.fromId(mo.getTypeId()));
         product.setReservePrice(mo.getReservePrice());
         product.setDiscountPrice(mo.getDiscountPrice());
         store.setStoreId(mo.getStoreId());
         store.setType(mo.getIsTmall() == 1 ? StoreType.TMALL : StoreType.TAOBAO);
         product.setSales(mo.getSales());
-        product.setDescriptionScore(mo.getDescriptionScore());
-        if (mo.getGeneral().compareTo(BigDecimal.ZERO) > 0){
+        if (mo.getGeneral().compareTo(BigDecimal.ZERO) > 0) {
             product.setHireType(HireType.GENERAL);
             product.setRatio(mo.getGeneral());
-        }else {
+        } else {
             product.setHireType(HireType.Magpie);
             product.setRatio(mo.getMagpie());
         }
@@ -90,11 +101,12 @@ public class DaoLaoKeService extends AbstractHttpClient implements IDaoLaoKeServ
         product.setCouponSurplusNumber(mo.getCouponSurplusNumber());
         product.setCouponUseNumber(mo.getCouponUseNumber());
         product.setCondition(mo.getCondition());
+        product.setStore(store);
 
-        return  product;
     }
-    private String getUrl(String productId){
-        return detailUrl + "&appkey=" + appKey + "&v=1&id=" + productId;
+
+    private String getUrl(String productId) {
+        return detailUrl + "&appkey=" + appKey + "&v=2&id=" + productId;
     }
 
     public String getAppKey() {

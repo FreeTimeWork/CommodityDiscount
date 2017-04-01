@@ -7,17 +7,12 @@
      http://www.springframework.org/schema/context/spring-context.xsd
      ">
 
-    <bean
-        id="abstractHttpClient"
-        class="com.mwb.http.AbstractHttpClient"
-        abstract="true" init-method="init">
+    <bean id="daoLaoKeService" class="com.mwb.service.dataoke.DaoLaoKeService"
+          init-method="init">
+        <property name="appKey" value="8jdrk90okh" />
         <property name="mock" value="true"/>
         <property name="maxConnection" value="150"/>
         <property name="connectionTimeout" value="10000"/>
         <property name="socketTimeout" value="10000"/>
-    </bean>
-
-    <bean id="daoLaoKeService" class="com.mwb.service.dataoke.DaoLaoKeService">
-        <property name="appKey" value="2222" />
     </bean>
 </beans>

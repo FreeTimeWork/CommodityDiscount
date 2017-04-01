@@ -35,4 +35,13 @@ public class ProductPicture implements Serializable {
     public void setProduct(Product product) {
         this.product = product;
     }
+
+    @Override
+    public String toString() {
+        return "ProductPicture{" +
+                "url='" + url + '\'' +
+                ", id=" + id +
+                ", productId=" + product.getId() +
+                '}';
+    }
 }

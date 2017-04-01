@@ -3,12 +3,10 @@ package com.mwb.controller.employee;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.alibaba.fastjson.JSONArray;
 import com.mwb.controller.api.ContentType;
 import com.mwb.controller.employee.api.EmployeeResponse;
 import com.mwb.dao.model.AdminEmployee;
 import com.mwb.dao.model.comm.Log;
-import com.mwb.dao.model.employee.Employee;
 import com.mwb.dao.model.product.Product;
 import com.mwb.service.api.IEmployeeService;
 import com.mwb.service.dataoke.api.IDaoLaoKeService;
@@ -59,8 +57,6 @@ public class EmployeeController {
 //        String str = JSONArray.toJSONString(employee);
 //        response.setObject(str);
 //        response.setAdminEmployee(adminEmployee1);
-
-        Product product = daoLaoKeService.getParsProduct("2116148");
 
         return response;
     }

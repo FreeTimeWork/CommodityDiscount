@@ -1,36 +1,29 @@
-package com.mwb.dao.model.product;
+package com.mwb.controller.product.api;
 
-import com.mwb.dao.model.comm.Bool;
-import com.mwb.dao.model.employee.Employee;
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 /**
- * Created by MengWeiBo on 2017-03-29
+ * Created by MengWeiBo on 2017-04-01
  */
-public class Product implements Serializable{
-    private static final long serialVersionUID = 1L;
+public class CreateProductRequest {
 
-    private Integer id;                 //编号
-    private String taoKeId;             //大淘客id
+    private Integer activityId;            //活动类别id
     private String productId;           //淘宝id
     private String name;                //商品名称
     private String pictureUrl;             //商品主图
     private BigDecimal reservePrice;    //商品正常价格
     private Integer sales;              //商品月销量
     private String url;                 //商品链接
-    private Date activityTime;          //活动开始时间
+    private String activityTime;          //活动开始时间
+    private Integer productTypeId;        //商品类型Id
 
-    private Bool immediately;           //是否拍立减
+    private Boolean immediately;         //是否拍立减
     private BigDecimal discountPrice;   //卷后价格
     private BigDecimal couponAmount;    //优惠券金额
     private String couponUrl;           //优惠券连接
-    private Date couponBeginTime;       //优惠券开始时间
-    private Date couponEndTime;         //优惠券开始时间
+    private String couponBeginTime;       //优惠券开始时间
+    private String couponEndTime;         //优惠券开始时间
     private Integer couponUseNumber;    //领取数量
     private Integer couponSurplusNumber; //剩余数量
     private String condition;           //使用条件
@@ -38,25 +31,25 @@ public class Product implements Serializable{
     private String features;            //特色
     private String description;         //备注
     private String chargePrice;        //收费单价
-    private Date createTime;          //提交时间
+    private String createTime;          //提交时间
 
     private BigDecimal ratio;           //佣金比例
     private String planUrl;             //计划链接
-    private HireType hireType;          //佣金类型
+    private Integer hireTypeId;          //佣金类型
 
-    private Employee employee;          //员工
-    private Store store;                //店铺
-    private ProductStatus status;       //状态
-    private Activity activity;          //活动类别
-    private ProductType productType;           //商品类型
-    private List<ProductPicture> pictures;
+    private String qq;
+    private BigDecimal storeDescriptionScore; //店铺描述分数
+    private BigDecimal serviceScore;        //店铺服务分数
+    private BigDecimal speedScore;          //店铺配送分数
+    private Integer storeTypeId;             //店铺类型
+    private List<String> pictures;          // 图片链接
 
-    public Integer getId() {
-        return id;
+    public Integer getActivityId() {
+        return activityId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setActivityId(Integer activityId) {
+        this.activityId = activityId;
     }
 
     public String getProductId() {
@@ -73,14 +66,6 @@ public class Product implements Serializable{
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getTaoKeId() {
-        return taoKeId;
-    }
-
-    public void setTaoKeId(String taoKeId) {
-        this.taoKeId = taoKeId;
     }
 
     public String getPictureUrl() {
@@ -115,11 +100,27 @@ public class Product implements Serializable{
         this.url = url;
     }
 
-    public Bool getImmediately() {
+    public String getActivityTime() {
+        return activityTime;
+    }
+
+    public void setActivityTime(String activityTime) {
+        this.activityTime = activityTime;
+    }
+
+    public Integer getProductTypeId() {
+        return productTypeId;
+    }
+
+    public void setProductTypeId(Integer productTypeId) {
+        this.productTypeId = productTypeId;
+    }
+
+    public Boolean getImmediately() {
         return immediately;
     }
 
-    public void setImmediately(Bool immediately) {
+    public void setImmediately(Boolean immediately) {
         this.immediately = immediately;
     }
 
@@ -147,19 +148,19 @@ public class Product implements Serializable{
         this.couponUrl = couponUrl;
     }
 
-    public Date getCouponBeginTime() {
+    public String getCouponBeginTime() {
         return couponBeginTime;
     }
 
-    public void setCouponBeginTime(Date couponBeginTime) {
+    public void setCouponBeginTime(String couponBeginTime) {
         this.couponBeginTime = couponBeginTime;
     }
 
-    public Date getCouponEndTime() {
+    public String getCouponEndTime() {
         return couponEndTime;
     }
 
-    public void setCouponEndTime(Date couponEndTime) {
+    public void setCouponEndTime(String couponEndTime) {
         this.couponEndTime = couponEndTime;
     }
 
@@ -211,52 +212,12 @@ public class Product implements Serializable{
         this.chargePrice = chargePrice;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
-    }
-
-    public Date getActivityTime() {
-        return activityTime;
-    }
-
-    public void setActivityTime(Date activityTime) {
-        this.activityTime = activityTime;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public Store getStore() {
-        return store;
-    }
-
-    public void setStore(Store store) {
-        this.store = store;
-    }
-
-    public ProductStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ProductStatus status) {
-        this.status = status;
-    }
-
-    public Activity getActivity() {
-        return activity;
-    }
-
-    public void setActivity(Activity activity) {
-        this.activity = activity;
     }
 
     public BigDecimal getRatio() {
@@ -267,14 +228,6 @@ public class Product implements Serializable{
         this.ratio = ratio;
     }
 
-    public HireType getHireType() {
-        return hireType;
-    }
-
-    public void setHireType(HireType hireType) {
-        this.hireType = hireType;
-    }
-
     public String getPlanUrl() {
         return planUrl;
     }
@@ -283,24 +236,59 @@ public class Product implements Serializable{
         this.planUrl = planUrl;
     }
 
-    public ProductType getProductType() {
-        return productType;
+    public Integer getHireTypeId() {
+        return hireTypeId;
     }
 
-    public void setProductType(ProductType productType) {
-        this.productType = productType;
+    public void setHireTypeId(Integer hireTypeId) {
+        this.hireTypeId = hireTypeId;
     }
 
-    public List<ProductPicture> getPictures() {
+    public String getQq() {
+        return qq;
+    }
+
+    public void setQq(String qq) {
+        this.qq = qq;
+    }
+
+    public BigDecimal getStoreDescriptionScore() {
+        return storeDescriptionScore;
+    }
+
+    public void setStoreDescriptionScore(BigDecimal storeDescriptionScore) {
+        this.storeDescriptionScore = storeDescriptionScore;
+    }
+
+    public BigDecimal getServiceScore() {
+        return serviceScore;
+    }
+
+    public void setServiceScore(BigDecimal serviceScore) {
+        this.serviceScore = serviceScore;
+    }
+
+    public BigDecimal getSpeedScore() {
+        return speedScore;
+    }
+
+    public void setSpeedScore(BigDecimal speedScore) {
+        this.speedScore = speedScore;
+    }
+
+    public Integer getStoreTypeId() {
+        return storeTypeId;
+    }
+
+    public void setStoreTypeId(Integer storeTypeId) {
+        this.storeTypeId = storeTypeId;
+    }
+
+    public List<String> getPictures() {
         return pictures;
     }
 
-    public void setPictures(List<ProductPicture> pictures) {
+    public void setPictures(List<String> pictures) {
         this.pictures = pictures;
-    }
-
-    @Override
-    public String toString() {
-        return ReflectionToStringBuilder.toString(this);
     }
 }

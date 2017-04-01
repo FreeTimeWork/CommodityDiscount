@@ -1,10 +1,10 @@
 package com.mwb.service;
 
-import com.alibaba.fastjson.JSONObject;
 import com.mwb.dao.model.product.Product;
+import com.mwb.dao.model.product.ProductPicture;
 import com.mwb.dao.model.product.Store;
 import com.mwb.dao.model.product.StoreType;
-import com.mwb.http.SimpleHttpClient;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
@@ -14,13 +14,17 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.htmlparser.Node;
 import org.htmlparser.Parser;
+import org.htmlparser.Tag;
 import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.nodes.TagNode;
+import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Span;
 import org.htmlparser.tags.TitleTag;
 import org.htmlparser.util.NodeList;
+import org.htmlparser.util.ParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,212 +34,262 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by MengWeiBo on 2017-03-29
  */
+
 public class ParserService {
     private static final Logger LOG = LoggerFactory.getLogger(ParserService.class);
 
-    private URL url;
-    private int responseCode;
-    private HttpURLConnection urlConnection;
-    private BufferedReader reader;
-    private String line;
     private String urlStr;
-    private Parser parser;
 
     public ParserService(String urlStr) {
         this.urlStr = urlStr;
-        setParser(urlStr);
+    }
+
+    public Product grabProduct() {
+        LOG.info("grabProduct urlStr:{}", urlStr);
+
+        Product product = new Product();
+        product.setUrl(urlStr);
+        setProductId(product);
+
+        if (urlStr.contains("tmall.com")) {
+            setTmallStoreScore(product);
+            setTmallProductPictures(product);
+        } else {
+            setTaoBaoStoreScore(product);
+            setTaoBaoProductPictures(product);
+        }
+
+        return product;
+    }
+
+    private void setProductId(Product product) {
+        String id = "";
+
+        if (urlStr.contains("&id=")) {
+            String urlSpilts[] = urlStr.split("&id=");
+            id = urlSpilts[urlSpilts.length - 1].split("&")[0];
+        } else if (urlStr.contains("?id=")) {
+            String urlSpilts[] = urlStr.split("\\?id=");
+            id = urlSpilts[urlSpilts.length - 1].split("&")[0];
+        }
+        product.setProductId(id);
     }
 
     private void setParser(String urlStr) {
-        StringBuilder sb = new StringBuilder();
         try {
-            url = new URL(urlStr);
-            urlConnection = (HttpURLConnection) url.openConnection();
+            StringBuilder sb = new StringBuilder();
+
+            URL url = new URL(urlStr);
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
             //获取服务器响应代码
-            responseCode = urlConnection.getResponseCode();
+            int responseCode = urlConnection.getResponseCode();
             if (responseCode == 200) {
                 //得到输入流，即获得了网页的内容
-                reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "gbk"));
-                while ((line = reader.readLine()) != null) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "gbk"));
+                String line = reader.readLine();
+                while (StringUtils.isNotBlank(line)) {
                     sb.append(line);
-                    System.out.println(line);
                 }
             } else {
                 LOG.error("获取不到网页的源码，服务器响应代码为：" + responseCode);
                 throw new RuntimeException();
             }
-
-            parser = Parser.createParser(sb.toString(), "UTF-8");
+            Parser parser = Parser.createParser(getContent(urlStr), "UTF-8");
 
         } catch (Exception e) {
             LOG.error("获取不到网页的源码,出现异常：" + e);
         }
     }
 
-    private void setTaoBaoStoreScore(Product product) throws Exception {
-        if (product.getStore() == null) {
-            Store store = new Store();
+    private void setTaoBaoStoreScore(Product product) {
+        Store store = product.getStore();
+
+        if (store == null) {
+            store = new Store();
             product.setStore(store);
         }
 
-        Store store = product.getStore();
+        try {
+            Parser parser = Parser.createParser(getContent(urlStr), "UTF-8");
+            TagNameFilter filter = new TagNameFilter("dd");
 
-        TagNameFilter filter = new TagNameFilter("dd");
+            NodeList nodes = parser.extractAllNodesThatMatch(filter);
 
-        NodeList nodes = parser.extractAllNodesThatMatch(filter);
+            for (int i = 0; i < nodes.size(); ++i) {
+                TagNode tn = (TagNode) nodes.elementAt(i);
+                String clkUrl = tn.getAttribute("class");
 
-        for (int i = 0; i < nodes.size(); ++i) {
-            TagNode tn = (TagNode) nodes.elementAt(i);
-            String clkUrl = tn.getAttribute("class");
+                if ("tb-rate-higher".equals(clkUrl)) {
+                    LinkTag node = (LinkTag) tn.getChildren().extractAllNodesThatMatch(new TagNameFilter("a")).elementAt(0);
+                    String score = node.getChild(0).getText().trim();
 
-            if ("tb-rate-higher".equals(clkUrl)) {
-                LinkTag node = (LinkTag) tn.getChildren().extractAllNodesThatMatch(new TagNameFilter("a")).elementAt(0);
-                String score = node.getChild(0).getText().trim();
+                    TagNode tagNode = (TagNode) tn.getParent().getChildren().extractAllNodesThatMatch(new TagNameFilter("dt")).elementAt(0);
+                    String title = tagNode.toString();
 
-                TagNode tagNode = (TagNode) tn.getParent().getChildren().extractAllNodesThatMatch(new TagNameFilter("dt")).elementAt(0);
-                String title = tagNode.toString();
-
-                if (title.contains("描述")) {
-                    store.setDescriptionScore(new BigDecimal(score));
-                } else if (title.contains("服务")) {
-                    store.setServiceScore(new BigDecimal(score));
-                } else if (title.contains("物流")) {
-                    store.setSpeedScore(new BigDecimal(score));
+                    if (title.contains("描述")) {
+                        store.setDescriptionScore(new BigDecimal(score));
+                    } else if (title.contains("服务")) {
+                        store.setServiceScore(new BigDecimal(score));
+                    } else if (title.contains("物流")) {
+                        store.setSpeedScore(new BigDecimal(score));
+                    }
                 }
             }
+        } catch (ParserException e) {
+            LOG.error("setTmallStoreScore is err:{}", e);
         }
     }
 
-    private void setTmallStoreScore(Product product) throws Exception {
+    private void setTmallStoreScore(Product product) {
 
         Store store = product.getStore();
+        if (store == null) {
+            store = new Store();
+            product.setStore(store);
+        }
+
+        Parser parser = Parser.createParser(getContent(urlStr), "UTF-8");
 
         TagNameFilter filter = new TagNameFilter("span");
+        NodeList nodes = null;
+        try {
+            nodes = parser.extractAllNodesThatMatch(filter);
+            for (int i = 0; i < nodes.size(); ++i) {
+                TagNode tn = (TagNode) nodes.elementAt(i);
+                String clkUrl = tn.getAttribute("class");
 
-        NodeList nodes = parser.extractAllNodesThatMatch(filter);
+                if ("shopdsr-score-con".equals(clkUrl)) {
+                    String score = ((Span) tn).getChild(0).getText().trim();
 
-        for (int i = 0; i < nodes.size(); ++i) {
-            TagNode tn = (TagNode) nodes.elementAt(i);
-            String clkUrl = tn.getAttribute("class");
-
-            if ("shopdsr-score-con".equals(clkUrl)) {
-                String score = ((Span) tn).getChild(0).getText().trim();
-
-                TagNode tagNode = (TagNode) tn.getParent().getParent();
-                String title = tagNode.toString();
-                if (title.contains("描 述")) {
-                    store.setDescriptionScore(new BigDecimal(score));
-                } else if (title.contains("服 务")) {
-                    store.setServiceScore(new BigDecimal(score));
-                } else if (title.contains("物 流")) {
-                    store.setSpeedScore(new BigDecimal(score));
+                    TagNode tagNode = (TagNode) tn.getParent().getParent();
+                    String title = tagNode.toString();
+                    if (title.contains("描 述")) {
+                        store.setDescriptionScore(new BigDecimal(score));
+                    } else if (title.contains("服 务")) {
+                        store.setServiceScore(new BigDecimal(score));
+                    } else if (title.contains("物 流")) {
+                        store.setSpeedScore(new BigDecimal(score));
+                    }
                 }
             }
+        } catch (ParserException e) {
+            LOG.error("setTmallStoreScore is err:{}", e);
         }
     }
 
-    private void setTmallProductName(Product product) throws Exception {
-        TagNameFilter filter = new TagNameFilter("title");
-        NodeList nodes = parser.extractAllNodesThatMatch(filter);
+    private void setTmallProductPictures(Product product) {
+        try {
+            List<ProductPicture> pictures = product.getPictures();
+            if (CollectionUtils.isEmpty(pictures)) {
+                pictures = new ArrayList<>();
+                product.setPictures(pictures);
+            }
 
-        TitleTag tn = (TitleTag) nodes.elementAt(0);
-        String name = tn.getChild(0).getText().trim();
+            Parser parser = Parser.createParser(getContent(urlStr), "UTF-8");
 
-        if (StringUtils.isBlank(name)) {
-            return;
+            TagNameFilter filter = new TagNameFilter("ul");
+            NodeList nodes = parser.extractAllNodesThatMatch(filter);
+            for (int i = 0; i < nodes.size(); i++) {
+                TagNode tn = (TagNode) nodes.elementAt(i);
+                String clkUrl = tn.getAttribute("class");
+
+                if ("tb-thumb tm-clear ".equals(clkUrl)) {
+                    NodeList imageNodes = tn.getChildren();
+                    for (int j = 0; j < imageNodes.size(); j++) {
+                        Node node = imageNodes.elementAt(j);
+                        if (node instanceof Tag) {
+                            TagNameFilter imageFilter = new TagNameFilter("a");
+                            LinkTag linkTag = (LinkTag) node.getChildren().extractAllNodesThatMatch(imageFilter).elementAt(0);
+                            NodeList nodeList = linkTag.getChildren();
+                            for (int z = 0; z < nodeList.size(); z++) {
+                                Node imageNode = nodeList.elementAt(z);
+                                if (imageNode instanceof ImageTag) {
+                                    String imageUrl = ((ImageTag) imageNode).getImageURL();
+
+                                    ProductPicture productPicture = new ProductPicture();
+                                    productPicture.setProduct(product);
+                                    productPicture.setUrl(imageUrl);
+                                    pictures.add(productPicture);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("setTmallProductPictures is err e:{}", e);
         }
-
-        if (name.contains("-tmall.com")) {
-            String urlSpilts[] = name.split("-tmall.com");
-            name = urlSpilts[0];
-        } else if (name.contains("-淘宝网")) {
-            String urlSpilts[] = name.split("-淘宝网");
-            name = urlSpilts[0];
-        }
-        product.setName(name);
-
-        LOG.info("name :{}", product.getName());
     }
 
-    private void setTaoBaoProductPrice(Product product) throws Exception {
-        TagNameFilter filter = new TagNameFilter("li");
-        NodeList nodes = parser.extractAllNodesThatMatch(filter);
+    private void setTaoBaoProductPictures(Product product) {
+        try {
+            List<ProductPicture> pictures = product.getPictures();
+            if (CollectionUtils.isEmpty(pictures)) {
+                pictures = new ArrayList<>();
+                product.setPictures(pictures);
+            }
 
-        TitleTag tn = (TitleTag) nodes.elementAt(0);
-        String name = tn.getChild(0).getText().trim();
+            Parser parser = Parser.createParser(getContent(urlStr), "UTF-8");
 
-        if (StringUtils.isBlank(name)) {
-            return;
+            TagNameFilter filter = new TagNameFilter("div");
+            NodeList nodes = parser.extractAllNodesThatMatch(filter);
+            for (int i = 0; i < nodes.size(); i++) {
+                TagNode tn = (TagNode) nodes.elementAt(i);
+                String clkUrl = tn.getAttribute("class");
+
+                if ("tb-pic tb-s50".equals(clkUrl)) {
+                    NodeList imageNodes = tn.getChildren();
+                    for (int j = 0; j < imageNodes.size(); j++) {
+                        Node node = imageNodes.elementAt(j);
+                        if (node instanceof LinkTag) {
+                            NodeList nodeList = node.getChildren();
+                            for (int z = 0; z < nodeList.size(); z++) {
+                                Node imageNode = nodeList.elementAt(z);
+                                if (imageNode instanceof Tag) {
+                                    String imageUrl = ((Tag) imageNode).getAttribute("data-src");
+
+                                    ProductPicture productPicture = new ProductPicture();
+                                    productPicture.setProduct(product);
+                                    productPicture.setUrl(imageUrl);
+                                    pictures.add(productPicture);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("setTmallProductPictures is err e:{}", e);
         }
-
-        if (name.contains("-tmall.com")) {
-            String urlSpilts[] = name.split("-tmall.com");
-            name = urlSpilts[0];
-        } else if (name.contains("-淘宝网")) {
-            String urlSpilts[] = name.split("-淘宝网");
-            name = urlSpilts[0];
-        }
-        product.setName(name);
-
-        LOG.info("name :{}", product.getName());
-    }
-
-    //淘宝 天猫 商品url,店铺类型
-    private void setProductUrl(Product product) {
-        String id = "";
-        if (product.getStore() == null) {
-            Store store = new Store();
-            product.setStore(store);
-        }
-        if (urlStr.contains("&id=")) {
-            String urlSpilts[] = urlStr.split("&id=");
-            id = urlSpilts[urlSpilts.length - 1].split("&")[0];
-            product.getStore().setType(StoreType.TMALL);
-        } else if (urlStr.contains("?id=")) {
-            String urlSpilts[] = urlStr.split("\\?id=");
-            id = urlSpilts[urlSpilts.length - 1].split("&")[0];
-            product.getStore().setType(StoreType.TAOBAO);
-        }
-        product.setProductId(id);
-
-        LOG.info("ProductId :{}", id);
     }
 
     public static void main(String[] args) throws Exception {
         String url = new String("https://item.taobao.com/item.htm?id=546128980616&ali_refid=a3_430676_1006:1108619018:N:%E7%94%B7%E5%A4%B9%E5%85%8B:b894320bfe3f73f89beec3bc62ea1ac6&ali_trackid=1_b894320bfe3f73f89beec3bc62ea1ac6&spm=a231o.7712113/a.1004.245.MItKnY&ali_refid=a3_430676_1006:1108619018:N:%E7%94%B7%E5%A4%B9%E5%85%8B:b894320bfe3f73f89beec3bc62ea1ac6&ali_trackid=1_b894320bfe3f73f89beec3bc62ea1ac6&spm=a231o.7712113/a.1004.245.MItKnY");
 //        url = "https://detail.tmall.com/item.htm?spm=a222r.8295401.7232537034.2.HkcdqB&acm=lb-zebra-223892-1815928.1003.4.1549547&id=544701354389&scm=1003.4.lb-zebra-223892-1815928.ITEM_544701354389_1549547&sku_properties=5919063:6536025";
 //        url = "https://detail.tmall.com/item.htm?spm=a220o.1000855.1998025129.1.sgOfpO&abtest=_AB-LR32-PR32&pvid=2d85f8f3-f8e2-4f33-80db-704408bcfb6f&pos=1&abbucket=_AB-M32_B15&acm=03054.1003.1.1539344&id=530414781951&scm=1007.12144.78696.23864_42343&sku_properties=5919063:6536025;12304035:116177;122216431:27772";
-//        ParserService parserService = new ParserService(url);
-//        Product product = new Product();
+//        url = "https://detail.tmall.com/item.htm?id=528405028168";
+        ParserService parserService = new ParserService(url);
+        Product product = new Product();
 //
-//        parserService.setTmallProductName(product);
-////        parserService.setTaoBaoStoreScore(product);
+        parserService.setTaoBaoProductPictures(product);
+//        parserService.setTaoBaoStoreScore(product);
 //        parserService.setProductUrl(product);
 ////        System.out.println(product.toString());
-        SimpleHttpClient httpClient = new SimpleHttpClient(1, 10000, 10000);
-        Map<String, String> params = new HashMap<String, String>();
 
-        String sss = "https://uland.taobao.com/cp/coupon?activityId=38ab6234272945bf912906efbe1d293e&pid=mm_54519761_6274140_21634502&itemId=545129332754&src=mlz_mlztk&dx=1&ali_trackid=2%3Amm_54519761_6274140_21634502%3A1490936012_2k1_161224176";
-        String httpResponse = httpClient.get(sss, params, null);
-        JSONObject jsonObject = (JSONObject) JSONObject.parse(httpResponse);
-        jsonObject.get("");
-        System.out.println(jsonObject);
+
+        System.out.println(product);
 
 //        getContent(url);
     }
 
-
-
-
-    //http://blog.csdn.net/sang1203/article/details/51286221
-    public static String getContent(String url){
+    private String getContent(String url) {
         HttpClientBuilder custom = HttpClients.custom();//创建httpclient
         //通过构建器构建一个httpclient对象，可以认为是获取到一个浏览器对象
         CloseableHttpClient build = custom.build();
@@ -250,8 +304,6 @@ public class ParserService {
             //解析实体中页面的内容，返回字符串形式
             content = EntityUtils.toString(entity);
             System.out.println(content);
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
