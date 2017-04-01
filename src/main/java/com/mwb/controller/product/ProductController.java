@@ -2,10 +2,9 @@ package com.mwb.controller.product;
 
 import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
-import com.mwb.controller.product.api.CreateProductRequest;
-import com.mwb.controller.product.api.ProductDetailsResponse;
-import com.mwb.controller.product.api.GrabRequest;
-import com.mwb.controller.product.api.SearchProductRequest;
+import com.mwb.controller.product.api.*;
+import com.mwb.dao.filter.ProductFilter;
+import com.mwb.dao.filter.SearchResult;
 import com.mwb.dao.model.comm.Bool;
 import com.mwb.dao.model.comm.Log;
 import com.mwb.dao.model.product.*;
@@ -56,17 +55,43 @@ public class ProductController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/grab", produces = ContentType.APPLICATION_JSON_UTF8)
+    @RequestMapping(value = "/detail", produces = ContentType.APPLICATION_JSON_UTF8)
     public ServiceResponse getProductDetail(Integer id) {
+        Product product = productService.getProductById(id);
 
-        return new ServiceResponse();
+        return ProductDetailsResponse.toResponse(product);
 
     }
 
     @ResponseBody
     @RequestMapping(value = "/search", produces = ContentType.APPLICATION_JSON_UTF8)
-    public ServiceResponse searchProduct(SearchProductRequest request) {
+    public ServiceResponse searchProduct(SearchProductRequest request) throws ParseException {
+        ProductFilter filter = new ProductFilter();
 
+        filter.setId(request.getId());
+        filter.setProductId(request.getProductId());
+        filter.setName(request.getName());
+        filter.setGroupId(request.getGroupId());
+        filter.setEmployeeId(request.getEmployeeId());
+        filter.setCreateBeginTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getCreateBeginTime()));
+        filter.setCreateEndTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getCreateEndTime()));
+        filter.setBeginFromTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getBeginFromTime()));
+        filter.setBeginToTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getBeginToTime()));
+        filter.setEndFromTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getEndFromTime()));
+        filter.setEndToTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getEndFromTime()));
+        filter.setUseMinNumber(request.getUseMinNumber());
+        filter.setUseMaxNumber(request.getUseMaxNumber());
+        filter.setSurplusMinNumber(request.getSurplusMinNumber());
+        filter.setSurplusMaxNumber(request.getSurplusMaxNumber());
+        filter.setStatus(ProductStatus.fromId(request.getStatusId()));
+        filter.setType(ProductType.fromId(request.getTypeId()));
+
+        SearchResult<Product> result = productService.searchProduct(filter);
+        List<ProductVO> productVOs = ProductVO.toVOs(result.getResult());
+
+        SearchProductResponse response = new SearchProductResponse();
+        response.setProducts(productVOs);
+        response.setPagingResult(result.getPagingResult());
 
         return new ServiceResponse();
     }
