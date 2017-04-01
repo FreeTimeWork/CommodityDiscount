@@ -9,7 +9,9 @@ import com.mwb.controller.employee.api.EmployeeResponse;
 import com.mwb.dao.model.AdminEmployee;
 import com.mwb.dao.model.comm.Log;
 import com.mwb.dao.model.employee.Employee;
+import com.mwb.dao.model.product.Product;
 import com.mwb.service.api.IEmployeeService;
+import com.mwb.service.dataoke.api.IDaoLaoKeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +28,9 @@ public class EmployeeController {
 
     @Autowired
     private IEmployeeService adminService;
+
+    @Autowired
+    private IDaoLaoKeService daoLaoKeService;
 
     @RequestMapping("/login")
     public String Login(AdminEmployee adminEmployee, HttpServletRequest request) {
@@ -48,12 +53,15 @@ public class EmployeeController {
     @RequestMapping(value = "/login1", produces = ContentType.APPLICATION_JSON_UTF8)
     public EmployeeResponse Login() {
         EmployeeResponse response = new EmployeeResponse();
-        AdminEmployee adminEmployee1 = new AdminEmployee();
-        adminEmployee1.setPassword("12");
-        Employee employee = adminService.getEmployeeById();
-        String str = JSONArray.toJSONString(employee);
-        response.setObject(str);
-        response.setAdminEmployee(adminEmployee1);
+//        AdminEmployee adminEmployee1 = new AdminEmployee();
+//        adminEmployee1.setPassword("12");
+//        Employee employee = adminService.getEmployeeById();
+//        String str = JSONArray.toJSONString(employee);
+//        response.setObject(str);
+//        response.setAdminEmployee(adminEmployee1);
+
+        Product product = daoLaoKeService.getParsProduct("2116148");
+
         return response;
     }
 
