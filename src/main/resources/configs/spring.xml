@@ -7,15 +7,17 @@
      http://www.springframework.org/schema/context/spring-context.xsd
      ">
 
-    <!-- 自动注入 -->
-    <context:component-scan base-package="com.mwb" />
+    <bean
+        id="abstractHttpClient"
+        class="com.mwb.http.AbstractHttpClient"
+        abstract="true" init-method="init">
+        <property name="mock" value="true"/>
+        <property name="maxConnection" value="150"/>
+        <property name="connectionTimeout" value="10000"/>
+        <property name="socketTimeout" value="10000"/>
+    </bean>
 
-    <!-- 加载properties文件  -->
-    <!--  <bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-        <property name="locations">
-            <list>
-                <value>classpath:mysqldb.properties</value>
-            </list>
-        </property>
-    </bean> -->
+    <bean id="daoLaoKeService" class="com.mwb.service.dataoke.DaoLaoKeService">
+        <property name="appKey" value="2222" />
+    </bean>
 </beans>

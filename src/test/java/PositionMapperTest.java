@@ -12,7 +12,6 @@ public class PositionMapperTest extends AbstractPersistenceTest {
 //    @Test1
     public void Test1(){
         Position position = new Position();
-        position.setCode("ADMIN");
         position.setName("管理员");
         mapper.insertPosition(position);
     }

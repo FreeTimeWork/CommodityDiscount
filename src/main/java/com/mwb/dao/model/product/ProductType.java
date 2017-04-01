@@ -21,21 +21,28 @@ public enum ProductType implements IdInterface {
     APPLIANCE(9, "APPLIANCE", "数码家电");
 
     private static final Map<String, ProductType> code2Activity;
+    private static final Map<Integer, ProductType> id2Activity;
 
     private int id;
     private String code;
     private String description;
 
     static {
-        code2Activity = new HashMap<String, ProductType>();
+        code2Activity = new HashMap<>();
+        id2Activity = new HashMap<>();
 
         for (ProductType appDeviceType : ProductType.values()) {
             code2Activity.put(appDeviceType.getCode(), appDeviceType);
+            id2Activity.put(appDeviceType.getId(), appDeviceType);
         }
     }
 
     public static ProductType fromCode(String code) {
         return code2Activity.get(code);
+    }
+
+    public static ProductType fromId(Integer id) {
+        return id2Activity.get(id);
     }
 
     ProductType(int id, String code, String description) {
