@@ -30,7 +30,7 @@ public class CreateProductRequest {
 
     private String features;            //特色
     private String description;         //备注
-    private String chargePrice;        //收费单价
+    private BigDecimal chargePrice;        //收费单价
     private String createTime;          //提交时间
 
     private BigDecimal ratio;           //佣金比例
@@ -204,11 +204,11 @@ public class CreateProductRequest {
         this.description = description;
     }
 
-    public String getChargePrice() {
+    public BigDecimal getChargePrice() {
         return chargePrice;
     }
 
-    public void setChargePrice(String chargePrice) {
+    public void setChargePrice(BigDecimal chargePrice) {
         this.chargePrice = chargePrice;
     }
 
