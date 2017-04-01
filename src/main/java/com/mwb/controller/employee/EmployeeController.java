@@ -51,12 +51,12 @@ public class EmployeeController {
     @RequestMapping(value = "/login1", produces = ContentType.APPLICATION_JSON_UTF8)
     public EmployeeResponse Login() {
         EmployeeResponse response = new EmployeeResponse();
-//        AdminEmployee adminEmployee1 = new AdminEmployee();
-//        adminEmployee1.setPassword("12");
-//        Employee employee = adminService.getEmployeeById();
-//        String str = JSONArray.toJSONString(employee);
-//        response.setObject(str);
-//        response.setAdminEmployee(adminEmployee1);
+        AdminEmployee adminEmployee1 = new AdminEmployee();
+        adminEmployee1.setPassword("12");
+        Employee employee = adminService.getEmployeeById();
+        String str = JSONArray.toJSONString(employee);
+        response.setObject(str);
+        response.setAdminEmployee(adminEmployee1);
 
         return response;
     }

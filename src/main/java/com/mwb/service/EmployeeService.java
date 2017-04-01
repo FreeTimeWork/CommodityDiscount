@@ -25,6 +25,6 @@ public class EmployeeService implements IEmployeeService {
     }
 
     public Employee getEmployeeById(){
-        return  employeeMapper.selectEmployeeById("1");
+        return  employeeMapper.selectEmployeeById(1);
     }
 }
