@@ -1,12 +1,14 @@
 import com.mwb.dao.mapper.PositionMapper;
 import com.mwb.dao.model.position.Position;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created by Fangchen.chai on 2017/3/31.
  */
 public class PositionMapperTest extends AbstractPersistenceTest {
 
-//    @Autowired
+    @Autowired
     private PositionMapper mapper;
 
 //    @Test1

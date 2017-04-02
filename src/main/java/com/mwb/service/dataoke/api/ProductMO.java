@@ -35,7 +35,7 @@ public class ProductMO {
     @JSONField(name = "Commission_jihua")
     private BigDecimal general;
     @JSONField(name = "Commission_queqiao")
-    private BigDecimal Magpie;
+    private BigDecimal magpie;
     @JSONField(name = "Jihua_link")
     private String planUrl;
     @JSONField(name = "Quan_price")
@@ -146,11 +146,11 @@ public class ProductMO {
     }
 
     public BigDecimal getMagpie() {
-        return Magpie;
+        return magpie;
     }
 
     public void setMagpie(BigDecimal magpie) {
-        Magpie = magpie;
+        this.magpie = magpie;
     }
 
     public String getPlanUrl() {

@@ -12,5 +12,5 @@ public interface EmployeeMapper {
 
     public void updateEmployee(Employee employee);
 
-    public Employee selectEmployeeById(@Param("id") String id);
+    public Employee selectEmployeeById(@Param("id") Integer id);
 }

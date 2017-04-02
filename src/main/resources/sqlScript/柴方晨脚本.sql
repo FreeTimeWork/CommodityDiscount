@@ -35,6 +35,8 @@ DROP TABLE IF EXISTS `t_group`;
 CREATE TABLE `t_group` (
   `id` int(16) unsigned NOT NULL AUTO_INCREMENT,
   `name` char(32) NOT NULL,
+  `employeeId` char(32) DEFAULT NULL COMMENT '组长id',
+  `employeeName` char(32) DEFAULT NULL COMMENT '组长name',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_group_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -52,7 +54,8 @@ CREATE TABLE `t_employee` (
   `create_time` datetime NOT NULL,
   `status_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `idx_employee_status` (`status_id`),
+  KEY `idx_employee_mobile` (`mobile`),
+  UNIQUE KEY `uk_employee_name` (`name`),
 	CONSTRAINT `fk_employee_position` FOREIGN KEY (`position_id`) REFERENCES `t_position` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
 	CONSTRAINT `fk_employee_group` FOREIGN KEY (`group_id`) REFERENCES `t_group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_employee_status` FOREIGN KEY (`status_id`) REFERENCES `t_employee_status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -64,7 +67,6 @@ CREATE TABLE `t_permission` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` char(64) NOT NULL,
   `name` char(32) NOT NULL,
-  `description` char(32) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_permission_code` (`code`),
   UNIQUE KEY `uk_permission_name` (`name`)
@@ -90,3 +92,10 @@ CREATE TABLE `t_position_permission` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+
+-- 初始数据
+INSERT INTO t_permission VALUES (1,'audit.wait.read','待审核'),(2,'audit.now.read','审核中'),(3,'audit.reject.read','驳回'),(4,'audit.refuse.read','拒绝'),(5,'audit.review.read','待复审'),(6,'store.generalize.read','推广中'),
+(7,'date.about.end.read','即将结束'),(8,'date.end.read','结束'),(9,'payment.replace.read','代付款'),(10,'payment.now.read','付款中'),(11,'payment.end.read','已付款'),(12,'payment.refuse.read','拒绝付款'),(13,'finance.report.read','查看财务报表'),
+(14,'store.submit','提交商品'),(15,'accounts.submit','提交结账'),(16,'employee.add','添加成员'),(17,'employee.upgrade','升级业务员');
+
+INSERT INTO t_position VALUES (1,'管理员'),(2,'业务员'),(3,'组长'),(4,'审单员'),(5,'财务');

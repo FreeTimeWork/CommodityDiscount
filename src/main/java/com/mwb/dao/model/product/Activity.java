@@ -15,21 +15,28 @@ public enum Activity implements IdInterface {
     TRAILER(4, "TRAILER", "预告商品");
 
     private static final Map<String, Activity> code2Activity;
+    private static final Map<Integer, Activity> id2Activity;
 
     private int id;
     private String code;
     private String description;
 
     static {
-        code2Activity = new HashMap<String, Activity>();
+        code2Activity = new HashMap<>();
+        id2Activity = new HashMap<>();
 
         for (Activity appDeviceType : Activity.values()) {
             code2Activity.put(appDeviceType.getCode(), appDeviceType);
+            id2Activity.put(appDeviceType.getId(), appDeviceType);
         }
     }
 
     public static Activity fromCode(String code) {
         return code2Activity.get(code);
+    }
+
+    public static Activity fromId(Integer id) {
+        return id2Activity.get(id);
     }
 
     Activity(int id, String code, String description) {

@@ -19,12 +19,11 @@ public class Product implements Serializable{
     private String taoKeId;             //大淘客id
     private String productId;           //淘宝id
     private String name;                //商品名称
-    private String picture;             //商品主图
+    private String pictureUrl;             //商品主图
     private BigDecimal reservePrice;    //商品正常价格
     private Integer sales;              //商品月销量
     private String url;                 //商品链接
     private Date activityTime;          //活动开始时间
-    private BigDecimal descriptionScore; //商品描述分
 
     private Bool immediately;           //是否拍立减
     private BigDecimal discountPrice;   //卷后价格
@@ -32,24 +31,20 @@ public class Product implements Serializable{
     private String couponUrl;           //优惠券连接
     private Date couponBeginTime;       //优惠券开始时间
     private Date couponEndTime;         //优惠券开始时间
-    private Integer totalNumber;        //初始数量
     private Integer couponUseNumber;    //领取数量
     private Integer couponSurplusNumber; //剩余数量
     private String condition;           //使用条件
 
     private String features;            //特色
     private String description;         //备注
-    private String chargeAmount;        //收费单价
-    private Integer createById;         //提交人Id
-    private String createByName;        //提交人
-    private Date createByTime;          //提交时间
+    private BigDecimal chargePrice;        //收费单价
+    private Date createTime;          //提交时间
 
     private BigDecimal ratio;           //佣金比例
     private String planUrl;             //计划链接
     private HireType hireType;          //佣金类型
 
     private Employee employee;          //员工
-    private Hire hire;                  //佣金
     private Store store;                //店铺
     private ProductStatus status;       //状态
     private Activity activity;          //活动类别
@@ -80,14 +75,6 @@ public class Product implements Serializable{
         this.name = name;
     }
 
-    public BigDecimal getDescriptionScore() {
-        return descriptionScore;
-    }
-
-    public void setDescriptionScore(BigDecimal descriptionScore) {
-        this.descriptionScore = descriptionScore;
-    }
-
     public String getTaoKeId() {
         return taoKeId;
     }
@@ -96,12 +83,12 @@ public class Product implements Serializable{
         this.taoKeId = taoKeId;
     }
 
-    public String getPicture() {
-        return picture;
+    public String getPictureUrl() {
+        return pictureUrl;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 
     public BigDecimal getReservePrice() {
@@ -176,14 +163,6 @@ public class Product implements Serializable{
         this.couponEndTime = couponEndTime;
     }
 
-    public Integer getTotalNumber() {
-        return totalNumber;
-    }
-
-    public void setTotalNumber(Integer totalNumber) {
-        this.totalNumber = totalNumber;
-    }
-
     public Integer getCouponUseNumber() {
         return couponUseNumber;
     }
@@ -224,44 +203,20 @@ public class Product implements Serializable{
         this.description = description;
     }
 
-    public String getChargeAmount() {
-        return chargeAmount;
+    public BigDecimal getChargePrice() {
+        return chargePrice;
     }
 
-    public void setChargeAmount(String chargeAmount) {
-        this.chargeAmount = chargeAmount;
+    public void setChargePrice(BigDecimal chargePrice) {
+        this.chargePrice = chargePrice;
     }
 
-    public Integer getCreateById() {
-        return createById;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreateById(Integer createById) {
-        this.createById = createById;
-    }
-
-    public String getCreateByName() {
-        return createByName;
-    }
-
-    public void setCreateByName(String createByName) {
-        this.createByName = createByName;
-    }
-
-    public Date getCreateByTime() {
-        return createByTime;
-    }
-
-    public void setCreateByTime(Date createByTime) {
-        this.createByTime = createByTime;
-    }
-
-    public Hire getHire() {
-        return hire;
-    }
-
-    public void setHire(Hire hire) {
-        this.hire = hire;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public Date getActivityTime() {

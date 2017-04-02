@@ -23,21 +23,27 @@ public enum ProductStatus implements IdInterface {
     PAY_END(3, "PAY_END", "已付款");
 
     private static final Map<String, ProductStatus> code2ProductStatus;
+    private static final Map<Integer, ProductStatus> id2ProductStatus;
 
     private int id;
     private String code;
     private String description;
 
     static {
-        code2ProductStatus = new HashMap<String, ProductStatus>();
+        code2ProductStatus = new HashMap<>();
+        id2ProductStatus = new HashMap<>();
 
         for (ProductStatus appDeviceType : ProductStatus.values()) {
             code2ProductStatus.put(appDeviceType.getCode(), appDeviceType);
+            id2ProductStatus.put(appDeviceType.getId(), appDeviceType);
         }
     }
 
     public static ProductStatus fromCode(String code) {
         return code2ProductStatus.get(code);
+    }
+    public static ProductStatus fromId(Integer id) {
+        return id2ProductStatus.get(id);
     }
 
     ProductStatus(int id, String code, String description) {
