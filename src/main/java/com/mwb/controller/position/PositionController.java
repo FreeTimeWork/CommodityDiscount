@@ -39,7 +39,6 @@ public class PositionController {
         SearchResult<Position> result = positionService.searchPosition(filter);
         SearchPositionResponse response = new SearchPositionResponse();
         response.setPositions(PositionVO.toVOs(result.getResult()));
-        response.setPagingResult(result.getPagingResult());
         return response;
     }
 

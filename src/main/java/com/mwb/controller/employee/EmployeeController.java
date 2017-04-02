@@ -57,7 +57,10 @@ public class EmployeeController {
     public Boolean verifyGroupLeader(Integer groupId) {
         Group group = employeeService.getGroupById(groupId);
 
-        return group == null;
+        if (group != null && group.getEmployeeId() != null) {
+            return true;
+        }
+        return false;
     }
 
     //    修改密码，分组，升级，离职

@@ -2,6 +2,8 @@ package com.mwb.service.employee;
 
 import java.util.List;
 
+import com.mwb.controller.api.PagingRequest;
+import com.mwb.controller.api.PagingResult;
 import com.mwb.dao.filter.EmployeeFilter;
 import com.mwb.dao.filter.SearchResult;
 import com.mwb.dao.mapper.EmployeeMapper;
@@ -40,21 +42,36 @@ public class EmployeeService implements IEmployeeService {
 
     @Override
     public SearchResult<Employee> searchEmployeeByFilter(EmployeeFilter filter) {
-        return null;
+        SearchResult<Employee> result = new SearchResult<>();
+        List<Employee> employees = employeeMapper.selectEmployeeByFilter(filter);
+
+        result.setResult(employees);
+
+        if (filter.isPaged() && filter.getPagingData() != null) {
+            int recordNumber = employeeMapper.countEmployeeByFiler(filter);
+            PagingResult pagingResult = new PagingResult(recordNumber, filter.getPagingData());
+            result.setPagingResult(pagingResult);
+            result.setPaged(true);
+        }
+
+        return result;
     }
 
     @Override
     public void createGroup(Group group) {
 
+        employeeMapper.insertGroup(group);
+
     }
 
     @Override
     public Group getGroupById(Integer id) {
-        return null;
+        return employeeMapper.selectGroupById(id);
     }
 
     @Override
     public List<Group> getAllGroup() {
-        return null;
+        return employeeMapper.selectAllGroup();
     }
+
 }

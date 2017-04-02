@@ -18,22 +18,39 @@
 		<include refid="com.mwb.dao.mapper.CommonMapper.pagingLimit"/>
 	</sql>
 
+	<sql id="positionFilter">
+		<if test="filter.positionId != null">
+			ap.id = #{filter.id, javaType=string, jdbcType=CHAR}
+		</if>
+	</sql>
 
 	<sql id="positionColumns">
 		ap.id AS position_id,
 		ap.name AS position_name
 	</sql>
 
-<select id="selectPositionById" resultMap="positionResult" parameterType="map">
-	SELECT
-	<include refid="positionColumns"/>
-	FROM
-		t_position ap
-	<where>
-		ap.id = #{id, javaType=int, jdbcType=INTEGER}
-	</where>
+	<select id="selectPositionById" resultMap="positionResult" parameterType="map">
+		SELECT
+		<include refid="positionColumns"/>
+		FROM
+			t_position ap
+		<where>
+			ap.id = #{id, javaType=int, jdbcType=INTEGER}
+		</where>
 
-</select>
+	</select>
+
+	<select id="selectPositionByFilter" resultMap="positionResult" parameterType="map">
+		SELECT
+		<include refid="positionColumns"/>
+		FROM
+		t_position ap
+		<where>
+			<include refid="positionFilter"/>
+		</where>
+
+	</select>
+
 	<insert
 			id="insertPosition"
 			parameterType="Position"
