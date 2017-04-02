@@ -37,6 +37,11 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
+    public List<Employee> getAllEmployee() {
+        return null;
+    }
+
+    @Override
     public SearchResult<Employee> searchEmployeeByFilter(EmployeeFilter filter) {
         return null;
     }

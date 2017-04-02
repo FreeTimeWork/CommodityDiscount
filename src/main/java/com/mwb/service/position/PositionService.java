@@ -22,6 +22,11 @@ public class PositionService implements IPositionService{
     }
 
     @Override
+    public List<Position> searchAllPosition() {
+        return null;
+    }
+
+    @Override
     public List<Permission> searchAllPermission() {
         return null;
     }

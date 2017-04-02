@@ -14,6 +14,10 @@ public class ResourceVO {
         this.label = label;
         this.value = value;
     }
+    public ResourceVO(Integer label, Object value) {
+        this.label = label + "";
+        this.value = value;
+    }
 
     public String getLabel() {
         return label;

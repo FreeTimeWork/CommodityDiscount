@@ -8,20 +8,22 @@ public class DataResponse extends ServiceResponse {
 
     private static final long serialVersionUID = 1L;
 
-    private List<ResourceVO> activitys;
+    private List<ResourceVO> activities;
     private List<ResourceVO> hireTypes;
     private List<ResourceVO> productStatus;
     private List<ResourceVO> productTypes;
     private List<ResourceVO> storeTypes;
     private List<ResourceVO> employeeStatus;
     private List<ResourceVO> groups;
+    private List<ResourceVO> positions;
+    private List<ResourceVO> employees;
 
-    public List<ResourceVO> getActivitys() {
-        return activitys;
+    public List<ResourceVO> getActivities() {
+        return activities;
     }
 
-    public void setActivitys(List<ResourceVO> activitys) {
-        this.activitys = activitys;
+    public void setActivities(List<ResourceVO> activities) {
+        this.activities = activities;
     }
 
     public List<ResourceVO> getHireTypes() {
@@ -70,5 +72,21 @@ public class DataResponse extends ServiceResponse {
 
     public void setGroups(List<ResourceVO> groups) {
         this.groups = groups;
+    }
+
+    public List<ResourceVO> getPositions() {
+        return positions;
+    }
+
+    public void setPositions(List<ResourceVO> positions) {
+        this.positions = positions;
+    }
+
+    public List<ResourceVO> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<ResourceVO> employees) {
+        this.employees = employees;
     }
 }

@@ -13,6 +13,8 @@ public interface IEmployeeService {
 
 	public void modifyEmployee(Employee employee);
 
+	public List<Employee> getAllEmployee();
+
 	public SearchResult<Employee> searchEmployeeByFilter(EmployeeFilter filter);
 
 	public void createGroup(Group group);

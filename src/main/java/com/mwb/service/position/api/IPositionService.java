@@ -14,6 +14,8 @@ public interface IPositionService {
 
     public SearchResult<Position> searchPosition(PositionFilter filter);
 
+    public List<Position> searchAllPosition();
+
     public List<Permission> searchAllPermission();
 
     public List<Permission> getPermissionsByPositionId();
