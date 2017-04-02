@@ -1,6 +1,7 @@
 package com.mwb.controller.employee;
 
 import java.util.Date;
+import java.util.List;
 
 import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
@@ -34,13 +35,13 @@ public class EmployeeController {
     private IEmployeeService employeeService;
 
     @ResponseBody
-    @RequestMapping(value = "/create",produces = ContentType.APPLICATION_JSON_UTF8)
+    @RequestMapping(value = "/create", produces = ContentType.APPLICATION_JSON_UTF8)
     public ServiceResponse createEmployee(CreateEmployeeRequest request) {
 
         Employee employee = new Employee();
         employee.setFullName(request.getFullName());
         employee.setCreateTime(new Date());
-        employee.setGender(Gender.fromCode(request.getGenderCode()) );
+        employee.setGender(Gender.fromCode(request.getGenderCode()));
         employee.setMobile(request.getMobile());
         employee.setPassword(request.getPassword());
         employee.setPosition(new Position(request.getPositionId()));
@@ -52,17 +53,17 @@ public class EmployeeController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/group/verify",produces = ContentType.APPLICATION_JSON_UTF8)
-    public Boolean verifyGroupLeader(Integer groupId){
+    @RequestMapping(value = "/group/verify", produces = ContentType.APPLICATION_JSON_UTF8)
+    public Boolean verifyGroupLeader(Integer groupId) {
         Group group = employeeService.getGroupById(groupId);
 
         return group == null;
     }
 
-//    修改密码，分组，升级，离职
+    //    修改密码，分组，升级，离职
     @ResponseBody
-    @RequestMapping(value = "/modify",produces = ContentType.APPLICATION_JSON_UTF8)
-    public ServiceResponse modifyEmployee(ModifyEmployeeRequest request){
+    @RequestMapping(value = "/modify", produces = ContentType.APPLICATION_JSON_UTF8)
+    public ServiceResponse modifyEmployee(ModifyEmployeeRequest request) {
 
         Employee employee = new Employee();
         employee.setId(request.getEmployeeId());
@@ -77,15 +78,15 @@ public class EmployeeController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/search",produces = ContentType.APPLICATION_JSON_UTF8)
-    public ServiceResponse searchEmployee(SearchEmployeeRequest request){
+    @RequestMapping(value = "/search", produces = ContentType.APPLICATION_JSON_UTF8)
+    public ServiceResponse searchEmployee(SearchEmployeeRequest request) {
 
         EmployeeFilter filter = new EmployeeFilter();
         filter.setFullName(request.getFullName());
         filter.setGroupId(request.getGroupId());
         filter.setPositionId(request.getPositionId());
         filter.setPaged(true);
-        filter.setPagingData(new PagingData(request.getPageNumber(),request.getPageSize()));
+        filter.setPagingData(new PagingData(request.getPageNumber(), request.getPageSize()));
 
         SearchResult<Employee> result = employeeService.searchEmployeeByFilter(filter);
         SearchEmployeeResponse response = new SearchEmployeeResponse();
@@ -95,10 +96,10 @@ public class EmployeeController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/group/create",produces = ContentType.APPLICATION_JSON_UTF8)
-    public ServiceResponse createGroup(CreateGroupRequest request){
+    @RequestMapping(value = "/group/create", produces = ContentType.APPLICATION_JSON_UTF8)
+    public ServiceResponse createGroup(CreateGroupRequest request) {
 
-        if (StringUtils.isEmpty(request.getName())){
+        if (StringUtils.isEmpty(request.getName())) {
             return new ServiceResponse();
         }
 
@@ -109,4 +110,14 @@ public class EmployeeController {
         return new ServiceResponse();
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/group/create", produces = ContentType.APPLICATION_JSON_UTF8)
+    public ServiceResponse getAllGroup() {
+
+        List<Group> groups = employeeService.getAllGroup();
+
+        SearchGroupResponse response = new SearchGroupResponse();
+        response.setGroups(GroupVO.toVOs(groups));
+        return response;
+    }
 }

@@ -1,5 +1,7 @@
 package com.mwb.service.employee;
 
+import java.util.List;
+
 import com.mwb.dao.filter.EmployeeFilter;
 import com.mwb.dao.filter.SearchResult;
 import com.mwb.dao.mapper.EmployeeMapper;
@@ -46,6 +48,11 @@ public class EmployeeService implements IEmployeeService {
 
     @Override
     public Group getGroupById(Integer id) {
+        return null;
+    }
+
+    @Override
+    public List<Group> getAllGroup() {
         return null;
     }
 }

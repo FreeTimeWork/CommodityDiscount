@@ -9,14 +9,14 @@ public class ModifyEmployeeRequest {
     private String password;
     private Integer positionId;
     private String employeeStatus;
-    private Integer GroupId;
+    private Integer groupId;
 
     public Integer getGroupId() {
-        return GroupId;
+        return groupId;
     }
 
     public void setGroupId(Integer groupId) {
-        GroupId = groupId;
+        this.groupId = groupId;
     }
 
     public String getEmployeeStatus() {
