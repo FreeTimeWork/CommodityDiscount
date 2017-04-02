@@ -62,7 +62,7 @@
         employeeName
         ) VALUE (
         #{name,javaType=string, jdbcType=CHAR},
-        #{employeeId, javaType=string, jdbcType=CHAR},
+        #{employeeId, javaType=int, jdbcType=INTEGER},
         #{employeeName, javaType=string, jdbcType=CHAR}
         )
     </insert>

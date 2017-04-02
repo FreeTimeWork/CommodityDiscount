@@ -10,7 +10,7 @@ public class Group implements Serializable {
 
     private Integer id;
     private String name;
-    private String employeeId; //组长employeeId
+    private Integer employeeId; //组长employeeId
     private String employeeName;
 
     public String getEmployeeName() {
@@ -21,11 +21,11 @@ public class Group implements Serializable {
         this.employeeName = employeeName;
     }
 
-    public String getEmployeeId() {
+    public Integer getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(String employeeId) {
+    public void setEmployeeId(Integer employeeId) {
         this.employeeId = employeeId;
     }
 

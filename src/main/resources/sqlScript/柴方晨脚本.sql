@@ -35,7 +35,7 @@ DROP TABLE IF EXISTS `t_group`;
 CREATE TABLE `t_group` (
   `id` int(16) unsigned NOT NULL AUTO_INCREMENT,
   `name` char(32) NOT NULL,
-  `employee_id` char(32) DEFAULT NULL COMMENT '组长id',
+  `employee_id` `id` int(11) unsigned DEFAULT NULL COMMENT '组长id',
   `employee_name` char(32) DEFAULT NULL COMMENT '组长name',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_group_name` (`name`)
