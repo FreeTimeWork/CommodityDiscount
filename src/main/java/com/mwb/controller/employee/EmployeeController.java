@@ -1,15 +1,21 @@
 package com.mwb.controller.employee;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import java.util.Date;
 
 import com.mwb.controller.api.ContentType;
-import com.mwb.controller.employee.api.EmployeeResponse;
-import com.mwb.dao.model.AdminEmployee;
+import com.mwb.controller.api.ServiceResponse;
+import com.mwb.controller.employee.api.*;
+import com.mwb.dao.filter.EmployeeFilter;
+import com.mwb.dao.filter.SearchResult;
 import com.mwb.dao.model.comm.Log;
-import com.mwb.dao.model.product.Product;
-import com.mwb.service.api.IEmployeeService;
-import com.mwb.service.dataoke.api.IDaoLaoKeService;
+import com.mwb.dao.model.comm.PagingData;
+import com.mwb.dao.model.employee.Employee;
+import com.mwb.dao.model.employee.EmployeeStatus;
+import com.mwb.dao.model.employee.Gender;
+import com.mwb.dao.model.employee.Group;
+import com.mwb.dao.model.position.Position;
+import com.mwb.service.employee.api.IEmployeeService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,40 +31,82 @@ public class EmployeeController {
     private static final Log LOG = Log.getLog(EmployeeController.class);
 
     @Autowired
-    private IEmployeeService adminService;
+    private IEmployeeService employeeService;
 
-    @Autowired
-    private IDaoLaoKeService daoLaoKeService;
-
-    @RequestMapping("/login")
-    public String Login(AdminEmployee adminEmployee, HttpServletRequest request) {
-        LOG.info("Login into ");
-//        adminEmployee.setPassword(Md5);
-        AdminEmployee manager = adminService.login(adminEmployee);
-        if (manager == null) {
-            LOG.info("admin =null ");
-            request.setAttribute("err", "err");
-            return "manager/login";
-        } else {
-            LOG.info("admin =ok ");
-
-            HttpSession session = request.getSession();
-            session.setAttribute("admin", manager);
-            return "redirect:/static/manager/index";
-        }
-    }
     @ResponseBody
-    @RequestMapping(value = "/login1", produces = ContentType.APPLICATION_JSON_UTF8)
-    public EmployeeResponse Login() {
-        EmployeeResponse response = new EmployeeResponse();
-        AdminEmployee adminEmployee1 = new AdminEmployee();
-        adminEmployee1.setPassword("12");
-        Employee employee = adminService.getEmployeeById();
-        String str = JSONArray.toJSONString(employee);
-        response.setObject(str);
-        response.setAdminEmployee(adminEmployee1);
+    @RequestMapping(value = "/create",produces = ContentType.APPLICATION_JSON_UTF8)
+    public ServiceResponse createEmployee(CreateEmployeeRequest request) {
 
+        Employee employee = new Employee();
+        employee.setFullName(request.getFullName());
+        employee.setCreateTime(new Date());
+        employee.setGender(Gender.fromCode(request.getGenderCode()) );
+        employee.setMobile(request.getMobile());
+        employee.setPassword(request.getPassword());
+        employee.setPosition(new Position(request.getPositionId()));
+        employee.setStatus(EmployeeStatus.IN_POSITION);
+
+        employeeService.createEmployee(employee);
+
+        return new ServiceResponse();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/group/verify",produces = ContentType.APPLICATION_JSON_UTF8)
+    public Boolean verifyGroupLeader(Integer groupId){
+        Group group = employeeService.getGroupById(groupId);
+
+        return group == null;
+    }
+
+//    修改密码，分组，升级，离职
+    @ResponseBody
+    @RequestMapping(value = "/modify",produces = ContentType.APPLICATION_JSON_UTF8)
+    public ServiceResponse modifyEmployee(ModifyEmployeeRequest request){
+
+        Employee employee = new Employee();
+        employee.setId(request.getEmployeeId());
+        employee.setPassword(request.getPassword());
+        employee.setPosition(new Position(request.getPositionId()));
+        employee.setGroup(new Group(request.getGroupId()));
+        employee.setStatus(EmployeeStatus.fromCode(request.getEmployeeStatus()));
+
+        employeeService.modifyEmployee(employee);
+
+        return new ServiceResponse();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/search",produces = ContentType.APPLICATION_JSON_UTF8)
+    public ServiceResponse searchEmployee(SearchEmployeeRequest request){
+
+        EmployeeFilter filter = new EmployeeFilter();
+        filter.setFullName(request.getFullName());
+        filter.setGroupId(request.getGroupId());
+        filter.setPositionId(request.getPositionId());
+        filter.setPaged(true);
+        filter.setPagingData(new PagingData(request.getPageNumber(),request.getPageSize()));
+
+        SearchResult<Employee> result = employeeService.searchEmployeeByFilter(filter);
+        SearchEmployeeResponse response = new SearchEmployeeResponse();
+        response.setEmployees(SearchEmployeeResponse.toVOs(result.getResult()));
+        response.setPagingResult(result.getPagingResult());
         return response;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/group/create",produces = ContentType.APPLICATION_JSON_UTF8)
+    public ServiceResponse createGroup(CreateGroupRequest request){
+
+        if (StringUtils.isEmpty(request.getName())){
+            return new ServiceResponse();
+        }
+
+        Group group = new Group();
+        group.setName(request.getName());
+        employeeService.createGroup(group);
+
+        return new ServiceResponse();
     }
 
 }

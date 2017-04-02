@@ -1,5 +1,10 @@
 package com.mwb.controller.product;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
 import com.mwb.controller.product.api.*;
@@ -7,6 +12,7 @@ import com.mwb.dao.filter.ProductFilter;
 import com.mwb.dao.filter.SearchResult;
 import com.mwb.dao.model.comm.Bool;
 import com.mwb.dao.model.comm.Log;
+import com.mwb.dao.model.comm.PagingData;
 import com.mwb.dao.model.product.*;
 import com.mwb.service.ParserService;
 import com.mwb.service.dataoke.api.IDaoLaoKeService;
@@ -18,11 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Controller
 @RequestMapping("/product")
@@ -85,6 +86,8 @@ public class ProductController {
         filter.setSurplusMaxNumber(request.getSurplusMaxNumber());
         filter.setStatus(ProductStatus.fromId(request.getStatusId()));
         filter.setType(ProductType.fromId(request.getTypeId()));
+        filter.setPaged(true);
+        filter.setPagingData(new PagingData(request.getPageNumber(),request.getPageSize()));
 
         SearchResult<Product> result = productService.searchProduct(filter);
         List<ProductVO> productVOs = ProductVO.toVOs(result.getResult());

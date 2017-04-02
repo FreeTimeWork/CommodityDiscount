@@ -1,5 +1,6 @@
 package com.mwb.dao.model.employee;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.mwb.dao.model.position.Position;
@@ -7,9 +8,10 @@ import com.mwb.dao.model.position.Position;
 /**
  *
  */
-public class Employee {
+public class Employee implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-    private String id;
+    private Integer id;
     private String fullName;
     private Gender gender;
     private String mobile;
@@ -19,11 +21,11 @@ public class Employee {
     private Position position;
     private EmployeeStatus status;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
