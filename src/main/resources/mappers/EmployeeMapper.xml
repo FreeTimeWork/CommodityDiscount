@@ -72,9 +72,14 @@
 		#{mobile, javaType=string, jdbcType=CHAR},
 		#{password, javaType=string, jdbcType=CHAR},
 		#{createTime, javaType=date, jdbcType=TIMESTAMP},
-		<if test="group == null">
-			NULL ,
-		</if>
+		<choose>
+			<when test="group != null">
+				#{group.id, javaType=int, jdbcType=INTEGER},
+			</when>
+			<otherwise>
+				NULL ,
+			</otherwise>
+		</choose>
 		#{position.id, javaType=int, jdbcType=INTEGER},
 		#{status.id, javaType=int, jdbcType=INTEGER}
 		)

@@ -27,10 +27,11 @@ public class EmployeeMapperTest extends AbstractPersistenceTest {
         employee.setCreateTime(new Date());
         employee.setFullName("chaifangchen");
         employee.setGender(Gender.F);
-        employee.setMobile("15104569789");
+        employee.setMobile("15104569789123");
         employee.setPassword("123456789");
         Position position = new Position();
         position.setId(1);
+//        employee.setGroup(new Group(1));
         employee.setPosition(position);
         employee.setStatus(EmployeeStatus.IN_POSITION);
         employeeMapper.insertEmployee(employee);

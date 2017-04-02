@@ -8,7 +8,7 @@ import com.mwb.controller.api.ServiceResponse;
  * Created by fangchen.chai on 2017/4/2.
  */
 public class SearchGroupResponse extends ServiceResponse{
-    List<GroupVO> groups;
+    private List<GroupVO> groups;
 
     public List<GroupVO> getGroups() {
         return groups;

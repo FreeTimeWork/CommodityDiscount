@@ -7,6 +7,7 @@ import com.mwb.dao.filter.SearchResult;
 import com.mwb.dao.mapper.EmployeeMapper;
 import com.mwb.dao.model.AdminEmployee;
 import com.mwb.dao.model.employee.Employee;
+import com.mwb.dao.model.employee.EmployeeStatus;
 import com.mwb.dao.model.employee.Group;
 import com.mwb.service.employee.api.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,13 @@ public class EmployeeService implements IEmployeeService {
 
     @Override
     public void createEmployee(Employee employee) {
+        employeeMapper.insertEmployee(employee);
 
     }
 
     @Override
     public void modifyEmployee(Employee employee) {
-
+        employeeMapper.updateEmployee(employee);
     }
 
     @Override

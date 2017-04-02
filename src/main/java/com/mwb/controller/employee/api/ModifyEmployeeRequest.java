@@ -8,7 +8,7 @@ public class ModifyEmployeeRequest {
     private Integer employeeId;
     private String password;
     private Integer positionId;
-    private String employeeStatus;
+    private boolean dismission;
     private Integer groupId;
 
     public Integer getGroupId() {
@@ -19,12 +19,12 @@ public class ModifyEmployeeRequest {
         this.groupId = groupId;
     }
 
-    public String getEmployeeStatus() {
-        return employeeStatus;
+    public boolean isDismission() {
+        return dismission;
     }
 
-    public void setEmployeeStatus(String employeeStatus) {
-        this.employeeStatus = employeeStatus;
+    public void setDismission(boolean dismission) {
+        this.dismission = dismission;
     }
 
     public Integer getEmployeeId() {

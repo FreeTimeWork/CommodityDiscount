@@ -55,7 +55,7 @@ CREATE TABLE `t_employee` (
   `status_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_employee_mobile` (`mobile`),
-  UNIQUE KEY `uk_employee_name` (`name`),
+  UNIQUE KEY `uk_employee_mobile` (`mobile`),
 	CONSTRAINT `fk_employee_position` FOREIGN KEY (`position_id`) REFERENCES `t_position` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
 	CONSTRAINT `fk_employee_group` FOREIGN KEY (`group_id`) REFERENCES `t_group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_employee_status` FOREIGN KEY (`status_id`) REFERENCES `t_employee_status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -99,3 +99,5 @@ INSERT INTO t_permission VALUES (1,'audit.wait.read','待审核'),(2,'audit.now.
 (14,'store.submit','提交商品'),(15,'accounts.submit','提交结账'),(16,'employee.add','添加成员'),(17,'employee.upgrade','升级业务员');
 
 INSERT INTO t_position VALUES (1,'管理员'),(2,'业务员'),(3,'组长'),(4,'审单员'),(5,'财务');
+
+INSERT INTO t_employee_status VALUES (1,'IN_POSITION','在职'),(2,'OUT_OF_POSITION','离职');
