@@ -57,7 +57,10 @@ public class EmployeeController {
     public Boolean verifyGroupLeader(Integer groupId) {
         Group group = employeeService.getGroupById(groupId);
 
-        return group == null;
+        if (group != null && group.getEmployeeId() != null) {
+            return true;
+        }
+        return false;
     }
 
     //    修改密码，分组，升级，离职
@@ -70,7 +73,9 @@ public class EmployeeController {
         employee.setPassword(request.getPassword());
         employee.setPosition(new Position(request.getPositionId()));
         employee.setGroup(new Group(request.getGroupId()));
-        employee.setStatus(EmployeeStatus.fromCode(request.getEmployeeStatus()));
+        if (request.isDismission()){
+            employee.setStatus(EmployeeStatus.OUT_OF_POSITION);
+        }
 
         employeeService.modifyEmployee(employee);
 
@@ -111,7 +116,7 @@ public class EmployeeController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/group/create", produces = ContentType.APPLICATION_JSON_UTF8)
+    @RequestMapping(value = "/group/allGroup", produces = ContentType.APPLICATION_JSON_UTF8)
     public ServiceResponse getAllGroup() {
 
         List<Group> groups = employeeService.getAllGroup();

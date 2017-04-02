@@ -18,7 +18,7 @@ public interface IPositionService {
 
     public List<Permission> searchAllPermission();
 
-    public List<Permission> getPermissionsByPositionId();
+    public List<Permission> getPermissionsByPositionId(Integer positionId);
 
     public void createPositionPermission(Integer positionId, List<Integer> permissions);
 

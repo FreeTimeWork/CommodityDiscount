@@ -27,35 +27,34 @@ public class PositionController {
     private IPositionService positionService;
 
     @ResponseBody
-    @RequestMapping(value = "/search",produces = ContentType.APPLICATION_JSON_UTF8)
-    public ServiceResponse searchPosition(SearchPositionRequest request){
+    @RequestMapping(value = "/search", produces = ContentType.APPLICATION_JSON_UTF8)
+    public ServiceResponse searchPosition(SearchPositionRequest request) {
 
         PositionFilter filter = new PositionFilter();
 
         filter.setId(request.getPositionId());
         filter.setPaged(true);
-        filter.setPagingData(new PagingData(request.getPageNumber(),request.getPageSize()));
+        filter.setPagingData(new PagingData(request.getPageNumber(), request.getPageSize()));
 
-        SearchResult<Position> result =  positionService.searchPosition(filter);
+        SearchResult<Position> result = positionService.searchPosition(filter);
         SearchPositionResponse response = new SearchPositionResponse();
         response.setPositions(PositionVO.toVOs(result.getResult()));
-        response.setPagingResult(result.getPagingResult());
         return response;
     }
 
     @ResponseBody
-    @RequestMapping(value = "/permission/search",produces = ContentType.APPLICATION_JSON_UTF8)
-    public ServiceResponse searchPermission(){
+    @RequestMapping(value = "/permission/allPermission", produces = ContentType.APPLICATION_JSON_UTF8)
+    public ServiceResponse searchPermission() {
 
-        List<Permission> permissions =  positionService.searchAllPermission();
+        List<Permission> permissions = positionService.searchAllPermission();
         SearchPermissionResponse response = new SearchPermissionResponse();
         response.setPermissions(PermissionVO.toVOs(permissions));
         return response;
     }
 
     @ResponseBody
-    @RequestMapping(value = "/permission/byPositionId",produces = ContentType.APPLICATION_JSON_UTF8)
-    public  ServiceResponse getPermissionByPositionId(Integer positionId){
+    @RequestMapping(value = "/permission/byPositionId", produces = ContentType.APPLICATION_JSON_UTF8)
+    public ServiceResponse getPermissionByPositionId(Integer positionId) {
 
         List<Permission> permissions = positionService.getPermissionsByPositionId();
         SearchPermissionResponse response = new SearchPermissionResponse();
@@ -64,8 +63,8 @@ public class PositionController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/permission/modify",produces = ContentType.APPLICATION_JSON_UTF8)
-    public ServiceResponse modifyPositionPermission(ModifyPositionPermissionRequest request){
+    @RequestMapping(value = "/permission/modify", produces = ContentType.APPLICATION_JSON_UTF8)
+    public ServiceResponse modifyPositionPermission(ModifyPositionPermissionRequest request) {
 
         //删除该岗位所有权限，重新添加。
         positionService.createPositionPermission(request.getPositionId(), request.getPermissionIds());

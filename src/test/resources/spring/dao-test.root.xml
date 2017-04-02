@@ -95,7 +95,7 @@
 		<property name="basePackage" value="com.mwb.dao.mapper" />
 	</bean>
 
-	<bean id="daoLaoKeService" class="com.mwb.service.dataoke.DaoLaoKeService">
-		<property name="appKey" value="2222" />
-	</bean>
+	<!--<bean id="daoLaoKeService" class="com.mwb.service.dataoke.DaoLaoKeService">-->
+		<!--<property name="appKey" value="2222" />-->
+	<!--</bean>-->
 </beans>
