@@ -16,11 +16,13 @@
         <result property="createTime" column="employee_create_time"/>
         <result property="status" column="employee_status" javaType="EmployeeStatus" typeHandler="EnumIdTypeHandler"/>
 
-        <!--<association property="group" column="employee_group"-->
-        <!--javaType="Group" resultMap="groupResult"/>-->
-        <!--<association property="position" column="employee_position"-->
-        <!--javaType="Position" resultMap="positionResult"/>-->
+        <association property="group" column="employee_group"
+        javaType="Group" resultMap="groupResult"/>
+        <association property="position" column="employee_position"
+        javaType="Position" resultMap="positionResult"/>
     </resultMap>
+
+    <resultMap id="positionResult" type="Position" extends="com.mwb.dao.mapper.PositionMapper.positionResult"/>
 
     <resultMap
             id="groupResult"
@@ -35,6 +37,13 @@
         <include refid="com.mwb.dao.mapper.CommonMapper.pagingLimit"/>
     </sql>
 
+    <sql id="positionColumns">
+        <include refid="com.mwb.dao.mapper.PositionMapper.positionColumns"/>
+    </sql>
+
+    <sql id="permissionColumns">
+        <include refid="com.mwb.dao.mapper.PermissionMapper.permissionColumns"/>
+    </sql>
 
     <sql id="employeeColumns">
 		ae.id AS employee_id,
@@ -55,6 +64,18 @@
 		g.employee_name AS group_employee_name
 	</sql>
 
+    <sql id="employeeFilter">
+        <if test="filter.fullName != null">
+            ae.full_name LIKE #{filter.fullName, javaType=string, jdbcType=CHAR}
+        </if>
+        <if test="filter.groupId != null">
+            ae.group_id = #{filter.groupId, javaType=int, jdbcType=INTEGER}
+        </if>
+        <if test="filter.positionId != null">
+            ae.position_id = #{filter.positionId, javaType=int, jdbcType=INTEGER}
+        </if>
+
+    </sql>
     <insert id="insertGroup" parameterType="Group" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_group (
         name,
@@ -67,18 +88,63 @@
         )
     </insert>
 
-    <select id="selectAllGroup" resultType="groupResult" >
+    <select id="selectAllGroup" resultMap="groupResult" >
         SELECT
         <include refid="groupColumns"/>
         FROM t_group g
     </select>
 
-    <select id="selectGroupById" resultType="Group" parameterType="map">
+    <select id="selectGroupById" resultMap="groupResult" parameterType="map">
         SELECT
         <include refid="groupColumns"/>
         FROM t_group g
         <where>
-            g.id = #{id, jdbcType=int, jdbcType=INTEGER}
+            g.id = #{id, javaType=int, jdbcType=INTEGER}
+        </where>
+    </select>
+
+    <select id="selectEmployeeByFilter" parameterType="map" resultMap="employeeResult">
+        SELECT
+            <include refid="employeeColumns"/>,
+            <include refid="groupColumns"/>,
+            <include refid="positionColumns"/>
+        FROM
+            t_employee ae
+            LEFT JOIN t_group g ON g.id = ae.group_id
+            INNER JOIN t_position ap ON ap.id = ae.position_id
+        <where>
+            <include refid="employeeFilter"/>
+        </where>
+        <include refid="pagingLimit"/>
+    </select>
+
+    <select id="countEmployeeByFilter" parameterType="map" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            t_employee ae
+            LEFT JOIN t_group g ON g.id = ae.group_id
+            INNER JOIN t_position ap ON ap.id = ae.position_id
+        <where>
+            <include refid="employeeFilter"/>
+        </where>
+    </select>
+
+    <select id="selectEmployeeByMobileAndPassword" parameterType="map" resultMap="employeeResult">
+        SELECT
+        <include refid="employeeColumns"/>,
+        <include refid="groupColumns"/>,
+        <include refid="positionColumns"/>,
+        <include refid="permissionColumns"/>
+        FROM
+        t_employee ae
+        LEFT JOIN t_group g ON g.id = ae.group_id
+        INNER JOIN t_position ap ON ap.id = ae.position_id
+        LEFT JOIN t_position_permission app ON app.position_id = ap.id
+        LEFT JOIN t_permission ap1 ON ap1.id = app.permission_id
+        <where>
+            ae.mobile = #{mobile, javaType=string, jdbcType=CHAR}
+            AND  ae.password = #{password, javaType=string, jdbcType=CHAR}
         </where>
     </select>
 

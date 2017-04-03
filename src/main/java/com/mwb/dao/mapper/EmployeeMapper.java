@@ -12,15 +12,17 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface EmployeeMapper {
 
-    public List<Employee> selectEmployeeByFilter(EmployeeFilter filter);
+    public List<Employee> selectEmployeeByFilter(@Param("filter") EmployeeFilter filter);
 
-    public int countEmployeeByFiler(EmployeeFilter filter);
+    public int countEmployeeByFiler(@Param("filter") EmployeeFilter filter);
 
     public void insertEmployee(Employee employee);
 
     public void updateEmployee(Employee employee);
 
     public Employee selectEmployeeById(@Param("id") Integer id);
+
+    public Employee selectEmployeeByMobileAndPassword(@Param("mobile") String mobile, @Param("password") String password);
 
     // group
     public void insertGroup(Group group);
