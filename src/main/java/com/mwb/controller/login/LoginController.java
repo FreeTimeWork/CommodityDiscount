@@ -41,4 +41,12 @@ public class LoginController {
 
         return response;
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/logout",produces = ContentType.APPLICATION_JSON_UTF8)
+    public ServiceResponse logout(){
+        ApplicationContextUtils.getSession().removeAttribute("employee");
+        return new ServiceResponse();
+    }
+
 }
