@@ -1,5 +1,6 @@
 package com.mwb.controller.login;
 
+import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
 import com.mwb.controller.login.api.LoginRequest;
 import com.mwb.controller.util.ApplicationContextUtils;
@@ -9,6 +10,8 @@ import com.mwb.util.MD5Tools;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Created by fangchen.chai on 2017/4/3.
@@ -19,6 +22,8 @@ public class LoginController {
     @Autowired
     private IEmployeeService employeeService;
 
+    @ResponseBody
+    @RequestMapping(value = "/login",produces = ContentType.APPLICATION_JSON_UTF8)
     public ServiceResponse login(LoginRequest request) {
         ServiceResponse response = new ServiceResponse();
         if (StringUtils.isNotEmpty(request.getMobile()) && StringUtils.isNotEmpty(request.getPassword())) {
