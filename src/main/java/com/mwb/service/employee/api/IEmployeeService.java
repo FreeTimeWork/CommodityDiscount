@@ -17,6 +17,8 @@ public interface IEmployeeService {
 
 	public SearchResult<Employee> searchEmployeeByFilter(EmployeeFilter filter);
 
+	public Employee getEmployeeByMobileAndPassword(String mobile, String password);
+
 	public void createGroup(Group group);
 
 	public Group getGroupById(Integer id);

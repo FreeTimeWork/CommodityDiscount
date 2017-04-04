@@ -56,7 +56,7 @@ public class PositionController {
     @RequestMapping(value = "/permission/byPositionId", produces = ContentType.APPLICATION_JSON_UTF8)
     public ServiceResponse getPermissionByPositionId(Integer positionId) {
 
-        List<Permission> permissions = positionService.getPermissionsByPositionId();
+        List<Permission> permissions = positionService.getPermissionsByPositionId(positionId);
         SearchPermissionResponse response = new SearchPermissionResponse();
         response.setPermissions(PermissionVO.toVOs(permissions));
         return response;

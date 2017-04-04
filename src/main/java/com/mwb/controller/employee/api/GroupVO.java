@@ -13,7 +13,7 @@ public class GroupVO {
 
     private Integer id;
     private String name;
-    private String employeeId; //组长employeeId
+    private Integer employeeId; //组长employeeId
     private String employeeName;
 
     public static List<GroupVO> toVOs(List<Group> groups) {
@@ -52,11 +52,11 @@ public class GroupVO {
         this.name = name;
     }
 
-    public String getEmployeeId() {
+    public Integer getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(String employeeId) {
+    public void setEmployeeId(Integer employeeId) {
         this.employeeId = employeeId;
     }
 

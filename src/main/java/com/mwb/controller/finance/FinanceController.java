@@ -2,11 +2,9 @@ package com.mwb.controller.finance;
 
 import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
-import com.mwb.controller.employee.api.SearchEmployeeRequest;
 import com.mwb.controller.finance.api.SearchFinanceRequest;
 import com.mwb.controller.finance.api.SearchFinanceResponse;
 import com.mwb.service.finance.api.IFinanceService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/finance")
 public class FinanceController {
 
-    @Autowired
+//    @Autowired
     private IFinanceService financeService;
 
     @ResponseBody

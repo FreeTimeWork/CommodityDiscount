@@ -16,6 +16,7 @@ import com.mwb.dao.model.employee.Gender;
 import com.mwb.dao.model.employee.Group;
 import com.mwb.dao.model.position.Position;
 import com.mwb.service.employee.api.IEmployeeService;
+import com.mwb.util.MD5Tools;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -70,7 +71,8 @@ public class EmployeeController {
 
         Employee employee = new Employee();
         employee.setId(request.getEmployeeId());
-        employee.setPassword(request.getPassword());
+        //密码加密
+        employee.setPassword(MD5Tools.MD5(request.getPassword()));
         employee.setPosition(new Position(request.getPositionId()));
         employee.setGroup(new Group(request.getGroupId()));
         if (request.isDismission()){

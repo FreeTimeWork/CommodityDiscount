@@ -63,6 +63,11 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
+    public Employee getEmployeeByMobileAndPassword(String mobile, String password) {
+        return employeeMapper.selectEmployeeByMobileAndPassword(mobile,password);
+    }
+
+    @Override
     public void createGroup(Group group) {
 
         employeeMapper.insertGroup(group);
