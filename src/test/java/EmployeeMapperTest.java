@@ -22,7 +22,7 @@ public class EmployeeMapperTest extends AbstractPersistenceTest {
         System.out.println(employeeMapper.selectEmployeeByMobileAndPassword("123456789","123456789"));
     }
 
-    @Test
+//    @Test
     public void employeeByFilter() {
         EmployeeFilter filter = new EmployeeFilter();
         filter.setPositionId(1);

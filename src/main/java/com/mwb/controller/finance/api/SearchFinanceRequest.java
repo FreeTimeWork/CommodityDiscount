@@ -1,9 +1,11 @@
 package com.mwb.controller.finance.api;
 
+import com.mwb.controller.api.PagingRequest;
+
 /**
  *  Created by mwb on 2017/4/2 0002.
  */
-public class SearchFinanceRequest {
+public class SearchFinanceRequest extends PagingRequest {
     private Integer groupId;
     private Integer employeeId;
     private Integer statusId;    //筛选 员工状态

@@ -4,6 +4,7 @@ import com.mwb.dao.model.employee.Employee;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  *  Created by mwb on 2017/4/2 0002.
@@ -12,13 +13,13 @@ public class Finance implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
-    private Integer ranking;//排名
     private Integer submitNumber;//提报数量
     private Integer averageDaily;//提报率
-    private BigDecimal refuseRate;//拒绝率
+    private Integer refuseRate;//拒绝率
     private Integer refuseNumber;//拒绝数量
     private Integer twoAuditNumber;//待二审数量
     private Integer promoteNumber;//推广中数量
+    private Integer endApproachNumber;//即将结束数量
     private Integer endNumber;//结束数量
     private Integer payWaitNumber;//代付款数量
     private Integer payRunNumber;//付款中数量
@@ -27,15 +28,8 @@ public class Finance implements Serializable {
     private BigDecimal guestUnitPrice;//客单价
     private BigDecimal actualChargeAmount;//实收金额
     private BigDecimal shouldChargeAmount;//应收金额
+    private Date createTime;
     private Employee employee;
-
-    public Integer getRanking() {
-        return ranking;
-    }
-
-    public void setRanking(Integer ranking) {
-        this.ranking = ranking;
-    }
 
     public Integer getId() {
         return id;
@@ -61,11 +55,11 @@ public class Finance implements Serializable {
         this.averageDaily = averageDaily;
     }
 
-    public BigDecimal getRefuseRate() {
+    public Integer getRefuseRate() {
         return refuseRate;
     }
 
-    public void setRefuseRate(BigDecimal refuseRate) {
+    public void setRefuseRate(Integer refuseRate) {
         this.refuseRate = refuseRate;
     }
 
@@ -83,6 +77,14 @@ public class Finance implements Serializable {
 
     public void setTwoAuditNumber(Integer twoAuditNumber) {
         this.twoAuditNumber = twoAuditNumber;
+    }
+
+    public Integer getEndApproachNumber() {
+        return endApproachNumber;
+    }
+
+    public void setEndApproachNumber(Integer endApproachNumber) {
+        this.endApproachNumber = endApproachNumber;
     }
 
     public Integer getPromoteNumber() {
@@ -163,5 +165,13 @@ public class Finance implements Serializable {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

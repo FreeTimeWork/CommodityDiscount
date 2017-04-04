@@ -1,20 +1,27 @@
 package com.mwb.controller.finance.api;
 
+import com.mwb.dao.model.finance.Finance;
+import org.apache.commons.collections.CollectionUtils;
+
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by Administrator on 2017/4/3 0003.
+ * Created by MengWeiBo on 2017-04-01
  */
 public class FinanceVO {
     private Integer id;
     private Integer ranking;
     private String employeeName;
+    private Integer employeeId;
     private Integer submitNumber;//提报数量
     private Integer averageDaily;//提报率
-    private BigDecimal refuseRate;//拒绝率
+    private Integer refuseRate;//拒绝率
     private Integer refuseNumber;//拒绝数量
     private Integer twoAuditNumber;//待二审数量
     private Integer promoteNumber;//推广中数量
+    private Integer endApproachNumber;//即将结束数量
     private Integer endNumber;//结束数量
     private Integer payWaitNumber;//代付款数量
     private Integer payRunNumber;//付款中数量
@@ -23,6 +30,48 @@ public class FinanceVO {
     private BigDecimal guestUnitPrice;//客单价
     private BigDecimal actualChargeAmount;//实收金额
     private BigDecimal shouldChargeAmount;//应收金额
+
+    public static FinanceVO toVO(Finance finance) {
+        FinanceVO vo = new FinanceVO();
+        vo.setId(finance.getId());
+        vo.setEmployeeId(finance.getEmployee().getId());
+        vo.setEmployeeName(finance.getEmployee().getFullName());
+        vo.setSubmitNumber(finance.getSubmitNumber());
+        vo.setAverageDaily(finance.getAverageDaily());
+        vo.setRefuseNumber(finance.getRefuseNumber());
+        vo.setRefuseRate(finance.getRefuseRate());
+        vo.setTwoAuditNumber(finance.getTwoAuditNumber());
+        vo.setPromoteNumber(finance.getPromoteNumber());
+        vo.setEndApproachNumber(finance.getEndApproachNumber());
+        vo.setEndNumber(finance.getEndNumber());
+        vo.setPayWaitNumber(finance.getPayWaitNumber());
+        vo.setPayRunNumber(finance.getPayRunNumber());
+        vo.setPayEndNumber(finance.getPayEndNumber());
+        vo.setPayTrailerNumber(finance.getPayTrailerNumber());
+        vo.setGuestUnitPrice(finance.getGuestUnitPrice());
+        vo.setActualChargeAmount(finance.getActualChargeAmount());
+        vo.setShouldChargeAmount(finance.getShouldChargeAmount());
+
+        return vo;
+    }
+
+    public static List<FinanceVO> toVOs(List<Finance> finances) {
+        List<FinanceVO> vos = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(finances)) {
+            for (Finance finance : finances) {
+                vos.add(toVO(finance));
+            }
+        }
+        return vos;
+    }
+
+    public Integer getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Integer employeeId) {
+        this.employeeId = employeeId;
+    }
 
     public Integer getId() {
         return id;
@@ -64,11 +113,11 @@ public class FinanceVO {
         this.averageDaily = averageDaily;
     }
 
-    public BigDecimal getRefuseRate() {
+    public Integer getRefuseRate() {
         return refuseRate;
     }
 
-    public void setRefuseRate(BigDecimal refuseRate) {
+    public void setRefuseRate(Integer refuseRate) {
         this.refuseRate = refuseRate;
     }
 
@@ -86,6 +135,14 @@ public class FinanceVO {
 
     public void setTwoAuditNumber(Integer twoAuditNumber) {
         this.twoAuditNumber = twoAuditNumber;
+    }
+
+    public Integer getEndApproachNumber() {
+        return endApproachNumber;
+    }
+
+    public void setEndApproachNumber(Integer endApproachNumber) {
+        this.endApproachNumber = endApproachNumber;
     }
 
     public Integer getPromoteNumber() {

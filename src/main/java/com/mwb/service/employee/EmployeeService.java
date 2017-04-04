@@ -1,25 +1,19 @@
 package com.mwb.service.employee;
 
-import java.util.List;
-
-import com.mwb.controller.api.PagingRequest;
 import com.mwb.controller.api.PagingResult;
 import com.mwb.dao.filter.EmployeeFilter;
 import com.mwb.dao.filter.SearchResult;
 import com.mwb.dao.mapper.EmployeeMapper;
-import com.mwb.dao.model.AdminEmployee;
 import com.mwb.dao.model.employee.Employee;
-import com.mwb.dao.model.employee.EmployeeStatus;
 import com.mwb.dao.model.employee.Group;
 import com.mwb.service.employee.api.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service("employeeService")
 public class EmployeeService implements IEmployeeService {
-
 
     @Autowired
     private EmployeeMapper employeeMapper;

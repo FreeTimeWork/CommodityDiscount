@@ -22,5 +22,4 @@ public interface IPositionService {
 
     public void createPositionPermission(Integer positionId, List<Integer> permissions);
 
-
 }

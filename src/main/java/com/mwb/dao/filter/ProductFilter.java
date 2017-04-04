@@ -30,6 +30,7 @@ public class ProductFilter extends SearchFilter {
     private Integer surplusMaxNumber;
     private ProductType type;
     private ProductStatus status;
+    private List<ProductStatus> excludeStatus;
     private List<ProductStatus> includeStatus;
 
     public Integer getId() {
@@ -184,5 +185,13 @@ public class ProductFilter extends SearchFilter {
 
     public void setIncludeStatus(List<ProductStatus> includeStatus) {
         this.includeStatus = includeStatus;
+    }
+
+    public List<ProductStatus> getExcludeStatus() {
+        return excludeStatus;
+    }
+
+    public void setExcludeStatus(List<ProductStatus> excludeStatus) {
+        this.excludeStatus = excludeStatus;
     }
 }

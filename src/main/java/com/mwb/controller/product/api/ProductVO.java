@@ -58,7 +58,7 @@ public class ProductVO {
         vo.setActivityName(product.getActivity().getDescription());
         vo.setCouponBeginTime(DateTimeUtility.formatYYYYMMDDHHMMSS(product.getCouponBeginTime()));
         vo.setCouponEndTime(DateTimeUtility.formatYYYYMMDDHHMMSS(product.getCouponEndTime()));
-        vo.setCouponUseNumber(product.getCouponUseNumber());
+        vo.setCouponUseNumber(product.getCouponReceiveNumber());
         vo.setCouponSurplusNumber(product.getCouponSurplusNumber());
         vo.setQq(product.getStore().getQq());
         vo.setEmployeeName(product.getEmployee().getFullName());

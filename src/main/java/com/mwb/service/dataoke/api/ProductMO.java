@@ -45,7 +45,7 @@ public class ProductMO {
     @JSONField(name = "Quan_surplus")
     private Integer couponSurplusNumber;
     @JSONField(name = "Quan_receive")
-    private Integer couponUseNumber;
+    private Integer couponReceiveNumber;
     @JSONField(name = "Quan_condition")
     private String condition;
 
@@ -185,12 +185,12 @@ public class ProductMO {
         this.couponSurplusNumber = couponSurplusNumber;
     }
 
-    public Integer getCouponUseNumber() {
-        return couponUseNumber;
+    public Integer getCouponReceiveNumber() {
+        return couponReceiveNumber;
     }
 
-    public void setCouponUseNumber(Integer couponUseNumber) {
-        this.couponUseNumber = couponUseNumber;
+    public void setCouponReceiveNumber(Integer couponReceiveNumber) {
+        this.couponReceiveNumber = couponReceiveNumber;
     }
 
     public String getCondition() {

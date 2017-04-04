@@ -93,7 +93,7 @@ public class ProductDetailsResponse extends ServiceResponse {
             response.setCouponUrl(product.getCouponUrl());
             response.setCouponBeginTime(DateTimeUtility.formatYYYYMMDDHHMMSS(product.getCouponBeginTime()));
             response.setCouponEndTime(DateTimeUtility.formatYYYYMMDDHHMMSS(product.getCouponEndTime()));
-            response.setCouponUseNumber(product.getCouponUseNumber());
+            response.setCouponUseNumber(product.getCouponReceiveNumber());
             response.setCouponSurplusNumber(product.getCouponSurplusNumber());
             response.setCondition(product.getCondition());
             response.setFeatures(product.getFeatures());

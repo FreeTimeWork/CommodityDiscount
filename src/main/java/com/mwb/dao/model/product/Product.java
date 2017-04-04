@@ -30,8 +30,8 @@ public class Product implements Serializable{
     private BigDecimal couponAmount;    //优惠券金额
     private String couponUrl;           //优惠券连接
     private Date couponBeginTime;       //优惠券开始时间
-    private Date couponEndTime;         //优惠券开始时间
-    private Integer couponUseNumber;    //领取数量
+    private Date couponEndTime;         //优惠券结束时间
+    private Integer couponReceiveNumber;    //领取数量
     private Integer couponSurplusNumber; //剩余数量
     private String condition;           //使用条件
 
@@ -163,12 +163,12 @@ public class Product implements Serializable{
         this.couponEndTime = couponEndTime;
     }
 
-    public Integer getCouponUseNumber() {
-        return couponUseNumber;
+    public Integer getCouponReceiveNumber() {
+        return couponReceiveNumber;
     }
 
-    public void setCouponUseNumber(Integer couponUseNumber) {
-        this.couponUseNumber = couponUseNumber;
+    public void setCouponReceiveNumber(Integer couponReceiveNumber) {
+        this.couponReceiveNumber = couponReceiveNumber;
     }
 
     public Integer getCouponSurplusNumber() {
