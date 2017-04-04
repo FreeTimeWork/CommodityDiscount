@@ -175,6 +175,15 @@ public class ProductService implements IProductService {
                 createVoucherPicture(picture);
             }
         }
+
+        Finance finance = financeService.getFinanceByEmployeeId(voucher.getProduct().getEmployee().getId());
+        finance.setPayRunNumber(finance.getPayRunNumber() - 1);
+        finance.setPayEndNumber(finance.getPayEndNumber() + 1);
+        finance.setShouldChargeAmount(finance.getShouldChargeAmount().add(voucher.getShouldChargeAmount()));
+        finance.setActualChargeAmount(finance.getActualChargeAmount().add(voucher.getActualChargeAmount()));
+        finance.setGuestUnitPrice(finance.getActualChargeAmount().divide(new BigDecimal(finance.getPayEndNumber()), 2));
+
+        financeService.modifyFinance(finance);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.mwb.dao.model.product;
 
 import com.mwb.dao.model.comm.Bool;
 import com.mwb.dao.model.employee.Employee;
+import com.mwb.dao.model.product.voucher.ProductVoucher;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
 import java.io.Serializable;
@@ -50,6 +51,7 @@ public class Product implements Serializable{
     private Activity activity;          //活动类别
     private ProductType productType;           //商品类型
     private List<ProductPicture> pictures;
+    private ProductVoucher voucher;          // 凭证信息
 
     public Integer getId() {
         return id;
@@ -297,6 +299,14 @@ public class Product implements Serializable{
 
     public void setPictures(List<ProductPicture> pictures) {
         this.pictures = pictures;
+    }
+
+    public ProductVoucher getVoucher() {
+        return voucher;
+    }
+
+    public void setVoucher(ProductVoucher voucher) {
+        this.voucher = voucher;
     }
 
     @Override

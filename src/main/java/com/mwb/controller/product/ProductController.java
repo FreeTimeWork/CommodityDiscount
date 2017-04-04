@@ -1,10 +1,5 @@
 package com.mwb.controller.product;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
 import com.mwb.controller.finance.api.ProductVoucherVO;
@@ -21,6 +16,7 @@ import com.mwb.dao.model.comm.PagingData;
 import com.mwb.dao.model.employee.Employee;
 import com.mwb.dao.model.product.*;
 import com.mwb.dao.model.product.voucher.ProductVoucher;
+import com.mwb.dao.model.product.voucher.VoucherPicture;
 import com.mwb.service.ParserService;
 import com.mwb.service.dataoke.api.IDaoLaoKeService;
 import com.mwb.service.product.api.IProductService;
@@ -35,6 +31,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by MengWeiBo on 2017-04-01
@@ -73,9 +75,20 @@ public class ProductController {
     @ResponseBody
     @RequestMapping(value = "/detail", produces = ContentType.APPLICATION_JSON_UTF8)
     public ServiceResponse getProductDetail(Integer id) {
-        Product product = productService.getProductById(id);
+        Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
+        if (employee == null) {
+            return new ProductDetailsResponse();
+        }
 
-        return ProductDetailsResponse.toResponse(product);
+        Product product = productService.getProductById(id);
+        ProductDetailsResponse response = ProductDetailsResponse.toResponse(product);
+
+        Integer positionId = product.getEmployee().getPosition().getId();
+        if (!positionId.equals(1) || !positionId.equals(5)) {
+            response.setVoucher(null);
+        }
+
+        return response;
 
     }
 
@@ -188,27 +201,46 @@ public class ProductController {
     @ResponseBody
     @RequestMapping(value = "/voucher/create", produces = ContentType.APPLICATION_JSON_UTF8)
     public ServiceResponse createProductVoucher(
-            HttpServletRequest request, @RequestParam("files") MultipartFile files, Integer id) {
-        Product product = productService.getProductById(id);
-//        String contextPath=request.getSession().getServletContext().getContextPath();
-//        String img=contextPath+"/static/bookimgs/" +"default.jpg";
-//        if (!file.isEmpty()) {
-//            String filePath = request.getSession().getServletContext().getRealPath("/")
-//                    + "\\static\\bookimgs\\" +  file.getOriginalFilename();
-//            //   /BookStore
-//
-//            img=contextPath+"/static/bookimgs/" +  file.getOriginalFilename();
-//            //转存文件
-//            LOGGER.info(" fileup into{}",file.getOriginalFilename());
-//            LOGGER.info("filePath{}",filePath);
-//            try {
-//                file.transferTo(new File(filePath));
-//                LOGGER.info(file.getOriginalFilename() + "上传文件成功");
-//            } catch (IOException e) {
-//                LOGGER.error("IOException{}",e);
-//                e.printStackTrace();
-//            }
-//        }
+            HttpServletRequest httpServletRequest,
+            @RequestParam("files") MultipartFile[] files,
+            CreateProductVoucherRequest request) {
+        Product product = productService.getProductById(request.getId());
+
+        ProductVoucher voucher = new ProductVoucher();
+        voucher.setReceiveNumber(request.getCouponReceiveNumber());
+        voucher.setUseNumber(request.getCouponUseNumber());
+        voucher.setPayAmount(request.getPayAmount());
+        voucher.setShouldChargeAmount(request.getShouldChargeAmount());
+        voucher.setActualChargeAmount(request.getActualChargeAmount());
+        voucher.setCreateTime(new Date());
+        voucher.setConversionRate(request.getConversionRate());
+        voucher.setWithoutRate(request.getWithoutRate());
+        voucher.setProduct(product);
+
+        List<VoucherPicture> pictures = new ArrayList<>();
+        if (files != null && files.length > 0) {
+            for (int i = 0; i < files.length; i++) {
+                try {
+                    MultipartFile file = files[i];
+                    String filePath = httpServletRequest.getSession().getServletContext().getRealPath("/")
+                            + "\\image\\" + file.getOriginalFilename();
+
+                    VoucherPicture picture = new VoucherPicture();
+                    picture.setUrl(filePath);
+                    picture.setVoucher(voucher);
+                    pictures.add(picture);
+
+                    file.transferTo(new File(filePath));
+                } catch (IOException e) {
+                    LOG.error("createProductVoucher is err.");
+                }
+            }
+        }
+
+        voucher.setPictures(pictures);
+
+        productService.createProductVoucher(voucher);
+
         return new ServiceResponse();
 
     }
