@@ -15,7 +15,7 @@ public interface BpmMapper {
 
     public void updateTask(Task task);
 
-    public void batchInsertVariable(@Param("variables") List<Variable> variables);
+    public void batchInsertOrUpdateVariable(@Param("variables") List<Variable> variables);
 
     public List<Variable> selectVariableByTaskId(@Param("taskId") Integer taskId);
 

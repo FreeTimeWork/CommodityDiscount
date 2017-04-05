@@ -99,7 +99,8 @@ CREATE TABLE `ru_variable` (
   `name` varchar(255) COLLATE utf8_bin NOT NULL,
   `text` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
 	`task_id` int(16) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_ru_variable_name_task_id` (`name`,`task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
