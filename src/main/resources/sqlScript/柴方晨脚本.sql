@@ -84,6 +84,24 @@ CREATE TABLE `t_position_permission` (
   CONSTRAINT `fk_position_permission_position` FOREIGN KEY (`position_id`) REFERENCES `t_position` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- 正在执行的审批表
+DROP TABLE IF EXISTS `ru_task`;
+CREATE TABLE `ru_task` (
+  `id` int(16) unsigned NOT NULL AUTO_INCREMENT,
+	`employee_id` int(16) unsigned NOT NULL COMMENT '审核人id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- 流程变量
+DROP TABLE IF EXISTS `ru_variable`;
+CREATE TABLE `ru_variable` (
+  `id` int(16) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_bin NOT NULL,
+  `text` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
+	`task_id` int(16) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

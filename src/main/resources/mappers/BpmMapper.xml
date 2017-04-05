@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mwb.dao.mapper.BpmMapper">
+
+
+    <resultMap
+            id="taskResult"
+            type="Task">
+        <id property="id" column="task_id"/>
+        <result property="employeeId" column="task_employee_id"/>
+    </resultMap>
+
+    <resultMap
+            id="variableResult"
+            type="Variable">
+        <id property="id" column="variable_id"/>
+        <result property="name" column="variable_name"/>
+        <result property="text" column="variable_text"/>
+        <result property="taskId" column="variable_task_id"/>
+    </resultMap>
+
+    <sql id="pagingLimit">
+        <include refid="com.mwb.dao.mapper.CommonMapper.pagingLimit"/>
+    </sql>
+
+    <sql id="taskColumns">
+		rt.id AS task_id,
+		rt.employee_id AS task_employee_id
+	</sql>
+
+    <sql id="variableColumns">
+        rv.id AS variable_id,
+        rv.name AS variable_name,
+        rv.text AS variable_text,
+        rv.task_id AS variable_task_id
+    </sql>
+
+    <insert
+            id="insertTask"
+            parameterType="Task"
+            useGeneratedKeys="true"
+            keyProperty="id">
+
+		INSERT INTO ru_task (
+		employee_id
+		) VALUES (
+		#{employeeId, javaType=int, jdbcType=INTEGER}
+		)
+	</insert>
+
+    <update
+            id="updateTask"
+            parameterType="Task">
+
+        UPDATE
+        ru_task
+        <set>
+            <if test="employeeId != null">
+                    employee_id = #{employeeId, javaType=int, jdbcType=INTEGER}
+            </if>
+        </set>
+        WHERE
+        id = #{id, javaType=int, jdbcType=INTEGER}
+    </update>
+
+    <insert
+            id="batchInsertVariable"
+            parameterType="Variable">
+
+        INSERT INTO ru_variable (
+            `name`,
+            `text`,
+            `task_id`
+        ) VALUES
+          <foreach collection="variables" item="item" index="index" separator=",">
+              (
+                  #{item.name, javaType=string, jdbcType=CHAR},
+                  #{item.text, javaType=string, jdbcType=CHAR},
+                  #{item.taskId, javaType=int, jdbcType=INTEGER}
+              )
+          </foreach>
+    </insert>
+
+    <select id="selectVariableByTaskId" resultMap="variableResult" parameterType="map">
+        SELECT
+        <include refid="variableColumns"/>
+        FROM
+        ru_variable rv
+        <where>
+            rv.task_id = #{taskId, javaType=int, jdbcType=INTEGER}
+        </where>
+
+    </select>
+
+
+</mapper>   

@@ -110,6 +110,7 @@ CREATE TABLE `t_product` (
   `status_id` int(10) unsigned NOT NULL,
   `store_id` int(10) unsigned NOT NULL,
   `employee_id` int(10) unsigned NOT NULL,
+  `task_id` int(16) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `hire_type_id` (`hire_type_id`),
   KEY `type_id` (`type_id`),
@@ -117,12 +118,14 @@ CREATE TABLE `t_product` (
   KEY `t_product_ibfk_4` (`status_id`),
   KEY `employee_id` (`employee_id`),
   KEY `t_product_ibfk_5` (`store_id`),
+  KEY `t_product_ibfk_6` (`task_id`),
   CONSTRAINT `t_product_ibfk_1` FOREIGN KEY (`hire_type_id`) REFERENCES `t_hire_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `t_product_ibfk_2` FOREIGN KEY (`type_id`) REFERENCES `t_product_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `t_product_ibfk_3` FOREIGN KEY (`activity_id`) REFERENCES `t_activity` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `t_product_ibfk_4` FOREIGN KEY (`status_id`) REFERENCES `t_product_status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `t_product_ibfk_5` FOREIGN KEY (`store_id`) REFERENCES `t_store` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `t_product_ibfk_6` FOREIGN KEY (`employee_id`) REFERENCES `t_employee` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `t_product_ibfk_6` FOREIGN KEY (`employee_id`) REFERENCES `t_employee` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `t_product_ibfk_7` FOREIGN KEY (`task_id`) REFERENCES `ru_task` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 商品图片
