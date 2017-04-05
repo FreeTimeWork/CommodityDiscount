@@ -9,4 +9,6 @@ import com.mwb.dao.model.product.Product;
 public interface IDaoLaoKeService {
 
     public void setDaTaoKeProduct(Product product);
+
+    public Product getDaTaoKeProduct(String productId);
 }

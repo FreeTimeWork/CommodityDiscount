@@ -3,15 +3,13 @@ import java.util.List;
 
 import com.mwb.dao.mapper.PermissionMapper;
 import com.mwb.dao.model.permission.Permission;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created by Fangchen.chai on 2017/4/1.
  */
 public class PermissionMapperTest extends AbstractPersistenceTest{
 
-    @Autowired
+//    @Autowired
     public PermissionMapper mapper;
 
 //    @Test
@@ -24,7 +22,7 @@ public class PermissionMapperTest extends AbstractPersistenceTest{
         mapper.batchInsertPositionPermissions(1,permissionIds);
     }
 
-    @Test
+//    @Test
     public void test2(){
         List<Permission> permissions = mapper.selectPermissionsByPositionId(1);
         System.out.println(permissions);

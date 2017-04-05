@@ -2,6 +2,7 @@ package com.mwb.dao.model.product;
 
 import com.mwb.dao.model.comm.Bool;
 import com.mwb.dao.model.employee.Employee;
+import com.mwb.dao.model.product.voucher.ProductVoucher;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
 import java.io.Serializable;
@@ -30,8 +31,8 @@ public class Product implements Serializable{
     private BigDecimal couponAmount;    //优惠券金额
     private String couponUrl;           //优惠券连接
     private Date couponBeginTime;       //优惠券开始时间
-    private Date couponEndTime;         //优惠券开始时间
-    private Integer couponUseNumber;    //领取数量
+    private Date couponEndTime;         //优惠券结束时间
+    private Integer couponReceiveNumber;    //领取数量
     private Integer couponSurplusNumber; //剩余数量
     private String condition;           //使用条件
 
@@ -50,6 +51,7 @@ public class Product implements Serializable{
     private Activity activity;          //活动类别
     private ProductType productType;           //商品类型
     private List<ProductPicture> pictures;
+    private ProductVoucher voucher;          // 凭证信息
 
     public Integer getId() {
         return id;
@@ -163,12 +165,12 @@ public class Product implements Serializable{
         this.couponEndTime = couponEndTime;
     }
 
-    public Integer getCouponUseNumber() {
-        return couponUseNumber;
+    public Integer getCouponReceiveNumber() {
+        return couponReceiveNumber;
     }
 
-    public void setCouponUseNumber(Integer couponUseNumber) {
-        this.couponUseNumber = couponUseNumber;
+    public void setCouponReceiveNumber(Integer couponReceiveNumber) {
+        this.couponReceiveNumber = couponReceiveNumber;
     }
 
     public Integer getCouponSurplusNumber() {
@@ -297,6 +299,14 @@ public class Product implements Serializable{
 
     public void setPictures(List<ProductPicture> pictures) {
         this.pictures = pictures;
+    }
+
+    public ProductVoucher getVoucher() {
+        return voucher;
+    }
+
+    public void setVoucher(ProductVoucher voucher) {
+        this.voucher = voucher;
     }
 
     @Override

@@ -30,13 +30,29 @@ public class DaoLaoKeService extends AbstractHttpClient implements IDaoLaoKeServ
     public void setDaTaoKeProduct(Product product) {
         LOG.info("get productId discount info.");
         ProductMO mo = getProductMO(product.getProductId());
+
         try {
             toProduct(mo, product);
         } catch (Exception e) {
             LOG.error("get productId discount info toProduct is err:{}", mo);
-            e.printStackTrace();
         }
+    }
 
+    @Override
+    public Product getDaTaoKeProduct(String productId) {
+        LOG.info("get productId discount info.");
+        ProductMO mo = getProductMO(productId);
+        if (mo == null) {
+            return null;
+        }
+        Product product = new Product();
+        try {
+            toProduct(mo, product);
+        } catch (Exception e) {
+            LOG.error("get productId discount info toProduct is err:{}", mo);
+            return null;
+        }
+        return product;
     }
 
     private ProductMO getProductMO(String productId) {
@@ -99,7 +115,7 @@ public class DaoLaoKeService extends AbstractHttpClient implements IDaoLaoKeServ
         product.setCouponAmount(mo.getCouponAmount());
         product.setCouponEndTime(DateTimeUtility.parseYYYYMMDDHHMMSS(mo.getCouponEndTime()));
         product.setCouponSurplusNumber(mo.getCouponSurplusNumber());
-        product.setCouponUseNumber(mo.getCouponUseNumber());
+        product.setCouponReceiveNumber(mo.getCouponReceiveNumber());
         product.setCondition(mo.getCondition());
         product.setStore(store);
 
