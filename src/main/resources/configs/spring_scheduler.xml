@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 实例化bean -->
+    <bean id= "productJobTask" class ="com.mwb.scheduler.ProductJobTask"/>
+
+    <!-- 配置MethodInvokingJobDetailFactoryBean -->
+    <bean id= "productTaskMethod"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="productJobTask"/>
+        <property name="targetMethod" value="run"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+
+    <!-- 配置定时表达式 -->
+    <bean id= "productTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean" >
+        <property name="jobDetail" ref="productTaskMethod" />
+        <!-- 每日3点 -->
+        <property name="cronExpression" value="0 0 3 * * ?" />
+    </bean>
+
+    <!-- 配置调度工厂 -->
+    <bean id= "schedulerFactoryBean"
+          class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers" >
+            <list>
+                <ref bean="productTaskTrigger" />
+            </list>
+        </property>
+    </bean>
+</beans>

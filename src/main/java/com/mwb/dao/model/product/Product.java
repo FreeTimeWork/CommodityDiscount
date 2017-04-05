@@ -21,6 +21,7 @@ public class Product implements Serializable{
     private String productId;           //淘宝id
     private String name;                //商品名称
     private String pictureUrl;             //商品主图
+    private String supplementPictureUrl;    //商品主图
     private BigDecimal reservePrice;    //商品正常价格
     private Integer sales;              //商品月销量
     private String url;                 //商品链接
@@ -91,6 +92,14 @@ public class Product implements Serializable{
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
+    }
+
+    public String getSupplementPictureUrl() {
+        return supplementPictureUrl;
+    }
+
+    public void setSupplementPictureUrl(String supplementPictureUrl) {
+        this.supplementPictureUrl = supplementPictureUrl;
     }
 
     public BigDecimal getReservePrice() {

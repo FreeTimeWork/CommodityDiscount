@@ -99,9 +99,9 @@ public class ProductService implements IProductService {
 
     @Override
     public void createProduct(Product product) {
-        productMapper.insertProduct(product);
-
         createStore(product.getStore());
+
+        productMapper.insertProduct(product);
 
         if (CollectionUtils.isNotEmpty(product.getPictures())) {
             for (ProductPicture picture : product.getPictures()) {

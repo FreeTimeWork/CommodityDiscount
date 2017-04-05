@@ -23,6 +23,7 @@ public class ProductDetailsResponse extends ServiceResponse {
     private String createHistory;           //提交历史
     private String name;                //商品名称
     private String pictureUrl;             //商品主图
+    private String supplementPictureUrl;    //补充主图
     private BigDecimal reservePrice;    //商品正常价格
     private Integer sales;              //商品月销量
     private String url;                 //商品链接
@@ -77,6 +78,7 @@ public class ProductDetailsResponse extends ServiceResponse {
             response.setProductId(product.getProductId());
             response.setName(product.getName());
             response.setPictureUrl(product.getPictureUrl());
+            response.setSupplementPictureUrl(product.getSupplementPictureUrl());
             response.setReservePrice(product.getReservePrice());
             response.setSales(product.getSales());
             response.setUrl(product.getUrl());
@@ -470,5 +472,13 @@ public class ProductDetailsResponse extends ServiceResponse {
 
     public void setVoucher(ProductVoucherVO voucher) {
         this.voucher = voucher;
+    }
+
+    public String getSupplementPictureUrl() {
+        return supplementPictureUrl;
+    }
+
+    public void setSupplementPictureUrl(String supplementPictureUrl) {
+        this.supplementPictureUrl = supplementPictureUrl;
     }
 }
