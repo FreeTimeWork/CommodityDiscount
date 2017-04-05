@@ -6,5 +6,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	<!-- 别名 -->
 	<typeAliases>
 		<package name="com.mwb.dao.model"/>
+		<package name="com.mwb.dao.model.employee"/>
 	</typeAliases>
 </configuration>

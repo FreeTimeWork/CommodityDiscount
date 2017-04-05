@@ -1,14 +1,11 @@
 package com.mwb.controller.api;
 
-
-import com.mwb.controller.api.PagingResult;
-
 import java.io.Serializable;
 
 /**
  * Created by MengWeiBo on 2017-03-28
  */
-public class PagingResponse implements Serializable {
+public class PagingResponse extends ServiceResponse implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int pageNumber;

@@ -62,6 +62,7 @@ public class ProductDetailsResponse extends ServiceResponse {
     private Integer storeTypeId;             //店铺类型
     private String storeTypeName;           //店铺类型
     private List<String> pictures;          // 图片链接
+    private ProductVoucherVO voucher;          // 凭证信息
 
     public static ProductDetailsResponse toResponse(Product product) {
         ProductDetailsResponse response = new ProductDetailsResponse();
@@ -93,7 +94,7 @@ public class ProductDetailsResponse extends ServiceResponse {
             response.setCouponUrl(product.getCouponUrl());
             response.setCouponBeginTime(DateTimeUtility.formatYYYYMMDDHHMMSS(product.getCouponBeginTime()));
             response.setCouponEndTime(DateTimeUtility.formatYYYYMMDDHHMMSS(product.getCouponEndTime()));
-            response.setCouponUseNumber(product.getCouponUseNumber());
+            response.setCouponUseNumber(product.getCouponReceiveNumber());
             response.setCouponSurplusNumber(product.getCouponSurplusNumber());
             response.setCondition(product.getCondition());
             response.setFeatures(product.getFeatures());
@@ -107,8 +108,7 @@ public class ProductDetailsResponse extends ServiceResponse {
                 response.setHireTypeName(product.getHireType().getDescription());
             }
             if (product.getEmployee() != null) {
-                //// TODO: 2017/4/1
-//                response.setEmployeeId(product.getEmployee().getId());
+                response.setEmployeeId(product.getEmployee().getId());
                 response.setEmployeeName(product.getEmployee().getFullName());
             }
             if (product.getStore() != null) {
@@ -129,6 +129,8 @@ public class ProductDetailsResponse extends ServiceResponse {
                 }
                 response.setPictures(pictures);
             }
+
+            response.setVoucher(ProductVoucherVO.toVO(product.getVoucher()));
         }
 
         return response;
@@ -460,5 +462,13 @@ public class ProductDetailsResponse extends ServiceResponse {
 
     public void setPictures(List<String> pictures) {
         this.pictures = pictures;
+    }
+
+    public ProductVoucherVO getVoucher() {
+        return voucher;
+    }
+
+    public void setVoucher(ProductVoucherVO voucher) {
+        this.voucher = voucher;
     }
 }

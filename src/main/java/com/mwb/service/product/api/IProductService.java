@@ -1,8 +1,15 @@
 package com.mwb.service.product.api;
 
 import com.mwb.dao.filter.ProductFilter;
+import com.mwb.dao.filter.ProductVoucherFilter;
 import com.mwb.dao.filter.SearchResult;
+import com.mwb.dao.model.employee.Employee;
 import com.mwb.dao.model.product.Product;
+import com.mwb.dao.model.product.ProductPicture;
+import com.mwb.dao.model.product.ProductStatus;
+import com.mwb.dao.model.product.Store;
+import com.mwb.dao.model.product.voucher.ProductVoucher;
+import com.mwb.dao.model.product.voucher.VoucherPicture;
 
 import java.util.List;
 
@@ -15,7 +22,21 @@ public interface IProductService {
 
     public List<Product> getProductByProductId(String productId);
 
-    public SearchResult<Product> searchProduct(ProductFilter filter);
+    public List<Product> getProductByStatus(Integer employeeId, ProductStatus status);
+
+    public SearchResult<Product> searchProduct(ProductFilter filter, Employee employee);
 
     public void createProduct(Product product);
+
+    public void modifyProduct(Product product);
+
+    public SearchResult<ProductVoucher> searchProductVoucher(ProductVoucherFilter filter);
+
+    public void createProductVoucher(ProductVoucher voucher);
+
+    public void createVoucherPicture(VoucherPicture voucherPicture);
+
+    public void createProductPicture(ProductPicture productPicture);
+
+    public void createStore(Store store);
 }

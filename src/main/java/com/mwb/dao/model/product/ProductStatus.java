@@ -17,10 +17,10 @@ public enum ProductStatus implements IdInterface {
     PROMOTE(6, "PROMOTE", "推广中"),
     END_APPROACH(7, "END_APPROACH", "即将结束"),
     END(8, "END", "已结束"),
-    PAY_WAIT(3, "PAY_WAIT", "代付款"),
-    PAY_RUN(3, "PAY_RUN", "付款中"),
-    PAY_TRAILER(3, "PAY_TRAILER", "拒绝付款"),
-    PAY_END(3, "PAY_END", "已付款");
+    PAY_WAIT(9, "PAY_WAIT", "代付款"),
+    PAY_RUN(10, "PAY_RUN", "付款中"),
+    PAY_TRAILER(11, "PAY_TRAILER", "拒绝付款"),
+    PAY_END(12, "PAY_END", "已付款");
 
     private static final Map<String, ProductStatus> code2ProductStatus;
     private static final Map<Integer, ProductStatus> id2ProductStatus;
