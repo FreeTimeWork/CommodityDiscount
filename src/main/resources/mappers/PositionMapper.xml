@@ -9,7 +9,7 @@
             id="positionResult"
             type="Position">
 
-        <id property="id" column="employee_id"/>
+        <id property="id" column="position_id"/>
         <result property="name" column="position_name"/>
         <collection property="permissions" ofType="Permission" resultMap="permissionResult"/>
     </resultMap>
