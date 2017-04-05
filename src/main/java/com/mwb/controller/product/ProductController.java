@@ -146,6 +146,7 @@ public class ProductController {
         product.setProductId(request.getProductId());
         product.setName(request.getName());
         product.setPictureUrl(request.getPictureUrl());
+        product.setSupplementPictureUrl(request.getSupplementPictureUrl());
         product.setReservePrice(request.getReservePrice());
         product.setSales(request.getSales());
         product.setUrl(request.getUrl());
@@ -214,7 +215,7 @@ public class ProductController {
         voucher.setActualChargeAmount(request.getActualChargeAmount());
         voucher.setCreateTime(new Date());
         voucher.setConversionRate(request.getConversionRate());
-        voucher.setWithoutRate(request.getWithoutRate());
+        voucher.setWithoutUrl(request.getWithoutRate());
         voucher.setProduct(product);
 
         List<VoucherPicture> pictures = new ArrayList<>();

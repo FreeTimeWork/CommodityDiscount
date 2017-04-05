@@ -11,7 +11,7 @@ import java.util.Map;
 public enum  HireType implements IdInterface {
     DIRECTIONAL(1, "DIRECTIONAL", "定向"),
     GENERAL(2, "GENERAL", "通用"),
-    Magpie(3, "Magpie", "鹊桥");
+    MAGPIE(3, "MAGPIE", "鹊桥");
 
     private static final Map<String, HireType> code2HireType;
     private static final Map<Integer, HireType> id2HireType;

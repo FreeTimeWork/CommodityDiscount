@@ -13,12 +13,12 @@ public enum ProductType implements IdInterface {
     MAN(2, "MAN", "男裝"),
     UNDERWEAR(3, "UNDERWEAR", "內衣"),
     MATERNAL(4, "MATERNAL", "母婴"),
-    COSMETICS(4, "COSMETICS", "化妆品"),
-    OCCUPY(5, "OCCUPY", "居家"),
-    SHOES(6, "SHOES", "鞋包配饰"),
-    FOOD(7, "FOOD", "美食"),
-    CAR(8, "CAR", "文体车品"),
-    APPLIANCE(9, "APPLIANCE", "数码家电");
+    COSMETICS(5, "COSMETICS", "化妆品"),
+    OCCUPY(6, "OCCUPY", "居家"),
+    SHOES(7, "SHOES", "鞋包配饰"),
+    FOOD(8, "FOOD", "美食"),
+    CAR(9, "CAR", "文体车品"),
+    APPLIANCE(10, "APPLIANCE", "数码家电");
 
     private static final Map<String, ProductType> code2Activity;
     private static final Map<Integer, ProductType> id2Activity;

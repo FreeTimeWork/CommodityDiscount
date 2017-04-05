@@ -35,7 +35,7 @@ public class ProductVoucherVO {
         vo.setShouldChargeAmount(voucher.getShouldChargeAmount());
         vo.setActualChargeAmount(voucher.getActualChargeAmount());
         vo.setConversionRate(voucher.getConversionRate());
-        vo.setWithoutRate(voucher.getWithoutRate());
+        vo.setWithoutRate(voucher.getWithoutUrl());
         List<String> pictures = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(voucher.getPictures())) {
             for (VoucherPicture picture : voucher.getPictures()) {

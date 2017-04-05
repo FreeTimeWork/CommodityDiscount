@@ -1,6 +1,5 @@
 package com.mwb.dao.model.product.voucher;
 
-import com.mwb.dao.model.employee.Employee;
 import com.mwb.dao.model.product.Product;
 
 import java.io.Serializable;
@@ -21,7 +20,7 @@ public class ProductVoucher implements Serializable {
     private BigDecimal actualChargeAmount;//实收金额
     private Date createTime;
     private BigDecimal conversionRate;//转化率
-    private String withoutRate;//外部链接
+    private String withoutUrl;//外部链接
     private Product product;
     private List<VoucherPicture> pictures;
 
@@ -89,12 +88,12 @@ public class ProductVoucher implements Serializable {
         this.conversionRate = conversionRate;
     }
 
-    public String getWithoutRate() {
-        return withoutRate;
+    public String getWithoutUrl() {
+        return withoutUrl;
     }
 
-    public void setWithoutRate(String withoutRate) {
-        this.withoutRate = withoutRate;
+    public void setWithoutUrl(String withoutUrl) {
+        this.withoutUrl = withoutUrl;
     }
 
     public Product getProduct() {
