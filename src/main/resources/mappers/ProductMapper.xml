@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mwb.dao.mapper.ProductMapper">
+
+    <!--<resultMap id="employeeResult" type="Employee" extends="com.mwb.dao.mapper.EmployeeMapper.employeeResult"/>-->
+
+    <resultMap
+        id="storeResult"
+        type="Store">
+
+        <id property="id" column="store_id"/>
+        <result property="storeId" column="store_store_id"/>
+        <result property="qq" column="store_qq"/>
+        <result property="descriptionScore" column="store_description_score"/>
+        <result property="serviceScore" column="store_service_score"/>
+        <result property="speedScore" column="store_speed_score"/>
+        <result property="type" column="store_type_id" javaType="StoreType" typeHandler="EnumIdTypeHandler"/>
+    </resultMap>
+
+    <resultMap
+        id="productResult"
+        type="Product">
+
+        <id property="id" column="product_id"/>
+        <result property="taoKeId" column="product_taoKe_id"/>
+        <result property="productId" column="product_product_id"/>
+        <result property="name" column="product_name"/>
+        <result property="pictureUrl" column="product_picture_url"/>
+        <result property="supplementPictureUrl" column="product_supplement_picture_url"/>
+        <result property="reservePrice" column="product_reserve_price"/>
+        <result property="sales" column="product_sales"/>
+        <result property="url" column="product_url"/>
+        <result property="activityTime" column="product_activity_time"/>
+        <result property="immediately" column="product_immediately" jdbcType="CHAR" javaType="Bool"/>
+        <result property="discountPrice" column="product_discount_price"/>
+        <result property="couponAmount" column="product_coupon_amount"/>
+        <result property="couponUrl" column="product_coupon_url"/>
+        <result property="couponBeginTime" column="product_coupon_begin_time"/>
+        <result property="couponEndTime" column="product_coupon_end_time"/>
+        <result property="couponReceiveNumber" column="product_coupon_receive_number"/>
+        <result property="couponSurplusNumber" column="product_coupon_surplus_number"/>
+        <result property="condition" column="product_condition"/>
+        <result property="features" column="product_features"/>
+        <result property="description" column="product_description"/>
+        <result property="chargePrice" column="product_charge_price"/>
+        <result property="createTime" column="product_create_time"/>
+        <result property="updateTime" column="product_update_time"/>
+        <result property="ratio" column="product_ratio"/>
+        <result property="planUrl" column="product_plan_url"/>
+        <result property="hireType" column="product_hire_type_id" javaType="HireType" typeHandler="EnumIdTypeHandler"/>
+        <result property="productType" column="product_type_id" javaType="ProductType" typeHandler="EnumIdTypeHandler"/>
+        <result property="activity" column="product_activity_id" javaType="Activity" typeHandler="EnumIdTypeHandler"/>
+        <result property="status" column="product_status_id" javaType="ProductStatus" typeHandler="EnumIdTypeHandler"/>
+
+        <association property="employee" javaType="Employee" resultMap="employeeResult"/>
+        <association property="store" javaType="Store" resultMap="storeResult"/>
+        <association property="voucher" javaType="ProductVoucher" resultMap="voucherResult"/>
+        <collection property="pictures" ofType="ProductPicture" resultMap="productPictureResult"/>
+    </resultMap>
+
+    <resultMap
+        id="voucherResult"
+        type="ProductVoucher">
+            <id property="id" column="voucher_id"/>
+            <result property="receiveNumber" column="voucher_receive_number"/>
+            <result property="useNumber" column="voucher_use_number"/>
+            <result property="payAmount" column="voucher_pay_amount"/>
+            <result property="shouldChargeAmount" column="voucher_should_charge_amount"/>
+            <result property="actualChargeAmount" column="voucher_actual_charge_amount"/>
+            <result property="createTime" column="voucher_create_time"/>
+            <result property="conversionRate" column="voucher_conversion_rate"/>
+            <result property="withoutUrl" column="voucher_without_url"/>
+
+        <association property="product" javaType="Product" resultMap="productResult"/>
+        <collection property="pictures" ofType="VoucherPicture" resultMap="voucherPictureResult"/>
+    </resultMap>
+
+    <resultMap
+        id="voucherPictureResult"
+        type="VoucherPicture">
+            <id property="id" column="voucher_picture_id"/>
+            <result property="url" column="voucher_picture_url"/>
+            <association property="voucher" javaType="ProductVoucher" resultMap="voucherResult"/>
+    </resultMap>
+
+    <resultMap
+        id="productPictureResult"
+        type="ProductPicture">
+            <id property="id" column="product_picture_id"/>
+            <result property="url" column="product_picture_url"/>
+            <association property="product" javaType="Product" resultMap="productResult"/>
+    </resultMap>
+
+    <sql id="pagingLimit">
+        <include refid="com.mwb.dao.mapper.CommonMapper.pagingLimit"/>
+    </sql>
+
+    <sql id="employeeColumns">
+        <include refid="com.mwb.dao.mapper.EmployeeMapper.employeeColumns"/>
+    </sql>
+
+    <sql id="storeColumns">
+        s.id AS store_id,
+        s.store_id AS store_store_id,
+        s.qq AS store_qq,
+        s.description_score AS store_description_score,
+        s.service_score AS store_service_score,
+        s.speed_score AS store_speed_score,
+        s.type_id AS store_type_id
+    </sql>
+
+
+    <sql id="productColumns">
+        p.id AS product_id,
+        p.taoKe_id AS product_taoKe_id,
+        p.product_id AS product_product_id,
+        p.name AS product_name,
+        p.picture_url AS product_picture_url,
+        p.supplement_picture_url AS product_supplement_picture_url,
+        p.reserve_price AS product_reserve_price,
+        p.sales AS product_sales,
+        p.url AS product_url,
+        p.activity_time AS product_activity_time,
+        p.immediately AS product_immediately,
+        p.discount_price AS product_discount_price,
+        p.coupon_amount AS product_coupon_amount,
+        p.coupon_url AS product_coupon_url,
+        p.coupon_begin_time AS product_coupon_begin_time,
+        p.coupon_end_time AS product_coupon_end_time,
+        p.coupon_receive_number AS product_coupon_receive_number,
+        p.coupon_surplus_number AS product_coupon_surplus_number,
+        p.condition AS product_condition,
+        p.features AS product_features,
+        p.description AS product_description,
+        p.charge_price AS product_charge_price,
+        p.create_time AS product_create_time,
+        p.update_time AS product_update_time,
+        p.ratio AS product_ratio,
+        p.plan_url AS product_plan_url,
+        p.hire_type_id AS product_hire_type_id,
+        p.type_id AS product_type_id,
+        p.activity_id AS product_activity_id,
+        p.status_id AS product_status_id,
+        p.employee_id AS product_employee_id,
+        p.store_id AS product_store_id
+    </sql>
+
+    <sql id="voucherColumns">
+        vp.id AS voucher_id,
+        vp.receive_number AS voucher_receive_number,
+        vp.use_number AS voucher_use_number,
+        vp.pay_amount AS voucher_pay_amount,
+        vp.should_charge_amount AS voucher_should_charge_amount,
+        vp.actual_charge_amount AS voucher_actual_charge_amount,
+        vp.create_time AS voucher_create_time,
+        vp.conversion_rate AS voucher_conversion_rate,
+        vp.without_url AS voucher_without_url,
+        vp.product_id AS voucher_product_id
+    </sql>
+
+    <sql id="voucherPictureColumns">
+        vp.id AS voucher_picture_id,
+        vp.url AS voucher_picture_url,
+        vp.voucher_id AS voucher_picture_voucher_id
+    </sql>
+
+    <sql id="productPictureColumns">
+        pp.id AS product_picture_id,
+        pp.url AS product_picture_url,
+        pp.product_id AS product_picture_product_id
+    </sql>
+
+    <insert
+        id="insertStore"
+        parameterType="Store"
+        useGeneratedKeys="true"
+        keyProperty="id">
+
+        INSERT INTO t_store (
+            store_id,
+            qq,
+            description_score,
+            service_score,
+            speed_score,
+            type_id
+        ) VALUES (
+            #{storeId, javaType=string, jdbcType=CHAR},
+            #{qq, javaType=string, jdbcType=CHAR},
+            #{descriptionScore, javaType=bigdecimal, jdbcType=DECIMAL},
+            #{serviceScore, javaType=bigdecimal, jdbcType=DECIMAL},
+            #{speedScore, javaType=bigdecimal, jdbcType=DECIMAL},
+            #{type.id, javaType=int, jdbcType=INTEGER}
+        )
+    </insert>
+
+    <insert
+        id="insertProduct"
+        parameterType="Product"
+        useGeneratedKeys="true"
+        keyProperty="id">
+
+        INSERT INTO t_product (
+            taoKe_id,
+            product_id,
+            name,
+            picture_url,
+            supplement_picture_url,
+            reserve_price,
+            sales,
+            url,
+            activity_time,
+            immediately,
+            discount_price,
+            coupon_amount,
+            coupon_url,
+            coupon_begin_time,
+            coupon_end_time,
+            coupon_receive_number,
+            coupon_surplus_number,
+            condition,
+            features,
+            description,
+            charge_price,
+            create_time,
+            update_time,
+            ratio,
+            plan_url,
+            hire_type_id,
+            type_id,
+            activity_id,
+            status_id,
+            store_id,
+            employee_id
+        ) VALUES (
+            #{taoKeId, javaType=string, jdbcType=CHAR},
+            #{productId, javaType=string, jdbcType=CHAR},
+            #{name, javaType=string, jdbcType=CHAR},
+            #{pictureUrl, javaType=string, jdbcType=CHAR},
+            #{supplementPictureUrl, javaType=string, jdbcType=CHAR},
+            #{reservePrice, javaType=bigdecimal, jdbcType=DECIMAL},
+            #{sales, javaType=int, jdbcType=INTEGER},
+            #{url, javaType=string, jdbcType=CHAR},
+            #{activityTime, javaType=date, jdbcType=TIMESTAMP},
+            #{immediately.code, javaType=string, jdbcType=CHAR},
+            #{discountPrice, javaType=bigdecimal, jdbcType=DECIMAL},
+            #{couponAmount, javaType=bigdecimal, jdbcType=DECIMAL},
+            #{couponUrl, javaType=string, jdbcType=CHAR},
+            #{couponBeginTime, javaType=date, jdbcType=TIMESTAMP},
+            #{couponEndTime, javaType=date, jdbcType=TIMESTAMP},
+            #{couponReceiveNumber, javaType=int, jdbcType=INTEGER},
+            #{couponSurplusNumber, javaType=int, jdbcType=INTEGER},
+            #{condition, javaType=string, jdbcType=CHAR},
+            #{features, javaType=string, jdbcType=CHAR},
+            #{description, javaType=string, jdbcType=CHAR},
+            #{chargePrice, javaType=bigdecimal, jdbcType=DECIMAL},
+            #{createTime, javaType=date, jdbcType=TIMESTAMP},
+            #{updateTime, javaType=date, jdbcType=TIMESTAMP},
+            #{ratio, javaType=bigdecimal, jdbcType=DECIMAL},
+            #{planUrl, javaType=string, jdbcType=CHAR},
+            #{hireType.id, javaType=int, jdbcType=INTEGER},
+            #{productType.id, javaType=int, jdbcType=INTEGER},
+            #{activity.id, javaType=int, jdbcType=INTEGER},
+            #{status.id, javaType=int, jdbcType=INTEGER},
+            #{store.id, javaType=int, jdbcType=INTEGER},
+            #{employee.id, javaType=int, jdbcType=INTEGER}
+        )
+    </insert>
+</mapper>

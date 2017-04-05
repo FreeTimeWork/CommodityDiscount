@@ -83,7 +83,7 @@ public class ProductController {
         Product product = productService.getProductById(id);
         ProductDetailsResponse response = ProductDetailsResponse.toResponse(product);
 
-        Integer positionId = product.getEmployee().getPosition().getId();
+        Integer positionId = employee.getPosition().getId();
         if (!positionId.equals(1) || !positionId.equals(5)) {
             response.setVoucher(null);
         }

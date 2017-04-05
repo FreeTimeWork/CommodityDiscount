@@ -31,8 +31,8 @@ CREATE TABLE `t_hire_type` (
 ) ENGINE = INNODB DEFAULT CHARSET = utf8mb4;
 
 -- 商品状态表
-DROP TABLE IF EXISTS `t_product_status_type`;
-CREATE TABLE `t_product_status_type` (
+DROP TABLE IF EXISTS `t_product_status`;
+CREATE TABLE `t_product_status` (
 	`id` INT (11) UNSIGNED NOT NULL,
 	`code` CHAR (32) DEFAULT NULL,
 	`description` CHAR (32) DEFAULT NULL,
@@ -63,18 +63,17 @@ CREATE TABLE `t_store_type` (
 -- 店铺
 DROP TABLE IF EXISTS `t_store`;
 CREATE TABLE `t_store` (
-  `id` int(11) unsigned NOT NULL,
-  `storeId` char(32) DEFAULT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `store_id` char(32) DEFAULT NULL,
   `qq` char(32) DEFAULT NULL,
-  `descriptionScore` decimal(18,0) DEFAULT NULL,
-  `serviceScore` decimal(18,0) DEFAULT NULL,
-  `speedScore` decimal(18,0) unsigned zerofill DEFAULT NULL,
+  `description_score` decimal(18,0) DEFAULT NULL,
+  `service_score` decimal(18,0) DEFAULT NULL,
+  `speed_score` decimal(18,0) unsigned zerofill DEFAULT NULL,
   `type_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `type_id` (`type_id`),
   CONSTRAINT `t_store_ibfk_1` FOREIGN KEY (`type_id`) REFERENCES `t_store_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 
 -- 商品
 DROP TABLE IF EXISTS `t_product`;
@@ -90,6 +89,7 @@ CREATE TABLE `t_product` (
   `url` varchar(255) NOT NULL,
   `activity_time` datetime NOT NULL,
   `immediately` char(1) NOT NULL COMMENT '是否拍立减',
+  `discount_price` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '卷后金额',
   `coupon_amount` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '优惠卷金额',
   `coupon_url` varchar(255) NOT NULL,
   `coupon_begin_time` datetime NOT NULL,
@@ -101,6 +101,7 @@ CREATE TABLE `t_product` (
   `description` char(32) DEFAULT NULL,
   `charge_price` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '收费单价',
   `create_time` datetime NOT NULL,
+  `update_time` datetime NOT NULL,
   `ratio` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '佣金比例',
   `plan_url` char(32) DEFAULT NULL COMMENT '计划链接',
   `hire_type_id` int(10) unsigned NOT NULL,
@@ -127,7 +128,7 @@ CREATE TABLE `t_product` (
 -- 商品图片
 DROP TABLE IF EXISTS `t_product_picture`;
 CREATE TABLE `t_product_picture` (
-  `id` int(11) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `url` varchar(255) DEFAULT NULL,
   `product_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
@@ -138,15 +139,15 @@ CREATE TABLE `t_product_picture` (
 -- 商品凭证
 DROP TABLE IF EXISTS `t_product_voucher`;
 CREATE TABLE `t_product_voucher` (
-  `id` int(11) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `receive_number` int(10) unsigned NOT NULL,
   `use_number` int(10) unsigned NOT NULL,
   `pay_amount` decimal(18,2) NOT NULL DEFAULT '0.00',
   `should_charge_amount` decimal(18,2) NOT NULL DEFAULT '0.00',
   `actual_charge_amount` decimal(18,2) NOT NULL DEFAULT '0.00',
   `create_time` datetime NOT NULL,
-  `conversion_url` varchar(255) DEFAULT NULL,
   `conversion_rate` decimal(18,2) NOT NULL DEFAULT '0.00',
+  `without_url` varchar(255) DEFAULT NULL,
   `product_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `product_id` (`product_id`),
@@ -156,7 +157,7 @@ CREATE TABLE `t_product_voucher` (
 -- 商品凭证图片
 DROP TABLE IF EXISTS `t_voucher_picture`;
 CREATE TABLE `t_voucher_picture` (
-  `id` int(11) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `url` varchar(255) DEFAULT NULL,
   `voucher_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
@@ -167,7 +168,7 @@ CREATE TABLE `t_voucher_picture` (
 -- 财务
 DROP TABLE IF EXISTS `t_finance`;
 CREATE TABLE `t_finance` (
-  `id` int(11) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `url` varchar(255) DEFAULT NULL,
   `submit_number` int(10) unsigned NOT NULL,
   `average_daily` int(10) unsigned NOT NULL,

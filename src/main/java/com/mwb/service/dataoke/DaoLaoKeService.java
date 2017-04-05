@@ -108,7 +108,7 @@ public class DaoLaoKeService extends AbstractHttpClient implements IDaoLaoKeServ
             product.setHireType(HireType.GENERAL);
             product.setRatio(mo.getGeneral());
         } else {
-            product.setHireType(HireType.Magpie);
+            product.setHireType(HireType.MAGPIE);
             product.setRatio(mo.getMagpie());
         }
         product.setPlanUrl(mo.getPlanUrl());
