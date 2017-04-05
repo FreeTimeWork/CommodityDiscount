@@ -14,6 +14,8 @@
         <c3p0.version>0.9.5.2</c3p0.version>
         <org.quartz-scheduler.version>1.8.6</org.quartz-scheduler.version>
         <commons-httpclient.version>3.1</commons-httpclient.version>
+        <logback.version>1.1.7</logback.version>
+        <logback.hotfix.totalSizeCap.version>1.1.7_hotfix_totalSizeCap</logback.hotfix.totalSizeCap.version>
 
         <!-- other version properties -->
         <compile.encoding>UTF8</compile.encoding>
@@ -91,6 +93,19 @@
             <artifactId>commons-httpclient</artifactId>
             <version>${commons-httpclient.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.hotfix.totalSizeCap.version}</version>
+        </dependency>
+
         <!-- spring核心包 -->
         <dependency>
             <groupId>org.springframework</groupId>

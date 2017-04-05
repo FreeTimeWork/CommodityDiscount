@@ -12,13 +12,13 @@ import java.util.List;
  */
 public interface FinanceMapper {
 
+    public int countFinanceByFilter(@Param("filter") FinanceFilter filter);
+
     public List<Finance> selectFinanceByFilter(@Param("filter") FinanceFilter filter);
 
     public Finance selectFinanceByEmployeeId(@Param("employeeId") Integer employeeId);
 
     public int selectCurrentFinanceRank(@Param("employeeId") Integer employeeId);
-
-    public int countFinanceByFilter(@Param("filter") FinanceFilter filter);
 
     public void updateFinance(Finance finance);
 

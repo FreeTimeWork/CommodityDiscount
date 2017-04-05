@@ -8,7 +8,6 @@ import com.mwb.controller.finance.api.SearchFinanceVoucherResponse;
 import com.mwb.controller.product.api.*;
 import com.mwb.controller.util.ApplicationContextUtils;
 import com.mwb.dao.filter.ProductFilter;
-import com.mwb.dao.filter.ProductVoucherFilter;
 import com.mwb.dao.filter.SearchResult;
 import com.mwb.dao.model.comm.Bool;
 import com.mwb.dao.model.comm.Log;
@@ -115,8 +114,8 @@ public class ProductController {
         filter.setBeginToTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getBeginToTime()));
         filter.setEndFromTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getEndFromTime()));
         filter.setEndToTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getEndFromTime()));
-        filter.setUseMinNumber(request.getUseMinNumber());
-        filter.setUseMaxNumber(request.getUseMaxNumber());
+        filter.setReceiveMinNumber(request.getUseMinNumber());
+        filter.setReceiveMaxNumber(request.getUseMaxNumber());
         filter.setSurplusMinNumber(request.getSurplusMinNumber());
         filter.setSurplusMaxNumber(request.getSurplusMaxNumber());
         filter.setStatus(ProductStatus.fromId(request.getStatusId()));
@@ -271,11 +270,11 @@ public class ProductController {
     @RequestMapping(value = "/voucher/search", produces = ContentType.APPLICATION_JSON_UTF8)
     public ServiceResponse searchVoucher(SearchFinanceVoucherRequest request) throws ParseException {
         SearchFinanceVoucherResponse response = new SearchFinanceVoucherResponse();
-        ProductVoucherFilter filter = new ProductVoucherFilter();
-        filter.setProductType(ProductType.fromId(request.getProductId()));
+        ProductFilter filter = new ProductFilter();
+        filter.setType(ProductType.fromId(request.getProductTypeId()));
         filter.setGroupId(request.getGroupId());
         filter.setEmployeeId(request.getEmployeeId());
-        filter.setOrderByAsc(request.getOrderByAsc() == null ? true : request.getOrderByAsc());
+        filter.setOrderAsc(request.getOrderByAsc() == null ? true : request.getOrderByAsc());
         filter.setCreateBeginTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getCreateBeginTime()));
         filter.setCreateEndTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getCreateEndTime()));
         filter.setBeginFromTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getBeginFromTime()));
@@ -288,10 +287,10 @@ public class ProductController {
         filter.setMaxDiscountPrice(request.getMaxDiscountPrice());
         filter.setMinPayPrice(request.getMinPayPrice());
         filter.setMaxPayPrice(request.getMaxPayPrice());
-        filter.setMinSurplusNumber(request.getMinSurplusNumber());
-        filter.setMaxSurplusNumber(request.getMaxSurplusNumber());
-        filter.setMinUseNumber(request.getMinUseNumber());
-        filter.setMaxUseNumber(request.getMaxUseNumber());
+        filter.setSurplusMinNumber(request.getMinSurplusNumber());
+        filter.setSurplusMaxNumber(request.getMaxSurplusNumber());
+        filter.setReceiveMinNumber(request.getMinUseNumber());
+        filter.setReceiveMaxNumber(request.getMaxUseNumber());
         filter.setId(request.getId());
         filter.setName(request.getName());
         filter.setProductId(request.getProductId());

@@ -7,7 +7,7 @@ import com.mwb.controller.api.PagingRequest;
  */
 public class SearchProductRequest extends PagingRequest {
     private Integer id;
-    private Integer productId;
+    private String productId;
     private String name;
     private Integer statusId;
     private Integer typeId;
@@ -33,11 +33,11 @@ public class SearchProductRequest extends PagingRequest {
         this.id = id;
     }
 
-    public Integer getProductId() {
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId(Integer productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
 

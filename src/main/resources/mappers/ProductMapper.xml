@@ -4,7 +4,7 @@
 
 <mapper namespace="com.mwb.dao.mapper.ProductMapper">
 
-    <!--<resultMap id="employeeResult" type="Employee" extends="com.mwb.dao.mapper.EmployeeMapper.employeeResult"/>-->
+    <resultMap id="employeeResult" type="Employee" extends="com.mwb.dao.mapper.EmployeeMapper.employeeResult"/>
 
     <resultMap
         id="storeResult"
@@ -54,8 +54,8 @@
         <result property="activity" column="product_activity_id" javaType="Activity" typeHandler="EnumIdTypeHandler"/>
         <result property="status" column="product_status_id" javaType="ProductStatus" typeHandler="EnumIdTypeHandler"/>
 
-        <association property="employee" javaType="Employee" resultMap="employeeResult"/>
         <association property="store" javaType="Store" resultMap="storeResult"/>
+        <association property="employee" javaType="Employee" resultMap="employeeResult"/>
         <association property="voucher" javaType="ProductVoucher" resultMap="voucherResult"/>
         <collection property="pictures" ofType="ProductPicture" resultMap="productPictureResult"/>
     </resultMap>
@@ -89,7 +89,7 @@
         id="productPictureResult"
         type="ProductPicture">
             <id property="id" column="product_picture_id"/>
-            <result property="url" column="product_picture_url"/>
+            <result property="url" column="product_picture1_url"/>
             <association property="product" javaType="Product" resultMap="productResult"/>
     </resultMap>
 
@@ -131,7 +131,7 @@
         p.coupon_end_time AS product_coupon_end_time,
         p.coupon_receive_number AS product_coupon_receive_number,
         p.coupon_surplus_number AS product_coupon_surplus_number,
-        p.condition AS product_condition,
+        p.`condition` AS product_condition,
         p.features AS product_features,
         p.description AS product_description,
         p.charge_price AS product_charge_price,
@@ -148,16 +148,16 @@
     </sql>
 
     <sql id="voucherColumns">
-        vp.id AS voucher_id,
-        vp.receive_number AS voucher_receive_number,
-        vp.use_number AS voucher_use_number,
-        vp.pay_amount AS voucher_pay_amount,
-        vp.should_charge_amount AS voucher_should_charge_amount,
-        vp.actual_charge_amount AS voucher_actual_charge_amount,
-        vp.create_time AS voucher_create_time,
-        vp.conversion_rate AS voucher_conversion_rate,
-        vp.without_url AS voucher_without_url,
-        vp.product_id AS voucher_product_id
+        v.id AS voucher_id,
+        v.receive_number AS voucher_receive_number,
+        v.use_number AS voucher_use_number,
+        v.pay_amount AS voucher_pay_amount,
+        v.should_charge_amount AS voucher_should_charge_amount,
+        v.actual_charge_amount AS voucher_actual_charge_amount,
+        v.create_time AS voucher_create_time,
+        v.conversion_rate AS voucher_conversion_rate,
+        v.without_url AS voucher_without_url,
+        v.product_id AS voucher_product_id
     </sql>
 
     <sql id="voucherPictureColumns">
@@ -168,9 +168,247 @@
 
     <sql id="productPictureColumns">
         pp.id AS product_picture_id,
-        pp.url AS product_picture_url,
+        pp.url AS product_picture1_url,
         pp.product_id AS product_picture_product_id
     </sql>
+
+    <sql id="productFilter" >
+        <if test="filter.id != null">
+            AND p.id = #{filter.id, javaType=int, jdbcType=INTEGER}
+        </if>
+        <if test="filter.productId != null">
+            AND p.product_id = #{filter.productId, javaType=string, jdbcType=CHAR}
+        </if>
+        <if test="filter.name != null">
+            AND p.name LIKE #{filter.name, javaType=string, jdbcType=CHAR}
+        </if>
+        <if test="filter.groupId != null">
+            AND ae.group_id = #{filter.groupId, javaType=int, jdbcType=INTEGER}
+        </if>
+        <if test="filter.employeeId != null">
+            AND ae.id = #{filter.employeeId, javaType=int, jdbcType=INTEGER}
+        </if>
+        <if test="filter.createBeginTime != null">
+            AND p.create_time <![CDATA[ >= ]]> #{filter.createBeginTime, javaType=date, jdbcType=TIMESTAMP}
+        </if>
+        <if test="filter.createEndTime != null">
+            AND p.create_time <![CDATA[ <= ]]> #{filter.createEndTime, javaType=date, jdbcType=TIMESTAMP}
+        </if>
+        <if test="filter.beginFromTime != null">
+            AND p.coupon_begin_time <![CDATA[ >= ]]> #{filter.beginFromTime, javaType=date, jdbcType=TIMESTAMP}
+        </if>
+        <if test="filter.beginToTime != null">
+            AND p.coupon_begin_time <![CDATA[ <= ]]> #{filter.beginToTime, javaType=date, jdbcType=TIMESTAMP}
+        </if>
+        <if test="filter.endFromTime != null">
+            AND p.coupon_end_time <![CDATA[ >= ]]> #{filter.endFromTime, javaType=date, jdbcType=TIMESTAMP}
+        </if>
+        <if test="filter.endToTime != null">
+            AND p.coupon_end_time <![CDATA[ <= ]]> #{filter.endToTime, javaType=date, jdbcType=TIMESTAMP}
+        </if>
+        <if test="filter.receiveMinNumber != null">
+            AND p.coupon_receive_number <![CDATA[ >= ]]> #{filter.receiveMinNumber, javaType=int, jdbcType=INTEGER}
+        </if>
+        <if test="filter.receiveMaxNumber != null">
+            AND p.coupon_receive_number <![CDATA[ <= ]]>  #{filter.receiveMaxNumber, javaType=int, jdbcType=INTEGER}
+        </if>
+        <if test="filter.surplusMinNumber != null">
+            AND p.coupon_surplus_number <![CDATA[ >= ]]> #{filter.surplusMinNumber, javaType=int, jdbcType=INTEGER}
+        </if>
+        <if test="filter.surplusMaxNumber != null">
+            AND p.coupon_surplus_number <![CDATA[ <= ]]>  #{filter.surplusMaxNumber, javaType=int, jdbcType=INTEGER}
+        </if>
+        <if test="filter.minChargePrice != null">
+            AND p.charge_price <![CDATA[ >= ]]> #{filter.minChargePrice, javaType=bigdecimal, jdbcType=DECIMAL}
+        </if>
+        <if test="filter.maxChargePrice != null">
+            AND p.charge_price <![CDATA[ <= ]]>  #{filter.maxChargePrice, javaType=bigdecimal, jdbcType=DECIMAL}
+        </if>
+        <if test="filter.minDiscountPrice != null">
+            AND p.discount_price <![CDATA[ >= ]]> #{filter.minDiscountPrice, javaType=bigdecimal, jdbcType=DECIMAL}
+        </if>
+        <if test="filter.maxDiscountPrice != null">
+            AND p.discount_price <![CDATA[ <= ]]>  #{filter.maxDiscountPrice, javaType=bigdecimal, jdbcType=DECIMAL}
+        </if>
+        <if test="filter.minPayPrice != null">
+            AND v.pay_amount <![CDATA[ >= ]]> #{filter.minPayPrice, javaType=bigdecimal, jdbcType=DECIMAL}
+        </if>
+        <if test="filter.maxDiscountPrice != null">
+            AND v.pay_amount <![CDATA[ <= ]]>  #{filter.maxPayPrice, javaType=bigdecimal, jdbcType=DECIMAL}
+        </if>
+        <if test="filter.type != null">
+            AND p.type_id = #{filter.type.id, javaType=int, jdbcType=INTEGER}
+        </if>
+        <if test="filter.status != null">
+            AND p.status_id = #{filter.status.id, javaType=int, jdbcType=INTEGER}
+        </if>
+        <if test="filter.excludeStatus != null">
+            AND p.status_id NOT IN (
+            <foreach collection="filter.excludeStatus" item="item" index="index" separator=",">
+                #{item.id, javaType=int, jdbcType=INTEGER}
+            </foreach>
+            )
+        </if>
+        <if test="filter.includeStatus != null">
+            AND p.status_id IN (
+            <foreach collection="filter.includeStatus" item="item" index="index" separator=",">
+                #{item.id, javaType=int, jdbcType=INTEGER}
+            </foreach>
+            )
+        </if>
+        <choose>
+            <when test="filter.orderAsc != null and filter.orderAsc == false">
+                ORDER BY p.id DESC
+            </when>
+            <otherwise>
+                ORDER BY p.id ASC
+            </otherwise>
+        </choose>
+    </sql>
+
+    <select id="selectProductById"
+        resultMap="productResult">
+        SELECT
+            <include refid="productColumns"/>,
+            <include refid="employeeColumns"/>,
+            <include refid="storeColumns"/>,
+            <include refid="voucherColumns"/>,
+            <include refid="voucherPictureColumns"/>,
+            <include refid="productPictureColumns"/>
+        FROM
+            t_product p
+        INNER JOIN t_employee ae ON ae.id = p.employee_id
+        INNER JOIN t_store s ON s.id = p.store_id
+        LEFT JOIN t_product_picture pp ON pp.product_id = p.id
+        LEFT JOIN t_product_voucher v ON v.product_id = p.id
+        LEFT JOIN t_voucher_picture vp ON vp.voucher_id = v.id
+        <where>
+            p.id = #{id, javaType=int, jdbcType=INTEGER}
+        </where>
+    </select>
+
+    <select id="selectProductByProductId"
+        resultMap="productResult">
+        SELECT
+            <include refid="productColumns"/>,
+            <include refid="employeeColumns"/>,
+            <include refid="storeColumns"/>,
+            <include refid="voucherColumns"/>,
+            <include refid="voucherPictureColumns"/>,
+            <include refid="productPictureColumns"/>
+        FROM
+            t_product p
+        INNER JOIN t_employee ae ON ae.id = p.employee_id
+        INNER JOIN t_store s ON s.id = p.store_id
+        LEFT JOIN t_product_picture pp ON pp.product_id = p.id
+        LEFT JOIN t_product_voucher v ON v.product_id = p.id
+        LEFT JOIN t_voucher_picture vp ON vp.voucher_id = v.id
+        <where>
+            p.product_id = #{productId, javaType=string, jdbcType=CHAR}
+        </where>
+    </select>
+
+    <select id="selectProductByStatus"
+        resultMap="productResult">
+        SELECT
+            <include refid="productColumns"/>,
+            <include refid="employeeColumns"/>,
+            <include refid="storeColumns"/>,
+            <include refid="voucherColumns"/>,
+            <include refid="voucherPictureColumns"/>,
+            <include refid="productPictureColumns"/>
+        FROM
+            t_product p
+        INNER JOIN t_employee ae ON ae.id = p.employee_id
+        INNER JOIN t_store s ON s.id = p.store_id
+        LEFT JOIN t_product_picture pp ON pp.product_id = p.id
+        LEFT JOIN t_product_voucher v ON v.product_id = p.id
+        LEFT JOIN t_voucher_picture vp ON vp.voucher_id = v.id
+        <where>
+            <if test="employeeId != null" >
+                p.employee_id = #{employeeId, javaType=int, jdbcType=INTEGER}
+            </if>
+            <if test="status != null" >
+              AND  p.status_id = #{status.id, javaType=int, jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectProductByFilter"
+       resultMap="productResult">
+        SELECT
+            <include refid="productColumns"/>,
+            <include refid="employeeColumns"/>,
+            <include refid="storeColumns"/>,
+            <include refid="voucherColumns"/>,
+            <include refid="voucherPictureColumns"/>,
+            <include refid="productPictureColumns"/>
+        FROM
+            t_product p
+            INNER JOIN t_employee ae ON ae.id = p.employee_id
+            INNER JOIN t_store s ON s.id = p.store_id
+            LEFT JOIN t_product_picture pp ON pp.product_id = p.id
+            LEFT JOIN t_product_voucher v ON v.product_id = p.id
+            LEFT JOIN t_voucher_picture vp ON vp.voucher_id = v.id
+        <where>
+            <include refid="productFilter"/>
+        </where>
+          <include refid="pagingLimit" />
+    </select>
+
+    <select id="countProductByFilter"
+       resultType="int">
+        SELECT
+            COUNT(DISTINCT p.id)
+        FROM
+            t_product p
+            INNER JOIN t_employee ae ON ae.id = p.employee_id
+            INNER JOIN t_store s ON s.id = p.store_id
+            LEFT JOIN t_product_picture pp ON pp.product_id = p.id
+            LEFT JOIN t_product_voucher v ON v.product_id = p.id
+            LEFT JOIN t_voucher_picture vp ON vp.voucher_id = v.id
+        <where>
+            <include refid="productFilter"/>
+        </where>
+    </select>
+
+    <select id="selectProductVoucherByFilter"
+        resultMap="voucherResult">
+        SELECT
+            <include refid="productColumns"/>,
+            <include refid="employeeColumns"/>,
+            <include refid="storeColumns"/>,
+            <include refid="voucherColumns"/>,
+            <include refid="voucherPictureColumns"/>,
+            <include refid="productPictureColumns"/>
+        FROM
+            t_product_voucher v
+            INNER JOIN t_product p ON v.product_id = p.id
+            INNER JOIN t_employee ae ON ae.id = p.employee_id
+            INNER JOIN t_store s ON s.id = p.store_id
+            LEFT JOIN t_product_picture pp ON pp.product_id = p.id
+            LEFT JOIN t_voucher_picture vp ON vp.voucher_id = v.id
+        <where>
+            <include refid="productFilter"/>
+        </where>
+        <!--<include refid="pagingLimit" />-->
+    </select>
+
+    <select id="countProductVoucherByFilter"
+        resultType="int">
+        SELECT
+            COUNT(DISTINCT p.id)
+        FROM
+            t_product_voucher v
+            INNER JOIN t_product p ON v.product_id = p.id
+            INNER JOIN t_employee ae ON ae.id = p.employee_id
+            INNER JOIN t_store s ON s.id = p.store_id
+            LEFT JOIN t_product_picture pp ON pp.product_id = p.id
+            LEFT JOIN t_voucher_picture vp ON vp.voucher_id = v.id
+        <where>
+            <include refid="productFilter"/>
+        </where>
+    </select>
 
     <insert
         id="insertStore"
@@ -194,6 +432,33 @@
             #{type.id, javaType=int, jdbcType=INTEGER}
         )
     </insert>
+
+    <update
+        id="updateProduct"
+        parameterType="Product">
+
+        UPDATE
+            t_product
+        <set>
+            <if test="couponSurplusNumber != null">
+                coupon_surplus_number = #{couponSurplusNumber, javaType=int, jdbcType=INTEGER},
+            </if>
+            <if test="couponReceiveNumber != null">
+                coupon_receive_number = #{couponReceiveNumber, javaType=int, jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime, javaType=date, jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                status_id = #{status.id, javaType=int, jdbcType=INTEGER},
+            </if>
+            <if test="sales != null">
+                sales = #{sales, javaType=int, jdbcType=INTEGER}
+            </if>
+        </set>
+        WHERE
+            id = #{id, javaType=int, jdbcType=INTEGER}
+    </update>
 
     <insert
         id="insertProduct"
@@ -219,7 +484,7 @@
             coupon_end_time,
             coupon_receive_number,
             coupon_surplus_number,
-            condition,
+            `condition`,
             features,
             description,
             charge_price,
@@ -267,4 +532,61 @@
             #{employee.id, javaType=int, jdbcType=INTEGER}
         )
     </insert>
+
+    <insert
+        id="insertProductVoucher"
+        parameterType="ProductVoucher"
+        useGeneratedKeys="true"
+        keyProperty="id">
+        INSERT INTO t_product_voucher (
+            receive_number,
+            use_number,
+            pay_amount,
+            should_charge_amount,
+            actual_charge_amount,
+            create_time,
+            conversion_rate,
+            without_url,
+            product_id
+        ) VALUES (
+            #{receiveNumber, javaType=int, jdbcType=INTEGER},
+            #{useNumber, javaType=int, jdbcType=INTEGER},
+            #{payAmount, javaType=bigdecimal, jdbcType=DECIMAL},
+            #{shouldChargeAmount, javaType=bigdecimal, jdbcType=DECIMAL},
+            #{actualChargeAmount, javaType=bigdecimal, jdbcType=DECIMAL},
+            #{createTime, javaType=date, jdbcType=TIMESTAMP},
+            #{conversionRate, javaType=bigdecimal, jdbcType=DECIMAL},
+            #{withoutUrl, javaType=string, jdbcType=CHAR},
+            #{product.id, javaType=int, jdbcType=INTEGER}
+        )
+    </insert>
+
+    <insert
+        id="insertVoucherPicture"
+        parameterType="VoucherPicture"
+        useGeneratedKeys="true"
+        keyProperty="id">
+        INSERT INTO t_voucher_picture (
+            url,
+            voucher_id
+        ) VALUES (
+            #{url, javaType=string, jdbcType=CHAR},
+            #{voucher.id, javaType=int, jdbcType=INTEGER}
+        )
+    </insert>
+
+    <insert
+        id="insertProductPicture"
+        parameterType="ProductPicture"
+        useGeneratedKeys="true"
+        keyProperty="id">
+        INSERT INTO t_product_picture (
+            url,
+            product_id
+        ) VALUES (
+            #{url, javaType=string, jdbcType=CHAR},
+            #{product.id, javaType=int, jdbcType=INTEGER}
+        )
+    </insert>
+
 </mapper>

@@ -43,7 +43,7 @@ public class FinanceController {
         FinanceFilter filter = new FinanceFilter();
         filter.setEmployeeId(request.getEmployeeId());
         filter.setGroupId(request.getGroupId());
-        filter.setOrderByAsc(request.getOrderByAsc() == null ? true : request.getOrderByAsc());
+        filter.setOrderByAsc(request.getOrderByAsc() == null ? false : request.getOrderByAsc());
         filter.setStatus(EmployeeStatus.fromId(request.getStatusId()));
         filter.setPaged(true);
         filter.setPagingData(new PagingData(request.getPageNumber(), request.getPageSize()));

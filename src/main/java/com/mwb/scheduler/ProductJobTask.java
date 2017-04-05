@@ -83,6 +83,7 @@ public class ProductJobTask {
                 if (product.getCouponEndTime().after(now)) {
                     Product updateProduct = new Product();
                     updateProduct.setId(product.getId());
+                    updateProduct.setSales(product.getSales());
                     updateProduct.setStatus(ProductStatus.END);
                     productService.modifyProduct(updateProduct);
 

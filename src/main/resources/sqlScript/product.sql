@@ -169,7 +169,6 @@ CREATE TABLE `t_voucher_picture` (
 DROP TABLE IF EXISTS `t_finance`;
 CREATE TABLE `t_finance` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `url` varchar(255) DEFAULT NULL,
   `submit_number` int(10) unsigned NOT NULL,
   `average_daily` int(10) unsigned NOT NULL,
   `refuse_rate` int(10) unsigned NOT NULL,

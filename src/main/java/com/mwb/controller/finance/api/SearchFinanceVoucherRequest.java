@@ -29,7 +29,7 @@ public class SearchFinanceVoucherRequest extends PagingRequest {
     private BigDecimal minPayPrice;   //付款价格
     private BigDecimal maxPayPrice;   //付款价格
     private Integer id;
-    private Integer productId;
+    private String productId;
     private String name;
 
     public Integer getProductTypeId() {
@@ -200,11 +200,11 @@ public class SearchFinanceVoucherRequest extends PagingRequest {
         this.id = id;
     }
 
-    public Integer getProductId() {
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId(Integer productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
 
