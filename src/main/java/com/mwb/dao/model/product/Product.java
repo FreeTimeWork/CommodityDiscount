@@ -41,6 +41,7 @@ public class Product implements Serializable{
     private String description;         //备注
     private BigDecimal chargePrice;        //收费单价
     private Date createTime;          //提交时间
+    private Date updateTime;          //提交时间
 
     private BigDecimal ratio;           //佣金比例
     private String planUrl;             //计划链接
@@ -228,6 +229,14 @@ public class Product implements Serializable{
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     public Date getActivityTime() {
