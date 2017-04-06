@@ -1,5 +1,13 @@
 package com.mwb.controller.product;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
 import com.mwb.controller.finance.api.ProductVoucherVO;
 import com.mwb.controller.finance.api.SearchFinanceVoucherRequest;
@@ -45,13 +53,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by MengWeiBo on 2017-04-01
@@ -335,12 +336,13 @@ public class ProductController {
     //认领
     @ResponseBody
     @RequestMapping(value = "/approve/claim")
-    public ServiceResponse claimHandler(BaseApproveRequest request) {
+    public ServiceResponse claimHandler(@RequestBody BaseApproveRequest request) {
         Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
         if (employee == null) {
             return new ServiceResponse();
         }
         Product product = new Product();
+        product.setId(request.getProductId());
         //审单员
         if (employee.getPosition().getId().equals(4)) {
 
@@ -348,8 +350,32 @@ public class ProductController {
             productService.modifyProduct(product);
 
         } else if (employee.getPosition().getId().equals(5)) { //财务
-
+            product.setStatus(ProductStatus.PAY_RUN);
+            productService.modifyProduct(product);
         }
+
+        return new ServiceResponse();
+    }
+
+    //一审
+    @ResponseBody
+    @RequestMapping(value = "/approve/check", produces = ContentType.APPLICATION_JSON_UTF8)
+    public ServiceResponse checkHandler(@RequestBody BaseApproveRequest request) {
+        Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
+        if (employee == null) {
+            return new ServiceResponse();
+        }
+        Product product = new Product();
+        product.setId(request.getProductId());
+
+        ProductStatus status = ProductStatus.fromId(request.getProductStatusId());
+        if (status.equals(ProductStatus.REJECTED)) {
+            product.setStatus(ProductStatus.AUDIT_WAIT);
+            product.setUpdateTime(new Date());
+        }
+
+        product.setStatus(status);
+        productService.modifyProduct(product);
 
         return new ServiceResponse();
     }
@@ -357,15 +383,21 @@ public class ProductController {
     //复审
     @ResponseBody
     @RequestMapping(value = "/approve/recheck")
-    public ServiceResponse recheckHandler(BaseApproveRequest request) {
+    public ServiceResponse recheckHandler(@RequestBody BaseApproveRequest request) {
         Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
         if (employee == null) {
             return new ServiceResponse();
         }
-        //审单员
-        if (employee.getPosition().getId().equals(4)) {
-
+        Product product = new Product();
+        product.setId(request.getProductId());
+        ProductStatus status = ProductStatus.fromId(request.getProductStatusId());
+        if (status.equals(ProductStatus.REJECTED)) {
+            product.setStatus(ProductStatus.AUDIT_WAIT);
+            product.setUpdateTime(new Date());
         }
+        product.setStatus(ProductStatus.fromId(request.getProductStatusId()));
+        productService.modifyProduct(product);
+
         return new ServiceResponse();
     }
 }
