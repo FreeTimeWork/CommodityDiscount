@@ -35,18 +35,18 @@ public class ProductMapperTest extends AbstractPersistenceTest {
     //        @Autowired
     public FinanceMapper mapper1;
 
-    @Autowired
+//    @Autowired
     private IDaoLaoKeService daoLaoKeService;
 
-    @Test
+//    @Test
     public void request() throws Exception {
         System.out.println(DateTimeUtility.parseYYYYMMDDHHMMSS("2014-11-11 00:00:00"));
         CreateProductVoucherRequest request = newInstance(CreateProductVoucherRequest.class);
-        for (int i = 1; i < 500; i++) {
-            Product daTaoKeProduct = daoLaoKeService.getDaTaoKeProduct("2154002");
-            System.out.println(i + "---------" +daTaoKeProduct.getCouponReceiveNumber());
-        }
-        request.setId(1);
+//        for (int i = 1; i < 500; i++) {
+//            Product daTaoKeProduct = daoLaoKeService.getDaTaoKeProduct("2154002");
+//            System.out.println(i + "---------" +daTaoKeProduct.getCouponReceiveNumber());
+//        }
+//        request.setId(1);
 
 //        CreateProductRequest request = newInstance(CreateProductRequest.class);
 //        request.setActivityId(1);
