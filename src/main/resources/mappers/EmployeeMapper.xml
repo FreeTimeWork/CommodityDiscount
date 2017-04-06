@@ -161,9 +161,16 @@
 
     <select id="selectAllEmployee" resultMap="employeeResult" parameterType="map">
         SELECT
-              <include refid="employeeColumns"/>
+            <include refid="employeeColumns"/>,
+            <include refid="groupColumns"/>,
+            <include refid="positionColumns"/>,
+            <include refid="permissionColumns"/>
         FROM
-              t_employee ae
+            t_employee ae
+            LEFT JOIN t_group g ON g.id = ae.group_id
+            INNER JOIN t_position ap ON ap.id = ae.position_id
+            LEFT JOIN t_position_permission app ON app.position_id = ap.id
+            LEFT JOIN t_permission ap1 ON ap1.id = app.permission_id
     </select>
 
     <insert

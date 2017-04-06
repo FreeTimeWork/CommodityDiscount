@@ -256,14 +256,7 @@
             </foreach>
             )
         </if>
-        <choose>
-            <when test="filter.orderAsc != null and filter.orderAsc == false">
-                ORDER BY p.id DESC
-            </when>
-            <otherwise>
-                ORDER BY p.id ASC
-            </otherwise>
-        </choose>
+
     </sql>
 
     <select id="selectProductById"
@@ -353,6 +346,14 @@
         <where>
             <include refid="productFilter"/>
         </where>
+        <choose>
+            <when test="filter.orderAsc != null and filter.orderAsc == false">
+                ORDER BY p.id DESC
+            </when>
+            <otherwise>
+                ORDER BY p.id ASC
+            </otherwise>
+        </choose>
           <include refid="pagingLimit" />
     </select>
 
@@ -391,7 +392,15 @@
         <where>
             <include refid="productFilter"/>
         </where>
-        <!--<include refid="pagingLimit" />-->
+        <choose>
+            <when test="filter.orderAsc != null and filter.orderAsc == false">
+                ORDER BY p.id DESC
+            </when>
+            <otherwise>
+                ORDER BY p.id ASC
+            </otherwise>
+        </choose>
+        <include refid="pagingLimit" />
     </select>
 
     <select id="countProductVoucherByFilter"

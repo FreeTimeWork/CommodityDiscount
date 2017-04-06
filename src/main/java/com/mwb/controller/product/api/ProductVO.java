@@ -36,7 +36,7 @@ public class ProductVO {
         List<ProductVO> productVOs = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(products)) {
             for (Product product : products) {
-                toVO(product);
+                productVOs.add(toVO(product));
             }
         }
         return productVOs;
