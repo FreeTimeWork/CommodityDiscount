@@ -110,7 +110,7 @@ CREATE TABLE `t_product` (
   `status_id` int(10) unsigned NOT NULL,
   `store_id` int(10) unsigned NOT NULL,
   `employee_id` int(10) unsigned NOT NULL,
-  `task_id` int(16) unsigned NOT NULL,
+  `task_id` int(16) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `hire_type_id` (`hire_type_id`),
   KEY `type_id` (`type_id`),
