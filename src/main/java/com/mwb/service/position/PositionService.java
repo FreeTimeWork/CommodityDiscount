@@ -30,7 +30,7 @@ public class PositionService implements IPositionService{
     @Override
     public SearchResult<Position> searchPosition(PositionFilter filter) {
 
-        List<Position> positions = positionMapper.selectPositionByFiler(filter);
+        List<Position> positions = positionMapper.selectPositionByFilter(filter);
         SearchResult<Position> result = new SearchResult<>();
         result.setResult(positions);
 
@@ -39,7 +39,7 @@ public class PositionService implements IPositionService{
 
     @Override
     public List<Position> searchAllPosition() {
-        return null;
+        return positionMapper.selectAllPosition();
     }
 
     @Override

@@ -25,13 +25,14 @@
             </bean>
         </mvc:interceptor>
     </mvc:interceptors>
+
     <!-- 配置视图解析器 -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/"></property>
-        <property name="suffix" value=".jsp"></property>
+        <property name="prefix" value="/WEB-INF/view/"></property>
+        <property name="suffix" value=".html"></property>
     </bean>
     <!-- 静态资源的访问 -->
-    <mvc:resources mapping="/static/**" location="/static/"/>
+    <mvc:resources mapping="/assets/**" location="/assets/"/>
     <mvc:default-servlet-handler/>
     <mvc:annotation-driven></mvc:annotation-driven>
 
@@ -44,6 +45,7 @@
             </list>
         </property>
     </bean>
+
     <!-- 配置文件上传 MultipartResolver -->
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

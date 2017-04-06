@@ -14,6 +14,8 @@ public interface EmployeeMapper {
 
     public List<Employee> selectEmployeeByFilter(@Param("filter") EmployeeFilter filter);
 
+    public List<Employee> selectAllEmployee();
+
     public int countEmployeeByFiler(@Param("filter") EmployeeFilter filter);
 
     public void insertEmployee(Employee employee);

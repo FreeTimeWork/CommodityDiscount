@@ -36,7 +36,7 @@ public class EmployeeService implements IEmployeeService {
 
     @Override
     public List<Employee> getAllEmployee() {
-        return null;
+        return employeeMapper.selectAllEmployee();
     }
 
     @Override
