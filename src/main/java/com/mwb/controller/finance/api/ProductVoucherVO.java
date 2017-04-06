@@ -38,7 +38,7 @@ public class ProductVoucherVO {
         vo.setEmployeeName(product.getEmployee().getFullName());
         vo.setCreateTime(DateTimeUtility.formatYYYYMMDDHHMMSS(product.getCreateTime()));
         vo.setCouponBeginTime(DateTimeUtility.formatYYYYMMDDHHMMSS(product.getCouponBeginTime()));
-        vo.setCouponBeginTime(DateTimeUtility.formatYYYYMMDDHHMMSS(product.getCouponBeginTime()));
+        vo.setCouponEndTime(DateTimeUtility.formatYYYYMMDDHHMMSS(product.getCouponEndTime()));
         vo.setPictureUrl(product.getPictureUrl());
         vo.setUrl(product.getUrl());
         vo.setName(product.getName());
@@ -49,7 +49,11 @@ public class ProductVoucherVO {
         vo.setCouponReceiveNumber(voucher.getReceiveNumber());
         vo.setShouldChargeAmount(voucher.getShouldChargeAmount());
         vo.setPayAmount(voucher.getPayAmount());
-        vo.setUseRatio((voucher.getUseNumber() * 100) / (voucher.getReceiveNumber() * 100));
+        if (voucher.getReceiveNumber().equals(0)) {
+            vo.setUseRatio(0);
+        }else {
+            vo.setUseRatio(voucher.getUseNumber() * 100 / voucher.getReceiveNumber());
+        }
 
         return vo;
     }
