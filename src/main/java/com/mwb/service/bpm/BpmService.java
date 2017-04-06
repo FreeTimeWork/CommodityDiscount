@@ -10,12 +10,14 @@ import com.mwb.dao.model.bpm.Variable;
 import com.mwb.service.bpm.api.IBpmService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by Fangchen.chai on 2017/4/5.
  */
+@Service("bpmService")
 public class BpmService implements IBpmService{
 
     @Autowired
