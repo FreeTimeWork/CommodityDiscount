@@ -1,5 +1,13 @@
 package com.mwb.controller.product;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+
 import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
 import com.mwb.controller.finance.api.ProductVoucherVO;
@@ -8,7 +16,6 @@ import com.mwb.controller.finance.api.SearchFinanceVoucherResponse;
 import com.mwb.controller.product.api.*;
 import com.mwb.controller.util.ApplicationContextUtils;
 import com.mwb.dao.filter.ProductFilter;
-import com.mwb.dao.filter.ProductVoucherFilter;
 import com.mwb.dao.filter.SearchResult;
 import com.mwb.dao.model.comm.Bool;
 import com.mwb.dao.model.comm.Log;
@@ -29,14 +36,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by MengWeiBo on 2017-04-01
@@ -115,8 +114,8 @@ public class ProductController {
         filter.setBeginToTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getBeginToTime()));
         filter.setEndFromTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getEndFromTime()));
         filter.setEndToTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getEndFromTime()));
-        filter.setUseMinNumber(request.getUseMinNumber());
-        filter.setUseMaxNumber(request.getUseMaxNumber());
+        filter.setReceiveMinNumber(request.getUseMinNumber());
+        filter.setReceiveMaxNumber(request.getUseMaxNumber());
         filter.setSurplusMinNumber(request.getSurplusMinNumber());
         filter.setSurplusMaxNumber(request.getSurplusMaxNumber());
         filter.setStatus(ProductStatus.fromId(request.getStatusId()));
@@ -271,11 +270,11 @@ public class ProductController {
     @RequestMapping(value = "/voucher/search", produces = ContentType.APPLICATION_JSON_UTF8)
     public ServiceResponse searchVoucher(SearchFinanceVoucherRequest request) throws ParseException {
         SearchFinanceVoucherResponse response = new SearchFinanceVoucherResponse();
-        ProductVoucherFilter filter = new ProductVoucherFilter();
-        filter.setProductType(ProductType.fromId(request.getProductId()));
+        ProductFilter filter = new ProductFilter();
+        filter.setType(ProductType.fromId(request.getProductTypeId()));
         filter.setGroupId(request.getGroupId());
         filter.setEmployeeId(request.getEmployeeId());
-        filter.setOrderByAsc(request.getOrderByAsc() == null ? true : request.getOrderByAsc());
+        filter.setOrderAsc(request.getOrderByAsc() == null ? true : request.getOrderByAsc());
         filter.setCreateBeginTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getCreateBeginTime()));
         filter.setCreateEndTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getCreateEndTime()));
         filter.setBeginFromTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getBeginFromTime()));
@@ -288,10 +287,10 @@ public class ProductController {
         filter.setMaxDiscountPrice(request.getMaxDiscountPrice());
         filter.setMinPayPrice(request.getMinPayPrice());
         filter.setMaxPayPrice(request.getMaxPayPrice());
-        filter.setMinSurplusNumber(request.getMinSurplusNumber());
-        filter.setMaxSurplusNumber(request.getMaxSurplusNumber());
-        filter.setMinUseNumber(request.getMinUseNumber());
-        filter.setMaxUseNumber(request.getMaxUseNumber());
+        filter.setSurplusMinNumber(request.getMinSurplusNumber());
+        filter.setSurplusMaxNumber(request.getMaxSurplusNumber());
+        filter.setReceiveMinNumber(request.getMinUseNumber());
+        filter.setReceiveMaxNumber(request.getMaxUseNumber());
         filter.setId(request.getId());
         filter.setName(request.getName());
         filter.setProductId(request.getProductId());
@@ -303,5 +302,19 @@ public class ProductController {
         response.setPagingResult(result.getPagingResult());
 
         return response;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/approve/claim", produces = ContentType.APPLICATION_JSON_UTF8)
+    public ServiceResponse claimHandler(BaseApproveRequest request) {
+
+        return new ServiceResponse();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/approve/recheck", produces = ContentType.APPLICATION_JSON_UTF8)
+    public ServiceResponse recheckHandler(BaseApproveRequest request) {
+
+        return new ServiceResponse();
     }
 }

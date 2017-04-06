@@ -1,7 +1,6 @@
 package com.mwb.service.product.api;
 
 import com.mwb.dao.filter.ProductFilter;
-import com.mwb.dao.filter.ProductVoucherFilter;
 import com.mwb.dao.filter.SearchResult;
 import com.mwb.dao.model.employee.Employee;
 import com.mwb.dao.model.product.Product;
@@ -30,7 +29,7 @@ public interface IProductService {
 
     public void modifyProduct(Product product);
 
-    public SearchResult<ProductVoucher> searchProductVoucher(ProductVoucherFilter filter);
+    public SearchResult<ProductVoucher> searchProductVoucher(ProductFilter filter);
 
     public void createProductVoucher(ProductVoucher voucher);
 

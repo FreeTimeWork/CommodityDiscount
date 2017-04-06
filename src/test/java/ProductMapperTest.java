@@ -1,9 +1,14 @@
 import com.alibaba.fastjson.JSON;
+import com.mwb.dao.filter.FinanceFilter;
+import com.mwb.dao.filter.ProductFilter;
+import com.mwb.dao.mapper.FinanceMapper;
 import com.mwb.dao.mapper.ProductMapper;
 import com.mwb.dao.model.comm.Bool;
-import com.mwb.dao.model.product.Product;
-import com.mwb.dao.model.product.Store;
-import com.mwb.dao.model.product.StoreType;
+import com.mwb.dao.model.employee.Employee;
+import com.mwb.dao.model.finance.Finance;
+import com.mwb.dao.model.product.*;
+import com.mwb.dao.model.product.voucher.ProductVoucher;
+import com.mwb.dao.model.product.voucher.VoucherPicture;
 import com.mwb.util.DateTimeUtility;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +24,29 @@ import java.util.Random;
 /**
  * Created by MengWeiBo on 2017-04-05
  */
-public class ProductMaperTest extends AbstractPersistenceTest {
+public class ProductMapperTest extends AbstractPersistenceTest {
 
-    @Autowired
+    //    @Autowired
     public ProductMapper mapper;
 
+        @Autowired
+    public FinanceMapper mapper1;
+
     @Test
+    public void insertFiance() throws Exception {
+        Finance finance = newInstance(Finance.class);
+        Employee employee = new Employee();
+        employee.setId(1);
+        finance.setEmployee(employee);
+
+        FinanceFilter financeFilter = new FinanceFilter();
+
+        List<Finance> finances = mapper1.selectFinanceByFilter(financeFilter);
+       int a=   mapper1.countFinanceByFilter(financeFilter);
+        printJSON(finances);
+    }
+
+    //    @Test
     public void insertStore() throws Exception {
         Store store = newInstance(Store.class);
         store.setType(StoreType.TMALL);
@@ -32,22 +54,58 @@ public class ProductMaperTest extends AbstractPersistenceTest {
         printJSON(store);
     }
 
-    @Test
-    public void insertProduct() throws Exception {
-        Product product = newInstance(Product.class);
-        mapper.insertProduct(product);
-        printJSON(product);
+    //    @Test
+    public void selectProduct() throws Exception {
+
+        Product product = mapper.selectProductById(1);
+        mapper.updateProduct(product);
+//        List<Product> products = mapper.selectProductByStatus(null, ProductStatus.AUDIT_RUN);
+
+        ProductFilter productFilter = newInstance(ProductFilter.class);
+
+        List<ProductVoucher> products = mapper.selectProductVoucherByFilter(productFilter);
+        int a = mapper.countProductByFilter(productFilter);
+        printJSON(products);
     }
 
+    //    @Test
+    public void insertProductVoucher() throws Exception {
+        ProductVoucher productVoucher = newInstance(ProductVoucher.class);
+        Product product = new Product();
+        product.setId(1);
+        productVoucher.setProduct(product);
+        mapper.insertProductVoucher(productVoucher);
 
+        productVoucher.setId(1);
+        VoucherPicture picture = newInstance(VoucherPicture.class);
+        picture.setVoucher(productVoucher);
+        mapper.insertVoucherPicture(picture);
+        printJSON(productVoucher);
+    }
 
+    //    @Test
+    public void insertProduct() throws Exception {
+        Product product = newInstance(Product.class);
+        product.setStatus(ProductStatus.AUDIT_RUN);
+        product.setHireType(HireType.DIRECTIONAL);
+        product.setProductType(ProductType.APPLIANCE);
+        product.setActivity(Activity.BARGAIN);
+        Store store = newInstance(Store.class);
+        store.setId(1);
+        Employee employee = newInstance(Employee.class);
+        employee.setId(1);
+        product.setStore(store);
+        product.setEmployee(employee);
 
+        mapper.insertProduct(product);
 
+        product.setId(1);
+        ProductPicture productPicture = newInstance(ProductPicture.class);
+        productPicture.setProduct(product);
+        mapper.insertProductPicture(productPicture);
 
-
-
-
-
+        printJSON(product);
+    }
 
 
     public static void printJSON(Object obj) {

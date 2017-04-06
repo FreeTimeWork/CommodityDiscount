@@ -2,7 +2,6 @@ package com.mwb.service.product;
 
 import com.mwb.controller.api.PagingResult;
 import com.mwb.dao.filter.ProductFilter;
-import com.mwb.dao.filter.ProductVoucherFilter;
 import com.mwb.dao.filter.SearchResult;
 import com.mwb.dao.mapper.ProductMapper;
 import com.mwb.dao.model.employee.Employee;
@@ -150,7 +149,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public SearchResult<ProductVoucher> searchProductVoucher(ProductVoucherFilter filter) {
+    public SearchResult<ProductVoucher> searchProductVoucher(ProductFilter filter) {
         SearchResult<ProductVoucher> result = new SearchResult<>();
         List<ProductVoucher> vouchers = productMapper.selectProductVoucherByFilter(filter);
 

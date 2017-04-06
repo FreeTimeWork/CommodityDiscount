@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mwb.dao.mapper.FinanceMapper">
+
+    <resultMap id="employeeResult" type="Employee" extends="com.mwb.dao.mapper.EmployeeMapper.employeeResult"/>
+
+    <resultMap
+         id="financeResult"
+         type="Finance">
+
+        <id property="id" column="finance_id"/>
+        <result property="submitNumber" column="finance_submit_number"/>
+        <result property="averageDaily" column="finance_average_daily"/>
+        <result property="refuseRate" column="finance_refuse_rate"/>
+        <result property="refuseNumber" column="finance_refuse_number"/>
+        <result property="twoAuditNumber" column="finance_two_audit_number"/>
+        <result property="promoteNumber" column="finance_promote_number"/>
+        <result property="endApproachNumber" column="finance_end_approach_number"/>
+        <result property="endNumber" column="finance_end_number"/>
+        <result property="payWaitNumber" column="finance_pay_wait_number"/>
+        <result property="payRunNumber" column="finance_pay_run_number"/>
+        <result property="payTrailerNumber" column="finance_pay_trailer_number"/>
+        <result property="payEndNumber" column="finance_pay_end_number"/>
+        <result property="guestUnitPrice" column="finance_guest_unit_price"/>
+        <result property="actualChargeAmount" column="finance_actual_charge_amount"/>
+        <result property="shouldChargeAmount" column="finance_should_charge_amount"/>
+        <result property="createTime" column="finance_create_time"/>
+
+        <association property="employee" javaType="Employee" resultMap="employeeResult"/>
+    </resultMap>
+
+    <sql id="employeeColumns">
+        <include refid="com.mwb.dao.mapper.EmployeeMapper.employeeColumns"/>
+    </sql>
+
+    <sql id="pagingLimit">
+        <include refid="com.mwb.dao.mapper.CommonMapper.pagingLimit"/>
+    </sql>
+
+    <sql id="financeFilter">
+        <if test="filter.groupId != null">
+           AND ae.group_id = #{filter.groupId, javaType=int, jdbcType=INTEGER}
+        </if>
+        <if test="filter.employeeId != null">
+            AND ae.id = #{filter.employeeId, javaType=int, jdbcType=INTEGER}
+        </if>
+        <if test="filter.status != null">
+            AND ae.status_id = #{filter.status.id, javaType=int, jdbcType=INTEGER}
+        </if>
+
+    </sql>
+
+    <sql id="financeColumns">
+        f.id AS finance_id,
+        f.submit_number AS finance_submit_number,
+        f.average_daily AS finance_average_daily,
+        f.refuse_rate AS finance_refuse_rate,
+        f.refuse_number AS finance_refuse_number,
+        f.two_audit_number AS finance_two_audit_number,
+        f.promote_number AS finance_promote_number,
+        f.end_approach_number AS finance_end_approach_number,
+        f.end_number AS finance_end_number,
+        f.pay_wait_number AS finance_pay_wait_number,
+        f.pay_run_number AS finance_pay_run_number,
+        f.pay_trailer_number AS finance_pay_trailer_number,
+        f.pay_end_number AS finance_pay_end_number,
+        f.guest_unit_price AS finance_guest_unit_price,
+        f.actual_charge_amount AS finance_actual_charge_amount,
+        f.should_charge_amount AS finance_should_charge_amount,
+        f.create_time AS finance_create_time,
+        f.employee_id AS finance_employee_id
+    </sql>
+
+    <select id="selectFinanceByEmployeeId" resultMap="financeResult" parameterType="map">
+        SELECT
+            <include refid="financeColumns"/>,
+            <include refid="employeeColumns"/>
+        FROM
+            t_finance f
+        INNER JOIN t_employee ae ON f.employee_id = ae.id
+        WHERE
+            f.employee_id = #{employeeId, javaType=int, jdbcType=INTEGER}
+    </select>
+
+    <select id="selectCurrentFinanceRank" resultType="int" parameterType="map">
+        SELECT
+            COUNT(*)
+        FROM
+            t_finance f
+        INNER JOIN t_employee ae ON f.employee_id = ae.id
+        WHERE f.submit_number =
+
+        SELECT
+            f.submit_number
+        FROM
+            f.employee_id = #{employeeId, javaType=int, jdbcType=INTEGER}
+    </select>
+
+    <select id="selectFinanceByFilter" resultMap="financeResult" parameterType="map">
+        SELECT
+            <include refid="financeColumns"/>,
+            <include refid="employeeColumns"/>
+        FROM
+            t_finance f
+        INNER JOIN t_employee ae ON f.employee_id = ae.id
+        <where>
+            <include refid="financeFilter"/>
+        </where>
+        <choose>
+            <when test="filter.orderByAsc != null and filter.orderByAsc == true">
+                ORDER BY f.submit_number ASC
+            </when>
+            <otherwise>
+                ORDER BY f.submit_number DESC
+            </otherwise>
+        </choose>
+        <include refid="pagingLimit"/>
+    </select>
+
+    <select id="countFinanceByFilter" resultType="int" parameterType="map">
+        SELECT
+            COUNT(*)
+        FROM
+            t_finance f
+        INNER JOIN t_employee ae ON f.employee_id = ae.id
+        <where>
+            <include refid="financeFilter"/>
+        </where>
+    </select>
+
+    <insert
+        id="insertFinance"
+        parameterType="Finance"
+        useGeneratedKeys="true"
+        keyProperty="id">
+		INSERT INTO t_finance (
+		    submit_number,
+		    average_daily,
+		    refuse_rate,
+		    refuse_number,
+		    two_audit_number,
+		    promote_number,
+		    end_approach_number,
+		    end_number,
+		    pay_wait_number,
+		    pay_run_number,
+		    pay_trailer_number,
+		    pay_end_number,
+		    guest_unit_price,
+		    actual_charge_amount,
+		    should_charge_amount,
+		    create_time,
+		    employee_id
+		) VALUES (
+		    #{submitNumber, javaType=int, jdbcType=INTEGER},
+		    #{averageDaily, javaType=int, jdbcType=INTEGER},
+		    #{refuseRate, javaType=int, jdbcType=INTEGER},
+		    #{refuseNumber, javaType=int, jdbcType=INTEGER},
+		    #{twoAuditNumber, javaType=int, jdbcType=INTEGER},
+		    #{promoteNumber, javaType=int, jdbcType=INTEGER},
+		    #{endApproachNumber, javaType=int, jdbcType=INTEGER},
+		    #{endNumber, javaType=int, jdbcType=INTEGER},
+		    #{payWaitNumber, javaType=int, jdbcType=INTEGER},
+		    #{payRunNumber, javaType=int, jdbcType=INTEGER},
+		    #{payTrailerNumber, javaType=int, jdbcType=INTEGER},
+		    #{payEndNumber, javaType=int, jdbcType=INTEGER},
+		    #{guestUnitPrice, javaType=bigdecimal, jdbcType=DECIMAL},
+		    #{actualChargeAmount, javaType=bigdecimal, jdbcType=DECIMAL},
+		    #{shouldChargeAmount, javaType=bigdecimal, jdbcType=DECIMAL},
+		    #{createTime, javaType=date, jdbcType=TIMESTAMP},
+		    #{employee.id, javaType=int, jdbcType=INTEGER}
+		)
+	</insert>
+
+    <update
+        id="updateFinance"
+        parameterType="Finance">
+        UPDATE
+            t_finance
+        <set>
+            <if test="submitNumber != null">
+                submit_number = #{submitNumber, javaType=int, jdbcType=INTEGER},
+            </if>
+            <if test="averageDaily != null">
+                average_daily = #{averageDaily, javaType=int, jdbcType=INTEGER},
+            </if>
+            <if test="refuseRate != null">
+                refuse_rate = #{refuseRate, javaType=int, jdbcType=INTEGER},
+            </if>
+            <if test="refuseNumber != null">
+                refuse_number = #{refuseNumber, javaType=int, jdbcType=INTEGER},
+            </if>
+            <if test="twoAuditNumber != null">
+                two_audit_number = #{twoAuditNumber, javaType=int, jdbcType=INTEGER},
+            </if>
+            <if test="promoteNumber != null">
+                promote_number = #{promoteNumber, javaType=int, jdbcType=INTEGER},
+            </if>
+            <if test="endApproachNumber != null">
+                end_approach_number = #{endApproachNumber, javaType=int, jdbcType=INTEGER},
+            </if>
+            <if test="endNumber != null">
+                end_number = #{endNumber, javaType=int, jdbcType=INTEGER},
+            </if>
+            <if test="payWaitNumber != null">
+                pay_wait_number = #{payWaitNumber, javaType=int, jdbcType=INTEGER},
+            </if>
+            <if test="payRunNumber != null">
+                pay_run_number = #{payRunNumber, javaType=int, jdbcType=INTEGER},
+            </if>
+            <if test="payTrailerNumber != null">
+                pay_trailer_number = #{payTrailerNumber, javaType=int, jdbcType=INTEGER},
+            </if>
+            <if test="payEndNumber != null">
+                pay_end_number = #{payEndNumber, javaType=int, jdbcType=INTEGER},
+            </if>
+            <if test="guestUnitPrice != null">
+                guest_unit_price = #{guestUnitPrice, javaType=bigdecimal, jdbcType=DECIMAL},
+            </if>
+            <if test="actualChargeAmount != null">
+                actual_charge_amount = #{actualChargeAmount, javaType=int, jdbcType=INTEGER},
+            </if>
+            <if test="shouldChargeAmount != null">
+                should_charge_amount = #{shouldChargeAmount, javaType=int, jdbcType=INTEGER}
+            </if>
+        </set>
+        WHERE
+          id = #{id, javaType=int, jdbcType=INTEGER}
+    </update>
+
+</mapper>   

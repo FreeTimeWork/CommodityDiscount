@@ -4,6 +4,7 @@ import com.mwb.dao.model.product.ProductStatus;
 import com.mwb.dao.model.product.ProductType;
 import org.apache.commons.lang.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
 public class ProductFilter extends SearchFilter {
 
     private Integer id;
-    private Integer productId;
+    private String productId;
     private String name;
     private Integer groupId;
     private Integer employeeId;
@@ -24,10 +25,17 @@ public class ProductFilter extends SearchFilter {
     private Date beginToTime;
     private Date endFromTime;
     private Date endToTime;
-    private Integer useMinNumber;
-    private Integer useMaxNumber;
+    private Integer receiveMinNumber;
+    private Integer receiveMaxNumber;
     private Integer surplusMinNumber;
     private Integer surplusMaxNumber;
+    private BigDecimal minDiscountPrice;   //卷后价格
+    private BigDecimal maxDiscountPrice;   //卷后价格
+    private BigDecimal minChargePrice;        //服务费用
+    private BigDecimal maxChargePrice;        //服务费用
+
+    private BigDecimal minPayPrice;   //付款价格
+    private BigDecimal maxPayPrice;   //付款价格
     private ProductType type;
     private ProductStatus status;
     private List<ProductStatus> excludeStatus;
@@ -41,11 +49,11 @@ public class ProductFilter extends SearchFilter {
         this.id = id;
     }
 
-    public Integer getProductId() {
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId(Integer productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
 
@@ -131,20 +139,20 @@ public class ProductFilter extends SearchFilter {
         this.endToTime = endToTime;
     }
 
-    public Integer getUseMinNumber() {
-        return useMinNumber;
+    public Integer getReceiveMinNumber() {
+        return receiveMinNumber;
     }
 
-    public void setUseMinNumber(Integer useMinNumber) {
-        this.useMinNumber = useMinNumber;
+    public void setReceiveMinNumber(Integer receiveMinNumber) {
+        this.receiveMinNumber = receiveMinNumber;
     }
 
-    public Integer getUseMaxNumber() {
-        return useMaxNumber;
+    public Integer getReceiveMaxNumber() {
+        return receiveMaxNumber;
     }
 
-    public void setUseMaxNumber(Integer useMaxNumber) {
-        this.useMaxNumber = useMaxNumber;
+    public void setReceiveMaxNumber(Integer receiveMaxNumber) {
+        this.receiveMaxNumber = receiveMaxNumber;
     }
 
     public Integer getSurplusMinNumber() {
@@ -193,5 +201,53 @@ public class ProductFilter extends SearchFilter {
 
     public void setExcludeStatus(List<ProductStatus> excludeStatus) {
         this.excludeStatus = excludeStatus;
+    }
+
+    public BigDecimal getMinDiscountPrice() {
+        return minDiscountPrice;
+    }
+
+    public void setMinDiscountPrice(BigDecimal minDiscountPrice) {
+        this.minDiscountPrice = minDiscountPrice;
+    }
+
+    public BigDecimal getMaxDiscountPrice() {
+        return maxDiscountPrice;
+    }
+
+    public void setMaxDiscountPrice(BigDecimal maxDiscountPrice) {
+        this.maxDiscountPrice = maxDiscountPrice;
+    }
+
+    public BigDecimal getMinChargePrice() {
+        return minChargePrice;
+    }
+
+    public void setMinChargePrice(BigDecimal minChargePrice) {
+        this.minChargePrice = minChargePrice;
+    }
+
+    public BigDecimal getMaxChargePrice() {
+        return maxChargePrice;
+    }
+
+    public void setMaxChargePrice(BigDecimal maxChargePrice) {
+        this.maxChargePrice = maxChargePrice;
+    }
+
+    public BigDecimal getMinPayPrice() {
+        return minPayPrice;
+    }
+
+    public void setMinPayPrice(BigDecimal minPayPrice) {
+        this.minPayPrice = minPayPrice;
+    }
+
+    public BigDecimal getMaxPayPrice() {
+        return maxPayPrice;
+    }
+
+    public void setMaxPayPrice(BigDecimal maxPayPrice) {
+        this.maxPayPrice = maxPayPrice;
     }
 }

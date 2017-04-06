@@ -1,9 +1,12 @@
 package com.mwb.service.bpm;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.mwb.dao.mapper.BpmMapper;
 import com.mwb.dao.model.bpm.Task;
+import com.mwb.dao.model.bpm.Variable;
 import com.mwb.service.bpm.api.IBpmService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +44,13 @@ public class BpmService implements IBpmService{
 
     @Override
     public Map<String, String> getBpmVariable(Integer taskId) {
-        return null;
+
+        List<Variable> variables = bpmMapper.selectVariableByTaskId(taskId);
+        Map<String, String> variableMap = new HashMap<>();
+
+        for (Variable var : variables) {
+            variableMap.put(var.getName(), var.getText());
+        }
+        return variableMap;
     }
 }
