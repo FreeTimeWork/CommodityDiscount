@@ -367,14 +367,13 @@ public class ProductController {
         }
         Product product = new Product();
         product.setId(request.getProductId());
-
         ProductStatus status = ProductStatus.fromId(request.getProductStatusId());
+        product.setStatus(status);
         if (status.equals(ProductStatus.REJECTED)) {
             product.setStatus(ProductStatus.AUDIT_WAIT);
             product.setUpdateTime(new Date());
         }
 
-        product.setStatus(status);
         productService.modifyProduct(product);
 
         return new ServiceResponse();
@@ -391,11 +390,11 @@ public class ProductController {
         Product product = new Product();
         product.setId(request.getProductId());
         ProductStatus status = ProductStatus.fromId(request.getProductStatusId());
+        product.setStatus(ProductStatus.fromId(request.getProductStatusId()));
         if (status.equals(ProductStatus.REJECTED)) {
             product.setStatus(ProductStatus.AUDIT_WAIT);
             product.setUpdateTime(new Date());
         }
-        product.setStatus(ProductStatus.fromId(request.getProductStatusId()));
         productService.modifyProduct(product);
 
         return new ServiceResponse();
