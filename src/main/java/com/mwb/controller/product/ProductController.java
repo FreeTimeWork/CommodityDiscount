@@ -42,6 +42,7 @@ import com.mwb.dao.model.product.voucher.VoucherPicture;
 import com.mwb.service.ParserService;
 import com.mwb.service.bpm.api.IBpmService;
 import com.mwb.service.dataoke.api.IDaoLaoKeService;
+import com.mwb.service.finance.api.IFinanceService;
 import com.mwb.service.product.api.IProductService;
 import com.mwb.util.DateTimeUtility;
 import org.apache.commons.collections.CollectionUtils;
@@ -68,6 +69,9 @@ public class ProductController {
 
     @Autowired
     private IProductService productService;
+
+    @Autowired
+    private IFinanceService financeService;
 
     @Autowired
     private IBpmService bpmService;
@@ -371,7 +375,7 @@ public class ProductController {
         product.setStatus(status);
         if (status.equals(ProductStatus.REJECTED)) {
             product.setStatus(ProductStatus.AUDIT_WAIT);
-            product.setUpdateTime(new Date());
+            product.setUpdateStatusTime(new Date());
         }
 
         productService.modifyProduct(product);
@@ -390,12 +394,12 @@ public class ProductController {
         Product product = new Product();
         product.setId(request.getProductId());
         ProductStatus status = ProductStatus.fromId(request.getProductStatusId());
-        product.setStatus(ProductStatus.fromId(request.getProductStatusId()));
-        if (status.equals(ProductStatus.REJECTED)) {
-            product.setStatus(ProductStatus.AUDIT_WAIT);
-            product.setUpdateTime(new Date());
-        }
+        product.setStatus(status);
+        product.setUpdateStatusTime(new Date());
+
         productService.modifyProduct(product);
+
+        financeService.modifyFinance(employee.getId(), product.getStatus(), status);
 
         return new ServiceResponse();
     }
