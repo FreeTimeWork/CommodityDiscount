@@ -46,7 +46,12 @@
 		INSERT INTO ru_task (
 		employee_id
 		) VALUES (
-		#{employeeId, javaType=int, jdbcType=INTEGER}
+		<if test="employeeId == null">
+            NULL
+        </if>
+        <if test="employeeId != null">
+            #{employeeId, javaType=int, jdbcType=INTEGER}
+        </if>
 		)
 	</insert>
 

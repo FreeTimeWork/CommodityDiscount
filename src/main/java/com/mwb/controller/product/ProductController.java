@@ -1,21 +1,46 @@
 package com.mwb.controller.product;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
 import com.mwb.controller.finance.api.ProductVoucherVO;
 import com.mwb.controller.finance.api.SearchFinanceVoucherRequest;
 import com.mwb.controller.finance.api.SearchFinanceVoucherResponse;
-import com.mwb.controller.product.api.*;
+import com.mwb.controller.product.api.BaseApproveRequest;
+import com.mwb.controller.product.api.CreateProductRequest;
+import com.mwb.controller.product.api.CreateProductVoucherRequest;
+import com.mwb.controller.product.api.GrabRequest;
+import com.mwb.controller.product.api.ProductDetailsResponse;
+import com.mwb.controller.product.api.ProductVO;
+import com.mwb.controller.product.api.SearchProductRequest;
+import com.mwb.controller.product.api.SearchProductResponse;
 import com.mwb.controller.util.ApplicationContextUtils;
 import com.mwb.dao.filter.ProductFilter;
 import com.mwb.dao.filter.SearchResult;
+import com.mwb.dao.model.bpm.Task;
+import com.mwb.dao.model.bpm.Variable;
 import com.mwb.dao.model.comm.Bool;
 import com.mwb.dao.model.comm.Log;
 import com.mwb.dao.model.comm.PagingData;
 import com.mwb.dao.model.employee.Employee;
-import com.mwb.dao.model.product.*;
+import com.mwb.dao.model.product.Activity;
+import com.mwb.dao.model.product.HireType;
+import com.mwb.dao.model.product.Product;
+import com.mwb.dao.model.product.ProductPicture;
+import com.mwb.dao.model.product.ProductStatus;
+import com.mwb.dao.model.product.ProductType;
+import com.mwb.dao.model.product.Store;
+import com.mwb.dao.model.product.StoreType;
 import com.mwb.dao.model.product.voucher.ProductVoucher;
 import com.mwb.dao.model.product.voucher.VoucherPicture;
 import com.mwb.service.ParserService;
+import com.mwb.service.bpm.api.IBpmService;
 import com.mwb.service.dataoke.api.IDaoLaoKeService;
 import com.mwb.service.product.api.IProductService;
 import com.mwb.util.DateTimeUtility;
@@ -28,13 +53,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by MengWeiBo on 2017-04-01
@@ -50,6 +68,9 @@ public class ProductController {
 
     @Autowired
     private IProductService productService;
+
+    @Autowired
+    private IBpmService bpmService;
 
     @ResponseBody
     @RequestMapping(value = "/grab")
@@ -195,6 +216,14 @@ public class ProductController {
 
         productService.createProduct(product);
 
+        //存入流程变量
+        Task task = new Task();
+        Variable variable = new Variable("createdById", employee.getId() + "");
+        List<Variable> variables = new ArrayList<>();
+        variables.add(variable);
+        task.setVariables(variables);
+        //创建流程
+        bpmService.createTask(task);
         return new ServiceResponse();
     }
 
@@ -304,16 +333,70 @@ public class ProductController {
         return response;
     }
 
+    //认领
     @ResponseBody
     @RequestMapping(value = "/approve/claim")
-    public ServiceResponse claimHandler(BaseApproveRequest request) {
+    public ServiceResponse claimHandler(@RequestBody BaseApproveRequest request) {
+        Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
+        if (employee == null) {
+            return new ServiceResponse();
+        }
+        Product product = new Product();
+        product.setId(request.getProductId());
+        //审单员
+        if (employee.getPosition().getId().equals(4)) {
+
+            product.setStatus(ProductStatus.AUDIT_RUN);
+            productService.modifyProduct(product);
+
+        } else if (employee.getPosition().getId().equals(5)) { //财务
+            product.setStatus(ProductStatus.PAY_RUN);
+            productService.modifyProduct(product);
+        }
 
         return new ServiceResponse();
     }
 
+    //一审
+    @ResponseBody
+    @RequestMapping(value = "/approve/check", produces = ContentType.APPLICATION_JSON_UTF8)
+    public ServiceResponse checkHandler(@RequestBody BaseApproveRequest request) {
+        Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
+        if (employee == null) {
+            return new ServiceResponse();
+        }
+        Product product = new Product();
+        product.setId(request.getProductId());
+
+        ProductStatus status = ProductStatus.fromId(request.getProductStatusId());
+        if (status.equals(ProductStatus.REJECTED)) {
+            product.setStatus(ProductStatus.AUDIT_WAIT);
+            product.setUpdateTime(new Date());
+        }
+
+        product.setStatus(status);
+        productService.modifyProduct(product);
+
+        return new ServiceResponse();
+    }
+
+    //复审
     @ResponseBody
     @RequestMapping(value = "/approve/recheck")
-    public ServiceResponse recheckHandler(BaseApproveRequest request) {
+    public ServiceResponse recheckHandler(@RequestBody BaseApproveRequest request) {
+        Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
+        if (employee == null) {
+            return new ServiceResponse();
+        }
+        Product product = new Product();
+        product.setId(request.getProductId());
+        ProductStatus status = ProductStatus.fromId(request.getProductStatusId());
+        if (status.equals(ProductStatus.REJECTED)) {
+            product.setStatus(ProductStatus.AUDIT_WAIT);
+            product.setUpdateTime(new Date());
+        }
+        product.setStatus(ProductStatus.fromId(request.getProductStatusId()));
+        productService.modifyProduct(product);
 
         return new ServiceResponse();
     }
