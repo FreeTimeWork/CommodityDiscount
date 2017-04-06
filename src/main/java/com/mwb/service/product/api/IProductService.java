@@ -29,6 +29,8 @@ public interface IProductService {
 
     public void modifyProduct(Product product);
 
+    public void modifyProductStatus(Integer id, ProductStatus status);
+
     public SearchResult<ProductVoucher> searchProductVoucher(ProductFilter filter);
 
     public void createProductVoucher(ProductVoucher voucher);

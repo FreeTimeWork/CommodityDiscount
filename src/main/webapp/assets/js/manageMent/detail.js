@@ -22,6 +22,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             $(".zhou_2_floor>div").eq(num).addClass("dis").siblings("").removeClass("dis")
 
         })
+        $(".form_datetime").datetimepicker({
+            format: "yyyy-mm-dd hh:ii"
+        });
     })
     $.ajax({
         type: 'get',
