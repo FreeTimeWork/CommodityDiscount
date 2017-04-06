@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>报表</title>
+    <link rel="stylesheet" href="css/base.css"/>
+
+    <link rel="stylesheet" href="project/lib/bootstrap/css/bootstrap-2.3.0.min.css"/>
+    <link rel="stylesheet" href="project/them/DT_bootstrap.css"/>
+    <link rel="stylesheet" href="project/lib/jquery/datatable/css/select.dataTables.min.css"/>
+    <link rel="stylesheet" href="project/them/default.css"/>
+    <link rel="stylesheet" href="project/them/style.css"/>
+    <link rel="stylesheet" href="project/them/style-metro.css"/>
+    <link rel="stylesheet" href="project/them/style-responsive.css"/>
+    <link rel="stylesheet" href="css/base.css"/>
+    <link rel="stylesheet" href="css/baobiao.css"/>
+<body>
+<div class="cont">
+    <div class="top clearfix">
+        <div class="top_left">
+            <a href="#" class="go_index"><img src="img/logo_02.png" class="a_1" alt=""/></a>
+            <img src="img/pic-1_05.png" alt="" class="a_2"/><span class="top_text">商品管理</span>
+            <span class="top_num">27852</span><span class="line">|</span>
+            <img src="img/pic-2_07.png" alt="" class="a_2"/><span class="top_text">报表统计</span><span class="line"
+                                                                                                    style="padding-left:10px;">|</span>
+
+        </div>
+        <div class="top_right">
+            <a href="#">清除缓存</a>
+            <a href="#">灵感大王</a>
+            <a href="#">个人设置</a>
+            <a href="#">退出</a>
+        </div>
+
+    </div>
+
+    <div class="bottom clearfix">
+        <div class="bottom_left">
+            <ul style="margin:0">
+                <li style="border-bottom:#1481b3" class="fa_li">
+
+                    <a href="#" class="floor"><img src="img/pic-1_05.png" alt=""/><span>商品管理</span> <span
+                            class="jia add"></span></a>
+                    <ul>
+                        <li><a href=commodity.html" target="_blank">商品列表</a></li>
+                        <li><a href="detail.html" target="_blank">添加新商品</a></li>
+
+                    </ul>
+
+                </li>
+
+                <li class="fa_li">
+                    <a href="#" class="floor"><img src="img/pic-3_13.png" alt=""/><span>报表统计</span> <span
+                            class="jia add"></span></a>
+                    <ul>
+                        <li><a href="finance.html" target="_blank">财务管理</a></li>
+                        <li><a href="report.html" target="_blank">商品报表</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+        <div class="bottom_left_2">
+            <img src="img/pic-6_03.png" alt=""/>
+        </div>
+        <div class="bottom_right">
+            <div class="bottom_right_son dis">
+                <p class="bottom_add">添加新商品</p>
+
+                <p class="bottom_right_tit">管理中心-商品报表</p>
+                <form id="searchForm">
+                    <select uid="name" class="input-medium">
+                    </select>
+                    <select uid="groupId" class="input-medium">
+                    </select>
+                    <select  uid="employeeId" class="input-medium">
+                    </select>
+                    <select uid="statusId" class="input-medium">
+                    </select>
+                    <select uid="orderAsc" class="input-medium">
+
+                    </select>
+                    <select uid="typeId" class="input-medium">
+                    </select>
+                    <br/>
+                        <span class="">
+                            <label class="control-label helpinline">商品编号：</label> <input type="text" uid="productNamw" class="input-medium"/>
+                        </span>
+                        <span class="">
+                           <label class="control-label helpinline">商品ID：</label><input type="text" uid="productId" class="input-medium">
+                        </span>
+                    <br/>
+                        <span class="">
+                            <label class="control-label helpinline"> 提交时间：</label>
+                        <sapn id="createBeginTime_datePicker">
+                            <input uid="createBeginTime" type="text" class="input-small m-wrap"  readonly="readonly" style="cursor: text;">
+                        </sapn>
+                        ~
+                        <span id="createEndTime_datePicker">
+                            <input uid="createEndTime" type="text" class="input-small m-wrap"  readonly="readonly" style="cursor: text;">
+                        </span>
+                        </span>
+
+                     <span class="">
+                            <label class="control-label helpinline"> 优惠券开始时间：</label>
+                        <sapn id="beginFromTime_datePicker">
+                            <input uid="beginFromTime" type="text" class="input-small m-wrap"  readonly="readonly" style="cursor: text;">
+                        </sapn>
+                        ~
+                        <span id="beginToTime_datePicker">
+                            <input uid="beginToTime" type="text" class="input-small m-wrap"  readonly="readonly" style="cursor: text;">
+                        </span>
+                        </span>
+                    <br/>
+                    <span class="">
+                            <label class="control-label helpinline"> 优惠券结束时间：</label>
+                        <sapn id="endFromTime_datePicker">
+                            <input uid="endFromTime" type="text" class="input-small m-wrap"  readonly="readonly" style="cursor: text;">
+                        </sapn>
+                        ~
+                        <span id=endToTime_datePicker">
+                            <input uid="endToTime" type="text" class="input-small m-wrap"  readonly="readonly" style="cursor: text;">
+                        </span>
+                        </span>
+                    <label class="control-label helpinline"> 优惠券领取：</label><input type="text" uid="useMinNumber" class="input-medium"/>~<input type="text" uid="useMaxNumber" class="input-medium"/>
+                    <br/>
+                    <label class="control-label helpinline"> 优惠券剩余：</label><input type="text" uid="surplusMinNumber" class="input-medium">~<input type="text" uid="surplusMaxNumber" class="input-medium"/>
+                    <label class="control-label helpinline"> 服务费用：</label><input type="text" uid="minChargePrice" class="input-medium"/>~<input type="text" uid="maxChargePrice" class="input-medium"/>
+                    <label class="control-label helpinline"> 券后价格：</label><input type="text" uid="minDiscountPrice" class="input-medium"/>~<input type="text" uid="maxDiscountPrice" class="input-medium"/>
+                    <label class="control-label helpinline"> 付款金额：</label><input type="text" uid="minPayPrice" class="input-medium"/>~<input type="text" uid="maxPayPrice" class="input-medium"/>
+                    <span class="">
+                            <label class="control-label inline">商品编号：</label>
+                            <input type="text"uid="productNumber" class="input-medium"/>
+                    </span>
+                    <span class="">
+                            <label class="control-label inline">商品ID：</label>
+                            <input type="text"uid="projectId" class="input-medium"/>
+                    </span>
+                    <span class="">
+                            <label class="control-label inline">关键字：</label>
+                            <input type="text"uid="keyWord" class="input-medium"/>
+                    </span>
+                    <input type="submit" class="btn btn-primary red" value="搜索" />
+                    </p>
+
+
+
+                </form>
+                <table class="table table-striped table-bordered table-hover table-full-width"
+                       id="employeeGrid">
+                    <thead>
+                    <tr>
+                        <td class="select-checkbox" id="selectAllBtn"></td>
+                        <th>业务员</th>
+                        <th>提交时间</th>
+                        <th>优惠券有限期</th>
+                        <th>产品图片</th>
+                        <th>产品名称</th>
+                        <th>券后价格</th>
+                        <th>服务费</th>
+                        <th>佣金比例</th>
+                        <th>领取数量</th>
+                        <th>使用数量</th>
+                        <th>应收金额</th>
+                        <th>付款金额</th>
+                        <th>使用率</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="lib/require/require.js"></script>
+<script src="js/dependances.js"></script>
+<script src="js/manageMent/report.js"></script>
+</body>
+</html>

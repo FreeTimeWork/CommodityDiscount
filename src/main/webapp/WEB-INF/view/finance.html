@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>财务管理</title>
+    <link rel="stylesheet" href="project/lib/bootstrap/css/bootstrap-2.3.0.min.css"/>
+    <link rel="stylesheet" href="project/them/DT_bootstrap.css"/>
+    <link rel="stylesheet" href="project/lib/jquery/datatable/css/select.dataTables.min.css"/>
+    <link rel="stylesheet" href="project/them/default.css"/>
+    <link rel="stylesheet" href="project/them/style.css"/>
+    <link rel="stylesheet" href="project/them/style-metro.css"/>
+    <link rel="stylesheet" href="project/them/style-responsive.css"/>
+    <link rel="stylesheet" href="css/baobiao.css"/>
+</head>
+<body>
+<div class="cont">
+    <div class="top clearfix">
+        <div class="top_left">
+            <a href="#" class="go_index"><img src="img/logo_02.png" class="a_1" alt=""/></a>
+            <img src="img/pic-1_05.png" alt="" class="a_2"/><span class="top_text">商品管理</span>
+            <span class="top_num">27852</span><span class="line">|</span>
+            <img src="img/pic-2_07.png" alt="" class="a_2"/><span class="top_text">报表统计</span><span class="line"
+                                                                                                    style="padding-left:10px;">|</span>
+
+        </div>
+        <div class="top_right">
+            <a href="#">清除缓存</a>
+            <a href="#">灵感大王</a>
+            <a href="#">个人设置</a>
+            <a href="#">退出</a>
+        </div>
+
+    </div>
+
+    <div class="bottom clearfix">
+        <div class="bottom_left">
+            <ul style="margin:0">
+                <li style="border-bottom:#1481b3" class="fa_li">
+
+                    <a href="#" class="floor"><img src="img/pic-1_05.png" alt=""/><span>商品管理</span> <span
+                            class="jia add"></span></a>
+                    <ul>
+                        <li><a href=commodity.html" target="_blank">商品列表</a></li>
+                        <li><a href="detail.html" target="_blank">添加新商品</a></li>
+
+                    </ul>
+
+                </li>
+
+                <li class="fa_li">
+                    <a href="#" class="floor"><img src="img/pic-3_13.png" alt=""/><span>报表统计</span> <span
+                            class="jia add"></span></a>
+                    <ul>
+                        <li><a href="finance.html" target="_blank">财务管理</a></li>
+                        <li><a href="report.html" target="_blank">商品报表</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+        <div class="bottom_left_2">
+            <img src="img/pic-6_03.png" alt=""/>
+        </div>
+        <div class="bottom_right">
+            <div class="bottom_right_son dis">
+                <p class="bottom_right_tit">管理中心-财务管理</p>
+
+                <form id="searchForm">
+                    业务员小组：<select uid="groupId"></select>
+                    筛选业务员：<select uid="employeeId"></select>
+                    筛选状态：<select uid="statusId"></select>
+                    排序：<select uid="orderByAsc"></select>
+                     <span class="">
+                            <label class="control-label helpinline"> 付款时间：</label>
+                        <sapn id="beginPayTime_datePicker">
+                            <input uid="beginPayTime" type="text" class="input-small m-wrap"  readonly="readonly" style="cursor: text;">
+                        </sapn>
+                        ~
+                        <span id="endPayTime_datePicker">
+                            <input uid="endPayTime" type="text" class="input-small m-wrap"  readonly="readonly" style="cursor: text;">
+                        </span>
+                        </span>
+                    <input type="submit" class="btn btn-primary red" value="搜索" />
+                </form>
+                <table class="table table-striped table-bordered table-hover table-full-width"
+                       id="list">
+                    <thead>
+                    <tr>
+                        <th>排行</th>
+                        <th>业务员</th>
+                        <th>提报数量</th>
+                        <th>日均提报</th>
+                        <th>拒绝率</th>
+                        <th>拒绝</th>
+                        <th>待二审</th>
+                        <th>推广中</th>
+                        <th>已结束</th>
+                        <th>待付款</th>
+                        <th>付款中</th>
+                        <th>拒绝付款</th>
+                        <th>已付款</th>
+                        <th>客单价</th>
+                        <th>实收金额</th>
+                        <th>应收金额</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<script src="lib/require/require.js"></script>
+<script src="js/dependances.js"></script>
+<script src="js/manageMent/finance.js"></script>
+
+<script>
+//    $(function () {
+//        $(".fa_li>a").click(function () {
+//
+//            $(this).css("background", "#1481b3").parent().siblings("li").find(".floor").css("background", "#065c85")
+////
+//            $(this).parent().find(".jia").toggleClass("sub","add");
+////
+//
+//            $(this).parent().find("ul").toggle().parent().siblings("li").find("ul").hide();
+//        })
+//
+//        $(".fa_li ul li").on("mouseover click", function () {
+//
+//            $(this).css({"background": "#fff"}).find("a").css({"color": "red"}).parent().siblings("li").css({"background": "#efefef"}).find("a").css({"color": "#666"})
+//
+////
+//        })
+//    })
+
+
+</script>
+</body>
+</html>

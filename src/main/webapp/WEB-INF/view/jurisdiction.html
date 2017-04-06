@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>报表</title>
+    <link rel="stylesheet" href="css/base.css"/>
+
+    <link rel="stylesheet" href="project/lib/bootstrap/css/bootstrap-2.3.0.min.css"/>
+    <link rel="stylesheet" href="project/them/DT_bootstrap.css"/>
+    <link rel="stylesheet" href="project/lib/jquery/datatable/css/select.dataTables.min.css"/>
+    <link rel="stylesheet" href="project/them/default.css"/>
+    <link rel="stylesheet" href="project/them/style.css"/>
+    <link rel="stylesheet" href="project/them/style-metro.css"/>
+    <link rel="stylesheet" href="project/them/style-responsive.css"/>
+    <link rel="stylesheet" href="css/baobiao.css"/>
+<body>
+<div class="cont">
+    <div class="top clearfix">
+        <div class="top_left">
+            <a href="#" class="go_index"><img src="img/logo_02.png" class="a_1" alt=""/></a>
+            <img src="img/pic-1_05.png" alt="" class="a_2"/><span class="top_text">商品管理</span>
+            <span class="top_num">27852</span><span class="line">|</span>
+            <img src="img/pic-2_07.png" alt="" class="a_2"/><span class="top_text">报表统计</span><span class="line"
+                                                                                                    style="padding-left:10px;">|</span>
+
+        </div>
+        <div class="top_right">
+            <a href="#">清除缓存</a>
+            <a href="#">灵感大王</a>
+            <a href="#">个人设置</a>
+            <a href="#">退出</a>
+        </div>
+
+    </div>
+
+    <div class="bottom clearfix">
+        <div class="bottom_left">
+            <ul style="margin:0">
+                <li style="border-bottom:#1481b3" class="fa_li">
+
+                    <a href="#" class="floor"><img src="img/pic-1_05.png" alt=""/><span>商品管理</span> <span
+                            class="jia add"></span></a>
+                    <ul>
+                        <li><a href=commodity.html" target="_blank">商品列表</a></li>
+                        <li><a href="detail.html" target="_blank">添加新商品</a></li>
+
+                    </ul>
+
+                </li>
+
+                <li class="fa_li">
+                    <a href="#" class="floor"><img src="img/pic-3_13.png" alt=""/><span>报表统计</span> <span
+                            class="jia add"></span></a>
+                    <ul>
+                        <li><a href="finance.html" target="_blank">财务管理</a></li>
+                        <li><a href="report.html" target="_blank">商品报表</a></li>
+                    </ul>
+                </li>
+
+                <li class="fa_li">
+                    <a href="#" class="floor"><img src="img/pic-3_13.png" alt=""/><span>员工管理</span> <span
+                            class="jia add"></span></a>
+                    <ul>
+                        <li><a href="employeeInfo.html" target="_blank">员工信息</a></li>
+                        <li><a href="report.html" target="_blank">权限管理</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+        <div class="bottom_left_2">
+            <img src="img/pic-6_03.png" alt=""/>
+        </div>
+        <div class="bottom_right">
+            <div class="bottom_right_son dis">
+                <p class="bottom_right_tit">人员管理-权限管理</p>
+
+                <form id="modifyForm">
+                    <div class="control-group" style="width: 300px;margin: 0 auto">
+                        <label class="control-label" style="display: inline-block">权限管理</label>
+                        <select id="positionId"></select>
+                    </div>
+                    <div style="border-bottom: 3px solid black; margin-top: 30px;"></div>
+                    <div id="id" style="margin-top: 50px;">
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="lib/require/require.js"></script>
+<script src="js/dependances.js"></script>
+<script src="js/manageMent/jurisdiction.js"></script>
+</body>
+</html>

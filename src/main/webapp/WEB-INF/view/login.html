@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>login</title>
+    <link rel="stylesheet" href="css/base.css"/>
+
+    <link rel="stylesheet" href="css/baobiao.css"/>
+</head>
+<body>
+<div class="login_box">
+    <div class="login_inn">
+        <div class="login_inn_ss">
+            <p>账号登录</p>
+
+            <form action="">
+                <div class="item">
+                    <i class="us"></i><input type="text" placeholder="手机号"/>
+                </div>
+                <div class="item">
+                    <i class="ps"></i><input type="password" placeholder="密码"/>
+                </div>
+
+                <div class="remove clearfix">
+
+                    <a href="#">清空</a> <input type="text" value="登录" id="login"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="bg_box">
+    <div class="bg_inn">
+        <img src="img/close_2.png" alt="" class="bg_close"/>
+        <p class="bg_tit">账户岗位</p>
+        <p class="bg_choose">请选择一个岗位登陆</p>
+        <div class="bg_list_1">
+            <span>主职岗位</span>
+            <ul>
+                <li>
+                    <a href="#">CTO</a>
+                </li>
+            </ul>
+
+            <span>兼职岗位</span>
+            <ul>
+                <li>
+                    <a href="#">管理员</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<script src="js/jquery-1.11.1.min.js"></script>
+
+<script>
+
+    $("#login").click(function(){
+        $(".bg_box").show()
+    })
+    $(".bg_close").click(function(){
+        $(".bg_box").hide()
+    })
+</script>
+</body>
+</html>
