@@ -32,7 +32,7 @@ public class FinanceController {
     private IFinanceService financeService;
 
     @ResponseBody
-    @RequestMapping(value = "/search", produces = ContentType.APPLICATION_JSON_UTF8)
+    @RequestMapping(value = "/search")
     public ServiceResponse search(SearchFinanceRequest request) {
         SearchFinanceResponse response = new SearchFinanceResponse();
         Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");

@@ -18,6 +18,7 @@ import com.mwb.util.DateTimeUtility;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -46,6 +47,31 @@ public class ProductService implements IProductService {
         }
 
         return product;
+    }
+
+    @Override
+    @Transactional
+    public void createProduct(Product product) {
+        createStore(product.getStore());
+
+        productMapper.insertProduct(product);
+
+        if (CollectionUtils.isNotEmpty(product.getPictures())) {
+            for (ProductPicture picture : product.getPictures()) {
+                createProductPicture(picture);
+            }
+        }
+
+        Finance finance = financeService.getFinanceByEmployeeId(product.getEmployee().getId());
+        if (finance == null) {
+            createFinance(product.getEmployee());
+        } else {
+            int day = DateTimeUtility.daysBetween(finance.getCreateTime(), new Date());
+            finance.setSubmitNumber(finance.getSubmitNumber() + 1);
+            finance.setAverageDaily(finance.getSubmitNumber() * 100 / day);
+
+            financeService.modifyFinance(finance);
+        }
     }
 
     @Override
@@ -103,30 +129,6 @@ public class ProductService implements IProductService {
         }
     }
 
-    @Override
-    public void createProduct(Product product) {
-        createStore(product.getStore());
-
-        productMapper.insertProduct(product);
-
-        if (CollectionUtils.isNotEmpty(product.getPictures())) {
-            for (ProductPicture picture : product.getPictures()) {
-                createProductPicture(picture);
-            }
-        }
-
-        Finance finance = financeService.getFinanceByEmployeeId(product.getEmployee().getId());
-        if (finance == null) {
-            createFinance(product.getEmployee());
-        } else {
-            int day = DateTimeUtility.daysBetween(finance.getCreateTime(), new Date());
-            finance.setSubmitNumber(finance.getSubmitNumber() + 1);
-            finance.setAverageDaily(finance.getSubmitNumber() * 100 / day);
-
-            financeService.modifyFinance(finance);
-        }
-    }
-
     private void createFinance(Employee employee) {
         Finance finance = new Finance();
         finance.setSubmitNumber(1);
@@ -173,6 +175,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional
     public void createProductVoucher(ProductVoucher voucher) {
         productMapper.insertProductVoucher(voucher);
 

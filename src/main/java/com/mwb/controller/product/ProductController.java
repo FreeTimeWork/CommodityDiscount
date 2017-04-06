@@ -1,14 +1,5 @@
 package com.mwb.controller.product;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-
-import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
 import com.mwb.controller.finance.api.ProductVoucherVO;
 import com.mwb.controller.finance.api.SearchFinanceVoucherRequest;
@@ -49,10 +40,18 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by MengWeiBo on 2017-04-01
@@ -73,8 +72,8 @@ public class ProductController {
     private IBpmService bpmService;
 
     @ResponseBody
-    @RequestMapping(value = "/grab", produces = ContentType.APPLICATION_JSON_UTF8)
-    public ServiceResponse grabProduct(GrabRequest request) {
+    @RequestMapping(value = "/grab")
+    public ServiceResponse grabProduct(@RequestBody GrabRequest request) {
 
         if (StringUtils.isBlank(request.getProductUrl()) || StringUtils.isBlank(request.getCouponUrl())) {
             return new ServiceResponse();
@@ -92,7 +91,7 @@ public class ProductController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/detail", produces = ContentType.APPLICATION_JSON_UTF8)
+    @RequestMapping(value = "/detail")
     public ServiceResponse getProductDetail(Integer id) {
         Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
         if (employee == null) {
@@ -112,7 +111,7 @@ public class ProductController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/search", produces = ContentType.APPLICATION_JSON_UTF8)
+    @RequestMapping(value = "/search")
     public ServiceResponse searchProduct(SearchProductRequest request) throws ParseException {
         SearchProductResponse response = new SearchProductResponse();
 
@@ -152,9 +151,10 @@ public class ProductController {
         return response;
     }
 
+
     @ResponseBody
-    @RequestMapping(value = "/create", produces = ContentType.APPLICATION_JSON_UTF8)
-    public ServiceResponse create(CreateProductRequest request) throws ParseException {
+    @RequestMapping(value = "/create")
+    public ServiceResponse create(@RequestBody CreateProductRequest request) throws ParseException {
         Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
         if (employee == null) {
             return new ServiceResponse();
@@ -227,9 +227,8 @@ public class ProductController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/voucher/create", produces = ContentType.APPLICATION_JSON_UTF8)
+    @RequestMapping(value = "/voucher/create")
     public ServiceResponse createProductVoucher(
-            HttpServletRequest httpServletRequest,
             @RequestParam("files") MultipartFile[] files,
             CreateProductVoucherRequest request) {
         Product product = productService.getProductById(request.getId());
@@ -247,11 +246,12 @@ public class ProductController {
 
         List<VoucherPicture> pictures = new ArrayList<>();
         if (files != null && files.length > 0) {
+            String realPath = ApplicationContextUtils.getSession().getServletContext().getRealPath("/") + "\\image\\";
+
             for (int i = 0; i < files.length; i++) {
                 try {
                     MultipartFile file = files[i];
-                    String filePath = httpServletRequest.getSession().getServletContext().getRealPath("/")
-                            + "\\image\\" + file.getOriginalFilename();
+                    String filePath = realPath + file.getOriginalFilename();
 
                     VoucherPicture picture = new VoucherPicture();
                     picture.setUrl(filePath);
@@ -295,7 +295,7 @@ public class ProductController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/voucher/search", produces = ContentType.APPLICATION_JSON_UTF8)
+    @RequestMapping(value = "/voucher/search")
     public ServiceResponse searchVoucher(SearchFinanceVoucherRequest request) throws ParseException {
         SearchFinanceVoucherResponse response = new SearchFinanceVoucherResponse();
         ProductFilter filter = new ProductFilter();
@@ -334,7 +334,7 @@ public class ProductController {
 
     //认领
     @ResponseBody
-    @RequestMapping(value = "/approve/claim", produces = ContentType.APPLICATION_JSON_UTF8)
+    @RequestMapping(value = "/approve/claim")
     public ServiceResponse claimHandler(BaseApproveRequest request) {
         Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
         if (employee == null) {
@@ -356,7 +356,7 @@ public class ProductController {
 
     //复审
     @ResponseBody
-    @RequestMapping(value = "/approve/recheck", produces = ContentType.APPLICATION_JSON_UTF8)
+    @RequestMapping(value = "/approve/recheck")
     public ServiceResponse recheckHandler(BaseApproveRequest request) {
         Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
         if (employee == null) {

@@ -45,7 +45,7 @@ public class ResourceController {
     private IProductService productService;
 
     @ResponseBody
-    @RequestMapping(value = "/data", produces = ContentType.APPLICATION_JSON_UTF8)
+    @RequestMapping(value = "/data")
     public DataResponse getData() {
         DataResponse response = new DataResponse();
 
@@ -118,7 +118,7 @@ public class ResourceController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/status", produces = ContentType.APPLICATION_JSON_UTF8)
+    @RequestMapping(value = "/status")
     public ServiceResponse getProductStatus() {
         ProductStatusResponse response = new ProductStatusResponse();
         response.setStatus(getStatus());

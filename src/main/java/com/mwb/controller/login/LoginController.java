@@ -10,6 +10,7 @@ import com.mwb.util.MD5Tools;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -23,8 +24,8 @@ public class LoginController {
     private IEmployeeService employeeService;
 
     @ResponseBody
-    @RequestMapping(value = "/login",produces = ContentType.APPLICATION_JSON_UTF8)
-    public ServiceResponse login(LoginRequest request) {
+    @RequestMapping(value = "/login")
+    public ServiceResponse login(@RequestBody LoginRequest request) {
         ServiceResponse response = new ServiceResponse();
         if (StringUtils.isNotEmpty(request.getMobile()) && StringUtils.isNotEmpty(request.getPassword())) {
 
@@ -43,7 +44,7 @@ public class LoginController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/logout",produces = ContentType.APPLICATION_JSON_UTF8)
+    @RequestMapping(value = "/logout")
     public ServiceResponse logout(){
         ApplicationContextUtils.getSession().removeAttribute("employee");
         return new ServiceResponse();

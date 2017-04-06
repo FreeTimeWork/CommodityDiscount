@@ -13,6 +13,7 @@ import com.mwb.dao.model.position.Position;
 import com.mwb.service.position.api.IPositionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -27,7 +28,7 @@ public class PositionController {
     private IPositionService positionService;
 
     @ResponseBody
-    @RequestMapping(value = "/search", produces = ContentType.APPLICATION_JSON_UTF8)
+    @RequestMapping(value = "/search")
     public ServiceResponse searchPosition(SearchPositionRequest request) {
 
         PositionFilter filter = new PositionFilter();
@@ -43,7 +44,7 @@ public class PositionController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/permission/allPermission", produces = ContentType.APPLICATION_JSON_UTF8)
+    @RequestMapping(value = "/permission/allPermission")
     public ServiceResponse searchPermission() {
 
         List<Permission> permissions = positionService.searchAllPermission();
@@ -53,7 +54,7 @@ public class PositionController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/permission/byPositionId", produces = ContentType.APPLICATION_JSON_UTF8)
+    @RequestMapping(value = "/permission/byPositionId")
     public ServiceResponse getPermissionByPositionId(Integer positionId) {
 
         List<Permission> permissions = positionService.getPermissionsByPositionId(positionId);
@@ -63,8 +64,8 @@ public class PositionController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/permission/modify", produces = ContentType.APPLICATION_JSON_UTF8)
-    public ServiceResponse modifyPositionPermission(ModifyPositionPermissionRequest request) {
+    @RequestMapping(value = "/permission/modify")
+    public ServiceResponse modifyPositionPermission(@RequestBody ModifyPositionPermissionRequest request) {
 
         //删除该岗位所有权限，重新添加。
         positionService.createPositionPermission(request.getPositionId(), request.getPermissionIds());

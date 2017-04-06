@@ -2,12 +2,12 @@
 var I360R = (function () {
     var EXPORT_NONE = null;
     var REQUIRE_CONFIG = {
-        baseUrl: '/WebstormProjects/partTime/view',
+        baseUrl: '/CommodityDiscount/src/main/webapp/assets',
         paths:{
-            // Õâ¸öÊÇ´ó¸ç£¬Ò»¶¨ÐèÒªÓÐ
+            // ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ç£¬Ò»ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½
             'require': 'lib/requre/js/require',
 
-            // ÕâÀïÊÇjqueryºÍËûµÄ²å¼þÃÇ
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½jqueryï¿½ï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½ï¿½
             'jquery': 'lib/jquery/js/jquery-1.9.1.min',
             'jquery-json': 'lib/jquery/jquery-json/jquery.json-2.3',
             'jquery-ui': 'lib/jquery/jquery-ui/jquery-ui-1.10.3.custom.min',
@@ -32,7 +32,7 @@ var I360R = (function () {
             'bootstrap-modal': 'lib/bootstrap/modal/js/bootstrap-modal',
             'bootstrap-modalmanager': 'lib/bootstrap/modal/js/bootstrap-modalmanager',
 
-            // MVVM¼Ü¹¹µÄknockout, debugÄ£Ê½ÊÇ lib/knockout/knockout-2.3.0.debug
+            // MVVMï¿½Ü¹ï¿½ï¿½ï¿½knockout, debugÄ£Ê½ï¿½ï¿½ lib/knockout/knockout-2.3.0.debug
             'knockout': 'lib/knockout/knockout-2.3.0',
             'knockout-mapping-helper': 'lib/knockout/knockout.mapping.helper',
             'knockout-mapping': 'lib/knockout/knockout.mapping-2.4.1',
@@ -40,7 +40,7 @@ var I360R = (function () {
             // qunit
             'qunit': 'lib/qunit/js/qunit',
 
-            // bootstrapµÄÀ©Õ¹¼°²å¼þÃÇ£¬°üÀ¨ÁËbootstrap£¬ËùÒÔ²»ÓÃÕÛÌÚÁË
+            // bootstrapï¿½ï¿½ï¿½ï¿½Õ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½bootstrapï¿½ï¿½ï¿½ï¿½ï¿½Ô²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             'daterangepicker': 'lib/bootstrap/daterangepicker/js/bootstrap-daterangepicker',
             'datetimepicker': 'lib/bootstrap/datetimepicker/js/bootstrap-datetimepicker-MOD',
             'iCheck-master': 'lib/bootstrap/iCheck-master/jquery.icheck',
@@ -48,7 +48,7 @@ var I360R = (function () {
             // underscore
             'underscore': 'lib/underscore/underscore-1.5.1-min',
 
-            // i360r Ä£¿éÃÇ, ËùÓÐÄ£¿é¶¼Ó¦¸ÃÒÑ¾­Ð´ºÃÒÀÀµ¹ØÏµÁË
+            // i360r Ä£ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½Ä£ï¿½é¶¼Ó¦ï¿½ï¿½ï¿½Ñ¾ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½
             'coreKit': 'js/base/coreKit',
             'uiKit': 'js/base/uiKit',
             'permissionKit': 'js/base/permissionKit',
@@ -59,7 +59,7 @@ var I360R = (function () {
 
         },
 
-        /** ±¾ÉíÎÞÐò£¬Ö÷ÒªÊÇÐ´²»·ûºÏAMDÄ£¿é»¯¹æ·¶µÄÄ£¿é¼äµÄÒÀÀµ¹ØÏµ
+        /** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½AMDÄ£ï¿½é»¯ï¿½æ·¶ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµ
          *
          */
         shim: {

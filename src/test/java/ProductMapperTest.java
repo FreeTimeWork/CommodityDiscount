@@ -1,4 +1,6 @@
 import com.alibaba.fastjson.JSON;
+import com.mwb.controller.product.api.CreateProductRequest;
+import com.mwb.controller.product.api.CreateProductVoucherRequest;
 import com.mwb.dao.filter.FinanceFilter;
 import com.mwb.dao.filter.ProductFilter;
 import com.mwb.dao.mapper.FinanceMapper;
@@ -32,6 +34,22 @@ public class ProductMapperTest extends AbstractPersistenceTest {
 //        @Autowired
     public FinanceMapper mapper1;
 
+    @Test
+    public void request() throws Exception {
+        System.out.println(DateTimeUtility.parseYYYYMMDDHHMMSS("2014-11-11 00:00:00"));
+        CreateProductVoucherRequest request = newInstance(CreateProductVoucherRequest.class);
+        request.setId(1);
+
+//        CreateProductRequest request = newInstance(CreateProductRequest.class);
+//        request.setActivityId(1);
+//        request.setActivityTime("2017-11-11");
+//        request.setProductTypeId(1);
+//        request.setCouponEndTime("2017-11-11");
+//        request.setCouponBeginTime("2017-11-11");
+//        request.setHireTypeId(1);
+//        request.setStoreTypeId(1);
+        printJSON(request);
+    }
 //    @Test
     public void insertFiance() throws Exception {
         Finance finance = newInstance(Finance.class);
