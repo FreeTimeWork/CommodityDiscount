@@ -86,16 +86,18 @@
 
     <select id="selectCurrentFinanceRank" resultType="int" parameterType="map">
         SELECT
-            COUNT(*)
+            COUNT(f.id)
         FROM
             t_finance f
         INNER JOIN t_employee ae ON f.employee_id = ae.id
-        WHERE f.submit_number =
-
-        SELECT
-            f.submit_number
+        WHERE f.submit_number <![CDATA[ > ]]>
+        (SELECT
+            f1.submit_number
         FROM
-            f.employee_id = #{employeeId, javaType=int, jdbcType=INTEGER}
+            t_finance f1
+        WHERE
+            f1.employee_id = #{employeeId, javaType=int, jdbcType=INTEGER}
+            )
     </select>
 
     <select id="selectFinanceByFilter" resultMap="financeResult" parameterType="map">
@@ -220,10 +222,10 @@
                 guest_unit_price = #{guestUnitPrice, javaType=bigdecimal, jdbcType=DECIMAL},
             </if>
             <if test="actualChargeAmount != null">
-                actual_charge_amount = #{actualChargeAmount, javaType=int, jdbcType=INTEGER},
+                actual_charge_amount = #{actualChargeAmount, javaType=bigdecimal, jdbcType=DECIMAL},
             </if>
             <if test="shouldChargeAmount != null">
-                should_charge_amount = #{shouldChargeAmount, javaType=int, jdbcType=INTEGER}
+                should_charge_amount = #{shouldChargeAmount, javaType=bigdecimal, jdbcType=DECIMAL}
             </if>
         </set>
         WHERE

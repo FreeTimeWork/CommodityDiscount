@@ -36,12 +36,12 @@ public class SearchFilter {
         this.limit = limit;
     }
 
-//    public int getLimit() {
-//        if (limit  == null) {
-//            return MAX_RECORD;
-//        }
-//        return limit;
-//    }
+    public int getLimit() {
+        if (limit  == null) {
+            return MAX_RECORD;
+        }
+        return limit;
+    }
 
     public boolean isOrdered() {
         return ordered;
