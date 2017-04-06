@@ -1,6 +1,10 @@
 package com.mwb.controller.employee.api;
 
+import java.util.List;
+
+import com.mwb.controller.position.api.PermissionVO;
 import com.mwb.dao.model.employee.Employee;
+import org.apache.commons.collections.CollectionUtils;
 
 /**
  * Created by fangchen.chai on 2017/4/1.
@@ -11,8 +15,11 @@ public class EmployeeVO {
     private String genderName;
     private String mobile;
     private String groupName;
+    private String groupId;
     private Boolean businessPerson;
     private String positionName;
+    private String positionId;
+    private List<PermissionVO> permissions;
 
     public static EmployeeVO toVO(Employee employee) {
         EmployeeVO vo = new EmployeeVO();
@@ -22,11 +29,41 @@ public class EmployeeVO {
         vo.setGenderName(employee.getGender().name());
         if (employee.getGroup() != null){
             vo.setGroupName(employee.getGroup().getName());
+            vo.setGroupId(employee.getGroup().getId()+"");
         }
         vo.setPositionName(employee.getPosition().getName());
-
+        vo.setPositionId(employee.getPosition().getId()+"");
         vo.setBusinessPerson(employee.getPosition().getId().equals(2));
+
+        if (CollectionUtils.isNotEmpty(employee.getPosition().getPermissions())) {
+            List<PermissionVO> vos = PermissionVO.toVOs(employee.getPosition().getPermissions());
+            vo.setPermissions(vos);
+        }
         return vo;
+    }
+
+    public List<PermissionVO> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<PermissionVO> permissions) {
+        this.permissions = permissions;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getPositionId() {
+        return positionId;
+    }
+
+    public void setPositionId(String positionId) {
+        this.positionId = positionId;
     }
 
     public Boolean getBusinessPerson() {
