@@ -157,6 +157,14 @@ public class ProductService implements IProductService {
         productMapper.updateProduct(product);
     }
 
+    public void modifyProductStatus(Integer id, ProductStatus status) {
+        Product product = new Product();
+        product.setId(id);
+        product.setStatus(status);
+
+        productMapper.updateProduct(product);
+    }
+
     @Override
     public SearchResult<ProductVoucher> searchProductVoucher(ProductFilter filter) {
         SearchResult<ProductVoucher> result = new SearchResult<>();

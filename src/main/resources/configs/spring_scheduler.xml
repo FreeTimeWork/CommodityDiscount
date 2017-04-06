@@ -3,30 +3,42 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!-- 实例化bean -->
-    <bean id= "productJobTask" class ="com.mwb.scheduler.ProductJobTask"/>
+    <bean id= "productStatusJobTask" class ="com.mwb.scheduler.ProductStatusJobTask"/>
 
-    <!-- 配置MethodInvokingJobDetailFactoryBean -->
-    <bean id= "productTaskMethod"
+    <bean id= "productStatusTaskMethod"
           class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject" ref="productJobTask"/>
+        <property name="targetObject" ref="productStatusJobTask"/>
         <property name="targetMethod" value="run"/>
         <property name="concurrent" value="false"/>
     </bean>
 
-    <!-- 配置定时表达式 -->
-    <bean id= "productTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean" >
-        <property name="jobDetail" ref="productTaskMethod" />
+    <bean id= "productStatusTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean" >
+        <property name="jobDetail" ref="productStatusTaskMethod" />
         <!-- 每日3点 -->
         <property name="cronExpression" value="0 0 3 * * ?" />
     </bean>
 
-    <!-- 配置调度工厂 -->
+    <bean id= "productCouponNumberJobTask" class ="com.mwb.scheduler.ProductCouponNumberJobTask"/>
+
+    <bean id= "productCouponNumberTaskMethod"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="productCouponNumberJobTask"/>
+        <property name="targetMethod" value="run"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+
+    <bean id= "productCouponNumberTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean" >
+        <property name="jobDetail" ref="productCouponNumberTaskMethod" />
+        <!-- 每日2点 -->
+        <property name="cronExpression" value="0 0 2 * * ?" />
+    </bean>
+
     <bean id= "schedulerFactoryBean"
           class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers" >
             <list>
-                <ref bean="productTaskTrigger" />
+                <ref bean="productStatusTaskTrigger" />
+                <ref bean="productCouponNumberTaskTrigger" />
             </list>
         </property>
     </bean>

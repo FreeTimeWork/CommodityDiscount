@@ -11,6 +11,7 @@ import com.mwb.dao.model.finance.Finance;
 import com.mwb.dao.model.product.*;
 import com.mwb.dao.model.product.voucher.ProductVoucher;
 import com.mwb.dao.model.product.voucher.VoucherPicture;
+import com.mwb.service.dataoke.api.IDaoLaoKeService;
 import com.mwb.util.DateTimeUtility;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +32,20 @@ public class ProductMapperTest extends AbstractPersistenceTest {
     //    @Autowired
     public ProductMapper mapper;
 
-//        @Autowired
+    //        @Autowired
     public FinanceMapper mapper1;
+
+    @Autowired
+    private IDaoLaoKeService daoLaoKeService;
 
     @Test
     public void request() throws Exception {
         System.out.println(DateTimeUtility.parseYYYYMMDDHHMMSS("2014-11-11 00:00:00"));
         CreateProductVoucherRequest request = newInstance(CreateProductVoucherRequest.class);
+        for (int i = 1; i < 500; i++) {
+            Product daTaoKeProduct = daoLaoKeService.getDaTaoKeProduct("2154002");
+            System.out.println(i + "---------" +daTaoKeProduct.getCouponReceiveNumber());
+        }
         request.setId(1);
 
 //        CreateProductRequest request = newInstance(CreateProductRequest.class);
@@ -50,7 +58,8 @@ public class ProductMapperTest extends AbstractPersistenceTest {
 //        request.setStoreTypeId(1);
         printJSON(request);
     }
-//    @Test
+
+    //    @Test
     public void insertFiance() throws Exception {
         Finance finance = newInstance(Finance.class);
         Employee employee = new Employee();
@@ -60,7 +69,7 @@ public class ProductMapperTest extends AbstractPersistenceTest {
         FinanceFilter financeFilter = new FinanceFilter();
 
         List<Finance> finances = mapper1.selectFinanceByFilter(financeFilter);
-       int a=   mapper1.selectCurrentFinanceRank(3);
+        int a = mapper1.selectCurrentFinanceRank(3);
         printJSON(finances);
     }
 

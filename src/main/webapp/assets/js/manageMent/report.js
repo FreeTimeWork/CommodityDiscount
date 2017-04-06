@@ -8,6 +8,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             $(this).parent().find(".jia").toggleClass("sub");
             $(this).parent().find("ul").toggle().parent().siblings("li").find("ul").hide()
         })
+        $(".form_datetime").datetimepicker({
+            format: "yyyy-mm-dd hh:ii"
+        });
     })
     $.ajax({
         type: 'get',
@@ -154,32 +157,28 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     type : uiKit.Controller.EDIT
                 },{
                     uid : 'createBeginTime',
-                    type : uiKit.Controller.DATE_PICKER,
+                    type : uiKit.Controller.EDIT,
                     node : 'createBeginTime'
                 },{
                     uid : 'createEndTime',
-                    type : uiKit.Controller.DATE_PICKER,
+                    type : uiKit.Controller.EDIT,
                     node : 'createEndTime'
                 },{
                     uid : 'beginFromTime',
-                    type : uiKit.Controller.DATE_PICKER,
+                    type : uiKit.Controller.EDIT,
                     node : 'beginFromTime'
                 },{
                     uid : 'beginToTime',
-                    type : uiKit.Controller.DATE_PICKER,
+                    type : uiKit.Controller.EDIT,
                     node : 'beginToTime'
                 },{
                     uid : 'endFromTime',
-                    type : uiKit.Controller.DATE_PICKER,
+                    type : uiKit.Controller.EDIT,
                     node : 'endFromTime'
                 },{
                     uid : 'endToTime',
-                    type : uiKit.Controller.DATE_PICKER,
+                    type : uiKit.Controller.EDIT,
                     node : 'endToTime'
-                },{
-                    uid : 'beginDate',
-                    type : uiKit.Controller.DATE_PICKER,
-                    node : 'beginDate'
                 }]),
                 reset: false
             });

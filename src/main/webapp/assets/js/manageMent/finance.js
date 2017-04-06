@@ -24,6 +24,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit'], function ($,
 //            if(text=="��Ʒ����"){
 //                $(".bottom_right_son").eq(3).show().siblings().hide();
 //            }
+            $(".form_datetime").datetimepicker({
+                format: "yyyy-mm-dd hh:ii"
+            });
         })
     })
 
@@ -138,11 +141,11 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit'], function ($,
                     options: [{label: '',value: null},{label: '正序',value: true},{label: '倒序',value: false}]
                 },{
                     uid : 'beginPayTime',
-                    type : uiKit.Controller.DATE_PICKER,
+                    type : uiKit.Controller.EDIT,
                     node : 'beginPayTime'
                 },{
                     uid : 'endPayTime',
-                    type : uiKit.Controller.DATE_PICKER,
+                    type : uiKit.Controller.EDIT,
                     node : 'endPayTime'
                 }]),
                 reset: false
