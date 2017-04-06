@@ -32,7 +32,6 @@ public class CreateProductRequest {
     private String features;            //特色
     private String description;         //备注
     private BigDecimal chargePrice;        //收费单价
-    private String createTime;          //提交时间
 
     private BigDecimal ratio;           //佣金比例
     private String planUrl;             //计划链接
@@ -219,14 +218,6 @@ public class CreateProductRequest {
 
     public void setChargePrice(BigDecimal chargePrice) {
         this.chargePrice = chargePrice;
-    }
-
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
     }
 
     public BigDecimal getRatio() {

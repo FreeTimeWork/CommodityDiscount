@@ -47,7 +47,7 @@ public class EmployeeService implements IEmployeeService {
         result.setResult(employees);
 
         if (filter.isPaged() && filter.getPagingData() != null) {
-            int recordNumber = employeeMapper.countEmployeeByFiler(filter);
+            int recordNumber = employeeMapper.countEmployeeByFilter(filter);
             PagingResult pagingResult = new PagingResult(recordNumber, filter.getPagingData());
             result.setPagingResult(pagingResult);
             result.setPaged(true);

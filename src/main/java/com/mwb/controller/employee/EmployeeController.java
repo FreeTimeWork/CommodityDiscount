@@ -17,6 +17,7 @@ import com.mwb.util.MD5Tools;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -36,8 +37,8 @@ public class EmployeeController {
     private IEmployeeService employeeService;
 
     @ResponseBody
-    @RequestMapping(value = "/create", produces = ContentType.APPLICATION_JSON_UTF8)
-    public ServiceResponse createEmployee(CreateEmployeeRequest request) {
+    @RequestMapping(value = "/create")
+    public ServiceResponse createEmployee(@RequestBody CreateEmployeeRequest request) {
 
         Employee employee = new Employee();
         employee.setFullName(request.getFullName());
@@ -54,7 +55,7 @@ public class EmployeeController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/group/verify", produces = ContentType.APPLICATION_JSON_UTF8)
+    @RequestMapping(value = "/group/verify")
     public Boolean verifyGroupLeader(Integer groupId) {
         Group group = employeeService.getGroupById(groupId);
 
@@ -66,8 +67,8 @@ public class EmployeeController {
 
     //    修改密码，分组，升级，离职
     @ResponseBody
-    @RequestMapping(value = "/modify", produces = ContentType.APPLICATION_JSON_UTF8)
-    public ServiceResponse modifyEmployee(ModifyEmployeeRequest request) {
+    @RequestMapping(value = "/modify")
+    public ServiceResponse modifyEmployee(@RequestBody ModifyEmployeeRequest request) {
 
         Employee employee = new Employee();
         employee.setId(request.getEmployeeId());
@@ -85,7 +86,7 @@ public class EmployeeController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/search", produces = ContentType.APPLICATION_JSON_UTF8)
+    @RequestMapping(value = "/search")
     public ServiceResponse searchEmployee(SearchEmployeeRequest request) {
 
         EmployeeFilter filter = new EmployeeFilter();
@@ -103,8 +104,8 @@ public class EmployeeController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/group/create", produces = ContentType.APPLICATION_JSON_UTF8)
-    public ServiceResponse createGroup(CreateGroupRequest request) {
+    @RequestMapping(value = "/group/create")
+    public ServiceResponse createGroup(@RequestBody CreateGroupRequest request) {
 
         if (StringUtils.isEmpty(request.getName())) {
             return new ServiceResponse();
@@ -118,7 +119,7 @@ public class EmployeeController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/group/allGroup", produces = ContentType.APPLICATION_JSON_UTF8)
+    @RequestMapping(value = "/group/allGroup")
     public ServiceResponse getAllGroup() {
 
         List<Group> groups = employeeService.getAllGroup();
