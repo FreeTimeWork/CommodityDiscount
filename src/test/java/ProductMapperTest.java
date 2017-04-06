@@ -29,10 +29,10 @@ public class ProductMapperTest extends AbstractPersistenceTest {
     //    @Autowired
     public ProductMapper mapper;
 
-        @Autowired
+//        @Autowired
     public FinanceMapper mapper1;
 
-    @Test
+//    @Test
     public void insertFiance() throws Exception {
         Finance finance = newInstance(Finance.class);
         Employee employee = new Employee();
@@ -42,7 +42,7 @@ public class ProductMapperTest extends AbstractPersistenceTest {
         FinanceFilter financeFilter = new FinanceFilter();
 
         List<Finance> finances = mapper1.selectFinanceByFilter(financeFilter);
-       int a=   mapper1.countFinanceByFilter(financeFilter);
+       int a=   mapper1.selectCurrentFinanceRank(3);
         printJSON(finances);
     }
 

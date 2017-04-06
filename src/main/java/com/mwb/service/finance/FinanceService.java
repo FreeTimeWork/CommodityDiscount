@@ -53,7 +53,7 @@ public class FinanceService implements IFinanceService {
 
     @Override
     public int getCurrentFinanceRank(Integer employeeId) {
-        return financeMapper.selectCurrentFinanceRank(employeeId);
+        return financeMapper.selectCurrentFinanceRank(employeeId) + 1;
     }
 
     @Override

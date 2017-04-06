@@ -1,0 +1,210 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>找回密码</title>
+    <link rel="stylesheet" href="css/base.css"/>
+    <link rel="stylesheet" href="css/baobiao.css"/>
+    <script src="js/jquery-1.11.1.min.js"></script>
+</head>
+<body id="cas">
+<div id="container">
+    <header>
+        <center><h1>生活半径用户中心</h1></center>
+    </header>
+    <div id="content">
+
+        <script>
+
+            function showCaptchaDialog() {
+                $("#captchaDialog").show();
+                $("#bg").show();
+            }
+            function reloadDialogCaptcha() {
+                $('#dialogCaptchaImg').attr("src", '/frontend/security/captcha.rhtm' + "?timestamp=" + new Date().getTime());
+                $('#dialogCaptcha').val('');
+                $('#dialogCaptchaError').text('');
+            }
+            function hideCaptchaDialog() {
+                $("#captchaDialog").hide();
+                $("#bg").hide();
+            }
+            function showError(widget, error) {
+                $('#' + widget).show().text(error);
+            }
+            function isValidMobile(value) {
+                if (value) {
+                    var regex = /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(16[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+
+                    return regex.test(value);
+                }
+
+                return false;
+            }
+            function validateSendVerificationCode(callBack) {
+                var captchaDialog = $("#captchaDialog");
+                if (!captchaDialog.length) {
+                    $('body').append('<div id="captchaDialog" class="captchaDialog" style="display:none;">\
+							<p class="dialogCaptchaInfo">请输入下方的验证码,点击验证码刷新</p><a id="cancelDialogCaptcha"></a>\
+							<p class="customerFormInputWrapper capthaDialogMain">\
+								<input id="dialogCaptcha" type="text" maxlength="4" autocomplete="off" >\
+								<img id="dialogCaptchaImg"/>\
+							</p>\
+							<p class="capthaDialogSecond">\
+								<em id="dialogCaptchaError"></em>\
+								<a id="validateDialogCaptcha">确定</a>\
+							<p>\
+						</div><div id="bg"></div>');
+                    $("#validateDialogCaptcha").click(callBack ? callBack : function(){});
+                    $("#cancelDialogCaptcha").click(hideCaptchaDialog);
+                    $("#dialogCaptchaImg").click(reloadDialogCaptcha);
+
+                    captchaDialog = $("#captchaDialog");
+                }
+                reloadDialogCaptcha();
+                showCaptchaDialog();
+            }
+            $(function(){
+                $("#chooseSecureTypeFrom").submit(function(){
+                    var  mobile = $("#mobile").val($("#loginName").val()).val();
+                    var verificationCode = $("#verificationCode").val();
+                    var validate = false;
+                    if(!$.trim(verificationCode)){
+                        showError("verificationCodeError", "请输入验证码");
+                    }else{
+                        var url = "/services/frontend/rs/security/forgetPassword/validateVerificationCode";
+                        var request = {
+                            smsVerificationCode : verificationCode,
+                            mobile : mobile
+                        }
+                        $.ajax({
+                            type: "POST",
+                            url: url,
+                            data: $.toJSON(request),
+                            dataType: 'json',
+                            async:false,
+                            processData: false,
+                            contentType: "application/json; charset=UTF-8",
+                            success: function (result) {
+                                if(result.code == "100000"){
+                                    validate = true;
+                                }else{
+                                    $("#verificationCodeError").css('visibility', 'visible').css('color', 'red').html("请填写正确的验证码");
+                                }
+                            }
+                        });
+
+
+                    }
+
+                    return validate;
+                });
+                $("#sendVerificationCode").click(function() {
+                    validateSendVerificationCode(function(){
+                        var url = "/services/frontend/rs/security/verificationCode";
+                        var mobile =  $("#mobile").val($("#loginName").val()).val();
+                        var dialogCaptcha = $("#dialogCaptcha").val();
+                        var request = {
+                            mobile: $.trim(mobile),
+                            captcha: $.trim(dialogCaptcha)
+                        };
+
+                        $.ajax({
+                            type: "POST",
+                            url: url,
+                            data: $.toJSON(request),
+                            dataType : 'json',
+                            processData : false,
+                            contentType : "application/json; charset=UTF-8",
+                            success: function(result){
+
+                                if (result.code == "100000") {
+                                    hideCaptchaDialog();
+                                    var remainingTime = 60;
+                                    $("#sendVerificationCode").attr('disabled', true);
+                                    $("#verificationCodeError")
+                                            .css('visibility', 'visible')
+                                            .css('color', '#5a5a5a')
+                                            .html('校验码已发出。' + ' <em id="counter"></em> ' + '秒内没有收到验证码，请重新验证。');
+
+                                    $("#counter").text(remainingTime).css('color', 'red');
+
+                                    var timer = setInterval(function() {
+                                        remainingTime = remainingTime - 1;
+                                        $("#counter").text(remainingTime);
+                                        if (remainingTime <= 1) {
+                                            clearInterval(timer);
+                                            $("#sendVerificationCode").attr('disabled', false);
+                                            $("#verificationCodeError").css('visibility', 'hidden').css('color', 'red').empty();
+                                        }
+                                    }, 1000);
+                                } else {
+                                    reloadDialogCaptcha();
+                                    showError("dialogCaptchaError", result.message);
+                                }
+                            }
+                        });
+                    });
+                });
+            });
+
+        </script>
+
+        <div class="xindengluyelogomain">
+            <a href="#" title="" class="xindengluyemianlogo" ></a>
+            <div class="clear"></div>
+        </div>
+
+        <div class="mimazhaohuiCenter">
+            <div class="mimazhaohuiTitle">找回密码</div>
+            <div class="mimazhaohuiNr">
+                <div class="mimazhaohui">
+                    <ul>
+                        <li class="mimazhaohui_ul_li_heibai_1">填写账号名</li>
+                        <li class="mimazhaohui_ul_li_juhong_2">验证身份</li>
+                        <li class="mimazhaohui_ul_li_1">设置新密码</li>
+                        <li class="mimazhaohui_ul_li_1">完成</li>
+                    </ul>
+                </div>
+
+                <form id="chooseSecureTypeFrom" action="/security/forgetPassword/resetPassword.html" method="post">
+                    <input id="loginName" name="loginName" style="display:none" type="text" value="18988889999"/>
+                    <input id="mobile" name="mobile" style="display:none" type="text" value=""/>
+                    <div class="mimazhaohuiZhangHuMain">
+                        <ul>
+                            <div id="accountSecureMobileDiv" style="display:block">
+                                <li>
+                                    <em>已验证手机：</em>
+                                    <t class="xingMingT">189****9999</t>
+                                    <input id="sendVerificationCode" type="button" value="获取短信校验码" class="huoQuShouJiYanZhengMa" />
+                                </li>
+                                <div class="mimazhaohuiGehang"></div>
+
+                                <li>
+                                    <em>短信验证码：</em>
+                                    <input id="verificationCode" name="verificationCode" class="mimazhaohuiZhangHuMain_ul_li_input_1" type="text" value="" maxlength="11"/>
+                                </li>
+
+                                <div class="mimazhaohuiGehang2">
+                                    <em id="verificationCodeError"></em>
+                                </div>
+
+                                <li>
+                                    <input id="submitAccountSecureMobile" type="submit" value="下一步" class="mimazhaohuiZhangHuMain_ul_li_input_3" />
+                                    <div class="mimazhaohuiGehang"></div>
+                                </li>
+                            </div>
+                        </ul>
+
+                    </div>
+                    <p style="color: #565d55; margin-left: 70px;">若找回密码失败，请联系总部客服经理帮忙重置密码</p>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

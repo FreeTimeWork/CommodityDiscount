@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>添加新商品</title>
+    <link rel="stylesheet" href="project/lib/bootstrap/css/bootstrap-2.3.0.min.css"/>
+    <link rel="stylesheet" href="project/them/DT_bootstrap.css"/>
+    <link rel="stylesheet" href="project/lib/jquery/datatable/css/select.dataTables.min.css"/>
+    <link rel="stylesheet" href="project/them/default.css"/>
+    <link rel="stylesheet" href="project/them/style.css"/>
+    <link rel="stylesheet" href="project/them/style-metro.css"/>
+    <link rel="stylesheet" href="project/them/style-responsive.css"/>
+    <link rel="stylesheet" href="css/base.css"/>
+    <link rel="stylesheet" href="css/baobiao.css"/>
+</head>
+<body>
+<div class="cont">
+    <div class="top clearfix">
+        <div class="top_left">
+            <a href="#" class="go_index"><img src="img/logo_02.png" class="a_1" alt=""/></a>
+            <img src="img/pic-1_05.png" alt="" class="a_2"/><span class="top_text">商品管理</span>
+            <span class="top_num">27852</span><span class="line">|</span>
+            <img src="img/pic-2_07.png" alt="" class="a_2"/><span class="top_text">报表统计</span><span class="line"
+                                                                                                    style="padding-left:10px;">|</span>
+
+        </div>
+        <div class="top_right">
+            <a href="#">清除缓存</a>
+            <a href="#">灵感大王</a>
+            <a href="#">个人设置</a>
+            <a href="#">退出</a>
+        </div>
+
+    </div>
+
+    <div class="bottom clearfix">
+        <div class="bottom_left">
+            <ul style="margin:0">
+                <li style="border-bottom:#1481b3" class="fa_li">
+
+                    <a href="#" class="floor"><img src="img/pic-1_05.png" alt=""/><span>商品管理</span> <span
+                            class="jia add"></span></a>
+                    <ul>
+                        <li><a href=commodity.html" target="_blank">商品列表</a></li>
+                        <li><a href="detail.html" target="_blank">添加新商品</a></li>
+
+                    </ul>
+
+                </li>
+
+                <li class="fa_li">
+                    <a href="#" class="floor"><img src="img/pic-3_13.png" alt=""/><span>报表统计</span> <span
+                            class="jia add"></span></a>
+                    <ul>
+                        <li><a href="finance.html" target="_blank">财务管理</a></li>
+                        <li><a href="report.html" target="_blank">商品报表</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+        <div class="bottom_left_2">
+            <img src="img/pic-6_03.png" alt=""/>
+        </div>
+        <div class="bottom_right">
+            <div class="bottom_right_son dis">
+                <p class="bottom_add">商品列表</p>
+                <p class="bottom_right_tit">管理中心-商品列表</p>
+                <ul class="zhou_2_ul clearfix">
+                    <li class="on">通用信息</li>
+                    <li>添加凭证</li>
+                </ul>
+                <div class="zhou_2_floor">
+                    <div class="zhou_2_ty dis">
+                      <form id="detailForm">
+                          <div class="control-group">
+                              <label class="control-label" style="display: inline-block;margin-left: 37px;">活动类型:</label>
+                              <span class="controls radioControls" style="margin-left: 25px;">
+                                  <label class="radio inline"><input uid="activityId" type="radio" /></label>
+                              </span>
+                          </div>
+                          <p><label>活动开始时间：</label><input type="text" uid="activityTime"/></p>
+                         <p><label>产品链接:</label><textarea style="width:300px;height:auto;" uid="url">wwwwwwww</textarea></p>
+                         <p><label>优惠券链接:</label><textarea style="width:300px;height:auto;" uid="couponUrl">wwwwwwww</textarea></p>
+                          <input type="button" uid="grapInfo" value="抓取产品信息"/>
+                        <p><label>商品ID：</label><input type="text" uid="productId"/></p>
+                        <p><label>店铺类型：</label><label uid="storeTypeName"></label></p>
+                        <p><label style="margin-left: -15px;">店铺确认</label>：描述相符：<span uid="storeDiscriptionScore"></span><br/>
+                        <span style="margin-left: 99px;">服务态度：<span uid="serviceScore"></span></span><br/>
+                        <span style="margin-left: 99px;">发货速度：<span uid="speedScore"></span></span>
+                        </p>
+                        <p class="pro-img"><label>商品图片</label>：<img src="img/pic-1_05.png" alt=""/><img src="img/pic-1_05.png" alt=""/></p>
+                        <p><label>图片尺寸</label>：<label uid="pictureSize"></label></p>
+                        <p><label>补充主图</label>：<textarea name="" id="" >eeeeeeeee</textarea></p>
+                        <p><label>商品分类</label>：
+                            <select uid="category"></select>
+                        <span class="red">*</span></p>
+                        <p><label>商品名称</label>:<textarea uid="name">ggggggggggggg</textarea><span>10-20字，简单概括</span></p>
+                        <p><label>商品价格</label>:<label uid="reservePrice"></label></p>
+                        <p><label>30天内销量</label>:<label uid="sales"></label></p>
+                          <div class="control-group">
+                              <label class="control-label" style="display: inline-block;margin-left: 37px;">是否拍立减:</label>
+                              <span class="controls radioControls" style="margin-left: 25px;">
+                                  <label class="radio inline"><input uid="immediately" type="radio" /></label>
+                              </span>
+                              【默认为否】
+                          </div>
+                        <p><label>优惠券数量</label>:<label uid="couponUseNumber"></label></p>
+                        <p><label>优惠券有效期</label>:<input type="text" uid="couponBeginTime"/>~<input type="text" uid="couponEndTime"/></p>
+                        <p><label>券后价格</label>:<label uid="discountPrice"></label></p>
+                        <p><label>佣金比例</label>:<label uid="ratio"></label>【鹊桥佣金需填写真实比例】</p>
+                          <div class="control-group">
+                              <label class="control-label" style="display: inline-block;margin-left: 37px;">佣金类型:</label>
+                              <span class="controls radioControls" style="margin-left: 25px;">
+                                  <label class="radio inline"><input uid="hireTypeId" type="radio" /></label>
+                              </span>
+                          </div>
+                        <p><label>计划链接</label>:<textarea uid="planUrl">sssssss</textarea></p>
+                        <p><label>卖家填写</label>:<textarea uid="supplementPictureUrl">dddddddddddddddd</textarea><span>20-100个字,精简文案，突出产品亮点。需求痛点，注意不要用空格</span></p>
+                        <p><label>备注信息</label>:<textarea uid="description">dddddddddddddddd</textarea></p>
+                        <p><label>商家QQ</label>:<label uid="qq"></label><span class="red">*</span></p>
+                        <p><label>收费单价</label>:<label uid="chargePrice"></label><span class="red">*</span></p>
+                         <p class="last"><input type="submit" value="确定" class="sure"/><input type="reset" value="重置" class="reset"/></p>
+                      </form>
+                    <div class="look">
+                        <p>备注: </p>
+                            1. 淘宝c店数码家电类<br/>
+                            <p>不可提交:<span>大风扇</span><span>按摩器电动榨汁机</span><span>豆浆机</span><span>除螨仪</span><span>扫地机器人</span><span>吸尘器</span><span>挂烫机</span>
+                            <span>饮水机</span></p>
+                           <p>可提交:<span>大风扇</span><span>按摩器电动榨汁机</span><span>豆浆机</span><span>除螨仪</span><span>扫地机器人</span><span>吸尘器</span><span>挂烫机</span>
+                            <span>饮水机</span></p>
+                        2.商品和优惠券名称不能含有敏感词汇
+
+                    </div>
+
+                    </div>
+                    <div class="zhou_2_pz">
+                        <form id="createForm">
+                            <p><label style="display: inline-block">产品编号</label>:<span>12344</span></p>
+                            <p><label style="display: inline-block">提交时间</label>:<span>2017-3-4 </span></p>
+                            <p><label style="display: inline-block">优惠开始时间</label>:<span>2017-3-4 </span></p>
+                            <p><label style="display: inline-block">优惠结束时间</label>:<span>2017-3-5</span></p>
+                            <p><label style="display: inline-block">领取数量</label>:<input type="text" uid="couponReceiveNumber"/></p>
+                            <p><label style="display: inline-block">支付金额</label>:<input type="text" uid="payAmount"/></p>
+                            <p><label style="display: inline-block">使用数量</label>:<input type="text" uid="couponUseNumber"/></p>
+                            <p><label style="display: inline-block">应收款金额</label>:<input type="text" uid="shouldChargeAmount"/></p>
+                            <p><label style="display: inline-block">实际收款金额</label>:<input type="text" uid="actualChargeAmount"/></p>
+                            <p><label style="display: inline-block">转化率</label>:<input type="text" uid="conversionRate"/></p>
+                            <img src="img/pic-1_05.png" alt="" id="zhou_2_img"/>
+                            <p><label style="display: inline-block">图片描述</label>:<span>3333333333333</span><input type="file"/> <input type="text" uid="withoutRate" placeholder="请输入图片链接地址"/> </p>
+                            <p class="last"><input style="margin-right: 10px;" type="submit" value="确定" class="btn red"/><input type="reset" value="重置" class="btn red"/></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<script src="lib/require/require.js"></script>
+<script src="js/dependances.js"></script>
+<script src="js/manageMent/detail.js"></script>
+
+<script>
+
+
+
+
+</script>
+</body>
+</html>
