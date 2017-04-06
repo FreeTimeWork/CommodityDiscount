@@ -1,6 +1,5 @@
 package com.mwb.controller.login;
 
-import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
 import com.mwb.controller.login.api.LoginRequest;
 import com.mwb.controller.util.ApplicationContextUtils;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- *  Created by fangchen.chai on 2017/4/3.
+ * Created by fangchen.chai on 2017/4/3.
  */
 @Controller
 public class LoginController {
@@ -45,7 +44,7 @@ public class LoginController {
 
     @ResponseBody
     @RequestMapping(value = "/logout")
-    public ServiceResponse logout(){
+    public ServiceResponse logout() {
         ApplicationContextUtils.getSession().removeAttribute("employee");
         return new ServiceResponse();
     }
