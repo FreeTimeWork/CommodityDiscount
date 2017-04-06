@@ -9,6 +9,14 @@ public class Variable {
     private String text;
     private Integer taskId;
 
+    public Variable(String name, String text) {
+        this.name = name;
+        this.text = text;
+    }
+
+    public Variable() {
+    }
+
     public Integer getId() {
         return id;
     }

@@ -90,7 +90,7 @@ CREATE TABLE `t_position_permission` (
 DROP TABLE IF EXISTS `ru_task`;
 CREATE TABLE `ru_task` (
   `id` int(16) unsigned NOT NULL AUTO_INCREMENT,
-	`employee_id` int(16) unsigned NOT NULL COMMENT '审核人id',
+	`employee_id` int(16) unsigned DEFAULT NULL COMMENT '审核人id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

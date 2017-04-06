@@ -13,18 +13,35 @@ import com.mwb.controller.api.ServiceResponse;
 import com.mwb.controller.finance.api.ProductVoucherVO;
 import com.mwb.controller.finance.api.SearchFinanceVoucherRequest;
 import com.mwb.controller.finance.api.SearchFinanceVoucherResponse;
-import com.mwb.controller.product.api.*;
+import com.mwb.controller.product.api.BaseApproveRequest;
+import com.mwb.controller.product.api.CreateProductRequest;
+import com.mwb.controller.product.api.CreateProductVoucherRequest;
+import com.mwb.controller.product.api.GrabRequest;
+import com.mwb.controller.product.api.ProductDetailsResponse;
+import com.mwb.controller.product.api.ProductVO;
+import com.mwb.controller.product.api.SearchProductRequest;
+import com.mwb.controller.product.api.SearchProductResponse;
 import com.mwb.controller.util.ApplicationContextUtils;
 import com.mwb.dao.filter.ProductFilter;
 import com.mwb.dao.filter.SearchResult;
+import com.mwb.dao.model.bpm.Task;
+import com.mwb.dao.model.bpm.Variable;
 import com.mwb.dao.model.comm.Bool;
 import com.mwb.dao.model.comm.Log;
 import com.mwb.dao.model.comm.PagingData;
 import com.mwb.dao.model.employee.Employee;
-import com.mwb.dao.model.product.*;
+import com.mwb.dao.model.product.Activity;
+import com.mwb.dao.model.product.HireType;
+import com.mwb.dao.model.product.Product;
+import com.mwb.dao.model.product.ProductPicture;
+import com.mwb.dao.model.product.ProductStatus;
+import com.mwb.dao.model.product.ProductType;
+import com.mwb.dao.model.product.Store;
+import com.mwb.dao.model.product.StoreType;
 import com.mwb.dao.model.product.voucher.ProductVoucher;
 import com.mwb.dao.model.product.voucher.VoucherPicture;
 import com.mwb.service.ParserService;
+import com.mwb.service.bpm.api.IBpmService;
 import com.mwb.service.dataoke.api.IDaoLaoKeService;
 import com.mwb.service.product.api.IProductService;
 import com.mwb.util.DateTimeUtility;
@@ -51,6 +68,9 @@ public class ProductController {
 
     @Autowired
     private IProductService productService;
+
+    @Autowired
+    private IBpmService bpmService;
 
     @ResponseBody
     @RequestMapping(value = "/grab", produces = ContentType.APPLICATION_JSON_UTF8)
@@ -195,6 +215,14 @@ public class ProductController {
 
         productService.createProduct(product);
 
+        //存入流程变量
+        Task task = new Task();
+        Variable variable = new Variable("createdById", employee.getId() + "");
+        List<Variable> variables = new ArrayList<>();
+        variables.add(variable);
+        task.setVariables(variables);
+        //创建流程
+        bpmService.createTask(task);
         return new ServiceResponse();
     }
 
@@ -304,17 +332,40 @@ public class ProductController {
         return response;
     }
 
+    //认领
     @ResponseBody
     @RequestMapping(value = "/approve/claim", produces = ContentType.APPLICATION_JSON_UTF8)
     public ServiceResponse claimHandler(BaseApproveRequest request) {
+        Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
+        if (employee == null) {
+            return new ServiceResponse();
+        }
+        Product product = new Product();
+        //审单员
+        if (employee.getPosition().getId().equals(4)) {
+
+            product.setStatus(ProductStatus.AUDIT_RUN);
+            productService.modifyProduct(product);
+
+        } else if (employee.getPosition().getId().equals(5)) { //财务
+
+        }
 
         return new ServiceResponse();
     }
 
+    //复审
     @ResponseBody
     @RequestMapping(value = "/approve/recheck", produces = ContentType.APPLICATION_JSON_UTF8)
     public ServiceResponse recheckHandler(BaseApproveRequest request) {
+        Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
+        if (employee == null) {
+            return new ServiceResponse();
+        }
+        //审单员
+        if (employee.getPosition().getId().equals(4)) {
 
+        }
         return new ServiceResponse();
     }
 }
