@@ -161,6 +161,7 @@ public class ProductService implements IProductService {
         Product product = new Product();
         product.setId(id);
         product.setStatus(status);
+        product.setUpdateStatusTime(new Date());
 
         productMapper.updateProduct(product);
     }
