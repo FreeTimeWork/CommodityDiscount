@@ -35,6 +35,8 @@ public interface ProductMapper {
 
     public int countProductVoucherByFilter(@Param("filter") ProductFilter filter);
 
+    public List<VoucherPicture> selectVoucherPictureByVoucherId(@Param("voucherId") Integer voucherId);
+
     public void insertProductVoucher(ProductVoucher productVoucher);
 
     public void insertVoucherPicture(VoucherPicture voucherPicture);

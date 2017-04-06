@@ -266,7 +266,6 @@
             <include refid="employeeColumns"/>,
             <include refid="storeColumns"/>,
             <include refid="voucherColumns"/>,
-            <include refid="voucherPictureColumns"/>,
             <include refid="productPictureColumns"/>
         FROM
             t_product p
@@ -274,7 +273,6 @@
         INNER JOIN t_store s ON s.id = p.store_id
         LEFT JOIN t_product_picture pp ON pp.product_id = p.id
         LEFT JOIN t_product_voucher v ON v.product_id = p.id
-        LEFT JOIN t_voucher_picture vp ON vp.voucher_id = v.id
         <where>
             p.id = #{id, javaType=int, jdbcType=INTEGER}
         </where>
@@ -287,7 +285,6 @@
             <include refid="employeeColumns"/>,
             <include refid="storeColumns"/>,
             <include refid="voucherColumns"/>,
-            <include refid="voucherPictureColumns"/>,
             <include refid="productPictureColumns"/>
         FROM
             t_product p
@@ -295,7 +292,6 @@
         INNER JOIN t_store s ON s.id = p.store_id
         LEFT JOIN t_product_picture pp ON pp.product_id = p.id
         LEFT JOIN t_product_voucher v ON v.product_id = p.id
-        LEFT JOIN t_voucher_picture vp ON vp.voucher_id = v.id
         <where>
             p.product_id = #{productId, javaType=string, jdbcType=CHAR}
         </where>
@@ -308,7 +304,6 @@
             <include refid="employeeColumns"/>,
             <include refid="storeColumns"/>,
             <include refid="voucherColumns"/>,
-            <include refid="voucherPictureColumns"/>,
             <include refid="productPictureColumns"/>
         FROM
             t_product p
@@ -316,7 +311,6 @@
         INNER JOIN t_store s ON s.id = p.store_id
         LEFT JOIN t_product_picture pp ON pp.product_id = p.id
         LEFT JOIN t_product_voucher v ON v.product_id = p.id
-        LEFT JOIN t_voucher_picture vp ON vp.voucher_id = v.id
         <where>
             <if test="employeeId != null" >
                 p.employee_id = #{employeeId, javaType=int, jdbcType=INTEGER}
@@ -334,7 +328,6 @@
             <include refid="employeeColumns"/>,
             <include refid="storeColumns"/>,
             <include refid="voucherColumns"/>,
-            <include refid="voucherPictureColumns"/>,
             <include refid="productPictureColumns"/>
         FROM
             t_product p
@@ -342,7 +335,6 @@
             INNER JOIN t_store s ON s.id = p.store_id
             LEFT JOIN t_product_picture pp ON pp.product_id = p.id
             LEFT JOIN t_product_voucher v ON v.product_id = p.id
-            LEFT JOIN t_voucher_picture vp ON vp.voucher_id = v.id
         <where>
             <include refid="productFilter"/>
         </where>
@@ -378,17 +370,11 @@
         SELECT
             <include refid="productColumns"/>,
             <include refid="employeeColumns"/>,
-            <include refid="storeColumns"/>,
-            <include refid="voucherColumns"/>,
-            <include refid="voucherPictureColumns"/>,
-            <include refid="productPictureColumns"/>
+            <include refid="voucherColumns"/>
         FROM
             t_product_voucher v
             INNER JOIN t_product p ON v.product_id = p.id
             INNER JOIN t_employee ae ON ae.id = p.employee_id
-            INNER JOIN t_store s ON s.id = p.store_id
-            LEFT JOIN t_product_picture pp ON pp.product_id = p.id
-            LEFT JOIN t_voucher_picture vp ON vp.voucher_id = v.id
         <where>
             <include refid="productFilter"/>
         </where>
@@ -406,17 +392,26 @@
     <select id="countProductVoucherByFilter"
         resultType="int">
         SELECT
-            COUNT(DISTINCT p.id)
+            COUNT(v.id)
         FROM
             t_product_voucher v
             INNER JOIN t_product p ON v.product_id = p.id
             INNER JOIN t_employee ae ON ae.id = p.employee_id
-            INNER JOIN t_store s ON s.id = p.store_id
-            LEFT JOIN t_product_picture pp ON pp.product_id = p.id
-            LEFT JOIN t_voucher_picture vp ON vp.voucher_id = v.id
         <where>
             <include refid="productFilter"/>
         </where>
+    </select>
+
+    <select id="selectVoucherPictureByVoucherId"
+            resultMap="voucherPictureResult">
+        SELECT
+            <include refid="voucherColumns"/>,
+            <include refid="voucherPictureColumns"/>
+        FROM
+              t_voucher_picture vp
+        INNER JOIN t_product_voucher v ON v.id = vp.voucher_id
+        WHERE
+              vp.voucher_id =  #{voucherId, javaType=int, jdbcType=INTEGER}
     </select>
 
     <insert

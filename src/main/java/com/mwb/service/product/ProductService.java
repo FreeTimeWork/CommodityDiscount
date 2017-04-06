@@ -38,7 +38,14 @@ public class ProductService implements IProductService {
 
     @Override
     public Product getProductById(Integer id) {
-        return productMapper.selectProductById(id);
+        Product product = productMapper.selectProductById(id);
+
+        if (product != null && product.getVoucher() != null) {
+            List<VoucherPicture> pictures = productMapper.selectVoucherPictureByVoucherId(product.getVoucher().getId());
+            product.getVoucher().setPictures(pictures);
+        }
+
+        return product;
     }
 
     @Override
