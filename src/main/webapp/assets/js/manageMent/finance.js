@@ -12,19 +12,39 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit'], function ($,
             $(this).css({"background": "#fff"}).find("a").css({"color": "red"}).parent().siblings("li").css({"background": "#efefef"}).find("a").css({"color": "#666"})
 
 //      var text=$(this).find("a").text();
-//            if(text=="…Ã∆∑¡–±Ì"){
+//            if(text=="ÔøΩÔøΩ∆∑ÔøΩ–±ÔøΩ"){
 //                $(".bottom_right_son").eq(0).show().siblings().hide();
 //            }
-//            if(text=="ÃÌº”–¬…Ã∆∑"){
+//            if(text=="ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ∆∑"){
 //                $(".bottom_right_son").eq(1).show().siblings().hide();
 //            }
-//            if(text=="≤∆ŒÒπ‹¿Ì"){
+//            if(text=="ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ"){
 //                $(".bottom_right_son").eq(2).show().siblings().hide();
 //            }
-//            if(text=="…Ã∆∑±®±Ì"){
+//            if(text=="ÔøΩÔøΩ∆∑ÔøΩÔøΩÔøΩÔøΩ"){
 //                $(".bottom_right_son").eq(3).show().siblings().hide();
 //            }
         })
+    })
+
+    $.ajax({
+        type: 'get',
+        async: false,
+        url: '/resource/data',
+        success: function (data) {
+            activitieOptions = data.activities
+            hireTypeOptions = data.hireTypes
+            productStatuOptions = data.productStatus
+            productTypeOptions = data.productTypes
+            storeTypeOptions = data.storeTypes
+            employeeStatuOptions = data.employeeStatus
+            groupOptions = data.groups
+            positionOptions = data.positions
+            employeeOptions = data.employees
+        },
+        error: function () {
+            alert('ËØ∑Ê±ÇÂ§±Ë¥•')
+        }
     })
 
 
@@ -38,21 +58,6 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit'], function ($,
             thiz = this;
             this.searchParams = {};
             this.initSearchForm();
-            $.ajax({
-                type: 'get',
-                async: false,
-                url: '/resource/data',
-                success: function (data) {
-                    thiz.activities = data.activities
-                    thiz.hireTypes = data.hireTypes
-                    thiz.productStatus = data.productStatus
-                    thiz.productTypes = data.productTypes
-                    thiz.storeTypes = data.storeTypes
-                    thiz.employeeStatus = data.employeeStatus
-                    thiz.groups = data.groups
-                    thiz.positions = data.positions
-                }
-            })
         }
 
         CurrentPage.prototype.initPageGrid = function () {
@@ -86,7 +91,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit'], function ($,
                 }, {
                     "data": "guestUnitPrice"
                 }, {
-                    "data": "actrulChargeAmount"
+                    "data": "actualChargeAmount"
                 }, {
                     "data": "shouldChargeAmount"
                 }],
@@ -118,19 +123,19 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit'], function ($,
                 fields: uiKit.FormUtils.generateFields('searchForm', [{
                     uid : 'groupId',
                     type : uiKit.Controller.SELECT,
-                    options: thiz.groups
+                    options: groupOptions
                 },{
                     uid : 'employeeId',
                     type : uiKit.Controller.SELECT,
-                    options: []
+                    options: employeeOptions
                 },{
                     uid : 'statusId',
                     type : uiKit.Controller.SELECT,
-                    options: thiz.employeeStatus
+                    options: employeeStatuOptions
                 },{
                     uid : 'orderByAsc',
                     type : uiKit.Controller.SELECT,
-                    options: []
+                    options: [{label: '',value: null},{label: 'Ê≠£Â∫è',value: true},{label: 'ÂÄíÂ∫è',value: false}]
                 },{
                     uid : 'beginPayTime',
                     type : uiKit.Controller.DATE_PICKER,

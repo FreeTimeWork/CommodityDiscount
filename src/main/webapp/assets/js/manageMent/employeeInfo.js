@@ -7,7 +7,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             $(this).parent().find(".jia").toggleClass("sub");
             $(this).parent().find("ul").toggle().parent().siblings("li").find("ul").hide()
         })
-  })
+    })
 
     var genderOptions = [{label: '男',value: 'M'},{label: '女',value: 'F'}]
     var CurrentPage = (function (_super) {
