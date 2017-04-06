@@ -11,17 +11,19 @@ import org.springframework.web.servlet.ModelAndView;
  * Created by fangchen.chai on 2017/4/5.
  */
 public class EmployeeInterceptor implements HandlerInterceptor {
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
 
         Employee employee =(Employee)request.getSession().getAttribute("employee");
 
-        if (employee != null){
-            return true;
-        } else {
-            response.sendRedirect(request.getContextPath()+"/index.html");
-            return false;
-        }
+//        if (employee != null){
+//            return true;
+//        } else {
+//            response.sendRedirect(request.getContextPath()+"/index.html");
+//            return false;
+//        }
+        return true;
     }
 
     @Override
