@@ -11,7 +11,9 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface PositionMapper {
 
-    public List<Position> selectPositionByFiler(@Param("filter") PositionFilter filter);
+    public List<Position> selectPositionByFilter(@Param("filter") PositionFilter filter);
+
+    public List<Position> selectAllPosition();
 
     public void insertPosition(Position position);
 

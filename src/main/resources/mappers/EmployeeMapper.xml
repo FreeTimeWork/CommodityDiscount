@@ -150,13 +150,20 @@
 
     <select id="selectEmployeeById" resultMap="employeeResult" parameterType="map">
         SELECT
-        <include refid="employeeColumns"/>
+            <include refid="employeeColumns"/>
         FROM
-        t_employee ae
+            t_employee ae
         <where>
             ae.id = #{id, javaType=int, jdbcType=INTEGER}
         </where>
 
+    </select>
+
+    <select id="selectAllEmployee" resultMap="employeeResult" parameterType="map">
+        SELECT
+              <include refid="employeeColumns"/>
+        FROM
+              t_employee ae
     </select>
 
     <insert

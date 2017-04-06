@@ -53,6 +53,13 @@
 
     </select>
 
+    <select id="selectAllPosition" resultMap="positionResult" parameterType="map">
+        SELECT
+            <include refid="positionColumns"/>
+        FROM
+            t_position ap
+    </select>
+
     <insert
             id="insertPosition"
             parameterType="Position"
