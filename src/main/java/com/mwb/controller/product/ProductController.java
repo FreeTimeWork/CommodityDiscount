@@ -1,5 +1,13 @@
 package com.mwb.controller.product;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+
 import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
 import com.mwb.controller.finance.api.ProductVoucherVO;
@@ -28,14 +36,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by MengWeiBo on 2017-04-01
@@ -302,5 +302,19 @@ public class ProductController {
         response.setPagingResult(result.getPagingResult());
 
         return response;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/approve/claim", produces = ContentType.APPLICATION_JSON_UTF8)
+    public ServiceResponse claimHandler(BaseApproveRequest request) {
+
+        return new ServiceResponse();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/approve/recheck", produces = ContentType.APPLICATION_JSON_UTF8)
+    public ServiceResponse recheckHandler(BaseApproveRequest request) {
+
+        return new ServiceResponse();
     }
 }
