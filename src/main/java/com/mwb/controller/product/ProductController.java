@@ -371,7 +371,7 @@ public class ProductController {
         ProductStatus status = ProductStatus.fromId(request.getProductStatusId());
         if (status.equals(ProductStatus.REJECTED)) {
             product.setStatus(ProductStatus.AUDIT_WAIT);
-            product.setUpdateTime(new Date());
+            product.setUpdateStatusTime(new Date());
         }
 
         product.setStatus(status);
@@ -391,11 +391,8 @@ public class ProductController {
         Product product = new Product();
         product.setId(request.getProductId());
         ProductStatus status = ProductStatus.fromId(request.getProductStatusId());
-        if (status.equals(ProductStatus.REJECTED)) {
-            product.setStatus(ProductStatus.AUDIT_WAIT);
-            product.setUpdateTime(new Date());
-        }
-        product.setStatus(ProductStatus.fromId(request.getProductStatusId()));
+
+        product.setStatus(status);
         productService.modifyProduct(product);
 
         return new ServiceResponse();

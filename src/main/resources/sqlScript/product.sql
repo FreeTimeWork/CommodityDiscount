@@ -101,7 +101,7 @@ CREATE TABLE `t_product` (
   `description` char(32) DEFAULT NULL,
   `charge_price` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '收费单价',
   `create_time` datetime NOT NULL,
-  `update_time` datetime DEFAULT NULL,
+  `update_status_time` datetime NOT NULL,
   `ratio` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '佣金比例',
   `plan_url` char(32) DEFAULT NULL COMMENT '计划链接',
   `hire_type_id` int(10) unsigned NOT NULL,

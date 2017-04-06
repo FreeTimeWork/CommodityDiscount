@@ -44,7 +44,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
 
         CurrentPage.prototype.init = function () {
 
-            var url ="/permision/allPermission";
+            var url ="/position/permission/allPermission";
             var successHandler = function(self, result) {
                 thiz.result = result;
                 var html = ''
@@ -91,36 +91,37 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     uid : 'positionId',
                     type : uiKit.Controller.SELECT,
                     options: positionOptions,
-                    change: function () {
-
-                        console.log(result);
-                        var url ="/permission/byPositionId";
-                        var successHandler = function(self, result) {
-                            var arr1 = result.permissions;
-                            var arr2 = thiz.result.arr2;
-                            var long = arr1.length<arr2.length?arr2:arr1;
-                            var short = arr1.length<arr2.length?arr1:arr2;
-                            var str = ","+long.toString()+",";
-                            var sameArray=[];
-                            for(var i in short){
-                                if(str.indexOf(","+short[i]+",")>=0){
-                                    sameArray.push(short[i]);
-                                }
-                            }
-                            var inputArray = $("input[name='quan']")
-                            for(var i = 0; i < inputArray.length; i++){
-                                for(var j = 0; j < sameArray.length; j++){
-                                    if(inputArray[i].value == sameArray[j].id){
-                                        inputArray[i].checked = true
+                    change: function (value) {
+                        if(value){
+                            var url ="/position/permission/byPositionId?positionId=" + value;
+                            var successHandler = function(self, result) {
+                                var arr1 = result.permissions;
+                                var arr2 = thiz.result.permissions;
+                                var long = arr1.length<arr2.length?arr2:arr1;
+                                var short = arr1.length<arr2.length?arr1:arr2;
+                                var str = ","+long.toString()+",";
+                                var sameArray=[];
+                                for(var i in short){
+                                    if(str.indexOf(","+short[i]+",")>=0){
+                                        sameArray.push(short[i]);
                                     }
                                 }
-                            }
-                        };
-                        var errorHandler = function(self, result) {
-                            alert('请求失败');
-                        };
-                        var action = new netKit.SimplePostAction(this,request, url,successHandler, errorHandler);
-                        action.submit();
+                                var inputArray = $("input[name='quan']")
+                                for(var i = 0; i < inputArray.length; i++){
+                                    for(var j = 0; j < sameArray.length; j++){
+                                        if(inputArray[i].value == sameArray[j].id){
+                                            inputArray[i].checked = true
+                                        }
+                                    }
+                                }
+                            };
+                            var errorHandler = function(self, result) {
+                                alert('请求失败');
+                            };
+                            var action = new netKit.SimpleGetAction(this,url,successHandler, errorHandler);
+                            action.submit();
+                        }
+
 
                     }
                 }]),
