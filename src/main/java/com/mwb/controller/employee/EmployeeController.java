@@ -1,8 +1,16 @@
 package com.mwb.controller.employee;
 
-import com.mwb.controller.api.ContentType;
+import java.util.Date;
+import java.util.List;
+
 import com.mwb.controller.api.ServiceResponse;
-import com.mwb.controller.employee.api.*;
+import com.mwb.controller.employee.api.CreateEmployeeRequest;
+import com.mwb.controller.employee.api.CreateGroupRequest;
+import com.mwb.controller.employee.api.GroupVO;
+import com.mwb.controller.employee.api.ModifyEmployeeRequest;
+import com.mwb.controller.employee.api.SearchEmployeeRequest;
+import com.mwb.controller.employee.api.SearchEmployeeResponse;
+import com.mwb.controller.employee.api.SearchGroupResponse;
 import com.mwb.dao.filter.EmployeeFilter;
 import com.mwb.dao.filter.SearchResult;
 import com.mwb.dao.model.comm.Log;
@@ -20,9 +28,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * 后台
@@ -45,7 +50,7 @@ public class EmployeeController {
         employee.setCreateTime(new Date());
         employee.setGender(Gender.fromCode(request.getGenderCode()));
         employee.setMobile(request.getMobile());
-        employee.setPassword(request.getPassword());
+        employee.setPassword(MD5Tools.MD5(request.getPassword()));
         employee.setPosition(new Position(request.getPositionId()));
         employee.setStatus(EmployeeStatus.IN_POSITION);
 
