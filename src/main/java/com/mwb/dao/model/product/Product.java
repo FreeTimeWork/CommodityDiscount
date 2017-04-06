@@ -1,14 +1,15 @@
 package com.mwb.dao.model.product;
 
-import com.mwb.dao.model.comm.Bool;
-import com.mwb.dao.model.employee.Employee;
-import com.mwb.dao.model.product.voucher.ProductVoucher;
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+import com.mwb.dao.model.bpm.Task;
+import com.mwb.dao.model.comm.Bool;
+import com.mwb.dao.model.employee.Employee;
+import com.mwb.dao.model.product.voucher.ProductVoucher;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
 /**
  * Created by MengWeiBo on 2017-03-29
@@ -54,6 +55,15 @@ public class Product implements Serializable{
     private ProductType productType;           //商品类型
     private List<ProductPicture> pictures;
     private ProductVoucher voucher;          // 凭证信息
+    private Task task;
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
+    }
 
     public Integer getId() {
         return id;
