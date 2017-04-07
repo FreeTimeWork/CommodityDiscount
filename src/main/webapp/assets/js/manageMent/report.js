@@ -1,5 +1,4 @@
 require.config(I360R.REQUIRE_CONFIG)
-
 require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSelect'], function ($,_,uiKit,netKit,cKit,dataTableSelect) {
     $(function () {
         $(".fa_li>a").click(function () {
@@ -8,40 +7,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             $(this).parent().find(".jia").toggleClass("sub");
             $(this).parent().find("ul").toggle().parent().siblings("li").find("ul").hide()
         })
-        $(".form_datetime").datetimepicker({
-            format: "yyyy-mm-dd hh:ii"
-        });
-    });
-    $.ajax({
-        type: 'get',
-        async: false,
-        url: '/employee/currentEmployee',
-        success: function (data) {
-            if (data.employee != null && data.employee.fullName != null) {
-                $("#userName").text(data.employee.fullName);
-                return;
-            }
-        }
-    });
-    $.ajax({
-        type: 'get',
-        async: false,
-        url: '/resource/data',
-        success: function (data) {
-            activitieOptions = data.activities
-            hireTypeOptions = data.hireTypes
-            productStatuOptions = data.productStatus
-            productTypeOptions = data.productTypes
-            storeTypeOptions = data.storeTypes
-            employeeStatuOptions = data.employeeStatus
-            groupOptions = data.groups
-            positionOptions = data.positions
-            employeeOptions = data.employees
-        },
-        error: function () {
-            alert('请求失败')
-        }
-    })
+  })
+
+
     var CurrentPage = (function (_super) {
         cKit.__extends(CurrentPage, _super);
 
@@ -52,6 +20,21 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             thiz = this;
             this.searchParams = {};
             this.initSearchForm();
+            $.ajax({
+                type: 'get',
+                async: false,
+                url: '/resource/data',
+                success: function (data) {
+                    thiz.activities = data.activities
+                    thiz.hireTypes = data.hireTypes
+                    thiz.productStatus = data.productStatus
+                    thiz.productTypes = data.productTypes
+                    thiz.storeTypes = data.storeTypes
+                    thiz.employeeStatus = data.employeeStatus
+                    thiz.groups = data.groups
+                    thiz.positions = data.positions
+                }
+            })
         }
 
         CurrentPage.prototype.initPageGrid = function () {
@@ -116,9 +99,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 }],
                 ajax: function (data,callBack,setting) {
                     netKit.TableAction(data,callBack,setting,{
-                        url: '/product/voucher/search',
+                        url: '/product/voncher/search',
                         postData: thiz.searchParams,
-                        root: "vouchers",
+                        root: "vonchers",
                         actionCallback: function (result) {
 
                         }
@@ -142,54 +125,58 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 fields: uiKit.FormUtils.generateFields('searchForm', [{
                     uid : 'name',
                     type : uiKit.Controller.SELECT,
-                    options: activitieOptions
+                    options: thiz.productTypes
                 },{
                     uid : 'gronpId',
                     type : uiKit.Controller.SELECT,
-                    options: groupOptions
+                    options: thiz.groups
                 },{
                     uid : 'employeeId',
                     type : uiKit.Controller.SELECT,
-                    options: employeeOptions
+                    options: []
                 },{
                     uid : 'statusId',
                     type : uiKit.Controller.SELECT,
-                    options: employeeStatuOptions
+                    options: thiz.employeeStatus
                 },{
                     uid : 'orderAsc',
                     type : uiKit.Controller.SELECT,
-                    options: [{label: '',value: null},{label: '正序',value: true},{label: '倒序',value: false}]
+                    options: []
                 },{
                     uid : 'typeId',
                     type : uiKit.Controller.SELECT,
-                    options: employeeStatuOptions
+                    options: []
                 },{
                     uid : 'productName',
                     type : uiKit.Controller.EDIT
                 },{
                     uid : 'createBeginTime',
-                    type : uiKit.Controller.EDIT,
+                    type : uiKit.Controller.DATE_PICKER,
                     node : 'createBeginTime'
                 },{
                     uid : 'createEndTime',
-                    type : uiKit.Controller.EDIT,
+                    type : uiKit.Controller.DATE_PICKER,
                     node : 'createEndTime'
                 },{
                     uid : 'beginFromTime',
-                    type : uiKit.Controller.EDIT,
+                    type : uiKit.Controller.DATE_PICKER,
                     node : 'beginFromTime'
                 },{
                     uid : 'beginToTime',
-                    type : uiKit.Controller.EDIT,
+                    type : uiKit.Controller.DATE_PICKER,
                     node : 'beginToTime'
                 },{
                     uid : 'endFromTime',
-                    type : uiKit.Controller.EDIT,
+                    type : uiKit.Controller.DATE_PICKER,
                     node : 'endFromTime'
                 },{
                     uid : 'endToTime',
-                    type : uiKit.Controller.EDIT,
+                    type : uiKit.Controller.DATE_PICKER,
                     node : 'endToTime'
+                },{
+                    uid : 'beginDate',
+                    type : uiKit.Controller.DATE_PICKER,
+                    node : 'beginDate'
                 }]),
                 reset: false
             });
@@ -200,8 +187,8 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
     var pageController = new uiKit.PageController({
 
 
-        onDetailClick: function (id ) {
-            window.open('/frontend/detail.html?id='+ id);
+        onDeailClick: function (id ) {
+           window.open('/zhou_1(3)%20(1)/view/zhou-2.html?id=') + id;
         }
 
     });
