@@ -2,7 +2,7 @@
 var I360R = (function () {
     var EXPORT_NONE = null;
     var REQUIRE_CONFIG = {
-        baseUrl: '/CommodityDiscount/src/main/webapp/assets',
+        baseUrl: '/assets',
         paths:{
             // ����Ǵ�磬һ����Ҫ��
             'require': 'lib/requre/js/require',

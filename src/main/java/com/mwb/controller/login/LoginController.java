@@ -1,6 +1,5 @@
 package com.mwb.controller.login;
 
-import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
 import com.mwb.controller.login.api.LoginRequest;
 import com.mwb.controller.util.ApplicationContextUtils;
@@ -45,7 +44,7 @@ public class LoginController {
 
     @ResponseBody
     @RequestMapping(value = "/logout")
-    public ServiceResponse logout(){
+    public ServiceResponse logout() {
         ApplicationContextUtils.getSession().removeAttribute("employee");
         return new ServiceResponse();
     }

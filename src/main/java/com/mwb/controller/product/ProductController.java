@@ -286,7 +286,10 @@ public class ProductController {
         financeService.modifyFinance(employee.getId(), product.getStatus(), ProductStatus.PAY_RUN);
 
         productService.modifyProductStatus(product.getId(), ProductStatus.PAY_RUN);
-
+        //修改流程审批人
+        Task task = product.getTask();
+        task.setEmployeeId(employee.getId());
+        bpmService.modifyTask(task);
         return new ServiceResponse();
 
     }
@@ -398,7 +401,6 @@ public class ProductController {
         productService.modifyProductStatus(product.getId(), status);
 
         financeService.modifyFinance(employee.getId(), product.getStatus(), status);
-
         return new ServiceResponse();
     }
 
