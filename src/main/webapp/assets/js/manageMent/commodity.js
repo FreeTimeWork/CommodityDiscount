@@ -169,7 +169,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     type : uiKit.Controller.SELECT,
                     options: activitieOptions
                 },{
-                    uid : 'gronpId',
+                    uid : 'groupId',
                     type : uiKit.Controller.SELECT,
                     options: groupOptions
                 },{
@@ -179,11 +179,11 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 },{
                     uid : 'statusId',
                     type : uiKit.Controller.SELECT,
-                    options: groupOptions
+                    options: employeeStatuOptions
                 },{
                     uid : 'orderAsc',
                     type : uiKit.Controller.SELECT,
-                    options: [{label: '',value: null},{label: '正序',value: true},{label: '倒序',value: false}]
+                    options: [{label: '排序',value: null},{label: '正序',value: true},{label: '倒序',value: false}]
                 },{
                     uid : 'typeId',
                     type : uiKit.Controller.SELECT,
