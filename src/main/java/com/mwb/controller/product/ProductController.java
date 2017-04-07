@@ -266,6 +266,9 @@ public class ProductController {
             for (int i = 0; i < files.length; i++) {
                 try {
                     MultipartFile file = files[i];
+                    if (file.isEmpty()){
+                        continue;
+                    }
                     String filePath = realPath + file.getOriginalFilename();
 
                     VoucherPicture picture = new VoucherPicture();
@@ -288,6 +291,7 @@ public class ProductController {
         Task task = product.getTask();
         task.setEmployeeId(employee.getId());
         bpmService.modifyTask(task);
+
         return new ServiceResponse();
 
     }
