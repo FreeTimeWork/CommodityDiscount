@@ -1,6 +1,5 @@
 package com.mwb.scheduler;
 
-import com.mwb.dao.model.finance.Finance;
 import com.mwb.dao.model.product.Product;
 import com.mwb.dao.model.product.ProductStatus;
 import com.mwb.service.finance.api.IFinanceService;
@@ -21,9 +20,6 @@ public class ProductStatusJobTask {
     @Autowired
     private IProductService productService;
 
-    @Autowired
-    private IFinanceService financeService;
-
     public void run() throws Exception {
 
         Date now = new Date();
@@ -33,9 +29,7 @@ public class ProductStatusJobTask {
             for (Product product : endProducts) {
                 int hour = DateTimeUtility.minuteBetween(product.getUpdateStatusTime(), now) / 60;
                 if (hour > 24) {
-                    productService.modifyProductStatus(product.getId(), ProductStatus.PAY_WAIT);
-
-                    financeService.modifyFinance(product.getEmployee().getId(), ProductStatus.END, ProductStatus.PAY_WAIT);
+                    productService.modifyProductStatus(product.getId(), product.getEmployee().getId(), product.getStatus(), ProductStatus.PAY_WAIT);
                 }
             }
         }
@@ -47,9 +41,7 @@ public class ProductStatusJobTask {
                 Date tomorrow = DateTimeUtility.addDays(DateTimeUtility.getMinTimeOfDay(product.getCouponEndTime()), 1);
 
                 if (now.after(tomorrow)){
-                    productService.modifyProductStatus(product.getId(), ProductStatus.END);
-
-                    financeService.modifyFinance(product.getEmployee().getId(), ProductStatus.END_APPROACH, ProductStatus.END);
+                    productService.modifyProductStatus(product.getId(), product.getEmployee().getId(), product.getStatus(), ProductStatus.END);
                 }
             }
         }
@@ -61,9 +53,7 @@ public class ProductStatusJobTask {
                 int hour = DateTimeUtility.minuteBetween(now, product.getUpdateStatusTime()) / 60;
 
                 if (hour <= 24 && hour > 0) {
-                    productService.modifyProductStatus(product.getId(), ProductStatus.END_APPROACH);
-
-                    financeService.modifyFinance(product.getEmployee().getId(), ProductStatus.PROMOTE, ProductStatus.END_APPROACH);
+                    productService.modifyProductStatus(product.getId(), product.getEmployee().getId(), product.getStatus(), ProductStatus.END_APPROACH);
                 }
             }
         }
@@ -76,9 +66,7 @@ public class ProductStatusJobTask {
                 int hour = DateTimeUtility.minuteBetween(product.getUpdateStatusTime(), now) / 60;
 
                 if (hour >= 24) {
-                    productService.modifyProductStatus(product.getId(), ProductStatus.PROMOTE);
-
-                    financeService.modifyFinance(product.getEmployee().getId(), ProductStatus.TWO_AUDIT, ProductStatus.PROMOTE);
+                    productService.modifyProductStatus(product.getId(), product.getEmployee().getId(), product.getStatus(), ProductStatus.PROMOTE);
                 }
             }
         }

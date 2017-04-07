@@ -16,6 +16,7 @@ import com.mwb.service.finance.api.IFinanceService;
 import com.mwb.service.product.api.IProductService;
 import com.mwb.util.DateTimeUtility;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -157,13 +158,20 @@ public class ProductService implements IProductService {
         productMapper.updateProduct(product);
     }
 
-    public void modifyProductStatus(Integer id, ProductStatus status) {
+    @Override
+    @Transactional
+    public void modifyProductStatus(Integer id, Integer employeeId, ProductStatus fromStatus, ProductStatus toStatus) {
+
         Product product = new Product();
         product.setId(id);
-        product.setStatus(status);
+        product.setStatus(toStatus);
         product.setUpdateStatusTime(new Date());
 
         productMapper.updateProduct(product);
+
+        if (employeeId != null && fromStatus != null) {
+            financeService.modifyFinance(employeeId, fromStatus, toStatus);
+        }
     }
 
     @Override
@@ -185,7 +193,7 @@ public class ProductService implements IProductService {
 
     @Override
     @Transactional
-    public void createProductVoucher(ProductVoucher voucher) {
+    public void createProductVoucher(ProductVoucher voucher, Product product) {
         productMapper.insertProductVoucher(voucher);
 
         if (CollectionUtils.isNotEmpty(voucher.getPictures())) {
@@ -194,14 +202,16 @@ public class ProductService implements IProductService {
             }
         }
 
-        Finance finance = financeService.getFinanceByEmployeeId(voucher.getProduct().getEmployee().getId());
-        finance.setPayRunNumber(finance.getPayRunNumber() - 1);
-        finance.setPayEndNumber(finance.getPayEndNumber() + 1);
+        Finance finance = financeService.getFinanceByEmployeeId(product.getEmployee().getId());
+        finance.setPayRunNumber(finance.getPayRunNumber() + 1);
+        finance.setPayWaitNumber(finance.getPayEndNumber() - 1);
         finance.setShouldChargeAmount(finance.getShouldChargeAmount().add(voucher.getShouldChargeAmount()));
         finance.setActualChargeAmount(finance.getActualChargeAmount().add(voucher.getActualChargeAmount()));
         finance.setGuestUnitPrice(finance.getActualChargeAmount().divide(new BigDecimal(finance.getPayEndNumber()), 2));
 
         financeService.modifyFinance(finance);
+
+        modifyProductStatus(product.getId(), null, null, ProductStatus.PAY_RUN);
     }
 
     @Override

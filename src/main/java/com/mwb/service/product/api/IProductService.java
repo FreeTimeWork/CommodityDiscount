@@ -29,11 +29,11 @@ public interface IProductService {
 
     public void modifyProduct(Product product);
 
-    public void modifyProductStatus(Integer id, ProductStatus status);
+    public void modifyProductStatus(Integer id, Integer employeeId, ProductStatus fromStatus, ProductStatus toStatus);
 
     public SearchResult<ProductVoucher> searchProductVoucher(ProductFilter filter);
 
-    public void createProductVoucher(ProductVoucher voucher);
+    public void createProductVoucher(ProductVoucher voucher, Product product);
 
     public void createVoucherPicture(VoucherPicture voucherPicture);
 
