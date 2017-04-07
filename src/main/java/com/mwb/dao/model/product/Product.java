@@ -1,14 +1,15 @@
 package com.mwb.dao.model.product;
 
-import com.mwb.dao.model.comm.Bool;
-import com.mwb.dao.model.employee.Employee;
-import com.mwb.dao.model.product.voucher.ProductVoucher;
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+import com.mwb.dao.model.bpm.Task;
+import com.mwb.dao.model.comm.Bool;
+import com.mwb.dao.model.employee.Employee;
+import com.mwb.dao.model.product.voucher.ProductVoucher;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
 /**
  * Created by MengWeiBo on 2017-03-29
@@ -41,7 +42,7 @@ public class Product implements Serializable{
     private String description;         //备注
     private BigDecimal chargePrice;        //收费单价
     private Date createTime;          //提交时间
-    private Date updateTime;          //更新时间
+    private Date updateStatusTime;          //更新时间
 
     private BigDecimal ratio;           //佣金比例
     private String planUrl;             //计划链接
@@ -54,6 +55,15 @@ public class Product implements Serializable{
     private ProductType productType;           //商品类型
     private List<ProductPicture> pictures;
     private ProductVoucher voucher;          // 凭证信息
+    private Task task;
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
+    }
 
     public Integer getId() {
         return id;
@@ -231,12 +241,12 @@ public class Product implements Serializable{
         this.createTime = createTime;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public Date getUpdateStatusTime() {
+        return updateStatusTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setUpdateStatusTime(Date updateStatusTime) {
+        this.updateStatusTime = updateStatusTime;
     }
 
     public Date getActivityTime() {

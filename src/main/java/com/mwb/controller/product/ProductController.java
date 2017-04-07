@@ -42,12 +42,14 @@ import com.mwb.dao.model.product.voucher.VoucherPicture;
 import com.mwb.service.ParserService;
 import com.mwb.service.bpm.api.IBpmService;
 import com.mwb.service.dataoke.api.IDaoLaoKeService;
+import com.mwb.service.finance.api.IFinanceService;
 import com.mwb.service.product.api.IProductService;
 import com.mwb.util.DateTimeUtility;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -68,6 +70,9 @@ public class ProductController {
 
     @Autowired
     private IProductService productService;
+
+    @Autowired
+    private IFinanceService financeService;
 
     @Autowired
     private IBpmService bpmService;
@@ -227,11 +232,19 @@ public class ProductController {
         return new ServiceResponse();
     }
 
+    //提交结账
     @ResponseBody
     @RequestMapping(value = "/voucher/create")
+    @Transactional
     public ServiceResponse createProductVoucher(
             @RequestParam("files") MultipartFile[] files,
             CreateProductVoucherRequest request) {
+
+        Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
+        if (employee == null) {
+            return new ServiceResponse();
+        }
+
         Product product = productService.getProductById(request.getId());
 
         ProductVoucher voucher = new ProductVoucher();
@@ -270,6 +283,13 @@ public class ProductController {
 
         productService.createProductVoucher(voucher);
 
+        financeService.modifyFinance(employee.getId(), product.getStatus(), ProductStatus.PAY_RUN);
+
+        productService.modifyProductStatus(product.getId(), ProductStatus.PAY_RUN);
+        //修改流程审批人
+        Task task = product.getTask();
+        task.setEmployeeId(employee.getId());
+        bpmService.modifyTask(task);
         return new ServiceResponse();
 
     }
@@ -341,23 +361,29 @@ public class ProductController {
         if (employee == null) {
             return new ServiceResponse();
         }
-        Product product = new Product();
-        product.setId(request.getProductId());
+
+        Product product = productService.getProductById(request.getProductId());
+        if (product == null) {
+            return new ServiceResponse();
+        }
+
         //审单员
         if (employee.getPosition().getId().equals(4)) {
 
-            product.setStatus(ProductStatus.AUDIT_RUN);
-            productService.modifyProduct(product);
+            productService.modifyProductStatus(product.getId(), ProductStatus.AUDIT_RUN);
+
+            financeService.modifyFinance(employee.getId(), product.getStatus(), ProductStatus.AUDIT_RUN);
 
         } else if (employee.getPosition().getId().equals(5)) { //财务
-            product.setStatus(ProductStatus.PAY_RUN);
-            productService.modifyProduct(product);
+            productService.modifyProductStatus(product.getId(), ProductStatus.PAY_RUN);
+
+            financeService.modifyFinance(employee.getId(), product.getStatus(), ProductStatus.PAY_RUN);
         }
 
         return new ServiceResponse();
     }
 
-    //一审
+    //审核
     @ResponseBody
     @RequestMapping(value = "/approve/check", produces = ContentType.APPLICATION_JSON_UTF8)
     public ServiceResponse checkHandler(@RequestBody BaseApproveRequest request) {
@@ -365,38 +391,17 @@ public class ProductController {
         if (employee == null) {
             return new ServiceResponse();
         }
-        Product product = new Product();
-        product.setId(request.getProductId());
+        Product product = productService.getProductById(request.getProductId());
+
         ProductStatus status = ProductStatus.fromId(request.getProductStatusId());
-        product.setStatus(status);
-        if (status.equals(ProductStatus.REJECTED)) {
-            product.setStatus(ProductStatus.AUDIT_WAIT);
-            product.setUpdateTime(new Date());
-        }
-
-        productService.modifyProduct(product);
-
-        return new ServiceResponse();
-    }
-
-    //复审
-    @ResponseBody
-    @RequestMapping(value = "/approve/recheck")
-    public ServiceResponse recheckHandler(@RequestBody BaseApproveRequest request) {
-        Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
-        if (employee == null) {
+        if (product == null) {
             return new ServiceResponse();
         }
-        Product product = new Product();
-        product.setId(request.getProductId());
-        ProductStatus status = ProductStatus.fromId(request.getProductStatusId());
-        product.setStatus(ProductStatus.fromId(request.getProductStatusId()));
-        if (status.equals(ProductStatus.REJECTED)) {
-            product.setStatus(ProductStatus.AUDIT_WAIT);
-            product.setUpdateTime(new Date());
-        }
-        productService.modifyProduct(product);
 
+        productService.modifyProductStatus(product.getId(), status);
+
+        financeService.modifyFinance(employee.getId(), product.getStatus(), status);
         return new ServiceResponse();
     }
+
 }

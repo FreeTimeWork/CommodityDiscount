@@ -50,6 +50,7 @@ public class ResourceController {
         DataResponse response = new DataResponse();
 
         List<ResourceVO> productTypes = new ArrayList<>();
+        productTypes.add(new ResourceVO("选择分类", null));
         for (ProductType productType : ProductType.values()) {
             ResourceVO vo = new ResourceVO(productType.getDescription(), productType.getId());
             productTypes.add(vo);
@@ -60,6 +61,7 @@ public class ResourceController {
             productStatus.add(vo);
         }
         List<ResourceVO> activities = new ArrayList<>();
+        activities.add(new ResourceVO("选择活动类别", null));
         for (Activity activity : Activity.values()) {
             ResourceVO vo = new ResourceVO(activity.getDescription(), activity.getId());
             activities.add(vo);
@@ -75,11 +77,13 @@ public class ResourceController {
             storeTypes.add(vo);
         }
         List<ResourceVO> employeeStatus = new ArrayList<>();
+        employeeStatus.add(new ResourceVO("全部", null));
         for (EmployeeStatus status : EmployeeStatus.values()) {
             ResourceVO vo = new ResourceVO(status.getDescription(), status.getId());
             employeeStatus.add(vo);
         }
         List<ResourceVO> groupVos = new ArrayList<>();
+        groupVos.add(new ResourceVO("所有业务小组", null));
         List<Group> groups = employeeService.getAllGroup();
         if (CollectionUtils.isNotEmpty(groups)) {
             for (Group group : groups) {
@@ -96,6 +100,7 @@ public class ResourceController {
             }
         }
         List<ResourceVO> employeeVos = new ArrayList<>();
+        employeeVos.add(new ResourceVO("选择业务员", null));
         List<Employee> employees = employeeService.getAllEmployee();
         if (CollectionUtils.isNotEmpty(employees)) {
             for (Employee employee : employees) {

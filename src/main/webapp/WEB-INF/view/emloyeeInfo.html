@@ -2,8 +2,9 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>报表</title>
+    <title>员工信息</title>
     <link rel="stylesheet" href="../../assets/lib/bootstrap/css/bootstrap-2.3.0.min.css"/>
+    <link rel="stylesheet" href="../../assets/lib/bootstrap/modal/css/bootstrap-modal.css"/>
     <link rel="stylesheet" href="../../assets/them/DT_bootstrap.css"/>
     <link rel="stylesheet" href="../../assets/lib/jquery/datatable/css/select.dataTables.min.css"/>
     <link rel="stylesheet" href="../../assets/them/default.css"/>
@@ -60,8 +61,8 @@
                     <a href="#" class="floor"><img src="img/pic-3_13.png" alt=""/><span>员工管理</span> <span
                             class="jia add"></span></a>
                     <ul>
-                        <li><a href="employeeInfo.html" target="_blank">员工信息</a></li>
-                        <li><a href="report.html" target="_blank">权限管理</a></li>
+                        <li><a href="/frontend/employeeInfo.html" target="_blank">员工信息</a></li>
+                        <li><a href="/frontendjurisdiction.html" target="_blank">权限管理</a></li>
                     </ul>
                 </li>
 
@@ -110,45 +111,51 @@
     <form class="form-horizontal form-striped" id="addForm" style="margin-top: 20px;" >
 
 
-        <div class="control-group" gid="categoryId">
+        <div class="control-group" gid="fullName">
             <label class="control-label">姓名</label>
             <div class="controls">
                 <input type="text" uid="fullName"/>
+                <span hid="fullName"></span>
             </div>
         </div>
 
-        <div class="control-group" gid="categoryId">
+        <div class="control-group" gid="genderCode">
             <label class="control-label">性别</label>
             <div class="controls">
                 <select uid="genderCode"></select>
+                <span hid="genderCode"></span>
             </div>
         </div>
 
-        <div class="control-group" gid="categoryId">
+        <div class="control-group" gid="mobile">
             <label class="control-label">手机号</label>
             <div class="controls">
                 <input type="text" uid="mobile"/>
+                <span hid="mobile"></span>
             </div>
         </div>
 
-        <div class="control-group" gid="categoryId">
+        <div class="control-group" gid="password">
             <label class="control-label">密码</label>
             <div class="controls">
                 <input type="text" uid="password"/>
+                <span hid="password"></span>
             </div>
         </div>
 
-        <div class="control-group" gid="categoryId">
+        <div class="control-group" gid="groupId">
             <label class="control-label">所属小组</label>
             <div class="controls">
                 <select uid="groupId"></select>
+                <span hid="groupId"></span>
             </div>
         </div>
 
-        <div class="control-group" gid="categoryId">
+        <div class="control-group" gid="positionId">
             <label class="control-label">岗位名称</label>
             <div class="controls">
                 <select uid="positionId"></select>
+                <span hid="positionId"></span>
             </div>
         </div>
 
@@ -167,10 +174,11 @@
     <form class="form-horizontal form-striped" id="addGroupForm" style="margin-top: 20px;" >
 
 
-        <div class="control-group" gid="categoryId">
+        <div class="control-group" gid="name">
             <label class="control-label">小组名称</label>
             <div class="controls">
                 <input type="text" uid="name"/>
+                <span hid="name"></span>
             </div>
         </div>
 
@@ -188,11 +196,11 @@
 
     <form class="form-horizontal form-striped" id="distributionForm" style="margin-top: 20px;" >
 
-        <input type="text" uid="employeeId" class="hidden"/>
+        <input type="text" uid="employeeId" style="display: none"/>
         <div class="control-group">
             <label class="control-label">选择小组</label>
             <div class="controls">
-                <select id="groupId"></select>
+                <select uid="groupId"></select>
             </div>
         </div>
 

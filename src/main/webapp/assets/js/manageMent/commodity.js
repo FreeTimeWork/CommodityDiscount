@@ -98,7 +98,8 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     "render": function (data,type,rowObject,meta) {
                         var html = '';
                         html += '<sapn>' + data + '</sapn>' + '<span style="color: red;">'+ rowObject.ratio +'</span><br>'
-                        html += "<a href=\'' + id + '\'>查看计划链接</a><br>"
+
+                        html += '<a href=\'' + rowObject.planUrl + '\'>' + '查看计划链接' + '</a><br>'
                         html += '<span>'+ rowObject.activityName +'</span>'
                         return html
                     }

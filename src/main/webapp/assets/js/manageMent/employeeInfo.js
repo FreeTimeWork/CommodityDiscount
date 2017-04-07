@@ -9,6 +9,26 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         })
     })
 
+    $.ajax({
+        type: 'get',
+        async: false,
+        url: '/resource/data',
+        success: function (data) {
+            activitieOptions = data.activities
+            hireTypeOptions = data.hireTypes
+            productStatuOptions = data.productStatus
+            productTypeOptions = data.productTypes
+            storeTypeOptions = data.storeTypes
+            employeeStatuOptions = data.employeeStatus
+            groupOptions = data.groups
+            positionOptions = data.positions
+            employeeOptions = data.employees
+        },
+        error: function () {
+            alert('请求失败')
+        }
+    })
+
     var genderOptions = [{label: '男',value: 'M'},{label: '女',value: 'F'}]
     var CurrentPage = (function (_super) {
         cKit.__extends(CurrentPage, _super);
@@ -43,10 +63,10 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         var businessPerson = rowObject.businessPerson;
                         var html = ''
                         if(businessPerson){
-                            html += '<a onclick="currentPage().onGroupClick(\'' + employeeId + '\',\'' + positionId + '\')">分组</a>'
+                            html += '<a style="margin-right: 10px;" onclick="currentPage().onGroupClick(\'' + employeeId + '\',\'' + positionId + '\')">分组</a>'
                         }
-                        html += '<a onclick="currentPage().onUpgradeClick(\'' + employeeId + '\',\'' + positionId + '\',\'' + groupId + '\')">升级</a>'
-                        html += '<a onclick="currentPage().onQuitClick(\'' + employeeId + '\',\'' + positionId + '\',\'' + true + '\')">离职</a>'
+                        html += '<a style="margin-right: 10px;" onclick="currentPage().onUpgradeClick(\'' + employeeId + '\',\'' + positionId + '\',\'' + groupId + '\')">升级</a>'
+                        html += '<a style="margin-right: 10px;" onclick="currentPage().onQuitClick(\'' + employeeId + '\',\'' + true + '\')">离职</a>'
                         return html;
                     }
                 }],
@@ -56,7 +76,6 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         postData: thiz.searchParams,
                         root: "employees",
                         actionCallback: function (result) {
-
                         }
                     })
                 }
@@ -81,11 +100,11 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 },{
                     uid : 'gronpId',
                     type : uiKit.Controller.SELECT,
-                    options: []
+                    options: groupOptions
                 },{
                     uid : 'positionId',
                     type : uiKit.Controller.SELECT,
-                    options: []
+                    options: positionOptions
                 }]),
                 reset: false
             });
@@ -147,12 +166,12 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 },{
                     uid: 'groupId',
                     type: uiKit.Controller.SELECT,
-                    options: [],
+                    options: groupOptions,
                     validators: [uiKit.Validator.NONEMPTY]
                 },{
                     uid: 'positionId',
                     type: uiKit.Controller.SELECT,
-                    options: [],
+                    options: positionOptions,
                     validators: [uiKit.Validator.NONEMPTY]
                 }])
             });
@@ -176,21 +195,6 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             thiz = this;
             this.onRefresh = config.onRefresh;
             this.initAddGroupForm();
-            $.ajax({
-                type: 'get',
-                async: false,
-                url: '/resource/data',
-                success: function (data) {
-                    thiz.activities = data.activities
-                    thiz.hireTypes = data.hireTypes
-                    thiz.productStatus = data.productStatus
-                    thiz.productTypes = data.productTypes
-                    thiz.storeTypes = data.storeTypes
-                    thiz.employeeStatus = data.employeeStatus
-                    thiz.groups = data.groups
-                    thiz.positions = data.positions
-                }
-            })
         }
 
         AddGroupDialog.prototype.initAddGroupForm = function () {
@@ -212,7 +216,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
 
                     return true;
                 },
-                fields: uiKit.FormUtils.generateFields('addDialog', [{
+                fields: uiKit.FormUtils.generateFields('addGroupDialog', [{
                     uid: 'name',
                     type: uiKit.Controller.EDIT,
                     validators: [uiKit.Validator.NONEMPTY]
@@ -224,20 +228,20 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         return AddGroupDialog;
     })(uiKit.Dialog);
 
+
     var DistributionDialog = (function (_super) {
-        cKit.__extends(distributionDialog, _super);
+        cKit.__extends(DistributionDialog, _super);
 
         var thiz;
 
-        function distributionDialog(id, config) {
+        function DistributionDialog(id, config) {
             _super.call(this, id, config);
 
             thiz = this;
             this.onRefresh = config.onRefresh;
             this.initDistributionForm();
         }
-
-        distributionDialog.prototype.initDistributionForm = function () {
+        DistributionDialog.prototype.initDistributionForm = function () {
 
             this.distributionForm = new uiKit.FormController({
                 id: 'distributionForm',
@@ -251,20 +255,20 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     var errorHandler = function(self, result) {
                         alert('请求失败');
                     };
-                    var action = new netKit.SimplePostAction(this,request, url,successHandler, errorHandler);
+                    var action = new netKit.SimplePostAction(this,url,request ,successHandler, errorHandler);
                     action.submit();
                     return false;
                 },
                 fields: uiKit.FormUtils.generateFields('distributionDialog', [{
-                    uid: 'name',
+                    uid: 'groupId',
                     type: uiKit.Controller.SELECT,
-                    options: thiz.groups,
+                    options: groupOptions,
                     validators: [uiKit.Validator.NONEMPTY]
                 }])
             });
         };
 
-        distributionDialog.prototype.update = function (model) {
+        DistributionDialog.prototype.update = function (model) {
             this.distributionForm.update(model)
         }
 
@@ -279,7 +283,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             if (!currentPage.distributionDialog) {
                 currentPage.distributionDialog = new DistributionDialog('distributionDialog', {});
             }
-            currentPage.distributionDialog.distributionForm({
+            currentPage.distributionDialog.distributionForm.update({
                 employeeId: employeeId
             })
 
@@ -300,13 +304,13 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 var errorHandler = function(self, result) {
                     alert('请求失败');
                 };
-                var action = new netKit.SimplePostAction(this,request, url,successHandler, errorHandler);
+                var action = new netKit.SimplePostAction(this, url, request,successHandler, errorHandler);
                 action.submit();
             };
             var errorHandler = function(self, result) {
                 alert('请求失败');
             };
-            var action = new netKit.SimpleGetAction(this,request, url,successHandler, errorHandler);
+            var action = new netKit.SimpleGetAction(this, url,successHandler, errorHandler);
             action.submit();
         },
         onQuitClick: function (employeeId,dismission) {
@@ -321,7 +325,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             var errorHandler = function(self, result) {
                 alert('请求失败');
             };
-            var action = new netKit.SimplePostAction(this,request, url,successHandler, errorHandler);
+            var action = new netKit.SimplePostAction(this,url , request,successHandler, errorHandler);
             action.submit();
         },
         onAddClick: function () {

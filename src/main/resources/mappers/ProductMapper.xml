@@ -46,7 +46,7 @@
         <result property="description" column="product_description"/>
         <result property="chargePrice" column="product_charge_price"/>
         <result property="createTime" column="product_create_time"/>
-        <result property="updateTime" column="product_update_time"/>
+        <result property="updateStatusTime" column="product_update_status_time"/>
         <result property="ratio" column="product_ratio"/>
         <result property="planUrl" column="product_plan_url"/>
         <result property="hireType" column="product_hire_type_id" javaType="HireType" typeHandler="EnumIdTypeHandler"/>
@@ -136,7 +136,7 @@
         p.description AS product_description,
         p.charge_price AS product_charge_price,
         p.create_time AS product_create_time,
-        p.update_time AS product_update_time,
+        p.update_status_time AS product_update_status_time,
         p.ratio AS product_ratio,
         p.plan_url AS product_plan_url,
         p.hire_type_id AS product_hire_type_id,
@@ -450,8 +450,8 @@
             <if test="couponReceiveNumber != null">
                 coupon_receive_number = #{couponReceiveNumber, javaType=int, jdbcType=INTEGER},
             </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime, javaType=date, jdbcType=TIMESTAMP},
+            <if test="updateStatusTime != null">
+                update_status_time = #{updateStatusTime, javaType=date, jdbcType=TIMESTAMP},
             </if>
             <if test="status != null">
                 status_id = #{status.id, javaType=int, jdbcType=INTEGER},
@@ -493,7 +493,7 @@
             description,
             charge_price,
             create_time,
-            update_time,
+            update_status_time,
             ratio,
             plan_url,
             hire_type_id,
@@ -525,7 +525,7 @@
             #{description, javaType=string, jdbcType=CHAR},
             #{chargePrice, javaType=bigdecimal, jdbcType=DECIMAL},
             #{createTime, javaType=date, jdbcType=TIMESTAMP},
-            #{updateTime, javaType=date, jdbcType=TIMESTAMP},
+            #{updateStatusTime, javaType=date, jdbcType=TIMESTAMP},
             #{ratio, javaType=bigdecimal, jdbcType=DECIMAL},
             #{planUrl, javaType=string, jdbcType=CHAR},
             #{hireType.id, javaType=int, jdbcType=INTEGER},

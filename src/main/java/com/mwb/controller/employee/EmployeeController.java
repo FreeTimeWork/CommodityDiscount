@@ -4,13 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.mwb.controller.api.ServiceResponse;
-import com.mwb.controller.employee.api.CreateEmployeeRequest;
-import com.mwb.controller.employee.api.CreateGroupRequest;
-import com.mwb.controller.employee.api.GroupVO;
-import com.mwb.controller.employee.api.ModifyEmployeeRequest;
-import com.mwb.controller.employee.api.SearchEmployeeRequest;
-import com.mwb.controller.employee.api.SearchEmployeeResponse;
-import com.mwb.controller.employee.api.SearchGroupResponse;
+import com.mwb.controller.employee.api.*;
+import com.mwb.controller.util.ApplicationContextUtils;
 import com.mwb.dao.filter.EmployeeFilter;
 import com.mwb.dao.filter.SearchResult;
 import com.mwb.dao.model.comm.Log;
@@ -40,6 +35,17 @@ public class EmployeeController {
 
     @Autowired
     private IEmployeeService employeeService;
+
+    @ResponseBody
+    @RequestMapping(value = "/currentEmployee")
+    public ServiceResponse getCurrentEmployee(){
+        Employee employee = (Employee)ApplicationContextUtils.getSession().getAttribute("employee");
+        CurrentEmployeeResponse response = new CurrentEmployeeResponse();
+        if (employee != null){
+            response.setEmployee(EmployeeVO.toVO(employee));
+        }
+        return response;
+    }
 
     @ResponseBody
     @RequestMapping(value = "/create")

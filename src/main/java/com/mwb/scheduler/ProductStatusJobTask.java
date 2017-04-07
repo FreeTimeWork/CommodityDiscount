@@ -31,13 +31,11 @@ public class ProductStatusJobTask {
         List<Product> endProducts = productService.getProductByStatus(null, ProductStatus.END);
         if (CollectionUtils.isNotEmpty(endProducts)) {
             for (Product product : endProducts) {
-                if (product.getCouponEndTime().after(now)) {
+                int hour = DateTimeUtility.minuteBetween(product.getUpdateStatusTime(), now) / 60;
+                if (hour > 24) {
                     productService.modifyProductStatus(product.getId(), ProductStatus.PAY_WAIT);
 
-                    Finance finance = financeService.getFinanceByEmployeeId(product.getEmployee().getId());
-                    finance.setEndNumber(finance.getEndNumber() - 1);
-                    finance.setPayWaitNumber(finance.getPayWaitNumber() + 1);
-                    financeService.modifyFinance(finance);
+                    financeService.modifyFinance(product.getEmployee().getId(), ProductStatus.END, ProductStatus.PAY_WAIT);
                 }
             }
         }
@@ -46,13 +44,12 @@ public class ProductStatusJobTask {
         List<Product> endApproachProducts = productService.getProductByStatus(null, ProductStatus.END_APPROACH);
         if (CollectionUtils.isNotEmpty(endApproachProducts)) {
             for (Product product : endApproachProducts) {
-                if (product.getCouponEndTime().after(now)) {
+                Date tomorrow = DateTimeUtility.addDays(DateTimeUtility.getMinTimeOfDay(product.getCouponEndTime()), 1);
+
+                if (now.after(tomorrow)){
                     productService.modifyProductStatus(product.getId(), ProductStatus.END);
 
-                    Finance finance = financeService.getFinanceByEmployeeId(product.getEmployee().getId());
-                    finance.setEndApproachNumber(finance.getEndApproachNumber() - 1);
-                    finance.setEndNumber(finance.getEndNumber() + 1);
-                    financeService.modifyFinance(finance);
+                    financeService.modifyFinance(product.getEmployee().getId(), ProductStatus.END_APPROACH, ProductStatus.END);
                 }
             }
         }
@@ -61,30 +58,29 @@ public class ProductStatusJobTask {
         List<Product> promoteProducts = productService.getProductByStatus(null, ProductStatus.PROMOTE);
         if (CollectionUtils.isNotEmpty(promoteProducts)) {
             for (Product product : promoteProducts) {
-                Date endApproachTime = DateTimeUtility.addDays(product.getCouponEndTime(), -1);
-                if (endApproachTime.after(now)) {
+                int hour = DateTimeUtility.minuteBetween(now, product.getUpdateStatusTime()) / 60;
+
+                if (hour <= 24 && hour > 0) {
                     productService.modifyProductStatus(product.getId(), ProductStatus.END_APPROACH);
 
-                    Finance finance = financeService.getFinanceByEmployeeId(product.getEmployee().getId());
-                    finance.setPromoteNumber(finance.getPromoteNumber() - 1);
-                    finance.setEndApproachNumber(finance.getEndApproachNumber() + 1);
-                    financeService.modifyFinance(finance);
+                    financeService.modifyFinance(product.getEmployee().getId(), ProductStatus.PROMOTE, ProductStatus.END_APPROACH);
                 }
             }
         }
-//        //结束 -- 》代付款
-//        List<Product> endProducts = productService.getProductByStatus(null, ProductStatus.END);
-//        if (CollectionUtils.isNotEmpty(endProducts)) {
-//            for (Product product : endProducts) {
-//                if (product.getCouponEndTime().after(now)) {
-//                    productService.modifyProductStatus(product.getId(), ProductStatus.PAY_WAIT);
-//
-//                    Finance finance = financeService.getFinanceByEmployeeId(product.getEmployee().getId());
-//                    finance.setEndNumber(finance.getEndNumber() - 1);
-//                    finance.setPayWaitNumber(finance.getPayWaitNumber() + 1);
-//                    financeService.modifyFinance(finance);
-//                }
-//            }
-//        }
+
+        //// TODO: 2017/4/6
+        //复审--》推广
+        List<Product> twoAuditProducts = productService.getProductByStatus(null, ProductStatus.TWO_AUDIT);
+        if (CollectionUtils.isNotEmpty(twoAuditProducts)) {
+            for (Product product : twoAuditProducts) {
+                int hour = DateTimeUtility.minuteBetween(product.getUpdateStatusTime(), now) / 60;
+
+                if (hour >= 24) {
+                    productService.modifyProductStatus(product.getId(), ProductStatus.PROMOTE);
+
+                    financeService.modifyFinance(product.getEmployee().getId(), ProductStatus.TWO_AUDIT, ProductStatus.PROMOTE);
+                }
+            }
+        }
     }
 }
