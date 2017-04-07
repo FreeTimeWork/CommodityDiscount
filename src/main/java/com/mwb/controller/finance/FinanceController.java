@@ -75,7 +75,7 @@ public class FinanceController {
         searchFinanceResponse.setPagingResult(result.getPagingResult());
 
         //生成excel
-        if (!request.isExcel()) {
+        if (request.isExcel()) {
 
             HttpServletRequest httpRequest = ApplicationContextUtils.getRequest();
             FileInputStream in = null;
@@ -89,7 +89,7 @@ public class FinanceController {
             finance = finance.replace(File.separator, "/");
 
             File flooder = new File(financeExcelFlooderPath);
-            if (flooder.exists()) {
+            if (!flooder.exists()) {
                 flooder.mkdirs();
             }
 
