@@ -12,10 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class BpmMapperTest extends AbstractPersistenceTest {
 
-    @Autowired
+//    @Autowired
     private BpmMapper mapper;
 
-    @Test
+//    @Test
     public void test1() {
         Task task = new Task();
 //        task.setEmployeeId(1);

@@ -1,60 +1,41 @@
 package com.mwb.controller.product;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
 import com.mwb.controller.finance.api.ProductVoucherVO;
 import com.mwb.controller.finance.api.SearchFinanceVoucherRequest;
 import com.mwb.controller.finance.api.SearchFinanceVoucherResponse;
-import com.mwb.controller.product.api.BaseApproveRequest;
-import com.mwb.controller.product.api.CreateProductRequest;
-import com.mwb.controller.product.api.CreateProductVoucherRequest;
-import com.mwb.controller.product.api.GrabRequest;
-import com.mwb.controller.product.api.ProductDetailsResponse;
-import com.mwb.controller.product.api.ProductVO;
-import com.mwb.controller.product.api.SearchProductRequest;
-import com.mwb.controller.product.api.SearchProductResponse;
+import com.mwb.controller.product.api.*;
 import com.mwb.controller.util.ApplicationContextUtils;
 import com.mwb.dao.filter.ProductFilter;
 import com.mwb.dao.filter.SearchResult;
-import com.mwb.dao.model.bpm.Task;
-import com.mwb.dao.model.bpm.Variable;
 import com.mwb.dao.model.comm.Bool;
 import com.mwb.dao.model.comm.Log;
 import com.mwb.dao.model.comm.PagingData;
 import com.mwb.dao.model.employee.Employee;
-import com.mwb.dao.model.product.Activity;
-import com.mwb.dao.model.product.HireType;
-import com.mwb.dao.model.product.Product;
-import com.mwb.dao.model.product.ProductPicture;
-import com.mwb.dao.model.product.ProductStatus;
-import com.mwb.dao.model.product.ProductType;
-import com.mwb.dao.model.product.Store;
-import com.mwb.dao.model.product.StoreType;
+import com.mwb.dao.model.product.*;
 import com.mwb.dao.model.product.voucher.ProductVoucher;
 import com.mwb.dao.model.product.voucher.VoucherPicture;
 import com.mwb.service.ParserService;
-import com.mwb.service.bpm.api.IBpmService;
 import com.mwb.service.dataoke.api.IDaoLaoKeService;
-import com.mwb.service.finance.api.IFinanceService;
 import com.mwb.service.product.api.IProductService;
 import com.mwb.util.DateTimeUtility;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by MengWeiBo on 2017-04-01
@@ -94,9 +75,6 @@ public class ProductController {
     @RequestMapping(value = "/detail")
     public ServiceResponse getProductDetail(Integer id) {
         Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
-        if (employee == null) {
-            return new ProductDetailsResponse();
-        }
 
         Product product = productService.getProductById(id);
         ProductDetailsResponse response = ProductDetailsResponse.toResponse(product);
@@ -116,9 +94,6 @@ public class ProductController {
         SearchProductResponse response = new SearchProductResponse();
 
         Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
-        if (employee == null) {
-            return response;
-        }
 
         ProductFilter filter = new ProductFilter();
 
@@ -132,7 +107,7 @@ public class ProductController {
         filter.setBeginFromTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getBeginFromTime()));
         filter.setBeginToTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getBeginToTime()));
         filter.setEndFromTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getEndFromTime()));
-        filter.setEndToTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getEndFromTime()));
+        filter.setEndToTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getEndToTime()));
         filter.setReceiveMinNumber(request.getUseMinNumber());
         filter.setReceiveMaxNumber(request.getUseMaxNumber());
         filter.setSurplusMinNumber(request.getSurplusMinNumber());
@@ -156,9 +131,6 @@ public class ProductController {
     @RequestMapping(value = "/create")
     public ServiceResponse create(@RequestBody CreateProductRequest request) throws ParseException {
         Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
-        if (employee == null) {
-            return new ServiceResponse();
-        }
 
         Product product = new Product();
 
@@ -226,11 +198,6 @@ public class ProductController {
             @RequestParam("files") MultipartFile[] files,
             CreateProductVoucherRequest request) {
 
-        Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
-        if (employee == null) {
-            return new ServiceResponse();
-        }
-
         Product product = productService.getProductById(request.getId());
 
         ProductVoucher voucher = new ProductVoucher();
@@ -251,7 +218,7 @@ public class ProductController {
             for (int i = 0; i < files.length; i++) {
                 try {
                     MultipartFile file = files[i];
-                    if (file.isEmpty()){
+                    if (file.isEmpty()) {
                         continue;
                     }
                     String filePath = realPath + file.getOriginalFilename();
@@ -340,9 +307,6 @@ public class ProductController {
     @RequestMapping(value = "/approve/claim")
     public ServiceResponse claimHandler(@RequestBody BaseApproveRequest request) {
         Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
-        if (employee == null) {
-            return new ServiceResponse();
-        }
 
         Product product = productService.getProductById(request.getProductId());
         if (product == null) {
@@ -364,9 +328,7 @@ public class ProductController {
     @RequestMapping(value = "/approve/check", produces = ContentType.APPLICATION_JSON_UTF8)
     public ServiceResponse checkHandler(@RequestBody BaseApproveRequest request) {
         Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
-        if (employee == null) {
-            return new ServiceResponse();
-        }
+
         Product product = productService.getProductById(request.getProductId());
 
         ProductStatus status = ProductStatus.fromId(request.getProductStatusId());

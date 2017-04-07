@@ -15,10 +15,10 @@ public class EmployeeVO {
     private String genderName;
     private String mobile;
     private String groupName;
-    private String groupId;
+    private Integer groupId;
     private Boolean businessPerson;
     private String positionName;
-    private String positionId;
+    private Integer positionId;
     private List<PermissionVO> permissions;
 
     public static EmployeeVO toVO(Employee employee) {
@@ -26,13 +26,13 @@ public class EmployeeVO {
         vo.setId(employee.getId());
         vo.setMobile(employee.getMobile());
         vo.setFullName(employee.getFullName());
-        vo.setGenderName(employee.getGender().name());
+        vo.setGenderName(employee.getGender().getDescription());
         if (employee.getGroup() != null){
             vo.setGroupName(employee.getGroup().getName());
-            vo.setGroupId(employee.getGroup().getId()+"");
+            vo.setGroupId(employee.getGroup().getId());
         }
         vo.setPositionName(employee.getPosition().getName());
-        vo.setPositionId(employee.getPosition().getId()+"");
+        vo.setPositionId(employee.getPosition().getId());
         vo.setBusinessPerson(employee.getPosition().getId().equals(2));
 
         if (CollectionUtils.isNotEmpty(employee.getPosition().getPermissions())) {
@@ -50,19 +50,19 @@ public class EmployeeVO {
         this.permissions = permissions;
     }
 
-    public String getGroupId() {
+    public Integer getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(String groupId) {
+    public void setGroupId(Integer groupId) {
         this.groupId = groupId;
     }
 
-    public String getPositionId() {
+    public Integer getPositionId() {
         return positionId;
     }
 
-    public void setPositionId(String positionId) {
+    public void setPositionId(Integer positionId) {
         this.positionId = positionId;
     }
 
