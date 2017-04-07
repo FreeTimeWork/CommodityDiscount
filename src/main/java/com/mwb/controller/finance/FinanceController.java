@@ -49,7 +49,7 @@ public class FinanceController {
 
     @ResponseBody
     @RequestMapping(value = "/search")
-    public ServiceResponse search(SearchFinanceRequest request) throws IOException {
+    public ServiceResponse search(SearchFinanceRequest request,HttpServletResponse httpResponse) throws IOException {
         SearchFinanceResponse searchFinanceResponse = new SearchFinanceResponse();
         Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
         if (employee == null) {
@@ -75,9 +75,8 @@ public class FinanceController {
         searchFinanceResponse.setPagingResult(result.getPagingResult());
 
         //生成excel
-        if (request.isExcel()) {
+        if (!request.isExcel()) {
 
-            HttpServletResponse httpResponse = ApplicationContextUtils.getResponse();
             HttpServletRequest httpRequest = ApplicationContextUtils.getRequest();
             FileInputStream in = null;
             OutputStream out = null;
@@ -86,11 +85,11 @@ public class FinanceController {
             String zipFlooderPath = "/tmp/finance/";
             financeExcelFlooderPath = financeExcelFlooderPath.replace(File.separator, "/");
             zipFlooderPath = zipFlooderPath.replace(File.separator, "/");
-            String finance = "/tmp/finance/";
+            String finance = "/tmp/";
             finance = finance.replace(File.separator, "/");
 
             File flooder = new File(financeExcelFlooderPath);
-            if (!flooder.exists()) {
+            if (flooder.exists()) {
                 flooder.mkdirs();
             }
 
@@ -105,7 +104,7 @@ public class FinanceController {
                 workbook = new HSSFWorkbook();
                 //create excel
                 FinanceExcelUtils.createFinanceExcel(workbook, vos);
-                excelFile = new File(financeExcelFlooderPath + DateTimeUtility.formatYYYYMMDDHHMM(new Date())+ "_财务报表.xls");
+                excelFile = new File(financeExcelFlooderPath +"财务报表.xls");
                 outStream = new FileOutputStream(excelFile);
                 workbook.write(outStream);
                 outStream.flush();
