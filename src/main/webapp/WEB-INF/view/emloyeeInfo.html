@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>员工信息</title>
     <link rel="stylesheet" href="../../assets/lib/bootstrap/css/bootstrap-2.3.0.min.css"/>
+    <link rel="stylesheet" href="../../assets/lib/bootstrap/datetimepicker/css/datetimepicker.css"/>
     <link rel="stylesheet" href="../../assets/lib/bootstrap/modal/css/bootstrap-modal.css"/>
     <link rel="stylesheet" href="../../assets/them/DT_bootstrap.css"/>
     <link rel="stylesheet" href="../../assets/lib/jquery/datatable/css/select.dataTables.min.css"/>
@@ -17,18 +18,12 @@
 <div class="cont">
     <div class="top clearfix">
         <div class="top_left">
-            <a href="#" class="go_index"><img src="../../assets/img/logo_02.png" class="a_1" alt=""/></a>
-            <img src="../../assets/img/pic-1_05.png" alt="" class="a_2"/><span class="top_text">商品管理</span>
-            <span class="top_num">27852</span><span class="line">|</span>
-            <img src="../../assets/img/pic-2_07.png" alt="" class="a_2"/><span class="top_text">报表统计</span><span class="line"
-                                                                                                                 style="padding-left:10px;">|</span>
 
         </div>
         <div class="top_right">
-            <a href="#">清除缓存</a>
-            <a href="#">灵感大王</a>
-            <a href="#">个人设置</a>
-            <a href="#">退出</a>
+            <a href="#"><span id="userName"></span></a>
+            <a href="/frontend/modify.html" class="modifyPassword">修改密码</a>
+            <a href="/logout">退出</a>
         </div>
 
     </div>
@@ -41,8 +36,8 @@
                     <a href="#" class="floor"><img src="../../assets/img/pic-1_05.png" alt=""/><span>商品管理</span> <span
                             class="jia add"></span></a>
                     <ul>
-                        <li><a href=commodity.html" target="_blank">商品列表</a></li>
-                        <li><a href="detail.html" target="_blank">添加员工</a></li>
+                        <li><a href="/frontend/commodity.html" target="_blank">商品列表</a></li>
+                        <li><a href="/frontend/detail.html" target="_blank">添加新商品</a></li>
 
                     </ul>
 
@@ -52,17 +47,17 @@
                     <a href="#" class="floor"><img src="../../assets/img/pic-3_13.png" alt=""/><span>报表统计</span> <span
                             class="jia add"></span></a>
                     <ul>
-                        <li><a href="finance.html" target="_blank">财务管理</a></li>
-                        <li><a href="report.html" target="_blank">商品报表</a></li>
+                        <li><a href="/frontend/finance.html" target="_blank">财务管理</a></li>
+                        <li><a href="/frontend/report.html" target="_blank">商品报表</a></li>
                     </ul>
                 </li>
 
                 <li class="fa_li">
-                    <a href="#" class="floor"><img src="img/pic-3_13.png" alt=""/><span>员工管理</span> <span
+                    <a href="#" class="floor"><img src="../../assets/img/pic-3_13.png" alt=""/><span>员工管理</span> <span
                             class="jia add"></span></a>
                     <ul>
                         <li><a href="/frontend/employeeInfo.html" target="_blank">员工信息</a></li>
-                        <li><a href="/frontendjurisdiction.html" target="_blank">权限管理</a></li>
+                        <li><a href="/frontend/report.html" target="_blank">权限管理</a></li>
                     </ul>
                 </li>
 

@@ -283,25 +283,7 @@
             <artifactId>ant</artifactId>
             <version>${org.apache.ant.version}</version>
         </dependency>
-
     </dependencies>
-
-
-    <!--<build>-->
-        <!--<finalName>CommodityDiscount</finalName>-->
-
-        <!--<resources>-->
-            <!--<resource>-->
-                <!--<directory>src/main/java</directory>-->
-                <!--<includes>-->
-                    <!--<include>**/*.properties</include>-->
-                    <!--<include>**/*.xml</include>-->
-                <!--</includes>-->
-                <!--<filtering>false</filtering>-->
-            <!--</resource>-->
-        <!--</resources>-->
-    <!--</build>-->
-
 
     <build>
         <plugins>
@@ -324,7 +306,6 @@
                     <encoding>${resource.encoding}</encoding>
                 </configuration>
             </plugin>
-
         </plugins>
 
     </build>

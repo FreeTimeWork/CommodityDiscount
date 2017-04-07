@@ -29,7 +29,29 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         error: function () {
             alert('请求失败')
         }
-    })
+    });
+    $.ajax({
+        type: 'get',
+        async: false,
+        url: '/employee/currentEmployee',
+        success: function (data) {
+            if (data.employee != null && data.employee.fullName != null) {
+                $("#userName").text(data.employee.fullName);
+                return;
+            }
+        }
+    });
+    $.ajax({
+        type: 'get',
+        async: false,
+        url: '/employee/currentEmployee',
+        success: function (data) {
+            if (data.employee != null && data.employee.fullName != null) {
+                $("#userName").text(data.employee.fullName);
+                return;
+            }
+        }
+    });
     var CurrentPage = (function (_super) {
         cKit.__extends(CurrentPage, _super);
 

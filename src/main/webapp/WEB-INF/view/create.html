@@ -84,29 +84,30 @@
                         <form id="detailForm" class="form-horizontal">
                             <div class="control-group" gid="activityId">
                                 <label class="control-label">活动类型</label>
-                                <label uid="activityName"></label>
+                              <span class="controls radioControls" style="margin-left: 10px;">
+                                  <label class="radio inline"><input uid="activityId" type="radio"/></label>
+                              </span>
                             </div>
                             <div class="control-group" gid="activityTime">
-                                <label class="control-label helpinline"> 提交时间</label>
+                                <label class="control-label helpinline"> 提交时间：</label>
                                 <span class="date">
-                                    <label uid="activityTime"></label>
+                                    <input uid="activityTime" size="16" type="text" value="" readonly class="form_datetime">
                                 </span>
                             </div>
                             <div class="control-group" gid="url">
-                                <label class="control-label">产品链接</label>
-                                <label uid="url"></label>
+                                <label class="control-label">产品链接</label><textarea style="width300px;heightauto;"
+                                                                                   uid="url"></textarea>
                             </div>
                             <div class="control-group" gid="couponUrl">
-                                <label class="control-label">优惠券链接</label>
-                                <label uid="couponUrl"></label>
+                                <label class="control-label">优惠券链接</label><textarea style="width300px;heightauto;"
+                                                                                    uid="couponUrl"></textarea>
+                            </div>
+                            <input style="margin: 0 0 20px 160px" type="button" uid="grapInfo" value="抓取产品信息"/>
+                            <div class="control-group" gid="productId">
+                                <label class="control-label">商品ID</label><input type="text" uid="productId"/>
                             </div>
                             <div class="control-group" gid="productId">
-                                <label class="control-label">商品ID</label>
-                                <label uid="productId"></label>
-                            </div>
-                            <div class="control-group" gid="productId">
-                                <label class="control-label">店铺类型</label>
-                                <label uid="storeTypeName"></label>
+                                <label class="control-label">店铺类型</label><label uid="storeTypeName"></label>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">店铺确认</label>描述相符<span
@@ -149,53 +150,53 @@
                                 <label class="control-label">图片尺寸</label><label uid="pictureSize"></label>
                             </div>
                             <div class="control-group" gid="productId">
-                                <label class="control-label">补充主图</label>
-                                <label class="control-label" uid="supplementPictureUrl"></label>
+                                <label class="control-label" uid="supplementPictureUrl">补充主图</label><textarea></textarea>
                             </div>
-                            <div class="control-group" gid="category">
+                            <div class="control-group" gid="productTypeId">
                                 <label class="control-label">商品分类</label>
-                                <label uid="productTypeName"></label>
+                                <select uid="productTypeId"></select>
                             </div>
                             <div class="control-group" gid="name">
-                                <label class="control-label">商品名称</label>
-                                <label uid="name"></label>
+                                <label class="control-label">商品名称</label><textarea uid="name"></textarea><span>10-20字，简单概括</span>
                             </div>
                             <div class="control-group" gid="sales">
                                 <label class="control-label">30天内销量</label><label uid="sales"></label>
                             </div>
                             <div class="control-group" gid="immediately">
                                 <label class="control-label">是否拍立减</label>
-                                <label uid="immediately"></label>
+                              <span class="controls radioControls" style="margin-left: 10px;">
+                                  <label class="radio inline"><input uid="immediately" type="radio"/></label>
+                              </span>
+                                【默认为否】
                             </div>
                             <div class="control-group" gid="">
                                 <label class="control-label">优惠券数量</label><label uid="couponUseNumber"></label>
                             </div>
                             <div class="control-group" gid="couponBeginTime">
-                                <label class="control-label">优惠券有效期</label>
-                                <label style="display: inline-block" uid="couponBeginTime"></label> <label style="display: inline-block" uid="couponEndTime"></label>
+                                <label class="control-label">优惠券有效期</label><input type="text"
+                                                                                  uid="couponBeginTime"/>~<input
+                                    type="text" uid="couponEndTime"/>
                             </div>
                             <div class="control-group" gid="">
                                 <label class="control-label">券后价格</label><label uid="discountPrice"></label>
                             </div>
                             <div class="control-group" gid="">
-                                <label class="control-label">佣金比例</label>
-                                <label uid="ratio"></label>
+                                <label class="control-label">佣金比例</label><input type="text" uid="ratio"/>【鹊桥佣金需填写真实比例】
                             </div>
                             <div class="control-group" gid="hireTypeId">
                                 <label class="control-label">佣金类型</label>
-                                <label id="hireTypeId"></label>
+                              <span class="controls radioControls" style="margin-left: 10px;">
+                                  <label class="radio inline"><input uid="hireTypeId" type="radio"/></label>
+                              </span>
                             </div>
                             <div class="control-group" gid="planUrl">
-                                <label class="control-label">计划链接</label>
-                                <label uid="planUrl"></label>
+                                <label class="control-label">计划链接</label><textarea uid="planUrl"></textarea>
                             </div>
                             <div class="control-group" gid="supplementPictureUrl">
-                                <label class="control-label">卖家填写</label>
-                                <label uid="supplementPictureUrl"></label>
+                                <label class="control-label">卖家填写</label><textarea uid="supplementPictureUrl"></textarea><span>20-100个字,精简文案，突出产品亮点。需求痛点，注意不要用空格</span>
                             </div>
                             <div class="control-group" gid="description">
-                                <label class="control-label">备注信息</label>
-                                <label uid="description"></label>
+                                <label class="control-label">备注信息</label><textarea uid="description"></textarea>
                             </div>
                             <div class="control-group" gid="">
                                 <label class="control-label">商家QQ</label><label style="display: inline-block" uid="qq"></label><span
@@ -205,6 +206,8 @@
                                 <label class="control-label">收费单价</label><label style="display: inline-block" uid="chargePrice"></label><span
                                     style="margin-left: 10px;color: red">*</span>
                             </div>
+                            <p class="last"><input type="submit" value="确定" class="sure"/><input type="reset" value="重置"
+                                                                                                 class="reset"/></p>
                         </form>
                         <div class="look">
                             <p>备注 </p>
@@ -256,7 +259,7 @@
 
 <script src="../../assets/lib/require/require.js"></script>
 <script src="../../assets/js/dependances.js"></script>
-<script src="../../assets/js/manageMent/detail.js"></script>
+<script src="../../assets/js/manageMent/create.js"></script>
 
 <script>
 

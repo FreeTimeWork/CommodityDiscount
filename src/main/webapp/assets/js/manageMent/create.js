@@ -106,23 +106,85 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 id: 'detailForm',
                 model: model || {},
                 submit: function(data) {
-
+                    var url ='/product/create';
+                    var request = {};
+                    request.activityId = data.activityId;
+                    request.productId = data.productId;
+                    request.name = data.name;
+                    request.pictureUrl = data.pictureUrl;
+                    request.reservePrice = data.reservePrice;
+                    request.sales = data.sales;
+                    request.url = data.url;
+                    request.activityTime = data.activityTime;
+                    request.productTypeId = data.productTypeId;
+                    request.immediately = data.immediately;
+                    request.discountPrice = data.discountPrice;
+                    request.couponAmount = data.couponAmount;
+                    request.couponUrl = data.couponUrl;
+                    request.couponBeginTime = data.couponBeginTime;
+                    request.couponEndTime = data.couponEndTime;
+                    request.couponUseNumber = data.couponUseNumber;
+                    request.couponSurplusNumber = data.couponSurplusNumber;
+                    request.condition = data.condition;
+                    request.features = data.features;
+                    request.description = data.description;
+                    request.chargePrice = data.chargePrice;
+                    request.createTime = data.createTime;
+                    request.ratio = data.ratio;
+                    request.planUrl = data.planUrl;
+                    request.hireTypeId = data.hireTypeId;
+                    request.storeDescriptionScore = data.storeDescriptionScore;
+                    request.serviceScore = data.serviceScore;
+                    request.speedScore = data.speedScore;
+                    request.storeTypeId = data.storeTypeId;
+                    request.pictures = data.pictures;
+                    var successHandler = function(self, result) {
+                        alert('成功')
+                    };
+                    var errorHandler = function(self, result) {
+                        alert('请求失败');
+                    };
+                    var action = new netKit.SimplePostAction(this, url, request,successHandler, errorHandler);
+                    action.submit();
                 },
                 fields: uiKit.FormUtils.generateFields('detailForm', [{
-                    uid : 'activityName',
-                    type : uiKit.Controller.LABEL,
+                    uid : 'activityId',
+                    type : uiKit.Controller.RADIO_GROUP,
+                    options : activeOption,
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'activityTime',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.EDIT,
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'url',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.EDIT,
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'couponUrl',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.EDIT,
+                    validators : [uiKit.Validator.NONEMPTY]
+                },{
+                    uid: 'grapInfo',
+                    type: uiKit.Controller.BUTTON,
+                    click: function () {
+                        var couponUrl = this.getContainerForm().viewModel.couponUrl();
+                        var productUrl = this.getContainerForm().viewModel.url();
+                        var url ="/product/grab?couponUrl="+couponUrl+"&productUrl="+productUrl;
+                        var successHandler = function(self, result) {
+                            thiz.detailForm.getViewModel().couponUrl(result.couponUrl)
+                            thiz.detailForm.getViewModel().url(result.url)
+                        };
+                        var errorHandler = function(self, result) {
+                            alert('请求参数错误');
+                        };
+                        var action = new netKit.SimpleGetAction(this, url,successHandler, errorHandler);
+                        action.submit();
+                    }
                 },{
                     uid : 'productId',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.EDIT,
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'storeDiscriptionScore',
                     type : uiKit.Controller.LABEL
@@ -220,14 +282,14 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     uid : 'pictureSize',
                     type : uiKit.Controller.LABEL
                 },{
-                    uid: 'supplementPictureUrl',
-                    type: uiKit.Controller.LABEL
-                },{
-                    uid : 'productTypeName',
-                    type : uiKit.Controller.LABEL
+                    uid : 'productTypeId',
+                    type : uiKit.Controller.SELECT,
+                    options: productTypeOptions,
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'name',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.EDIT,
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'reservePrice',
                     type : uiKit.Controller.LABEL
@@ -236,31 +298,41 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     type : uiKit.Controller.LABEL
                 },{
                     uid : 'immediately',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.RADIO_GROUP,
+                    options : [{label: '是',value: true},{label: '否',value:false}],
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'couponBeginTime',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.DATE_PICKER,
+                    node : 'couponBeginTime'
                 },{
                     uid : 'couponEndTime',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.DATE_PICKER,
+                    node : 'couponEndTime'
                 },{
                     uid : 'disCountPrice',
                     type : uiKit.Controller.LABEL
                 },{
                     uid : 'ratio',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.EDIT,
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'hireTypeId',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.RADIO_GROUP,
+                    options: hireTypeOptions,
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'planUrl',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.TEXT_AREA,
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'supplementPictureUrl',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.TEXT_AREA,
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'description',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.TEXT_AREA,
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'qq',
                     type : uiKit.Controller.LABEL

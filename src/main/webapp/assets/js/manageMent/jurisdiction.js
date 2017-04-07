@@ -7,7 +7,18 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             $(this).parent().find(".jia").toggleClass("sub");
             $(this).parent().find("ul").toggle().parent().siblings("li").find("ul").hide()
         })
-    })
+    });
+    $.ajax({
+        type: 'get',
+        async: false,
+        url: '/employee/currentEmployee',
+        success: function (data) {
+            if (data.employee != null && data.employee.fullName != null) {
+                $("#userName").text(data.employee.fullName);
+                return;
+            }
+        }
+    });
     $.ajax({
         type: 'get',
         async: false,

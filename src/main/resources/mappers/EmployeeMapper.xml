@@ -79,8 +79,8 @@
     <insert id="insertGroup" parameterType="Group" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_group (
         name,
-        employeeId,
-        employeeName
+        employee_id,
+        employee_name
         ) VALUE (
         #{name,javaType=string, jdbcType=CHAR},
         #{employeeId, javaType=int, jdbcType=INTEGER},
@@ -100,6 +100,15 @@
         FROM t_group g
         <where>
             g.id = #{id, javaType=int, jdbcType=INTEGER}
+        </where>
+    </select>
+
+    <select id="selectGroupByName" resultMap="groupResult" parameterType="map">
+        SELECT
+        <include refid="groupColumns"/>
+        FROM t_group g
+        <where>
+            g.name = #{name,javaType=string, jdbcType=CHAR}
         </where>
     </select>
 

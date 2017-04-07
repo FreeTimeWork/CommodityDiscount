@@ -37,7 +37,7 @@ public class FrontendController {
         return "detail";
     }
 
-    @RequestMapping("/emloyeeInfo.html")
+    @RequestMapping("/employeeInfo.html")
     public String emloyeeInfo() {
 
         return "emloyeeInfo";
@@ -46,6 +46,16 @@ public class FrontendController {
     public String finance() {
 
         return "finance";
+    }
+    @RequestMapping("/create.html")
+    public String create() {
+
+        return "create";
+    }
+
+    @RequestMapping("/modify.html")
+    public String modify() {
+        return "modify";
     }
 
     @RequestMapping("/zhou-1.html")

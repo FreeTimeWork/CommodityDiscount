@@ -18,11 +18,6 @@ public class EmployeeService implements IEmployeeService {
     @Autowired
     private EmployeeMapper employeeMapper;
 
-
-    public Employee getEmployeeById(){
-        return  employeeMapper.selectEmployeeById(1);
-    }
-
     @Override
     public void createEmployee(Employee employee) {
         employeeMapper.insertEmployee(employee);
@@ -71,6 +66,10 @@ public class EmployeeService implements IEmployeeService {
     @Override
     public Group getGroupById(Integer id) {
         return employeeMapper.selectGroupById(id);
+    }
+
+    public Group getGroupByName(String name){
+        return  employeeMapper.selectGroupByName(name);
     }
 
     @Override

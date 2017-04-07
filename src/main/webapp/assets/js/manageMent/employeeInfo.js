@@ -7,8 +7,18 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             $(this).parent().find(".jia").toggleClass("sub");
             $(this).parent().find("ul").toggle().parent().siblings("li").find("ul").hide()
         })
-    })
-
+    });
+    $.ajax({
+        type: 'get',
+        async: false,
+        url: '/employee/currentEmployee',
+        success: function (data) {
+            if (data.employee != null && data.employee.fullName != null) {
+                $("#userName").text(data.employee.fullName);
+                return;
+            }
+        }
+    });
     $.ajax({
         type: 'get',
         async: false,
@@ -64,8 +74,8 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         var html = ''
                         if(businessPerson){
                             html += '<a style="margin-right: 10px;" onclick="currentPage().onGroupClick(\'' + employeeId + '\',\'' + positionId + '\')">分组</a>'
+                            html += '<a style="margin-right: 10px;" onclick="currentPage().onUpgradeClick(\'' + employeeId + '\',\'' + positionId + '\',\'' + groupId + '\')">升级</a>'
                         }
-                        html += '<a style="margin-right: 10px;" onclick="currentPage().onUpgradeClick(\'' + employeeId + '\',\'' + positionId + '\',\'' + groupId + '\')">升级</a>'
                         html += '<a style="margin-right: 10px;" onclick="currentPage().onQuitClick(\'' + employeeId + '\',\'' + true + '\')">离职</a>'
                         return html;
                     }

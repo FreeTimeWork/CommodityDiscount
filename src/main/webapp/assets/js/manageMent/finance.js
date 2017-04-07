@@ -28,8 +28,18 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit'], function ($,
                 format: "yyyy-mm-dd hh:ii"
             });
         })
-    })
-
+    });
+    $.ajax({
+        type: 'get',
+        async: false,
+        url: '/employee/currentEmployee',
+        success: function (data) {
+            if (data.employee != null && data.employee.fullName != null) {
+                $("#userName").text(data.employee.fullName);
+                return;
+            }
+        }
+    });
     $.ajax({
         type: 'get',
         async: false,
@@ -61,6 +71,19 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit'], function ($,
             thiz = this;
             this.searchParams = {};
             this.initSearchForm();
+            $('#export').click(function () {
+                $.ajax({
+                    type: 'post',
+                    data: {excel: true},
+                    url: '/finance',
+                    success: function () {
+                        alert('成功')
+                    },
+                    error: function () {
+                        alert('失败')
+                    }
+                })
+            })
         }
 
         CurrentPage.prototype.initPageGrid = function () {

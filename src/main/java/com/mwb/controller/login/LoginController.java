@@ -42,11 +42,10 @@ public class LoginController {
         return response;
     }
 
-    @ResponseBody
     @RequestMapping(value = "/logout")
-    public ServiceResponse logout() {
+    public String logout() {
         ApplicationContextUtils.getSession().removeAttribute("employee");
-        return new ServiceResponse();
+        return "login";
     }
 
 }

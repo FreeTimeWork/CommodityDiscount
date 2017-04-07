@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public enum Gender {
 
-    M("M", "Male"), F("F", "Female");
+    M("M", "男"), F("F", "女");
 
     private static final Map<String, Gender> code2Gender;
 
