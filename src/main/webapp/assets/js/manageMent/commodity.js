@@ -86,17 +86,14 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     selector: 'td:first-child'
                 },
                 "columns": [{
-                    "data": null,
-                    "width": "4%",
-                    "className": 'select-checkbox',
-                    "orderable": false,
-                    "render": function() {
-                        return "";
-                    }
+                    "data": "id"
                 }, {
                     "data": "createTime"
                 }, {
-                    "data": "pictureUrl"
+                    "data": "pictureUrl",
+                    "render": function (cellValue) {
+                        return '<img src=\'' + cellValue + '\'/>'
+                    }
                 }, {
                     "data": "chargePrice"
                 }, {

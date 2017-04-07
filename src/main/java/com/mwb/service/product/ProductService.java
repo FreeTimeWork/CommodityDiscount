@@ -47,6 +47,9 @@ public class ProductService implements IProductService {
     public Product getProductById(Integer id) {
         Product product = productMapper.selectProductById(id);
 
+        if (product != null) {
+            product.setPictures(productMapper.selectProductPictureByProductId(product.getId()));
+        }
         if (product != null && product.getVoucher() != null) {
             List<VoucherPicture> pictures = productMapper.selectVoucherPictureByVoucherId(product.getVoucher().getId());
             product.getVoucher().setPictures(pictures);

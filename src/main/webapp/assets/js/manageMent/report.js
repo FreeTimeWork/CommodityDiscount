@@ -1,4 +1,5 @@
 require.config(I360R.REQUIRE_CONFIG)
+
 require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSelect'], function ($,_,uiKit,netKit,cKit,dataTableSelect) {
     $(function () {
         $(".fa_li>a").click(function () {
@@ -7,9 +8,40 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             $(this).parent().find(".jia").toggleClass("sub");
             $(this).parent().find("ul").toggle().parent().siblings("li").find("ul").hide()
         })
-  })
-
-
+        $(".form_datetime").datetimepicker({
+            format: "yyyy-mm-dd hh:ii"
+        });
+    });
+    $.ajax({
+        type: 'get',
+        async: false,
+        url: '/employee/currentEmployee',
+        success: function (data) {
+            if (data.employee != null && data.employee.fullName != null) {
+                $("#userName").text(data.employee.fullName);
+                return;
+            }
+        }
+    });
+    $.ajax({
+        type: 'get',
+        async: false,
+        url: '/resource/data',
+        success: function (data) {
+            activitieOptions = data.activities
+            hireTypeOptions = data.hireTypes
+            productStatuOptions = data.productStatus
+            productTypeOptions = data.productTypes
+            storeTypeOptions = data.storeTypes
+            employeeStatuOptions = data.employeeStatus
+            groupOptions = data.groups
+            positionOptions = data.positions
+            employeeOptions = data.employees
+        },
+        error: function () {
+            alert('请求失败')
+        }
+    })
     var CurrentPage = (function (_super) {
         cKit.__extends(CurrentPage, _super);
 
@@ -20,21 +52,6 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             thiz = this;
             this.searchParams = {};
             this.initSearchForm();
-            $.ajax({
-                type: 'get',
-                async: false,
-                url: '/resource/data',
-                success: function (data) {
-                    thiz.activities = data.activities
-                    thiz.hireTypes = data.hireTypes
-                    thiz.productStatus = data.productStatus
-                    thiz.productTypes = data.productTypes
-                    thiz.storeTypes = data.storeTypes
-                    thiz.employeeStatus = data.employeeStatus
-                    thiz.groups = data.groups
-                    thiz.positions = data.positions
-                }
-            })
         }
 
         CurrentPage.prototype.initPageGrid = function () {
@@ -59,13 +76,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     selector: 'td:first-child'
                 },
                 "columns": [{
-                    "data": null,
-                    "width": "4%",
-                    "className": 'select-checkbox',
-                    "orderable": false,
-                    "render": function() {
-                        return "";
-                    }
+                        "data": "id"
                 }, {
                     "data": "employeeName"
                 }, {
@@ -76,14 +87,16 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         return '<span style="color: blue;">' + data + '</sapn><br>' + '<span style="color: red;">' + rowObject.couponEndTime + '</sapn>'
                     }
                 }, {
-                    "data": "picturnUrl",
+                    "data": "pictureUrl",
                     "render": function (data) {
-                        return '<img src=\'' + data + '\'>'
+                        return '<img src=\'' + data + '\'/>'
                     }
+                }, {
+                    "data": "name"
                 }, {
                     "data": "discountPrice"
                 }, {
-                    "data": "chargePrice",
+                    "data": "chargePrice"
                 }, {
                     "data": "ratio"
                 }, {
@@ -95,13 +108,16 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 },{
                     "data": "payAmount"
                 },{
-                    "data": "useRatio"
+                    "data": "useRatio",
+                    "render": function (cellValue) {
+                        return cellValue + '%'
+                    }
                 }],
                 ajax: function (data,callBack,setting) {
                     netKit.TableAction(data,callBack,setting,{
-                        url: '/product/voncher/search',
+                        url: '/product/voucher/search',
                         postData: thiz.searchParams,
-                        root: "vonchers",
+                        root: "vouchers",
                         actionCallback: function (result) {
 
                         }
@@ -125,58 +141,54 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 fields: uiKit.FormUtils.generateFields('searchForm', [{
                     uid : 'name',
                     type : uiKit.Controller.SELECT,
-                    options: thiz.productTypes
+                    options: activitieOptions
                 },{
-                    uid : 'gronpId',
+                    uid : 'groupId',
                     type : uiKit.Controller.SELECT,
-                    options: thiz.groups
+                    options: groupOptions
                 },{
                     uid : 'employeeId',
                     type : uiKit.Controller.SELECT,
-                    options: []
+                    options: employeeOptions
                 },{
                     uid : 'statusId',
                     type : uiKit.Controller.SELECT,
-                    options: thiz.employeeStatus
+                    options: employeeStatuOptions
                 },{
                     uid : 'orderAsc',
                     type : uiKit.Controller.SELECT,
-                    options: []
+                    options: [{label: '排序',value: null},{label: '正序',value: true},{label: '倒序',value: false}]
                 },{
                     uid : 'typeId',
                     type : uiKit.Controller.SELECT,
-                    options: []
+                    options: employeeStatuOptions
                 },{
                     uid : 'productName',
                     type : uiKit.Controller.EDIT
                 },{
                     uid : 'createBeginTime',
-                    type : uiKit.Controller.DATE_PICKER,
+                    type : uiKit.Controller.EDIT,
                     node : 'createBeginTime'
                 },{
                     uid : 'createEndTime',
-                    type : uiKit.Controller.DATE_PICKER,
+                    type : uiKit.Controller.EDIT,
                     node : 'createEndTime'
                 },{
                     uid : 'beginFromTime',
-                    type : uiKit.Controller.DATE_PICKER,
+                    type : uiKit.Controller.EDIT,
                     node : 'beginFromTime'
                 },{
                     uid : 'beginToTime',
-                    type : uiKit.Controller.DATE_PICKER,
+                    type : uiKit.Controller.EDIT,
                     node : 'beginToTime'
                 },{
                     uid : 'endFromTime',
-                    type : uiKit.Controller.DATE_PICKER,
+                    type : uiKit.Controller.EDIT,
                     node : 'endFromTime'
                 },{
                     uid : 'endToTime',
-                    type : uiKit.Controller.DATE_PICKER,
+                    type : uiKit.Controller.EDIT,
                     node : 'endToTime'
-                },{
-                    uid : 'beginDate',
-                    type : uiKit.Controller.DATE_PICKER,
-                    node : 'beginDate'
                 }]),
                 reset: false
             });
@@ -187,8 +199,8 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
     var pageController = new uiKit.PageController({
 
 
-        onDeailClick: function (id ) {
-           window.open('/zhou_1(3)%20(1)/view/zhou-2.html?id=') + id;
+        onDetailClick: function (id ) {
+            window.open('/frontend/detail.html?id='+ id);
         }
 
     });
@@ -196,6 +208,4 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
     $(document).ready(function() {
         currentPage = new CurrentPage();
     });
-
-
-})
+});

@@ -265,13 +265,11 @@
             <include refid="productColumns"/>,
             <include refid="employeeColumns"/>,
             <include refid="storeColumns"/>,
-            <include refid="voucherColumns"/>,
-            <include refid="productPictureColumns"/>
+            <include refid="voucherColumns"/>
         FROM
             t_product p
         INNER JOIN t_employee ae ON ae.id = p.employee_id
         INNER JOIN t_store s ON s.id = p.store_id
-        LEFT JOIN t_product_picture pp ON pp.product_id = p.id
         LEFT JOIN t_product_voucher v ON v.product_id = p.id
         <where>
             p.id = #{id, javaType=int, jdbcType=INTEGER}
@@ -284,13 +282,11 @@
             <include refid="productColumns"/>,
             <include refid="employeeColumns"/>,
             <include refid="storeColumns"/>,
-            <include refid="voucherColumns"/>,
-            <include refid="productPictureColumns"/>
+            <include refid="voucherColumns"/>
         FROM
             t_product p
         INNER JOIN t_employee ae ON ae.id = p.employee_id
         INNER JOIN t_store s ON s.id = p.store_id
-        LEFT JOIN t_product_picture pp ON pp.product_id = p.id
         LEFT JOIN t_product_voucher v ON v.product_id = p.id
         <where>
             p.product_id = #{productId, javaType=string, jdbcType=CHAR}
@@ -303,13 +299,11 @@
             <include refid="productColumns"/>,
             <include refid="employeeColumns"/>,
             <include refid="storeColumns"/>,
-            <include refid="voucherColumns"/>,
-            <include refid="productPictureColumns"/>
+            <include refid="voucherColumns"/>
         FROM
             t_product p
         INNER JOIN t_employee ae ON ae.id = p.employee_id
         INNER JOIN t_store s ON s.id = p.store_id
-        LEFT JOIN t_product_picture pp ON pp.product_id = p.id
         LEFT JOIN t_product_voucher v ON v.product_id = p.id
         <where>
             <if test="employeeId != null" >
@@ -321,19 +315,27 @@
         </where>
     </select>
 
+    <select id="selectProductPictureByProductId"
+       resultMap="productPictureResult">
+        SELECT
+            <include refid="productPictureColumns"/>
+        FROM
+            t_product_picture pp
+        WHERE
+            pp.product_id = #{productId, javaType=int, jdbcType=INTEGER}
+    </select>
+
     <select id="selectProductByFilter"
        resultMap="productResult">
         SELECT
             <include refid="productColumns"/>,
             <include refid="employeeColumns"/>,
             <include refid="storeColumns"/>,
-            <include refid="voucherColumns"/>,
-            <include refid="productPictureColumns"/>
+            <include refid="voucherColumns"/>
         FROM
             t_product p
             INNER JOIN t_employee ae ON ae.id = p.employee_id
             INNER JOIN t_store s ON s.id = p.store_id
-            LEFT JOIN t_product_picture pp ON pp.product_id = p.id
             LEFT JOIN t_product_voucher v ON v.product_id = p.id
         <where>
             <include refid="productFilter"/>

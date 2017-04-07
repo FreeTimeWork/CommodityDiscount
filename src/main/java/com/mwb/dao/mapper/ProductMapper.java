@@ -24,6 +24,8 @@ public interface ProductMapper {
 
     public List<Product> selectProductByProductId(@Param("productId") String productId);
 
+    public List<ProductPicture> selectProductPictureByProductId(@Param("productId") Integer productId);
+
     public List<Product> selectProductByStatus(
             @Param("employeeId") Integer employeeId, @Param("status") ProductStatus status);
 
