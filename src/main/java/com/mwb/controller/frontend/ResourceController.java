@@ -57,7 +57,7 @@ public class ResourceController {
 
 
         List<ResourceVO> productTypes = new ArrayList<>();
-        productTypes.add(new ResourceVO("选择分类", null));
+        productTypes.add(new ResourceVO("选择商品分类", null));
         for (ProductType productType : ProductType.values()) {
             ResourceVO vo = new ResourceVO(productType.getDescription(), productType.getId());
             productTypes.add(vo);

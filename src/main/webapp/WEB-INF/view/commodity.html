@@ -67,7 +67,7 @@
         </div>
         <div class="bottom_right">
             <div class="bottom_right_son dis">
-                <p class="bottom_add">添加新商品</p>
+                <a href="create.html"><p class="bottom_add">添加新商品</p></a>
 
                 <p class="bottom_right_tit">管理中心-商品列表</p>
                 <ul class="pay_list clearfix">
@@ -79,6 +79,8 @@
                 <form id="searchForm">
                     <select uid="name" class="input-medium">
                     </select>
+                    <select uid="typeId" class="input-medium">
+                    </select>
                     <select uid="groupId" class="input-medium">
                     </select>
                     <select  uid="employeeId" class="input-medium">
@@ -86,21 +88,7 @@
                     <select uid="statusId" class="input-medium">
                     </select>
                     <select uid="orderAsc" class="input-medium">
-
                     </select>
-                    <select uid="typeId" class="input-medium">
-                    </select>
-                    <br/>
-                        <span class="">
-                            <label class="control-label inline">支付宝流水号：</label>
-                            <input type="text"uid="zhifubao" class="input-medium"/>
-                        </span>
-                        <span class="">
-                            <label class="control-label helpinline">商品编号：</label> <input type="text" uid="productNamw" class="input-medium"/>
-                        </span>
-                        <span class="">
-                           <label class="control-label helpinline">商品ID：</label><input type="text" uid="productId" class="input-medium">
-                        </span>
                     <br/>
                         <span class="">
                             <label class="control-label helpinline"> 提交时间：</label>
@@ -123,7 +111,6 @@
                             <input uid="beginToTime" size="16" type="text" value="" readonly class="form_datetime">
                         </span>
                         </span>
-                    <br/>
                     <span class="">
                             <label class="control-label helpinline"> 优惠券结束时间：</label>
                         <span class="date">
@@ -137,6 +124,11 @@
                     <label class="control-label helpinline"> 优惠券领取：</label><input type="text" uid="useMinNumber" class="input-medium"/>~<input type="text" uid="useMaxNumber" class="input-medium"/>
                     <br/>
                     <label class="control-label helpinline"> 优惠券剩余：</label><input type="text" uid="surplusMinNumber" class="input-medium">~<input type="text" uid="surplusMaxNumber" class="input-medium"/>
+                    <span class="">
+                            <label class="control-label helpinline">商品编号：</label> <input type="text" uid="productNamw" class="input-medium"/>
+                        </span>
+                        <span class="">
+                           <label class="control-label helpinline">商品ID：</label><input type="text" uid="productId" class="input-medium"></span>
                     <input type="submit" class="btn btn-primary red" value="搜索" />
                     </p>
 
