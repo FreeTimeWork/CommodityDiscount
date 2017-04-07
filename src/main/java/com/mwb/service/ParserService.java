@@ -117,7 +117,11 @@ public class ParserService {
         }
 
         try {
-            Parser parser = Parser.createParser(getContent(urlStr), "UTF-8");
+            String html = getContent(urlStr);
+            if (StringUtils.isBlank(html)) {
+                return;
+            }
+            Parser parser = Parser.createParser(html, "UTF-8");
             TagNameFilter filter = new TagNameFilter("dd");
 
             NodeList nodes = parser.extractAllNodesThatMatch(filter);
@@ -154,8 +158,11 @@ public class ParserService {
             store = new Store();
             product.setStore(store);
         }
-
-        Parser parser = Parser.createParser(getContent(urlStr), "UTF-8");
+        String html = getContent(urlStr);
+        if (StringUtils.isBlank(html)) {
+            return;
+        }
+        Parser parser = Parser.createParser(html, "UTF-8");
 
         TagNameFilter filter = new TagNameFilter("span");
         NodeList nodes = null;
@@ -191,8 +198,11 @@ public class ParserService {
                 pictures = new ArrayList<>();
                 product.setPictures(pictures);
             }
-
-            Parser parser = Parser.createParser(getContent(urlStr), "UTF-8");
+            String html = getContent(urlStr);
+            if (StringUtils.isBlank(html)) {
+                return;
+            }
+            Parser parser = Parser.createParser(html, "UTF-8");
 
             TagNameFilter filter = new TagNameFilter("ul");
             NodeList nodes = parser.extractAllNodesThatMatch(filter);
@@ -235,8 +245,11 @@ public class ParserService {
                 pictures = new ArrayList<>();
                 product.setPictures(pictures);
             }
-
-            Parser parser = Parser.createParser(getContent(urlStr), "UTF-8");
+            String html = getContent(urlStr);
+            if (StringUtils.isBlank(html)) {
+                return;
+            }
+            Parser parser = Parser.createParser(html, "UTF-8");
 
             TagNameFilter filter = new TagNameFilter("div");
             NodeList nodes = parser.extractAllNodesThatMatch(filter);
