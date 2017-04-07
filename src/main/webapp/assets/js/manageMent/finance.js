@@ -61,6 +61,19 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit'], function ($,
             thiz = this;
             this.searchParams = {};
             this.initSearchForm();
+            $('#export').click(function () {
+                $.ajax({
+                    type: 'post',
+                    data: {excel: true},
+                    url: '/finance',
+                    success: function () {
+                        alert('成功')
+                    },
+                    error: function () {
+                        alert('失败')
+                    }
+                })
+            })
         }
 
         CurrentPage.prototype.initPageGrid = function () {

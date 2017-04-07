@@ -66,16 +66,20 @@
         </div>
         <div class="bottom_right">
             <div class="bottom_right_son dis">
-                <p class="bottom_right_tit">人员管理-权限管理</p>
+                <p class="bottom_right_tit">修改密码</p>
 
-                <form id="modifyForm">
+                <form id="changePasswordForm">
                     <div class="control-group" style="width: 300px;margin: 0 auto">
-                        <label class="control-label" style="display: inline-block">权限管理</label>
-                        <select uid="positionId"></select>
+                        <label class="control-label" style="display: inline-block">旧密码</label>
+                        <input type="password" uid="oldPassword">
                     </div>
-                    <div style="border-bottom: 3px solid black; margin-top: 30px;"></div>
-                    <div id="id" style="margin-top: 50px;">
-
+                    <div class="control-group" style="width: 300px;margin: 0 auto">
+                        <label class="control-label" style="display: inline-block">新密码</label>
+                        <input type="password" uid="newPassword">
+                    </div>
+                    <div class="control-group" style="width: 300px;margin: 0 auto">
+                        <label class="control-label" style="display: inline-block">重复新密码</label>
+                        <input type="password" uid="confirmNewPassword">
                     </div>
                     <button style="margin: 0 auto   " type="submit" class="btn btn-primary btn-large blue">提交</button>
                 </form>
@@ -85,6 +89,6 @@
 </div>
 <script src="/assets/lib/require/require.js"></script>
 <script src="/assets/js/dependances.js"></script>
-<script src="/assets/js/manageMent/jurisdiction.js"></script>
+<script src="/assets/js/manageMent/modify.js"></script>
 </body>
 </html>

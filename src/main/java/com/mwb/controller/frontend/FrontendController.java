@@ -47,6 +47,16 @@ public class FrontendController {
 
         return "finance";
     }
+    @RequestMapping("/create.html")
+    public String create() {
+
+        return "create";
+    }
+
+    @RequestMapping("/modify.html")
+    public String modify() {
+        return "modify";
+    }
 
     @RequestMapping("/zhou-1.html")
     public String zhou() {
