@@ -12,6 +12,11 @@
     <link rel="stylesheet" href="../../assets/them/style-responsive.css"/>
     <link rel="stylesheet" href="../../assets/css/base.css"/>
     <link rel="stylesheet" href="../../assets/css/baobiao.css"/>
+    <style>
+        .control-label{
+            margin-right:4em;
+        }
+    </style>
 </head>
 <body>
 <div class="cont">
@@ -57,6 +62,14 @@
                         <li><a href="report.html" target="_blank">商品报表</a></li>
                     </ul>
                 </li>
+                <li class="fa_li">
+                    <a href="#" class="floor"><img src="img/pic-3_13.png" alt=""/><span>员工管理</span> <span
+                            class="jia add"></span></a>
+                    <ul>
+                        <li><a href="/frontend/employeeInfo.html" target="_blank">员工信息</a></li>
+                        <li><a href="/frontendjurisdiction.html" target="_blank">权限管理</a></li>
+                    </ul>
+                </li>
 
             </ul>
         </div>
@@ -88,7 +101,7 @@
                             </div>
                             <div class="control-group" gid="url">
                                 <label class="control-label">产品链接</label><textarea style="width300px;heightauto;"
-                                                                                   uid="url">wwwwwwww</textarea>
+                                                                                   uid="url"></textarea>
                             </div>
                             <div class="control-group" gid="couponUrl">
                                 <label class="control-label">优惠券链接</label><textarea style="width300px;heightauto;"
@@ -142,7 +155,7 @@
                                 <label class="control-label">图片尺寸</label><label uid="pictureSize"></label>
                             </div>
                             <div class="control-group" gid="productId">
-                                <label class="control-label">补充主图</label><textarea>eeeeeeeee</textarea>
+                                <label class="control-label">补充主图</label><textarea></textarea>
                             </div>
                             <div class="control-group" gid="category">
                                 <label class="control-label">商品分类</label>
@@ -185,18 +198,18 @@
                                 <label class="control-label">计划链接</label><textarea uid="planUrl"></textarea>
                             </div>
                             <div class="control-group" gid="supplementPictureUrl">
-                                <label class="control-label">卖家填写</label><textarea uid="supplementPictureUrl">dddddddddddddddd</textarea><span>20-100个字,精简文案，突出产品亮点。需求痛点，注意不要用空格</span>
+                                <label class="control-label">卖家填写</label><textarea uid="supplementPictureUrl"></textarea><span>20-100个字,精简文案，突出产品亮点。需求痛点，注意不要用空格</span>
                             </div>
                             <div class="control-group" gid="description">
                                 <label class="control-label">备注信息</label><textarea uid="description"></textarea>
                             </div>
                             <div class="control-group" gid="">
-                                <label class="control-label">商家QQ</label><label uid="qq"></label><span
-                                    class="red">*</span>
+                                <label class="control-label">商家QQ</label><label style="display: inline-block" uid="qq"></label><span
+                                    style="margin-left: 10px;color: red">*</span>
                             </div>
                             <div class="control-group" gid="">
-                                <label class="control-label">收费单价</label><label uid="chargePrice"></label><span
-                                    class="red">*</span>
+                                <label class="control-label">收费单价</label><label style="display: inline-block" uid="chargePrice"></label><span
+                                    style="margin-left: 10px;color: red">*</span>
                             </div>
                             <p class="last"><input type="submit" value="确定" class="sure"/><input type="reset" value="重置"
                                                                                                  class="reset"/></p>

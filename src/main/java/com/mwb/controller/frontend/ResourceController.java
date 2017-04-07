@@ -1,6 +1,5 @@
 package com.mwb.controller.frontend;
 
-import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
 import com.mwb.controller.frontend.api.DataResponse;
 import com.mwb.controller.frontend.api.ProductStatusResponse;
@@ -49,6 +48,14 @@ public class ResourceController {
     public DataResponse getData() {
         DataResponse response = new DataResponse();
 
+        Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
+        if (employee == null) {
+            return response;
+        }
+
+        Integer positionId = employee.getPosition().getId();
+
+
         List<ResourceVO> productTypes = new ArrayList<>();
         productTypes.add(new ResourceVO("选择分类", null));
         for (ProductType productType : ProductType.values()) {
@@ -87,6 +94,12 @@ public class ResourceController {
         List<Group> groups = employeeService.getAllGroup();
         if (CollectionUtils.isNotEmpty(groups)) {
             for (Group group : groups) {
+                if (positionId.equals(2) || positionId.equals(3)) {
+                    if (employee.getGroup() == null || !group.getId().equals(employee.getGroup().getId())) {
+                        continue;
+                    }
+                }
+
                 ResourceVO vo = new ResourceVO(group.getName(), group.getId());
                 groupVos.add(vo);
             }
@@ -103,8 +116,17 @@ public class ResourceController {
         employeeVos.add(new ResourceVO("选择业务员", null));
         List<Employee> employees = employeeService.getAllEmployee();
         if (CollectionUtils.isNotEmpty(employees)) {
-            for (Employee employee : employees) {
-                ResourceVO vo = new ResourceVO(employee.getFullName(), employee.getId());
+            for (Employee emp : employees) {
+                if (positionId.equals(2)) {
+                    if (!employee.getId().equals(emp.getId())) {
+                        continue;
+                    }
+                } else if (positionId.equals(3)) {
+                    if (emp.getGroup() == null || !emp.getGroup().getId().equals(employee.getGroup().getId())) {
+                        continue;
+                    }
+                }
+                ResourceVO vo = new ResourceVO(emp.getFullName(), emp.getId());
                 employeeVos.add(vo);
             }
         }
@@ -139,6 +161,7 @@ public class ResourceController {
             return vos;
         }
         ProductFilter filter = new ProductFilter();
+        filter.setPaged(false);
 
         SearchResult<Product> result = productService.searchProduct(filter, employee);
 
@@ -146,7 +169,7 @@ public class ResourceController {
     }
 
     private List<ResourceVO> getStatus(List<Product> products) {
-        int total = 0;
+        int total = products.size();
         List<ResourceVO> vos = new ArrayList<>();
         Map<ProductStatus, Integer> map = new HashMap<>();
 
@@ -158,7 +181,6 @@ public class ResourceController {
                 } else {
                     map.put(key, 1);
                 }
-                total += total + 1;
             }
         }
 
@@ -191,6 +213,8 @@ public class ResourceController {
                 map.get(ProductStatus.PAY_TRAILER) == null ? 0 : map.get(ProductStatus.PAY_TRAILER));
         ResourceVO payEnd = new ResourceVO(ProductStatus.PAY_END.getDescription(),
                 map.get(ProductStatus.PAY_END) == null ? 0 : map.get(ProductStatus.PAY_END));
+        ResourceVO settlement = new ResourceVO(ProductStatus.SETTLEMENT.getDescription(),
+                map.get(ProductStatus.SETTLEMENT) == null ? 0 : map.get(ProductStatus.SETTLEMENT));
 
         vos.add(auditWait);
         vos.add(auditRun);
@@ -204,6 +228,7 @@ public class ResourceController {
         vos.add(payRun);
         vos.add(payTrailer);
         vos.add(payEnd);
+        vos.add(settlement);
 
         return vos;
     }

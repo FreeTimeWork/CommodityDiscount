@@ -124,13 +124,13 @@ public class ProductDetailsResponse extends ServiceResponse {
                 }
             }
 
+            List<String> pictures = new ArrayList<>();
             if (CollectionUtils.isNotEmpty(product.getPictures())) {
-                List<String> pictures = new ArrayList<>();
                 for (ProductPicture picture : product.getPictures()) {
                     pictures.add(picture.getUrl());
                 }
-                response.setPictures(pictures);
             }
+            response.setPictures(pictures);
 
             response.setVoucher(ProductVoucherVO.toVO(product.getVoucher()));
         }

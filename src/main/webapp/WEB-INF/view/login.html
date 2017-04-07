@@ -3,9 +3,9 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>login</title>
-    <link rel="stylesheet" href="css/base.css"/>
+    <link rel="stylesheet" href="/assets/css/base.css"/>
 
-    <link rel="stylesheet" href="css/baobiao.css"/>
+    <link rel="stylesheet" href="/assets/css/baobiao.css"/>
 </head>
 <body>
 <div class="login_box">
@@ -13,16 +13,15 @@
         <div class="login_inn_ss">
             <p>账号登录</p>
 
-            <form action="">
+            <form id="form">
                 <div class="item">
-                    <i class="us"></i><input type="text" placeholder="手机号"/>
+                    <i class="us"></i><input class="telphone" name="mobile" type="text" placeholder="手机号"/><span class="mobile" style="display: none; color: red;margin-left: 10px;">这里不可以不填</span>
                 </div>
                 <div class="item">
-                    <i class="ps"></i><input type="password" placeholder="密码"/>
+                    <i class="ps"></i><input class="pword" name="password" type="password" placeholder="密码"/><span class="password" style="display: none; color: red;margin-left: 10px;">这里不可以不填</span>
                 </div>
 
                 <div class="remove clearfix">
-
                     <a href="#">清空</a> <input type="text" value="登录" id="login"/>
                 </div>
             </form>
@@ -55,15 +54,33 @@
 
 </div>
 
-<script src="js/jquery-1.11.1.min.js"></script>
+<script src="/assets/js/jquery-1.11.1.min.js"></script>
 
 <script>
-
-    $("#login").click(function(){
-        $(".bg_box").show()
-    })
-    $(".bg_close").click(function(){
-        $(".bg_box").hide()
+    $('#login').click(function () {
+        $.ajax({
+            type: 'post',
+            url: '/login',
+            data: $('#form').serialize(),
+            contentType: 'application/x-www-form-urlencoded',
+            beforeSend: function () {
+                if($('.telphone').val() == ''){
+                    $('.mobile').css('display','inline-block')
+                    return false
+                }else{
+                    $('.mobile').css('display','none')
+                }
+                if($('.pword').val() == ''){
+                    $('.password').css('display','inline-block')
+                    return false
+                }else{
+                    $('.password').css('display','none')
+                }
+            },
+            success: function () {
+                window.location.href = '/frontend/commodity.html'
+            }
+        })
     })
 </script>
 </body>

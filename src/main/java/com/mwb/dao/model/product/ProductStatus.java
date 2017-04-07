@@ -20,7 +20,8 @@ public enum ProductStatus implements IdInterface {
     PAY_WAIT(9, "PAY_WAIT", "代付款"),
     PAY_RUN(10, "PAY_RUN", "付款中"),
     PAY_TRAILER(11, "PAY_TRAILER", "拒绝付款"),
-    PAY_END(12, "PAY_END", "已付款");
+    PAY_END(12, "PAY_END", "已付款"),
+    SETTLEMENT(13, "SETTLEMENT", "已结算");
 
     private static final Map<String, ProductStatus> code2ProductStatus;
     private static final Map<Integer, ProductStatus> id2ProductStatus;
