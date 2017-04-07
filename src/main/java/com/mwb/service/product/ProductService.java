@@ -4,6 +4,8 @@ import com.mwb.controller.api.PagingResult;
 import com.mwb.dao.filter.ProductFilter;
 import com.mwb.dao.filter.SearchResult;
 import com.mwb.dao.mapper.ProductMapper;
+import com.mwb.dao.model.bpm.Task;
+import com.mwb.dao.model.bpm.Variable;
 import com.mwb.dao.model.employee.Employee;
 import com.mwb.dao.model.finance.Finance;
 import com.mwb.dao.model.product.Product;
@@ -12,11 +14,11 @@ import com.mwb.dao.model.product.ProductStatus;
 import com.mwb.dao.model.product.Store;
 import com.mwb.dao.model.product.voucher.ProductVoucher;
 import com.mwb.dao.model.product.voucher.VoucherPicture;
+import com.mwb.service.bpm.api.IBpmService;
 import com.mwb.service.finance.api.IFinanceService;
 import com.mwb.service.product.api.IProductService;
 import com.mwb.util.DateTimeUtility;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +39,9 @@ public class ProductService implements IProductService {
 
     @Autowired
     private IFinanceService financeService;
+
+    @Autowired
+    private IBpmService bpmService;
 
     @Override
     public Product getProductById(Integer id) {
@@ -73,6 +78,15 @@ public class ProductService implements IProductService {
 
             financeService.modifyFinance(finance);
         }
+
+        //存入流程变量
+        Task task = new Task();
+        Variable variable = new Variable("createdById", product.getEmployee().getId() + "");
+        List<Variable> variables = new ArrayList<>();
+        variables.add(variable);
+        task.setVariables(variables);
+        //创建流程
+        bpmService.createTask(task);
     }
 
     @Override
@@ -212,6 +226,11 @@ public class ProductService implements IProductService {
         financeService.modifyFinance(finance);
 
         modifyProductStatus(product.getId(), null, null, ProductStatus.PAY_RUN);
+
+        //修改流程审批人
+        Task task = product.getTask();
+        task.setEmployeeId(product.getEmployee().getId());
+        bpmService.modifyTask(task);
     }
 
     @Override
