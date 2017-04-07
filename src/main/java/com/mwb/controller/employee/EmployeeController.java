@@ -38,10 +38,10 @@ public class EmployeeController {
 
     @ResponseBody
     @RequestMapping(value = "/currentEmployee")
-    public ServiceResponse getCurrentEmployee(){
-        Employee employee = (Employee)ApplicationContextUtils.getSession().getAttribute("employee");
+    public ServiceResponse getCurrentEmployee() {
+        Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
         CurrentEmployeeResponse response = new CurrentEmployeeResponse();
-        if (employee != null){
+        if (employee != null) {
             response.setEmployee(EmployeeVO.toVO(employee));
         }
         return response;
@@ -51,12 +51,14 @@ public class EmployeeController {
     @RequestMapping(value = "/create")
     public ServiceResponse createEmployee(@RequestBody CreateEmployeeRequest request) {
 
+        //// TODO: 2017/4/7 校验手机号
         Employee employee = new Employee();
         employee.setFullName(request.getFullName());
         employee.setCreateTime(new Date());
         employee.setGender(Gender.fromCode(request.getGenderCode()));
         employee.setMobile(request.getMobile());
         employee.setPassword(MD5Tools.MD5(request.getPassword()));
+        employee.setGroup(new Group(request.getGroupId()));
         employee.setPosition(new Position(request.getPositionId()));
         employee.setStatus(EmployeeStatus.IN_POSITION);
 
@@ -76,18 +78,31 @@ public class EmployeeController {
         return false;
     }
 
-    //    修改密码，分组，升级，离职
+    @ResponseBody
+    @RequestMapping(value = "/modify/password")
+    public ServiceResponse modifyPassword(String password) {
+        Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
+
+        employee.setPassword(MD5Tools.MD5(password.trim()));
+
+        employeeService.modifyEmployee(employee);
+
+        return new ServiceResponse();
+    }
+
+    //分组，升级，离职
     @ResponseBody
     @RequestMapping(value = "/modify")
     public ServiceResponse modifyEmployee(@RequestBody ModifyEmployeeRequest request) {
 
         Employee employee = new Employee();
         employee.setId(request.getEmployeeId());
-        //密码加密
-        employee.setPassword(MD5Tools.MD5(request.getPassword()));
-        employee.setPosition(new Position(request.getPositionId()));
-        employee.setGroup(new Group(request.getGroupId()));
-        if (request.isDismission()){
+
+        if (request.getPositionId() != null) {
+            employee.setPosition(new Position(request.getPositionId()));
+        } else if (request.getGroupId() != null) {
+            employee.setGroup(new Group(request.getGroupId()));
+        } else if (request.isDismission()) {
             employee.setStatus(EmployeeStatus.OUT_OF_POSITION);
         }
 
@@ -117,16 +132,22 @@ public class EmployeeController {
     @ResponseBody
     @RequestMapping(value = "/group/create")
     public ServiceResponse createGroup(@RequestBody CreateGroupRequest request) {
+        ServiceResponse response = new ServiceResponse();
 
         if (StringUtils.isEmpty(request.getName())) {
-            return new ServiceResponse();
+            return response;
         }
 
-        Group group = new Group();
+        Group group = employeeService.getGroupByName(request.getName());
+        if (group != null) {
+            response.setMessage("小组名称已存在！");
+            return response;
+        }
+        group = new Group();
         group.setName(request.getName());
         employeeService.createGroup(group);
 
-        return new ServiceResponse();
+        return response;
     }
 
     @ResponseBody

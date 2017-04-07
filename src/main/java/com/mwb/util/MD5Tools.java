@@ -7,6 +7,9 @@ import java.security.MessageDigest;
  */
 public class MD5Tools {
 
+    public static void main(String[] args) {
+        System.out.println(MD5("1"));
+    }
     public final static String MD5(String pwd) {
         //用于加密的字符
         char md5String[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',

@@ -33,4 +33,6 @@ public interface EmployeeMapper {
 
     public Group selectGroupById(@Param("id") Integer id);
 
+    public Group selectGroupByName(@Param("name") String name);
+
 }

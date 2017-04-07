@@ -90,7 +90,7 @@ public class ResourceController {
             employeeStatus.add(vo);
         }
         List<ResourceVO> groupVos = new ArrayList<>();
-        groupVos.add(new ResourceVO("所有业务小组", null));
+        groupVos.add(new ResourceVO("选择业务小组", null));
         List<Group> groups = employeeService.getAllGroup();
         if (CollectionUtils.isNotEmpty(groups)) {
             for (Group group : groups) {

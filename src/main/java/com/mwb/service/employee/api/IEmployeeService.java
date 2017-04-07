@@ -23,6 +23,8 @@ public interface IEmployeeService {
 
 	public Group getGroupById(Integer id);
 
+	public Group getGroupByName(String name);
+
 	public List<Group> getAllGroup();
 
 

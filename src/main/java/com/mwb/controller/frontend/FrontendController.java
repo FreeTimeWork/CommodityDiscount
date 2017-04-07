@@ -37,7 +37,7 @@ public class FrontendController {
         return "detail";
     }
 
-    @RequestMapping("/emloyeeInfo.html")
+    @RequestMapping("/employeeInfo.html")
     public String emloyeeInfo() {
 
         return "emloyeeInfo";
