@@ -24,7 +24,7 @@ public class LoginController {
 
     @ResponseBody
     @RequestMapping(value = "/login")
-    public ServiceResponse login(@RequestBody LoginRequest request) {
+    public ServiceResponse login(LoginRequest request) {
         ServiceResponse response = new ServiceResponse();
         if (StringUtils.isNotEmpty(request.getMobile()) && StringUtils.isNotEmpty(request.getPassword())) {
 

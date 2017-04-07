@@ -71,12 +71,6 @@ public class ProductController {
     @Autowired
     private IProductService productService;
 
-    @Autowired
-    private IFinanceService financeService;
-
-    @Autowired
-    private IBpmService bpmService;
-
     @ResponseBody
     @RequestMapping(value = "/grab")
     public ServiceResponse grabProduct(@RequestBody GrabRequest request) {
@@ -222,21 +216,12 @@ public class ProductController {
 
         productService.createProduct(product);
 
-        //存入流程变量
-        Task task = new Task();
-        Variable variable = new Variable("createdById", employee.getId() + "");
-        List<Variable> variables = new ArrayList<>();
-        variables.add(variable);
-        task.setVariables(variables);
-        //创建流程
-        bpmService.createTask(task);
         return new ServiceResponse();
     }
 
     //提交结账
     @ResponseBody
     @RequestMapping(value = "/voucher/create")
-    @Transactional
     public ServiceResponse createProductVoucher(
             @RequestParam("files") MultipartFile[] files,
             CreateProductVoucherRequest request) {
@@ -266,6 +251,9 @@ public class ProductController {
             for (int i = 0; i < files.length; i++) {
                 try {
                     MultipartFile file = files[i];
+                    if (file.isEmpty()){
+                        continue;
+                    }
                     String filePath = realPath + file.getOriginalFilename();
 
                     VoucherPicture picture = new VoucherPicture();
@@ -284,10 +272,6 @@ public class ProductController {
 
         productService.createProductVoucher(voucher, product);
 
-        //修改流程审批人
-        Task task = product.getTask();
-        task.setEmployeeId(employee.getId());
-        bpmService.modifyTask(task);
         return new ServiceResponse();
 
     }
