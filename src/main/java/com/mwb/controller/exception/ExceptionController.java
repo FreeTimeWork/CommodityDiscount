@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
  * 异常控制
  * 跳转页面
  */
-@ControllerAdvice
+//@ControllerAdvice
 public class ExceptionController {
 	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ExceptionController.class);
 
