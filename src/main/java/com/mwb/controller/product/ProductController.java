@@ -73,15 +73,15 @@ public class ProductController {
 
     @ResponseBody
     @RequestMapping(value = "/grab")
-    public ServiceResponse grabProduct(@RequestBody GrabRequest request) {
+    public ServiceResponse grabProduct(String productUrl, String couponUrl) {
 
-        if (StringUtils.isBlank(request.getProductUrl()) || StringUtils.isBlank(request.getCouponUrl())) {
+        if (StringUtils.isBlank(productUrl) || StringUtils.isBlank(couponUrl)) {
             return new ServiceResponse();
         }
 
-        ParserService parserService = new ParserService(request.getProductUrl());
+        ParserService parserService = new ParserService(productUrl);
         Product product = parserService.grabProduct();
-        product.setCouponUrl(request.getCouponUrl());
+        product.setCouponUrl(couponUrl);
         daoLaoKeService.setDaTaoKeProduct(product);
 
         ProductDetailsResponse response = ProductDetailsResponse.toResponse(product);
@@ -246,7 +246,7 @@ public class ProductController {
 
         List<VoucherPicture> pictures = new ArrayList<>();
         if (files != null && files.length > 0) {
-            String realPath = ApplicationContextUtils.getSession().getServletContext().getRealPath("/") + "\\image\\";
+            String realPath = "\\image\\";
 
             for (int i = 0; i < files.length; i++) {
                 try {

@@ -170,7 +170,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     click: function () {
                         var couponUrl = this.getContainerForm().viewModel.couponUrl();
                         var productUrl = this.getContainerForm().viewModel.url();
-                        var url ="/product/details?couponUrl="+couponUrl+"&productUrl="+productUrl;
+                        var url ="/product/grab?couponUrl="+couponUrl+"&productUrl="+productUrl;
                         var successHandler = function(self, result) {
                             this.getContainerForm().getViewModel().couponUrl(result.couponUrl)
                             this.getContainerForm().getViewModel().url(result.productUrl)

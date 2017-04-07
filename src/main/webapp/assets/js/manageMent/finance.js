@@ -82,6 +82,8 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit'], function ($,
                 }, {
                     "data": "promoteNumber"
                 }, {
+                    "data": "endApproachNumber"
+                }, {
                     "data": "endNumber"
                 }, {
                     "data": "payWaitNumber"
