@@ -24,7 +24,7 @@ public class ProductStatusJobTask {
 
         Date now = new Date();
         //结束 -- 》代付款
-        List<Product> endProducts = productService.getProductByStatus(null, ProductStatus.END);
+        List<Product> endProducts = productService.getProductByStatus(ProductStatus.END);
         if (CollectionUtils.isNotEmpty(endProducts)) {
             for (Product product : endProducts) {
                 int hour = DateTimeUtility.minuteBetween(product.getUpdateStatusTime(), now) / 60;
@@ -35,7 +35,7 @@ public class ProductStatusJobTask {
         }
 
         //即将结束 --》结束
-        List<Product> endApproachProducts = productService.getProductByStatus(null, ProductStatus.END_APPROACH);
+        List<Product> endApproachProducts = productService.getProductByStatus(ProductStatus.END_APPROACH);
         if (CollectionUtils.isNotEmpty(endApproachProducts)) {
             for (Product product : endApproachProducts) {
                 Date tomorrow = DateTimeUtility.addDays(DateTimeUtility.getMinTimeOfDay(product.getCouponEndTime()), 1);
@@ -47,7 +47,7 @@ public class ProductStatusJobTask {
         }
 
         //即将结束
-        List<Product> promoteProducts = productService.getProductByStatus(null, ProductStatus.PROMOTE);
+        List<Product> promoteProducts = productService.getProductByStatus(ProductStatus.PROMOTE);
         if (CollectionUtils.isNotEmpty(promoteProducts)) {
             for (Product product : promoteProducts) {
                 int hour = DateTimeUtility.minuteBetween(now, product.getUpdateStatusTime()) / 60;
@@ -60,7 +60,7 @@ public class ProductStatusJobTask {
 
         //// TODO: 2017/4/6
         //复审--》推广
-        List<Product> twoAuditProducts = productService.getProductByStatus(null, ProductStatus.TWO_AUDIT);
+        List<Product> twoAuditProducts = productService.getProductByStatus(ProductStatus.TWO_AUDIT);
         if (CollectionUtils.isNotEmpty(twoAuditProducts)) {
             for (Product product : twoAuditProducts) {
                 int hour = DateTimeUtility.minuteBetween(product.getUpdateStatusTime(), now) / 60;

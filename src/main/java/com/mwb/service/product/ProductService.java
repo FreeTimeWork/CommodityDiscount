@@ -81,8 +81,8 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getProductByStatus(Integer employeeId, ProductStatus status) {
-        return productMapper.selectProductByStatus(employeeId, status);
+    public List<Product> getProductByStatus(ProductStatus status) {
+        return productMapper.selectProductByStatus(null, status);
     }
 
     @Override

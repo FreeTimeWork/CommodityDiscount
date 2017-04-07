@@ -206,7 +206,7 @@ INSERT INTO `t_activity` VALUES ( '1', 'ORDINARY', '普通活动' ), ('2', 'ROB'
 
 INSERT INTO `t_hire_type` VALUES ('1', 'DIRECTIONAL', '定向'), ('2', 'GENERAL', '通用'), ('3', 'MAGPIE', '鹊桥');
 
-INSERT INTO `t_product_status` VALUES ( '1', 'AUDIT_WAIT', '待审核' ), ( '2', 'AUDIT_RUN', '审核中' ), ('3', 'REJECTED', '驳回'), ('4', 'TRAILER', '拒绝'), ( '5', 'TWO_AUDIT', '待二审' ), ('6', 'PROMOTE', '推广中'), ( '7', 'END_APPROACH', '即将结束' ), ('8', 'END', '已结束'), ('9', 'PAY_WAIT', '代付款'), ('10', 'PAY_RUN', '付款中'), ( '11', 'PAY_TRAILER', '拒绝付款' ), ('12', 'PAY_END', '已付款');
+INSERT INTO `t_product_status` VALUES ( '1', 'AUDIT_WAIT', '待审核' ), ( '2', 'AUDIT_RUN', '审核中' ), ('3', 'REJECTED', '驳回'), ('4', 'TRAILER', '拒绝'), ( '5', 'TWO_AUDIT', '待二审' ), ('6', 'PROMOTE', '推广中'), ( '7', 'END_APPROACH', '即将结束' ), ('8', 'END', '已结束'), ('9', 'PAY_WAIT', '代付款'), ('10', 'PAY_RUN', '付款中'), ( '11', 'PAY_TRAILER', '拒绝付款' ), ('12', 'PAY_END', '已付款'),('13', 'SETTLEMENT', '已结算');
 
 INSERT INTO `t_store_type` VALUES ('1', 'TAOBAO', '淘宝'), ('2', 'TMALL', '天猫');
 

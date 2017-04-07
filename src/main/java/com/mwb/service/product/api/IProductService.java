@@ -21,7 +21,7 @@ public interface IProductService {
 
     public List<Product> getProductByProductId(String productId);
 
-    public List<Product> getProductByStatus(Integer employeeId, ProductStatus status);
+    public List<Product> getProductByStatus(ProductStatus status);
 
     public SearchResult<Product> searchProduct(ProductFilter filter, Employee employee);
 

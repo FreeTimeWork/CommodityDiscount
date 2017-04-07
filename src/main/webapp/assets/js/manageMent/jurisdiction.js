@@ -73,18 +73,19 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         if(quanObj[k].checked)
                             quanArray.push(quanObj[k].value);
                     }
-                    var url ="position/permission/modify";
+                    var url ="/position/permission/modify";
                     var request = {
                         positionId: data.positionId,
                         permissionIds: quanArray
                     };
                     var successHandler = function(self, result) {
                         alert('成功')
+                        window.location.reload()
                     };
                     var errorHandler = function(self, result) {
                         alert('请求失败');
                     };
-                    var action = new netKit.SimplePostAction(this,request, url,successHandler, errorHandler);
+                    var action = new netKit.SimplePostAction(this,url, request,successHandler, errorHandler);
                     action.submit();
                 },
                 fields: uiKit.FormUtils.generateFields('modifyForm', [{
@@ -93,6 +94,10 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     options: positionOptions,
                     change: function (value) {
                         if(value){
+                            var inputArray = $("input[name='quan']")
+                            for(var i = 0; i < inputArray.length; i++){
+                                inputArray[i].checked = false
+                            }
                             var url ="/position/permission/byPositionId?positionId=" + value;
                             var successHandler = function(self, result) {
                                 var arr1 = result.permissions;
@@ -106,7 +111,6 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                                         sameArray.push(short[i]);
                                     }
                                 }
-                                var inputArray = $("input[name='quan']")
                                 for(var i = 0; i < inputArray.length; i++){
                                     for(var j = 0; j < sameArray.length; j++){
                                         if(inputArray[i].value == sameArray[j].id){

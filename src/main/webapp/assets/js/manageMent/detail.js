@@ -107,7 +107,37 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 model: model || {},
                 submit: function(data) {
                     var url ='/product/create';
-                    var request = data;
+                    var request = {};
+                    request.activityId = data.activityId;
+                    request.productId = data.productId;
+                    request.name = data.name;
+                    request.pictureUrl = data.pictureUrl;
+                    request.reservePrice = data.reservePrice;
+                    request.sales = data.sales;
+                    request.url = data.url;
+                    request.activityTime = data.activityTime;
+                    request.productTypeId = data.productTypeId;
+                    request.immediately = data.immediately;
+                    request.discountPrice = data.discountPrice;
+                    request.couponAmount = data.couponAmount;
+                    request.couponUrl = data.couponUrl;
+                    request.couponBeginTime = data.couponBeginTime;
+                    request.couponEndTime = data.couponEndTime;
+                    request.couponUseNumber = data.couponUseNumber;
+                    request.couponSurplusNumber = data.couponSurplusNumber;
+                    request.condition = data.condition;
+                    request.features = data.features;
+                    request.description = data.description;
+                    request.chargePrice = data.chargePrice;
+                    request.createTime = data.createTime;
+                    request.ratio = data.ratio;
+                    request.planUrl = data.planUrl;
+                    request.hireTypeId = data.hireTypeId;
+                    request.storeDescriptionScore = data.storeDescriptionScore;
+                    request.serviceScore = data.serviceScore;
+                    request.speedScore = data.speedScore;
+                    request.storeTypeId = data.storeTypeId;
+                    request.pictures = data.pictures;
                     var successHandler = function(self, result) {
                         alert('成功')
                     };
@@ -287,7 +317,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     type : uiKit.Controller.EDIT,
                     validators : [uiKit.Validator.NONEMPTY]
                 },{
-                    uid : 'hireTypeName',
+                    uid : 'hireTypeId',
                     type : uiKit.Controller.RADIO_GROUP,
                     options: hireTypeOptions,
                     validators : [uiKit.Validator.NONEMPTY]
