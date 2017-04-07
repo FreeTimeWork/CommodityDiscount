@@ -29,6 +29,10 @@ public class BpmService implements IBpmService{
 
         bpmMapper.insertTask(task);
         if (CollectionUtils.isNotEmpty(task.getVariables())) {
+            List<Variable> variables = task.getVariables();
+            for (Variable v : variables) {
+                v.setTaskId(task.getId());
+            }
             bpmMapper.batchInsertOrUpdateVariable(task.getVariables());
         }
 

@@ -16,6 +16,9 @@
         <commons-httpclient.version>3.1</commons-httpclient.version>
         <logback.version>1.1.7</logback.version>
         <logback.hotfix.totalSizeCap.version>1.1.7_hotfix_totalSizeCap</logback.hotfix.totalSizeCap.version>
+        <poi.version>3.8</poi.version>
+        <poi-ooxml.version>3.8</poi-ooxml.version>
+        <org.apache.ant.version>1.9.4</org.apache.ant.version>
 
         <!-- other version properties -->
         <compile.encoding>UTF8</compile.encoding>
@@ -263,6 +266,24 @@
             <version>4.7</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi-ooxml.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>${org.apache.ant.version}</version>
+        </dependency>
+
     </dependencies>
 
 

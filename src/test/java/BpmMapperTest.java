@@ -12,23 +12,23 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class BpmMapperTest extends AbstractPersistenceTest {
 
-//    @Autowired
+    @Autowired
     private BpmMapper mapper;
 
-//    @Test
+    @Test
     public void test1() {
         Task task = new Task();
-        task.setEmployeeId(1);
+//        task.setEmployeeId(1);
         mapper.insertTask (task);
         List<Variable> variables = new ArrayList<>();
         Variable variable = new Variable();
-        variable.setTaskId(3);
-//        variable.setTaskId(task.getId());
+//        variable.setTaskId(3);
+        variable.setTaskId(task.getId());
         variable.setName("employeeName");
         variable.setText("管理员11");
         Variable variable2 = new Variable();
-        variable2.setTaskId(3);
-//        variable2.setTaskId(task.getId());
+//        variable2.setTaskId(3);
+        variable2.setTaskId(task.getId());
         variable2.setName("hehe");
         variable2.setText("hha11");
         variables.add(variable);

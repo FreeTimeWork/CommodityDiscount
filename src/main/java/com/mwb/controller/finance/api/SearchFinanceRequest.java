@@ -12,6 +12,15 @@ public class SearchFinanceRequest extends PagingRequest {
     private Boolean orderByAsc;  //是否为升序排序
     private String beginPayTime; //付款开始时间
     private String endPayTime;   //付款结束时间
+    private boolean excel;
+
+    public boolean isExcel() {
+        return excel;
+    }
+
+    public void setExcel(boolean excel) {
+        this.excel = excel;
+    }
 
     public Integer getGroupId() {
         return groupId;
