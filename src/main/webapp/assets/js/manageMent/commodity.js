@@ -37,9 +37,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         success: function (data) {
             if (data.employee != null && data.employee.fullName != null) {
                 $("#userName").text(data.employee.fullName);
-                if(data.employee.positionId != 2 && data.employee.positionId != 3 && data.employee.positionId != 6){
-                    $("#showCreate").hide();
-                }
+                return;
             }
         }
     });
@@ -97,11 +95,11 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         return '<img src=\'' + cellValue + '\'/>'
                     }
                 }, {
-                    "data": "name"
-                }, {
                     "data": "chargePrice"
                 }, {
                     "data": "discountPrice"
+                }, {
+                    "data": "ratio"
                 }, {
                     "data": "couponBeginTime",
                     "render": function (data,type,rowObject,meta) {
@@ -119,7 +117,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     "render": function (data,type,rowObject,meta) {
                         var html = '';
                         html += '<sapn>' + data + '</sapn>' + '<span style="color: red;">'+ rowObject.ratio +'</span><br>'
-                        if(rowObject.hireTypeCode == "DIRECTIONAL"){
+                        if(rowObject.hireTypeCode == "hireTypeCode"){
                             html += '<a href=\'' + rowObject.planUrl + '\'>' + '查看计划链接' + '</a><br>'
                         }
                         html += '<span>'+ rowObject.activityName +'</span>'
@@ -161,7 +159,13 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 id: 'searchForm',
                 model: {},
                 submit: function(data) {
-                    thiz.searchParams= data
+                    thiz.searchParams= data;
+                    thiz.searchParams.createBeginTime = $('#searchForm_createBeginTime').val()
+                    thiz.searchParams.createEndTime = $('#searchForm_createEndTime').val()
+                    thiz.searchParams.beginFromTime = $('#searchForm_beginFromTime').val()
+                    thiz.searchParams.beginToTime = $('#searchForm_beginToTime').val()
+                    thiz.searchParams.endFromTime = $('#searchForm_endFromTime').val()
+                    thiz.searchParams.endToTime = $('#searchForm_endToTime').val()
                     if(!thiz.pageGrid){
                         thiz.initPageGrid()
                     }else{
@@ -169,7 +173,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     }
                 },
                 fields: uiKit.FormUtils.generateFields('searchForm', [{
-                    uid : 'activityId',
+                    uid : 'name',
                     type : uiKit.Controller.SELECT,
                     options: activitieOptions
                 },{
