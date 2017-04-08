@@ -108,7 +108,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     uid : 'employeeName',
                     type : uiKit.Controller.EDIT
                 },{
-                    uid : 'gronpId',
+                    uid : 'groupId',
                     type : uiKit.Controller.SELECT,
                     options: groupOptions
                 },{
