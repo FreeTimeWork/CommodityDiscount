@@ -65,18 +65,23 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     "data": "groupName"
                 }, {
                     "data": "positionName"
+                }, {
+                    "data": "statusName"
                 },{
                     render: function (data,type,rowObject,meta) {
                         var employeeId = rowObject.id;
                         var groupId = rowObject.groupId;
                         var positionId = rowObject.positionId;
                         var businessPerson = rowObject.businessPerson;
-                        var html = ''
+                        var statusCode = rowObject.statusCode;
+                        var html = '';
                         if(businessPerson){
                             html += '<a style="margin-right: 10px;" onclick="currentPage().onGroupClick(\'' + employeeId + '\',\'' + positionId + '\')">分组</a>'
                             html += '<a style="margin-right: 10px;" onclick="currentPage().onUpgradeClick(\'' + employeeId + '\',\'' + positionId + '\',\'' + groupId + '\')">升级</a>'
                         }
-                        html += '<a style="margin-right: 10px;" onclick="currentPage().onQuitClick(\'' + employeeId + '\',\'' + true + '\')">离职</a>'
+                        if(statusCode == "IN_POSITION") {
+                            html += '<a style="margin-right: 10px;" onclick="currentPage().onQuitClick(\'' + employeeId + '\',\'' + true + '\')">离职</a>'
+                        }
                         return html;
                     }
                 }],
@@ -146,7 +151,11 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     var url = '/employee/create';
                     var request = data;
                     var successHandler = function (self, result) {
-                        alert('成功')
+                        if(result.resultMessage != null){
+                            alert(result.resultMessage);
+                        }else {
+                            alert('成功');
+                        }
                     };
                     var errorHandler = function (self, result) {
                         alert('失败')
@@ -216,7 +225,11 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     var url = '/employee/group/create';
                     var request = data;
                     var successHandler = function (self, result) {
-                        alert('成功')
+                        if(result.resultMessage != null){
+                            alert(result.resultMessage);
+                        }else {
+                            alert('成功');
+                        }
                     };
                     var errorHandler = function (self, result) {
                         alert('失败')
