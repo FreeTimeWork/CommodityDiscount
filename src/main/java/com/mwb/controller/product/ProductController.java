@@ -5,6 +5,7 @@ import com.mwb.controller.api.ServiceResponse;
 import com.mwb.controller.finance.api.ProductVoucherVO;
 import com.mwb.controller.finance.api.SearchFinanceVoucherRequest;
 import com.mwb.controller.finance.api.SearchFinanceVoucherResponse;
+import com.mwb.controller.frontend.api.ResourceVO;
 import com.mwb.controller.product.api.*;
 import com.mwb.controller.util.ApplicationContextUtils;
 import com.mwb.dao.filter.ProductFilter;
@@ -79,13 +80,40 @@ public class ProductController {
         Product product = productService.getProductById(id);
         ProductDetailsResponse response = ProductDetailsResponse.toResponse(product);
 
-        Integer positionId = employee.getPosition().getId();
-        if (!positionId.equals(1) && !positionId.equals(5)) {
-            response.setVoucher(null);
+        if (product != null) {
+            response.setApproveStatus(getProductApproveStatus(product, employee));
         }
 
         return response;
 
+    }
+
+    private List<ResourceVO> getProductApproveStatus(Product product, Employee employee) {
+        List<ResourceVO> vos = new ArrayList<>();
+        ProductStatus status = product.getStatus();
+        if (ProductStatus.AUDIT_RUN == status) {
+            vos.add(new ResourceVO(ProductStatus.TWO_AUDIT.getDescription(), ProductStatus.TWO_AUDIT.getId()));
+            vos.add(new ResourceVO(ProductStatus.REJECTED.getDescription(), ProductStatus.REJECTED.getId()));
+            vos.add(new ResourceVO(ProductStatus.TRAILER.getDescription(), ProductStatus.TRAILER.getId()));
+        }else if (ProductStatus.TWO_AUDIT == status) {
+            vos.add(new ResourceVO(ProductStatus.PROMOTE.getDescription(), ProductStatus.PROMOTE.getId()));
+            vos.add(new ResourceVO(ProductStatus.END.getDescription(), ProductStatus.END.getId()));
+            vos.add(new ResourceVO(ProductStatus.PAY_WAIT.getDescription(), ProductStatus.PAY_WAIT.getId()));
+            vos.add(new ResourceVO(ProductStatus.REJECTED.getDescription(), ProductStatus.REJECTED.getId()));
+            vos.add(new ResourceVO(ProductStatus.TRAILER.getDescription(), ProductStatus.TRAILER.getId()));
+        }else if (ProductStatus.PROMOTE == status
+                && product.getEmployee().getId().equals(employee.getId())) {
+            vos.add(new ResourceVO(ProductStatus.END.getDescription(), ProductStatus.END.getId()));
+            vos.add(new ResourceVO(ProductStatus.PAY_WAIT.getDescription(), ProductStatus.PAY_WAIT.getId()));
+        }else if (ProductStatus.END == status
+                && product.getEmployee().getId().equals(employee.getId())) {
+            vos.add(new ResourceVO(ProductStatus.PAY_WAIT.getDescription(), ProductStatus.PAY_WAIT.getId()));
+        }else if (ProductStatus.PAY_RUN == status) {
+            vos.add(new ResourceVO(ProductStatus.PAY_TRAILER.getDescription(), ProductStatus.PAY_TRAILER.getId()));
+            vos.add(new ResourceVO(ProductStatus.PAY_END.getDescription(), ProductStatus.PAY_END.getId()));
+        }
+
+        return vos;
     }
 
     @ResponseBody
@@ -132,9 +160,18 @@ public class ProductController {
     @RequestMapping(value = "/create")
     public ServiceResponse create(@RequestBody CreateProductRequest request) throws ParseException {
         Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
+        ServiceResponse response = new ServiceResponse();
+
+        ParserService parserService = new ParserService(request.getUrl());
+        Product dataokeProduct = daoLaoKeService.getDaTaoKeProduct(parserService.grabProduct().getProductId());
+        if (dataokeProduct == null) {
+            response.setMessage("商品地址错误!");
+            return response;
+        }
 
         Product product = new Product();
 
+        product.setTaoKeId(dataokeProduct.getTaoKeId());
         product.setProductId(request.getProductId());
         product.setName(request.getName());
         product.setPictureUrl(request.getPictureUrl());
@@ -172,6 +209,7 @@ public class ProductController {
         Store store = new Store();
         product.setStore(store);
         store.setQq(request.getQq());
+        store.setStoreId(dataokeProduct.getStore().getStoreId());
         store.setDescriptionScore(request.getStoreDescriptionScore());
         store.setServiceScore(request.getServiceScore());
         store.setSpeedScore(request.getSpeedScore());
