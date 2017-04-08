@@ -1,7 +1,9 @@
 package com.mwb.controller.product.api;
 
 import com.mwb.controller.api.ServiceResponse;
+import com.mwb.controller.finance.api.ProductVoucherVO;
 import com.mwb.controller.frontend.api.ResourceVO;
+import com.mwb.dao.model.bpm.Task;
 import com.mwb.dao.model.product.Product;
 import com.mwb.dao.model.product.ProductPicture;
 import com.mwb.util.DateTimeUtility;
@@ -65,6 +67,7 @@ public class ProductDetailsResponse extends ServiceResponse {
     private String storeTypeName;           //店铺类型
     private List<String> pictures;          // 图片链接
     private ProductVoucherVO voucher;          // 凭证信息
+    private Task task;
     private List<ResourceVO> approveStatus;
 
     public static ProductDetailsResponse toResponse(Product product) {
@@ -134,7 +137,6 @@ public class ProductDetailsResponse extends ServiceResponse {
             }
             response.setPictures(pictures);
 
-            response.setVoucher(ProductVoucherVO.toVO(product.getVoucher()));
         }
 
         return response;
@@ -154,6 +156,14 @@ public class ProductDetailsResponse extends ServiceResponse {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
     }
 
     public Integer getActivityId() {
