@@ -84,7 +84,7 @@ public class ProductController {
             response.setVoucher(ProductVoucherVO.toVO(product.getVoucher(), employee));
 
             response.setApproveStatus(getProductApproveStatus(product, employee));
-//            response.setTask();
+            response.setTask(product.getTask());
         }
 
         return response;
