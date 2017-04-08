@@ -7,8 +7,8 @@ import com.mwb.dao.mapper.EmployeeMapper;
 import com.mwb.dao.model.comm.BooleanResult;
 import com.mwb.dao.model.employee.Employee;
 import com.mwb.dao.model.employee.Group;
+import com.mwb.dao.model.position.Position;
 import com.mwb.service.employee.api.IEmployeeService;
-import com.mwb.service.finance.api.IFinanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -32,17 +32,44 @@ public class EmployeeService implements IEmployeeService {
         if (count > 0) {
             result.setResult(false);
         } else {
-            if (employee.getGroup() != null) {
-                employeeMapper.updateGroup(employee.getGroup());
-            }
             employeeMapper.insertEmployee(employee);
+
+            if (employee.getGroup() != null && employee.getGroup().getEmployeeName() != null) {
+                Group group = employee.getGroup();
+                group.setEmployeeId(employee.getId());
+                //老组长降级
+                if (group.getId() != null) {
+                    demoteEmployee(group.getId());
+                }
+                //该人成新组长
+                employeeMapper.updateGroup(group);
+            }
         }
         return result;
     }
 
+    private void demoteEmployee(int groupId) {
+        //老组长降级
+        Group oldGroup = employeeMapper.selectGroupById(groupId);
+        Employee oldEmployee = new Employee();
+        if (oldGroup.getEmployeeId() != null) {
+            oldEmployee.setId(oldGroup.getEmployeeId());
+            oldEmployee.setPosition(new Position(2));
+            employeeMapper.updateEmployee(oldEmployee);
+        }
+    }
     @Override
     public void modifyEmployee(Employee employee) {
         employeeMapper.updateEmployee(employee);
+
+        if (employee.getGroup() != null) {
+            //老组长降级
+            if (employee.getGroup().getId() != null) {
+                demoteEmployee(employee.getGroup().getId());
+            }
+            //修改组长
+            employeeMapper.updateGroup(employee.getGroup());
+        }
     }
 
     @Override
