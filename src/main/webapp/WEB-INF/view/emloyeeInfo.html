@@ -64,7 +64,7 @@
             </ul>
         </div>
         <div class="bottom_left_2">
-            <img src="img/pic-6_03.png" alt=""/>
+            <img src="/assets/img/pic-6_03.png" alt=""/>
         </div>
         <div class="bottom_right">
             <div class="bottom_right_son dis">
@@ -74,7 +74,7 @@
                 <p class="bottom_right_tit">管理中心-员工管理</p>
                 <form id="searchForm">
                     姓名；<input type="text" uid="fullName"/>
-                    小组；<select uid="gronpId"></select>
+                    小组；<select uid="groupId"></select>
                     岗位；<select uid="positionId"></select>
                     <input type="submit" class="btn btn-primary red" value="搜索" />
                 </form>
@@ -85,8 +85,9 @@
                         <th>姓名</th>
                         <th>性别</th>
                         <th>电话</th>
-                        <th>小组名称</th>
-                        <th>岗位名称</th>
+                        <th>小组</th>
+                        <th>岗位</th>
+                        <th>状态</th>
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -133,16 +134,8 @@
         <div class="control-group" gid="password">
             <label class="control-label">密码</label>
             <div class="controls">
-                <input type="text" uid="password"/>
+                <input type="password" uid="password"/>
                 <span hid="password"></span>
-            </div>
-        </div>
-
-        <div class="control-group" gid="groupId">
-            <label class="control-label">所属小组</label>
-            <div class="controls">
-                <select uid="groupId"></select>
-                <span hid="groupId"></span>
             </div>
         </div>
 
@@ -151,6 +144,14 @@
             <div class="controls">
                 <select uid="positionId"></select>
                 <span hid="positionId"></span>
+            </div>
+        </div>
+
+        <div class="control-group" gid="groupId">
+            <label class="control-label">所属小组</label>
+            <div class="controls">
+                <select uid="groupId"></select>
+                <span hid="groupId"></span>
             </div>
         </div>
 

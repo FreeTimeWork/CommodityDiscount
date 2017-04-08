@@ -19,6 +19,8 @@ public class EmployeeVO {
     private Boolean businessPerson;
     private String positionName;
     private Integer positionId;
+    private String statusCode;
+    private String statusName;
     private List<PermissionVO> permissions;
 
     public static EmployeeVO toVO(Employee employee) {
@@ -34,12 +36,30 @@ public class EmployeeVO {
         vo.setPositionName(employee.getPosition().getName());
         vo.setPositionId(employee.getPosition().getId());
         vo.setBusinessPerson(employee.getPosition().getId().equals(2));
+        vo.setStatusCode(employee.getStatus().getCode());
+        vo.setStatusName(employee.getStatus().getDescription());
 
         if (CollectionUtils.isNotEmpty(employee.getPosition().getPermissions())) {
             List<PermissionVO> vos = PermissionVO.toVOs(employee.getPosition().getPermissions());
             vo.setPermissions(vos);
         }
         return vo;
+    }
+
+    public String getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
     }
 
     public List<PermissionVO> getPermissions() {

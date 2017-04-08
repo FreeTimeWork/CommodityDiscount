@@ -8,6 +8,7 @@ import com.mwb.controller.employee.api.*;
 import com.mwb.controller.util.ApplicationContextUtils;
 import com.mwb.dao.filter.EmployeeFilter;
 import com.mwb.dao.filter.SearchResult;
+import com.mwb.dao.model.comm.BooleanResult;
 import com.mwb.dao.model.comm.Log;
 import com.mwb.dao.model.comm.PagingData;
 import com.mwb.dao.model.employee.Employee;
@@ -50,8 +51,8 @@ public class EmployeeController {
     @ResponseBody
     @RequestMapping(value = "/create")
     public ServiceResponse createEmployee(@RequestBody CreateEmployeeRequest request) {
+        ServiceResponse response = new ServiceResponse();
 
-        //// TODO: 2017/4/7 校验手机号
         Employee employee = new Employee();
         employee.setFullName(request.getFullName());
         employee.setCreateTime(new Date());
@@ -61,10 +62,23 @@ public class EmployeeController {
         employee.setGroup(new Group(request.getGroupId()));
         employee.setPosition(new Position(request.getPositionId()));
         employee.setStatus(EmployeeStatus.IN_POSITION);
+        if (employee.getPosition().getId().equals(3) && employee.getGroup() != null) {
+            Group group = employee.getGroup();
+            if (group.getId() != null) {
+                group.setEmployeeId(employee.getId());
+                group.setEmployeeName(employee.getFullName());
+                response.setMessage("已覆盖该组的组长");
+            } else {
+                employee.setGroup(null);
+            }
+        }
+        BooleanResult result = employeeService.createEmployee(employee);
 
-        employeeService.createEmployee(employee);
+        if (!result.isResult()) {
+            response.setMessage("手机号重复！");
+        }
 
-        return new ServiceResponse();
+        return response;
     }
 
     @ResponseBody

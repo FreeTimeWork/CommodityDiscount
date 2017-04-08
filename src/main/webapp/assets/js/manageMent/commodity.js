@@ -86,17 +86,14 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     selector: 'td:first-child'
                 },
                 "columns": [{
-                    "data": null,
-                    "width": "4%",
-                    "className": 'select-checkbox',
-                    "orderable": false,
-                    "render": function() {
-                        return "";
-                    }
+                    "data": "id"
                 }, {
                     "data": "createTime"
                 }, {
-                    "data": "pictureUrl"
+                    "data": "pictureUrl",
+                    "render": function (cellValue) {
+                        return '<img src=\'' + cellValue + '\'/>'
+                    }
                 }, {
                     "data": "chargePrice"
                 }, {
@@ -120,8 +117,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     "render": function (data,type,rowObject,meta) {
                         var html = '';
                         html += '<sapn>' + data + '</sapn>' + '<span style="color: red;">'+ rowObject.ratio +'</span><br>'
-
-                        html += '<a href=\'' + rowObject.planUrl + '\'>' + '查看计划链接' + '</a><br>'
+                        if(rowObject.hireTypeCode == "hireTypeCode"){
+                            html += '<a href=\'' + rowObject.planUrl + '\'>' + '查看计划链接' + '</a><br>'
+                        }
                         html += '<span>'+ rowObject.activityName +'</span>'
                         return html
                     }
@@ -132,10 +130,14 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 },{
                     render: function (data,type,rowObject,meta) {
                         var id = rowObject.id;
-                        var html = ''
+                        var html = '';
                         html += '<a style="margin-right: 10px;" onclick="currentPage().onDetailClick(\'' + id + '\')">查看</a>'
-                        html += '<a style="margin-right: 10px;" onclick="currentPage().onReSubmitClick()">再次提交</a>'
-                        html += '<a style="margin-right: 10px;" onclick="currentPage().onSubmitBillClick()">提交结账</a>'
+                        if(rowObject.showSubmit) {
+                            html += '<a style="margin-right: 10px;" onclick="currentPage().onReSubmitClick()">再次提交</a>'
+                            if(rowObject.statusCode == "PAY_WAIT") {
+                                html += '<a style="margin-right: 10px;" onclick="currentPage().onSubmitBillClick()">提交结账</a>'
+                            }
+                        }
                         return html;
                     }
                 }],

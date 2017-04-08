@@ -65,18 +65,23 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     "data": "groupName"
                 }, {
                     "data": "positionName"
+                }, {
+                    "data": "statusName"
                 },{
                     render: function (data,type,rowObject,meta) {
                         var employeeId = rowObject.id;
                         var groupId = rowObject.groupId;
                         var positionId = rowObject.positionId;
                         var businessPerson = rowObject.businessPerson;
-                        var html = ''
+                        var statusCode = rowObject.statusCode;
+                        var html = '';
                         if(businessPerson){
                             html += '<a style="margin-right: 10px;" onclick="currentPage().onGroupClick(\'' + employeeId + '\',\'' + positionId + '\')">分组</a>'
                             html += '<a style="margin-right: 10px;" onclick="currentPage().onUpgradeClick(\'' + employeeId + '\',\'' + positionId + '\',\'' + groupId + '\')">升级</a>'
                         }
-                        html += '<a style="margin-right: 10px;" onclick="currentPage().onQuitClick(\'' + employeeId + '\',\'' + true + '\')">离职</a>'
+                        if(statusCode == "IN_POSITION") {
+                            html += '<a style="margin-right: 10px;" onclick="currentPage().onQuitClick(\'' + employeeId + '\',\'' + true + '\')">离职</a>'
+                        }
                         return html;
                     }
                 }],
@@ -108,7 +113,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     uid : 'employeeName',
                     type : uiKit.Controller.EDIT
                 },{
-                    uid : 'gronpId',
+                    uid : 'groupId',
                     type : uiKit.Controller.SELECT,
                     options: groupOptions
                 },{
@@ -146,7 +151,11 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     var url = '/employee/create';
                     var request = data;
                     var successHandler = function (self, result) {
-                        alert('成功')
+                        if(result.resultMessage != null){
+                            alert(result.resultMessage);
+                        }else {
+                            alert('成功');
+                        }
                     };
                     var errorHandler = function (self, result) {
                         alert('失败')
@@ -177,7 +186,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     uid: 'groupId',
                     type: uiKit.Controller.SELECT,
                     options: groupOptions,
-                    validators: [uiKit.Validator.NONEMPTY]
+                    validators: [uiKit.Validator.EMPTY_NUMERIC]
                 },{
                     uid: 'positionId',
                     type: uiKit.Controller.SELECT,
@@ -216,7 +225,11 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     var url = '/employee/group/create';
                     var request = data;
                     var successHandler = function (self, result) {
-                        alert('成功')
+                        if(result.resultMessage != null){
+                            alert(result.resultMessage);
+                        }else {
+                            alert('成功');
+                        }
                     };
                     var errorHandler = function (self, result) {
                         alert('失败')
@@ -300,21 +313,28 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             currentPage.distributionDialog.show();
 
         },
-        onUpgradeClick: function (emlpoyeeId,positionId,groupId) {
-            var url ="/employee/group/verity?groupId=" + groupId;
+        onUpgradeClick: function (employeeId,positionId,groupId) {
+            var url ="/employee/group/verify?groupId=" + groupId;
             var successHandler = function(self, result) {
-                var url ="/employee/modify";
+                if (result && !window.confirm("确认覆盖现有组长？")){
+                    return false;
+                }
+                var url1 ="/employee/modify";
                 var request = {
                     employeeId: employeeId,
                     positionId: positionId
                 };
                 var successHandler = function(self, result) {
-                    alert('成功')
+                    if(result.resultMessage != null){
+                        alert(result.resultMessage);
+                    }else {
+                        alert('成功');
+                    }
                 };
                 var errorHandler = function(self, result) {
                     alert('请求失败');
                 };
-                var action = new netKit.SimplePostAction(this, url, request,successHandler, errorHandler);
+                var action = new netKit.SimplePostAction(this, url1, request,successHandler, errorHandler);
                 action.submit();
             };
             var errorHandler = function(self, result) {
