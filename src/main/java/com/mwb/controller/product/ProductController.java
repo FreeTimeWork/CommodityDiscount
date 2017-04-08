@@ -81,7 +81,10 @@ public class ProductController {
         ProductDetailsResponse response = ProductDetailsResponse.toResponse(product);
 
         if (product != null) {
+            response.setVoucher(ProductVoucherVO.toVO(product.getVoucher(), employee));
+
             response.setApproveStatus(getProductApproveStatus(product, employee));
+            response.setTask(product.getTask());
         }
 
         return response;
@@ -172,7 +175,7 @@ public class ProductController {
         Product product = new Product();
 
         product.setTaoKeId(dataokeProduct.getTaoKeId());
-        product.setProductId(request.getProductId());
+        product.setProductId(dataokeProduct.getProductId());
         product.setName(request.getName());
         product.setPictureUrl(dataokeProduct.getPictureUrl());
         product.setSupplementPictureUrl(request.getSupplementPictureUrl());
@@ -287,15 +290,16 @@ public class ProductController {
 
         if (CollectionUtils.isNotEmpty(products)) {
             StringBuilder str = new StringBuilder();
-            str.append("(历史推广记录:");
+            str.append("&nbsp&nbsp&nbsp【历史推广记录:");
             for (Product product : products) {
                 str.append(product.getEmployee().getFullName());
                 str.append("(");
                 str.append(product.getEmployee().getStatus().getDescription());
                 str.append(")");
                 str.append(DateTimeUtility.formatYYYYMMDD(product.getCreateTime()));
+                str.append(",&nbsp&nbsp");
             }
-            str.append(")");
+            str.append("】");
 
             return str.toString();
         } else {
@@ -335,7 +339,7 @@ public class ProductController {
         filter.setPagingData(new PagingData(request.getPageNumber(), request.getPageSize()));
         SearchResult<ProductVoucher> result = productService.searchProductVoucher(filter);
 
-        response.setVouchers(ProductVoucherVO.toVOs(result.getResult()));
+        response.setVouchers(ProductVoucherVO.toVOs(result.getResult(), null));
         response.setPagingResult(result.getPagingResult());
 
         return response;
