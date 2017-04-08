@@ -74,7 +74,9 @@
         <if test="filter.positionId != null">
             ae.position_id = #{filter.positionId, javaType=int, jdbcType=INTEGER}
         </if>
-
+        <if test="filter.mobile != null">
+            ae.mobile = #{filter.mobile, javaType=string, jdbcType=CHAR}
+        </if>
     </sql>
     <insert id="insertGroup" parameterType="Group" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_group (
