@@ -1,6 +1,7 @@
 package com.mwb.controller.product.api;
 
 import com.mwb.controller.api.ServiceResponse;
+import com.mwb.controller.frontend.api.ResourceVO;
 import com.mwb.dao.model.product.Product;
 import com.mwb.dao.model.product.ProductPicture;
 import com.mwb.util.DateTimeUtility;
@@ -64,6 +65,7 @@ public class ProductDetailsResponse extends ServiceResponse {
     private String storeTypeName;           //店铺类型
     private List<String> pictures;          // 图片链接
     private ProductVoucherVO voucher;          // 凭证信息
+    private List<ResourceVO> approveStatus;
 
     public static ProductDetailsResponse toResponse(Product product) {
         ProductDetailsResponse response = new ProductDetailsResponse();
@@ -136,6 +138,14 @@ public class ProductDetailsResponse extends ServiceResponse {
         }
 
         return response;
+    }
+
+    public List<ResourceVO> getApproveStatus() {
+        return approveStatus;
+    }
+
+    public void setApproveStatus(List<ResourceVO> approveStatus) {
+        this.approveStatus = approveStatus;
     }
 
     public Integer getId() {
