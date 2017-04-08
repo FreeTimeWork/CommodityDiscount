@@ -81,7 +81,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     var url ='/product/create';
                     var request = {};
                     request.activityId = data.activityId;
-                    request.productId = data.productId;
+                    //request.productId = data.productId;
                     request.name = data.name;
                     request.pictureUrl = data.pictureUrl;
                     request.reservePrice = data.reservePrice;
@@ -150,7 +150,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                                 pictureOptions = result.pictures;
                                 thiz.detailForm.getViewModel().storeTypeName(result.storeTypeName)
                                 thiz.detailForm.getViewModel().storeDescriptionScore(result.storeDescriptionScore)
-                                thiz.detailForm.getViewModel().productId(result.productId)
+                                thiz.detailForm.getViewModel().productId(result.productId + result.createHistory)
                                 thiz.detailForm.getViewModel().reservePrice(result.reservePrice)
                                 thiz.detailForm.getViewModel().serviceScore(result.serviceScore)
                                 thiz.detailForm.getViewModel().speedScore(result.speedScore)
