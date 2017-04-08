@@ -52,6 +52,25 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             }
         }
     });
+    $.ajax({
+        type: 'get',
+        async: false,
+        url: '/resource/status',
+        success: function (data) {
+            var html = '';
+            for (var i = 0; i < data.status.length; i++){
+                if(i==0){
+                    html += '<li class="on">' + data.status[i].label + '(' + data.status[i].value + ')' + '</li>'
+                } else{
+                    html += '<li>' + data.status[i].label + '(' + data.status[i].value + ')' + '</li>'
+                }
+            }
+            $('.pay_list').html(html)
+        },
+        error: function () {
+            alert('请求失败')
+        }
+    });
     var CurrentPage = (function (_super) {
         cKit.__extends(CurrentPage, _super);
 
@@ -81,25 +100,27 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             });
             this.pageGrid = $('#employeeGrid').dataTable({
                 "serverSide": true,
-                "select": {
-                    style: 'multi',
-                    selector: 'td:first-child'
-                },
                 "columns": [{
-                    "data": "id"
+                    "data": "id",
+                    "width": "3%"
                 }, {
-                    "data": "createTime"
+                    "data": "createTime",
+                    "width": "13%"
                 }, {
                     "data": "pictureUrl",
                     "render": function (cellValue) {
                         return '<img src=\'' + cellValue + '\'/>'
-                    }
+                    },
+                    "width": "15%"
                 }, {
-                    "data": "chargePrice"
+                    "data": "chargePrice",
+                    "width": "5%"
                 }, {
-                    "data": "discountPrice"
+                    "data": "discountPrice",
+                    "width": "5%"
                 }, {
-                    "data": "ratio"
+                    "data": "ratio",
+                    "width": "5%"
                 }, {
                     "data": "couponBeginTime",
                     "render": function (data,type,rowObject,meta) {
@@ -111,7 +132,8 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         html += '<sapn>领取/剩余：</sapn>';
                         html += '<span style="color: red;">' + rowObject.couponUseNumber + '</span>' + '/' + '<span>' + rowObject.couponSurplusNumber + '</span>';
                         return html
-                    }
+                    },
+                    "width": "15%"
                 }, {
                     "data": "hireTypeName",
                     "render": function (data,type,rowObject,meta) {
@@ -122,11 +144,14 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         }
                         html += '<span>'+ rowObject.activityName +'</span>'
                         return html
-                    }
+                    },
+                    "width": "10%"
                 },{
-                    "data": "employeeName"
+                    "data": "employeeName",
+                    "width": "10%"
                 }, {
-                    "data": "status"
+                    "data": "status",
+                    "width": "10%"
                 },{
                     render: function (data,type,rowObject,meta) {
                         var id = rowObject.id;
@@ -173,7 +198,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     }
                 },
                 fields: uiKit.FormUtils.generateFields('searchForm', [{
-                    uid : 'name',
+                    uid : 'activityId',
                     type : uiKit.Controller.SELECT,
                     options: activitieOptions
                 },{

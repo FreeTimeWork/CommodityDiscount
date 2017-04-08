@@ -60,6 +60,16 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             this.searchParams = {};
             this.init();
             this.initCreateForm();
+            $('#productCopy').click(function () {
+                var e = document.getElementById('detailForm_url');
+                e.select();
+                document.execCommand('Copy')
+            })
+            $('#couponCopy').click(function () {
+                var e = document.getElementById('detailForm_couponUrl');
+                e.select();
+                document.execCommand('Copy')
+            })
         }
 
         CurrentPage.prototype.init = function () {
@@ -116,10 +126,10 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     type : uiKit.Controller.LABEL
                 },{
                     uid : 'url',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.TEXT_AREA
                 },{
                     uid : 'couponUrl',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.TEXT_AREA
                 },{
                     uid : 'productId',
                     type : uiKit.Controller.LABEL

@@ -61,27 +61,17 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             thiz = this;
             this.searchParams = {};
             this.initDetailForm();
-            $('#productCopy').click(function () {
-                var e = document.getElementById('detailForm_url');
-                e.select();
-                document.execCommand('Copy')
-            })
-            $('#couponCopy').click(function () {
-                var e = document.getElementById('detailForm_couponUrl');
-                e.select();
-                document.execCommand('Copy')
-            })
         }
 
         CurrentPage.prototype.initDetailForm = function (model) {
             this.detailForm = new uiKit.FormController({
                 id: 'detailForm',
-                model: model || {},
+                model: {immediately:false},
                 submit: function(data) {
                     var url ='/product/create';
                     var request = {};
                     request.activityId = data.activityId;
-                    request.productId = data.productId;
+                    //request.productId = data.productId;
                     request.name = data.name;
                     request.pictureUrl = data.pictureUrl;
                     request.reservePrice = data.reservePrice;
@@ -103,7 +93,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     request.chargePrice = data.chargePrice;
                     request.createTime = data.createTime;
                     request.ratio = data.ratio;
-                    request.planUrl = data.planUrl;
+                    if(data.planUrl){
+                        request.planUrl = data.planUrl;
+                    }
                     request.hireTypeId = data.hireTypeId;
                     request.storeDescriptionScore = data.storeDescriptionScore;
                     request.serviceScore = data.serviceScore;
@@ -150,7 +142,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                                 pictureOptions = result.pictures;
                                 thiz.detailForm.getViewModel().storeTypeName(result.storeTypeName)
                                 thiz.detailForm.getViewModel().storeDescriptionScore(result.storeDescriptionScore)
-                                thiz.detailForm.getViewModel().productId(result.productId)
+                                thiz.detailForm.getViewModel().productId(result.productId + result.createHistory)
                                 thiz.detailForm.getViewModel().reservePrice(result.reservePrice)
                                 thiz.detailForm.getViewModel().serviceScore(result.serviceScore)
                                 thiz.detailForm.getViewModel().speedScore(result.speedScore)
@@ -159,6 +151,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                                 thiz.detailForm.getViewModel().sales(result.sales)
                                 thiz.detailForm.getViewModel().couponUseNumber("剩余" + result.couponUseNumber +"张" + "已领取(" + result.couponSurplusNumber +")")
                                 thiz.detailForm.getViewModel().discountPrice(result.discountPrice)
+                                thiz.detailForm.getViewModel().name(result.name)
                                 if(result.pictures.length > 0){
                                     for(var i = 0; i < result.pictures.length; i++){
                                         if(i==0){
@@ -338,7 +331,16 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'planUrl',
-                    type : uiKit.Controller.TEXT_AREA
+                    type : uiKit.Controller.TEXT_AREA,
+                    visible: function () {
+                        var type = this.getContainerForm().getViewModel().hireTypeId();
+                        if(type == '1'){
+                            return true
+                        }else {
+                            return false
+                        }
+                    }
+
                 },{
                     uid : 'supplementPictureUrl',
                     type : uiKit.Controller.TEXT_AREA
