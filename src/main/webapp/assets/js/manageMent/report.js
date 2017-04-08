@@ -98,6 +98,8 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         return '<img src=\'' + data + '\'>'
                     }
                 }, {
+                    "data": "name"
+                },{
                     "data": "discountPrice"
                 }, {
                     "data": "chargePrice",
