@@ -1,279 +1,168 @@
-require.config(I360R.REQUIRE_CONFIG)
-require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSelect'], function ($,_,uiKit,netKit,cKit,dataTableSelect) {
-$(function () {
-$(".fa_li>a").click(function () {
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>商品管理</title>
+    <link rel="stylesheet" href="../../assets/lib/bootstrap/css/bootstrap-2.3.0.min.css"/>
+    <link rel="stylesheet" href="../../assets/lib/bootstrap/datetimepicker/css/datetimepicker.css"/>
+    <link rel="stylesheet" href="../../assets/them/DT_bootstrap.css"/>
+    <link rel="stylesheet" href="../../assets/lib/jquery/datatable/css/select.dataTables.min.css"/>
+    <link rel="stylesheet" href="../../assets/them/default.css"/>
+    <link rel="stylesheet" href="../../assets/them/style.css"/>
+    <link rel="stylesheet" href="../../assets/them/style-metro.css"/>
+    <link rel="stylesheet" href="../../assets/them/style-responsive.css"/>
+    <link rel="stylesheet" href="../../assets/css/base.css"/>
+    <link rel="stylesheet" href="../../assets/css/baobiao.css"/>
+<body>
+<div class="cont">
+    <div class="top clearfix">
+        <div class="top_left">
 
-$(this).css("background", "#1481b3").parent().siblings("li").find(".floor").css("background", "#065c85")
-$(this).parent().find(".jia").toggleClass("sub");
-$(this).parent().find("ul").toggle().parent().siblings("li").find("ul").hide()
-})
-$(".form_datetime").datetimepicker({
-format: "yyyy-mm-dd hh:ii"
-});
-})
-$.ajax({
-type: 'get',
-async: false,
-url: '/resource/data',
-success: function (data) {
-activitieOptions = data.activities
-hireTypeOptions = data.hireTypes
-productStatuOptions = data.productStatus
-productTypeOptions = data.productTypes
-storeTypeOptions = data.storeTypes
-employeeStatuOptions = data.employeeStatus
-groupOptions = data.groups
-positionOptions = data.positions
-employeeOptions = data.employees
-},
-error: function () {
-alert('请求失败')
-}
-});
-$.ajax({
-type: 'get',
-async: false,
-url: '/employee/currentEmployee',
-success: function (data) {
-if (data.employee != null && data.employee.fullName != null) {
-$("#userName").text(data.employee.fullName);
-return;
-}
-}
-});
-$.ajax({
-type: 'get',
-async: false,
-url: '/employee/currentEmployee',
-success: function (data) {
-if (data.employee != null && data.employee.fullName != null) {
-$("#userName").text(data.employee.fullName);
-return;
-}
-}
-});
-$.ajax({
-type: 'get',
-async: false,
-url: '/resource/status',
-success: function (data) {
-var html = '';
-for (var i = 0; i < data.status.length; i++){
-if(i==0){
-html += '<li class="on">' + data.status[i].label + '(' + data.status[i].value + ')' + '</li>'
-} else{
-html += '<li>' + data.status[i].label + '(' + data.status[i].value + ')' + '</li>'
-}
-}
-$('.pay_list').html(html)
-},
-error: function () {
-alert('请求失败')
-}
-});
-var CurrentPage = (function (_super) {
-cKit.__extends(CurrentPage, _super);
+        </div>
+        <div class="top_right">
+            <a href="#"><span id="userName"></span></a>
+            <a href="/frontend/modify.html" class="modifyPassword">修改密码</a>
+            <a href="/logout">退出</a>
+        </div>
 
-var thiz;
+    </div>
 
-function CurrentPage() {
-_super.call(this);
-thiz = this;
-this.searchParams = {};
-this.initSearchForm();
-}
+    <div class="bottom clearfix">
+        <div class="bottom_left">
+            <ul style="margin:0">
+                <li style="border-bottom:#1481b3" class="fa_li">
 
-CurrentPage.prototype.initPageGrid = function () {
-$("#selectAllBtn").click(function() {
-if ($(this).parent("tr").hasClass("selected")) {
-thiz.pageGrid.rows().deselect();
-$(this).parent("tr").removeClass("selected");
-} else {
-thiz.pageGrid.rows().select();
-$(this).parent("tr").addClass("selected");
+                    <a href="#" class="floor"><img src="../../assets/img/pic-1_05.png" alt=""/><span>商品管理</span> <span
+                            class="jia add"></span></a>
+                    <ul>
+                        <li><a href="/frontend/commodity.html" target="_blank">商品列表</a></li>
+                        <li><a href="/frontend/create.html" target="_blank">添加新商品</a></li>
 
-}
-var tt = thiz.pageGrid.rows({
-selected: true
-}).data();
+                    </ul>
 
-});
-this.pageGrid = $('#employeeGrid').dataTable({
-"serverSide": true,
-"columns": [{
-"data": "id",
-"width": "3%"
-}, {
-"data": "createTime",
-"width": "13%"
-}, {
-"data": "pictureUrl",
-"render": function (cellValue) {
-return '<img src=\'' + cellValue + '\'/>'
-},
-"width": "15%"
-}, {
-"data": "chargePrice",
-"width": "5%"
-}, {
-"data": "discountPrice",
-"width": "5%"
-}, {
-"data": "ratio",
-"width": "5%"
-}, {
-"data": "couponBeginTime",
-"render": function (data,type,rowObject,meta) {
-var html = '';
-html += '<sapn>开始时间：</sapn>';
-html += '<span style="color: blue;">' + rowObject.couponBeginTime + '</span><br>';
-html += '<sapn>结束时间：</sapn>';
-html += '<span style="color: red;">' + rowObject.couponEndTime + '</span><br>';
-html += '<sapn>领取/剩余：</sapn>';
-html += '<span style="color: red;">' + rowObject.couponUseNumber + '</span>' + '/' + '<span>' + rowObject.couponSurplusNumber + '</span>';
-return html
-},
-"width": "15%"
-}, {
-"data": "hireTypeName",
-"render": function (data,type,rowObject,meta) {
-var html = '';
-html += '<sapn>' + data + '</sapn>' + '<span style="color: red;">'+ rowObject.ratio +'</span><br>'
-if(rowObject.hireTypeCode == "hireTypeCode"){
-html += '<a href=\'' + rowObject.planUrl + '\'>' + '查看计划链接' + '</a><br>'
-}
-html += '<span>'+ rowObject.activityName +'</span>'
-return html
-},
-"width": "10%"
-},{
-"data": "employeeName",
-"width": "10%"
-}, {
-"data": "status",
-"width": "10%"
-},{
-render: function (data,type,rowObject,meta) {
-var id = rowObject.id;
-var html = '';
-html += '<a style="margin-right: 10px;" onclick="currentPage().onDetailClick(\'' + id + '\')">查看</a>'
-if(rowObject.showSubmit) {
-html += '<a style="margin-right: 10px;" onclick="currentPage().onReSubmitClick()">再次提交</a>'
-if(rowObject.statusCode == "PAY_WAIT") {
-html += '<a style="margin-right: 10px;" onclick="currentPage().onSubmitBillClick()">提交结账</a>'
-}
-}
-return html;
-}
-}],
-ajax: function (data,callBack,setting) {
-netKit.TableAction(data,callBack,setting,{
-url: '/product/search',
-postData: thiz.searchParams,
-root: "products",
-actionCallback: function (result) {
+                </li>
 
-}
-})
-}
-}).api()
-}
+                <li class="fa_li">
+                    <a href="#" class="floor"><img src="../../assets/img/pic-3_13.png" alt=""/><span>报表统计</span> <span
+                            class="jia add"></span></a>
+                    <ul>
+                        <li><a href="/frontend/finance.html" target="_blank">财务管理</a></li>
+                        <li><a href="/frontend/report.html" target="_blank">商品报表</a></li>
+                    </ul>
+                </li>
 
-CurrentPage.prototype.initSearchForm = function () {
-this.searchForm = new uiKit.FormController({
-id: 'searchForm',
-model: {},
-submit: function(data) {
-thiz.searchParams= data;
-thiz.searchParams.createBeginTime = $('#searchForm_createBeginTime').val()
-thiz.searchParams.createEndTime = $('#searchForm_createEndTime').val()
-thiz.searchParams.beginFromTime = $('#searchForm_beginFromTime').val()
-thiz.searchParams.beginToTime = $('#searchForm_beginToTime').val()
-thiz.searchParams.endFromTime = $('#searchForm_endFromTime').val()
-thiz.searchParams.endToTime = $('#searchForm_endToTime').val()
-if(!thiz.pageGrid){
-thiz.initPageGrid()
-}else{
-thiz.pageGrid.draw()
-}
-},
-fields: uiKit.FormUtils.generateFields('searchForm', [{
-uid : 'activityId',
-type : uiKit.Controller.SELECT,
-options: activitieOptions
-},{
-uid : 'groupId',
-type : uiKit.Controller.SELECT,
-options: groupOptions
-},{
-uid : 'employeeId',
-type : uiKit.Controller.SELECT,
-options: employeeOptions
-},{
-uid : 'statusId',
-type : uiKit.Controller.SELECT,
-options: employeeStatuOptions
-},{
-uid : 'orderAsc',
-type : uiKit.Controller.SELECT,
-options: [{label: '排序',value: null},{label: '正序',value: true},{label: '倒序',value: false}]
-},{
-uid : 'typeId',
-type : uiKit.Controller.SELECT,
-options: productTypeOptions
-},{
-uid : 'zhifubao',
-type : uiKit.Controller.EDIT
-},{
-uid : 'productName',
-type : uiKit.Controller.EDIT
-},{
-uid : 'createBeginTime',
-type : uiKit.Controller.EDIT,
-node : 'createBeginTime'
-},{
-uid : 'createEndTime',
-type : uiKit.Controller.EDIT,
-node : 'createEndTime'
-},{
-uid : 'beginFromTime',
-type : uiKit.Controller.EDIT,
-node : 'beginFromTime'
-},{
-uid : 'beginToTime',
-type : uiKit.Controller.EDIT,
-node : 'beginToTime'
-},{
-uid : 'endFromTime',
-type : uiKit.Controller.EDIT,
-node : 'endFromTime'
-},{
-uid : 'endToTime',
-type : uiKit.Controller.EDIT,
-node : 'endToTime'
-},{
-uid : 'beginDate',
-type : uiKit.Controller.EDIT,
-node : 'beginDate'
-}]),
-reset: false
-});
-};
+                <li class="fa_li">
+                    <a href="#" class="floor"><img src="../../assets/img/pic-3_13.png" alt=""/><span>员工管理</span> <span
+                            class="jia add"></span></a>
+                    <ul>
+                        <li><a href="/frontend/employeeInfo.html" target="_blank">员工信息</a></li>
+                        <li><a href="/frontend/jurisdiction.html" target="_blank">权限管理</a></li>
+                    </ul>
+                </li>
 
-return CurrentPage;
-})(cKit.CoreObject);
-var pageController = new uiKit.PageController({
+            </ul>
+        </div>
+        <div class="bottom_left_2">
+            <img src="/assets/img/pic-6_03.png" alt=""/>
+        </div>
+        <div class="bottom_right">
+            <div class="bottom_right_son dis">
+                <div id="showCreate"><a href="create.html"><p class="bottom_add">添加新商品</p></a></div>
+
+                <p class="bottom_right_tit">管理中心-商品列表</p>
+                <ul class="pay_list clearfix">
+                    <li class="on">待付款(23)</li>
+                    <li>付款中(234)</li>
+                    <li>拒绝付款(44)</li>
+                    <li>已付款(4567)</li>
+                </ul>
+                <form id="searchForm">
+                    <select uid="activityId" class="input-medium">
+                    </select>
+                    <select uid="typeId" class="input-medium">
+                    </select>
+                    <select uid="groupId" class="input-medium">
+                    </select>
+                    <select  uid="employeeId" class="input-medium">
+                    </select>
+                    <select uid="statusId" class="input-medium">
+                    </select>
+                    <select uid="orderAsc" class="input-medium">
+                    </select>
+                    <br/>
+                        <span class="">
+                            <label class="control-label helpinline"> 提交时间：</label>
+                       <span class="date">
+                           <input uid="createBeginTime" size="16" type="text" readonly class="form_datetime">
+                       </span>
+                        ~
+                        <span class="date">
+                            <input uid="createEndTime" size="16" type="text" value="" readonly class="form_datetime">
+                        </span>
+                        </span>
+
+                     <span class="">
+                            <label class="control-label helpinline"> 优惠券开始时间：</label>
+                          <span class="date">
+                           <input uid="beginFromTime" size="16" type="text" value="" readonly class="form_datetime">
+                       </span>
+                        ~
+                        <span class="date">
+                            <input uid="beginToTime" size="16" type="text" value="" readonly class="form_datetime">
+                        </span>
+                        </span>
+                    <span class="">
+                            <label class="control-label helpinline"> 优惠券结束时间：</label>
+                        <span class="date">
+                           <input uid="endFromTime" size="16" type="text" value="" readonly class="form_datetime">
+                       </span>
+                        ~
+                        <span class="date">
+                            <input uid="endToTime" size="16" type="text" value="" readonly class="form_datetime">
+                        </span>
+                        </span>
+                    <label class="control-label helpinline"> 优惠券领取：</label><input type="text" uid="useMinNumber" class="input-medium"/>~<input type="text" uid="useMaxNumber" class="input-medium"/>
+                    <label class="control-label helpinline"> 优惠券剩余：</label><input type="text" uid="surplusMinNumber" class="input-medium">~<input type="text" uid="surplusMaxNumber" class="input-medium"/>
+                    <span class="">
+                            <label class="control-label helpinline">商品编号：</label> <input type="text" uid="id" class="input-medium"/>
+                        </span>
+                        <span class="">
+                           <label class="control-label helpinline">商品ID：</label><input type="text" uid="productId" class="input-medium"></span>
+                   <span class="">
+                           <label class="control-label helpinline">关键字：</label><input type="text" uid="name" class="input-medium"></span>
+
+                    <input type="submit" class="btn btn-primary red" value="搜索" />
+                    </p>
 
 
-onDetailClick: function (id ) {
-window.open('/frontend/detail.html?id='+ id);
-}
 
-});
-var currentPage = null;
-$(document).ready(function() {
-currentPage = new CurrentPage();
-});
-
-
-})
+                </form>
+                <table class="table table-striped table-bordered table-hover table-full-width"
+                       id="employeeGrid">
+                    <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>提交时间</th>
+                        <th>图片</th>
+                        <th>产品名称</th>
+                        <th>服务单价</th>
+                        <th>券后价格</th>
+                        <th>佣金信息</th>
+                        <th>优惠券信息</th>
+                        <th>提交人</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/lib/require/require.js"></script>
+<script src="/assets/js/dependances.js"></script>
+<script src="/assets/js/manageMent/commodity.js"></script>
+</body>
+</html>
