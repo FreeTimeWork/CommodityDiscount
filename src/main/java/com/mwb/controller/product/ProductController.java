@@ -118,7 +118,7 @@ public class ProductController {
         filter.setPagingData(new PagingData(request.getPageNumber(), request.getPageSize()));
 
         SearchResult<Product> result = productService.searchProduct(filter, employee);
-        List<ProductVO> productVOs = ProductVO.toVOs(result.getResult());
+        List<ProductVO> productVOs = ProductVO.toVOs(result.getResult(), employee);
 
         response.setProducts(productVOs);
         response.setPagingResult(result.getPagingResult());

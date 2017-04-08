@@ -322,7 +322,11 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     positionId: positionId
                 };
                 var successHandler = function(self, result) {
-                    alert('成功')
+                    if(result.resultMessage != null){
+                        alert(result.resultMessage);
+                    }else {
+                        alert('成功');
+                    }
                 };
                 var errorHandler = function(self, result) {
                     alert('请求失败');
