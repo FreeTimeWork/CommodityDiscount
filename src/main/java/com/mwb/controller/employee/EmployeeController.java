@@ -65,7 +65,7 @@ public class EmployeeController {
         boolean result = employeeService.createEmployee(employee);
 
         if (!result) {
-            response.setMessage("手机号重复");
+            response.setMessage("手机号重复！");
         }
 
         return response;
