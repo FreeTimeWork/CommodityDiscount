@@ -8,6 +8,7 @@ import com.mwb.controller.employee.api.*;
 import com.mwb.controller.util.ApplicationContextUtils;
 import com.mwb.dao.filter.EmployeeFilter;
 import com.mwb.dao.filter.SearchResult;
+import com.mwb.dao.model.comm.BooleanResult;
 import com.mwb.dao.model.comm.Log;
 import com.mwb.dao.model.comm.PagingData;
 import com.mwb.dao.model.employee.Employee;
@@ -61,10 +62,19 @@ public class EmployeeController {
         employee.setGroup(new Group(request.getGroupId()));
         employee.setPosition(new Position(request.getPositionId()));
         employee.setStatus(EmployeeStatus.IN_POSITION);
+        if (employee.getPosition().getId().equals(3) && employee.getGroup() != null) {
+            Group group = employee.getGroup();
+            if (group.getId() != null) {
+                group.setEmployeeId(employee.getId());
+                group.setEmployeeName(employee.getFullName());
+                response.setMessage("已覆盖该组的组长");
+            } else {
+                employee.setGroup(null);
+            }
+        }
+        BooleanResult result = employeeService.createEmployee(employee);
 
-        boolean result = employeeService.createEmployee(employee);
-
-        if (!result) {
+        if (!result.isResult()) {
             response.setMessage("手机号重复！");
         }
 
