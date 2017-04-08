@@ -95,8 +95,8 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     request.couponUrl = data.couponUrl;
                     request.couponBeginTime = data.couponBeginTime;
                     request.couponEndTime = data.couponEndTime;
-                    request.couponUseNumber = data.couponUseNumber;
-                    request.couponSurplusNumber = data.couponSurplusNumber;
+                    //request.couponUseNumber = data.couponUseNumber;
+                    //request.couponSurplusNumber = data.couponSurplusNumber;
                     request.condition = data.condition;
                     request.features = data.features;
                     request.description = data.description;
@@ -109,6 +109,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     request.serviceScore = data.serviceScore;
                     request.speedScore = data.speedScore;
                     request.storeTypeId = data.storeTypeId;
+                    request.qq = data.qq;
                     request.pictures = pictureOptions;
                     request.supplementPictureUrl = data.supplementPictureUrl
                     var successHandler = function(self, result) {
@@ -127,14 +128,8 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'activityTime',
-                    type : uiKit.Controller.EDIT,
-                    validators : [uiKit.Validator.DEFINE('这里不可以不填哦', function (value) {
-                        if(value){
-                            return true
-                        }else{
-                            return false
-                        }
-                    })]
+                    type : uiKit.Controller.EDIT
+
                 },{
                     uid : 'url',
                     type : uiKit.Controller.EDIT,
@@ -155,10 +150,14 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                                 pictureOptions = result.pictures;
                                 thiz.detailForm.getViewModel().storeTypeName(result.storeTypeName)
                                 thiz.detailForm.getViewModel().storeDescriptionScore(result.storeDescriptionScore)
+                                thiz.detailForm.getViewModel().productId(result.productId)
+                                thiz.detailForm.getViewModel().reservePrice(result.reservePrice)
                                 thiz.detailForm.getViewModel().serviceScore(result.serviceScore)
                                 thiz.detailForm.getViewModel().speedScore(result.speedScore)
+                                thiz.detailForm.getViewModel().condition(result.condition)
+                                thiz.detailForm.getViewModel().couponAmount(result.couponAmount)
                                 thiz.detailForm.getViewModel().sales(result.sales)
-                                thiz.detailForm.getViewModel().couponUseNumber(result.couponUseNumber)
+                                thiz.detailForm.getViewModel().couponUseNumber("剩余" + result.couponUseNumber +"张" + "已领取(" + result.couponSurplusNumber +")")
                                 thiz.detailForm.getViewModel().discountPrice(result.discountPrice)
                                 if(result.pictures.length > 0){
                                     for(var i = 0; i < result.pictures.length; i++){
@@ -200,8 +199,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     }
                 },{
                     uid : 'productId',
-                    type : uiKit.Controller.EDIT,
-                    validators : [uiKit.Validator.NONEMPTY]
+                    type : uiKit.Controller.LABEL
                 },{
                     uid : 'storeDiscriptionScore',
                     type : uiKit.Controller.LABEL
@@ -340,22 +338,24 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'planUrl',
-                    type : uiKit.Controller.TEXT_AREA,
-                    validators : [uiKit.Validator.NONEMPTY]
+                    type : uiKit.Controller.TEXT_AREA
                 },{
                     uid : 'supplementPictureUrl',
-                    type : uiKit.Controller.TEXT_AREA,
-                    validators : [uiKit.Validator.NONEMPTY]
+                    type : uiKit.Controller.TEXT_AREA
+                },{
+                    uid : 'features',
+                    type : uiKit.Controller.TEXT_AREA
                 },{
                     uid : 'description',
-                    type : uiKit.Controller.TEXT_AREA,
-                    validators : [uiKit.Validator.NONEMPTY]
+                    type : uiKit.Controller.TEXT_AREA
                 },{
                     uid : 'qq',
-                    type : uiKit.Controller.EDIT
+                    type : uiKit.Controller.EDIT,
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'chargePrice',
-                    type : uiKit.Controller.EDIT
+                    type : uiKit.Controller.EDIT,
+                    validators : [uiKit.Validator.NONEMPTY]
                 }]),
                 reset: false
             });

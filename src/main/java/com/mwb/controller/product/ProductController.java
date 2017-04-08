@@ -174,24 +174,24 @@ public class ProductController {
         product.setTaoKeId(dataokeProduct.getTaoKeId());
         product.setProductId(request.getProductId());
         product.setName(request.getName());
-        product.setPictureUrl(request.getPictureUrl());
+        product.setPictureUrl(dataokeProduct.getPictureUrl());
         product.setSupplementPictureUrl(request.getSupplementPictureUrl());
         product.setReservePrice(request.getReservePrice());
         product.setSales(request.getSales());
         product.setUrl(request.getUrl());
-        product.setActivityTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getActivityTime()));
+        product.setActivityTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getActivityTime()));
         product.setImmediately(Bool.fromValue(request.getImmediately()));
         product.setDiscountPrice(request.getDiscountPrice());
-        product.setCouponAmount(request.getCouponAmount());
+        product.setCouponAmount(dataokeProduct.getCouponAmount());
         product.setCouponUrl(request.getCouponUrl());
         if (StringUtils.isBlank(request.getCouponBeginTime())) {
             product.setCouponBeginTime(product.getActivityTime());
         } else {
-            product.setCouponBeginTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getCouponBeginTime()));
+            product.setCouponBeginTime(DateTimeUtility.parseYYYYMMDD(request.getCouponBeginTime()));
         }
-        product.setCouponEndTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getCouponEndTime()));
-        product.setCouponReceiveNumber(request.getCouponUseNumber());
-        product.setCouponSurplusNumber(request.getCouponSurplusNumber());
+        product.setCouponEndTime(DateTimeUtility.parseYYYYMMDD(request.getCouponEndTime()));
+        product.setCouponReceiveNumber(dataokeProduct.getCouponReceiveNumber());
+        product.setCouponSurplusNumber(dataokeProduct.getCouponSurplusNumber());
         product.setCondition(request.getCondition());
         product.setFeatures(request.getFeatures());
         product.setDescription(request.getDescription());
@@ -213,7 +213,7 @@ public class ProductController {
         store.setDescriptionScore(request.getStoreDescriptionScore());
         store.setServiceScore(request.getServiceScore());
         store.setSpeedScore(request.getSpeedScore());
-        store.setType(StoreType.fromId(request.getStoreTypeId()));
+        store.setType(dataokeProduct.getStore().getType());
 
         if (CollectionUtils.isNotEmpty(request.getPictures())) {
             List<ProductPicture> pictures = new ArrayList<>();
