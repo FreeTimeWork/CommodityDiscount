@@ -313,10 +313,13 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             currentPage.distributionDialog.show();
 
         },
-        onUpgradeClick: function (emlpoyeeId,positionId,groupId) {
+        onUpgradeClick: function (employeeId,positionId,groupId) {
             var url ="/employee/group/verify?groupId=" + groupId;
             var successHandler = function(self, result) {
-                var url ="/employee/modify";
+                if (result && !window.confirm("确认覆盖现有组长？")){
+                    return false;
+                }
+                var url1 ="/employee/modify";
                 var request = {
                     employeeId: employeeId,
                     positionId: positionId
@@ -331,7 +334,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 var errorHandler = function(self, result) {
                     alert('请求失败');
                 };
-                var action = new netKit.SimplePostAction(this, url, request,successHandler, errorHandler);
+                var action = new netKit.SimplePostAction(this, url1, request,successHandler, errorHandler);
                 action.submit();
             };
             var errorHandler = function(self, result) {
