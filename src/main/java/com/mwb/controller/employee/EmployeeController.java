@@ -50,8 +50,8 @@ public class EmployeeController {
     @ResponseBody
     @RequestMapping(value = "/create")
     public ServiceResponse createEmployee(@RequestBody CreateEmployeeRequest request) {
+        ServiceResponse response = new ServiceResponse();
 
-        //// TODO: 2017/4/7 校验手机号
         Employee employee = new Employee();
         employee.setFullName(request.getFullName());
         employee.setCreateTime(new Date());
@@ -62,9 +62,13 @@ public class EmployeeController {
         employee.setPosition(new Position(request.getPositionId()));
         employee.setStatus(EmployeeStatus.IN_POSITION);
 
-        employeeService.createEmployee(employee);
+        boolean result = employeeService.createEmployee(employee);
 
-        return new ServiceResponse();
+        if (!result) {
+            response.setMessage("手机号重复！");
+        }
+
+        return response;
     }
 
     @ResponseBody

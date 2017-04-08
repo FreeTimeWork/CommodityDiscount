@@ -19,9 +19,17 @@ public class EmployeeService implements IEmployeeService {
     private EmployeeMapper employeeMapper;
 
     @Override
-    public void createEmployee(Employee employee) {
-        employeeMapper.insertEmployee(employee);
-
+    public boolean createEmployee(Employee employee) {
+        boolean result = true;
+        EmployeeFilter filter = new EmployeeFilter();
+        filter.setMobile(employee.getMobile());
+        int count = employeeMapper.countEmployeeByFilter(filter);
+        if (count > 0) {
+            result = false;
+        } else {
+            employeeMapper.insertEmployee(employee);
+        }
+        return result;
     }
 
     @Override
@@ -54,6 +62,11 @@ public class EmployeeService implements IEmployeeService {
     @Override
     public Employee getEmployeeByMobileAndPassword(String mobile, String password) {
         return employeeMapper.selectEmployeeByMobileAndPassword(mobile,password);
+    }
+
+    @Override
+    public Employee getEmployeeById(Integer id) {
+        return employeeMapper.selectEmployeeById(id);
     }
 
     @Override
