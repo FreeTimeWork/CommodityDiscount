@@ -1,5 +1,7 @@
 package com.mwb.service.employee;
 
+import java.util.List;
+
 import com.mwb.controller.api.PagingResult;
 import com.mwb.dao.filter.EmployeeFilter;
 import com.mwb.dao.filter.SearchResult;
@@ -13,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service("employeeService")
 public class EmployeeService implements IEmployeeService {
@@ -60,7 +60,6 @@ public class EmployeeService implements IEmployeeService {
     }
     @Override
     public void modifyEmployee(Employee employee) {
-        employeeMapper.updateEmployee(employee);
 
         if (employee.getGroup() != null) {
             //老组长降级
@@ -70,6 +69,7 @@ public class EmployeeService implements IEmployeeService {
             //修改组长
             employeeMapper.updateGroup(employee.getGroup());
         }
+        employeeMapper.updateEmployee(employee);
     }
 
     @Override

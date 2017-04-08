@@ -118,6 +118,6 @@ INSERT INTO t_permission VALUES (1,'audit.wait.read','待审核'),(2,'audit.now.
 (7,'date.about.end.read','即将结束'),(8,'date.end.read','结束'),(9,'payment.replace.read','代付款'),(10,'payment.now.read','付款中'),(11,'payment.end.read','已付款'),(12,'payment.refuse.read','拒绝付款'),(13,'finance.report.read','查看财务报表'),
 (14,'store.submit','提交商品'),(15,'accounts.submit','提交结账'),(16,'employee.add','添加成员'),(17,'employee.upgrade','升级业务员');
 
-INSERT INTO t_position VALUES (1,'管理员'),(2,'业务员'),(3,'组长'),(4,'审单员'),(5,'财务');
+INSERT INTO t_position VALUES (1,'管理员'),(2,'业务员'),(3,'组长'),(4,'审单员'),(5,'财务'),(6,'零');
 
 INSERT INTO t_employee_status VALUES (1,'IN_POSITION','在职'),(2,'OUT_OF_POSITION','离职');
