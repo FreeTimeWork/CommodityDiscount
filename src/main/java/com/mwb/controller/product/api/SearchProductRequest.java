@@ -11,6 +11,7 @@ public class SearchProductRequest extends PagingRequest {
     private String name;
     private Integer statusId;
     private Integer typeId;
+    private Integer activityId;
     private Integer groupId;
     private Integer employeeId;
     private Boolean orderAsc;
@@ -63,6 +64,14 @@ public class SearchProductRequest extends PagingRequest {
 
     public void setTypeId(Integer typeId) {
         this.typeId = typeId;
+    }
+
+    public Integer getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(Integer activityId) {
+        this.activityId = activityId;
     }
 
     public Integer getGroupId() {
