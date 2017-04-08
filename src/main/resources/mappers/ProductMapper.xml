@@ -6,6 +6,8 @@
 
     <resultMap id="employeeResult" type="Employee" extends="com.mwb.dao.mapper.EmployeeMapper.employeeResult"/>
 
+    <resultMap id="taskResult" type="Task" extends="com.mwb.dao.mapper.BpmMapper.taskResult"/>
+
     <resultMap
         id="storeResult"
         type="Store">
@@ -57,6 +59,7 @@
         <association property="store" javaType="Store" resultMap="storeResult"/>
         <association property="employee" javaType="Employee" resultMap="employeeResult"/>
         <association property="voucher" javaType="ProductVoucher" resultMap="voucherResult"/>
+        <association property="task" javaType="Task" resultMap="taskResult"/>
         <collection property="pictures" ofType="ProductPicture" resultMap="productPictureResult"/>
     </resultMap>
 
@@ -99,6 +102,10 @@
 
     <sql id="employeeColumns">
         <include refid="com.mwb.dao.mapper.EmployeeMapper.employeeColumns"/>
+    </sql>
+
+    <sql id="taskColumns">
+        <include refid="com.mwb.dao.mapper.BpmMapper.taskColumns"/>
     </sql>
 
     <sql id="storeColumns">
@@ -268,12 +275,14 @@
             <include refid="productColumns"/>,
             <include refid="employeeColumns"/>,
             <include refid="storeColumns"/>,
-            <include refid="voucherColumns"/>
+            <include refid="voucherColumns"/>,
+            <include refid="taskColumns"/>
         FROM
             t_product p
         INNER JOIN t_employee ae ON ae.id = p.employee_id
         INNER JOIN t_store s ON s.id = p.store_id
         LEFT JOIN t_product_voucher v ON v.product_id = p.id
+        LEFT JOIN ru_task rt ON rt.id = p.task_id
         <where>
             p.id = #{id, javaType=int, jdbcType=INTEGER}
         </where>

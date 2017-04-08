@@ -155,7 +155,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         var html = '';
                         html += '<a style="margin-right: 10px;" onclick="currentPage().onDetailClick(\'' + id + '\')">查看</a>'
                         if(rowObject.showSubmit) {
-                            html += '<a style="margin-right: 10px;" onclick="currentPage().onReSubmitClick()">再次提交</a>'
+                            html += '<a style="margin-right: 10px;" onclick="currentPage().onReSubmitClick(\'' + id + '\')">再次提交</a>'
                             if(rowObject.statusCode == "PAY_WAIT") {
                                 html += '<a style="margin-right: 10px;" onclick="currentPage().onSubmitBillClick()">提交结账</a>'
                             }
@@ -264,6 +264,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
 
         onDetailClick: function (id ) {
             window.open('/frontend/detail.html?id='+ id);
+        },
+        onReSubmitClick: function () {
+            window.open('/frontend/create.html?id='+ id);
         }
 
     });
