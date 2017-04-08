@@ -9,7 +9,7 @@ import com.mwb.dao.model.employee.Group;
 
 public interface IEmployeeService {
 
-	public void createEmployee(Employee employee);
+	public boolean createEmployee(Employee employee);
 
 	public void modifyEmployee(Employee employee);
 
@@ -18,6 +18,8 @@ public interface IEmployeeService {
 	public SearchResult<Employee> searchEmployeeByFilter(EmployeeFilter filter);
 
 	public Employee getEmployeeByMobileAndPassword(String mobile, String password);
+
+	public Employee getEmployeeById(Integer id);
 
 	public void createGroup(Group group);
 

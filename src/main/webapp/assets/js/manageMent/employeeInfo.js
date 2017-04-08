@@ -301,7 +301,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
 
         },
         onUpgradeClick: function (emlpoyeeId,positionId,groupId) {
-            var url ="/employee/group/verity?groupId=" + groupId;
+            var url ="/employee/group/verify?groupId=" + groupId;
             var successHandler = function(self, result) {
                 var url ="/employee/modify";
                 var request = {

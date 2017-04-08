@@ -10,6 +10,15 @@ public class EmployeeFilter extends SearchFilter {
     private String fullName;
     private Integer groupId;
     private Integer positionId;
+    private String mobile;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
     public String getFullName() {
         return fullName;
