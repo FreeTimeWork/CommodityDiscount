@@ -15,7 +15,14 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         success: function (data) {
             if (data.employee != null && data.employee.fullName != null) {
                 $("#userName").text(data.employee.fullName);
-                return;
+                var positionId = data.employee.positionId;
+                if(positionId != 2
+                    && positionId != 3
+                    && positionId != 6){
+                    $("#showCreate").hide();
+                }else {
+                    $("#showCreate").hide();
+                }
             }
         }
     });
@@ -75,11 +82,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         var businessPerson = rowObject.businessPerson;
                         var statusCode = rowObject.statusCode;
                         var html = '';
-                        if(businessPerson){
+                        if(businessPerson && statusCode == "IN_POSITION"){
                             html += '<a style="margin-right: 10px;" onclick="currentPage().onGroupClick(\'' + employeeId + '\',\'' + positionId + '\')">分组</a>'
                             html += '<a style="margin-right: 10px;" onclick="currentPage().onUpgradeClick(\'' + employeeId + '\',\'' + positionId + '\',\'' + groupId + '\')">升级</a>'
-                        }
-                        if(statusCode == "IN_POSITION") {
                             html += '<a style="margin-right: 10px;" onclick="currentPage().onQuitClick(\'' + employeeId + '\',\'' + true + '\')">离职</a>'
                         }
                         return html;

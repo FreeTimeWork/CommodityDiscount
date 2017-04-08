@@ -19,7 +19,14 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         success: function (data) {
             if (data.employee != null && data.employee.fullName != null) {
                 $("#userName").text(data.employee.fullName);
-                return;
+                var positionId = data.employee.positionId;
+                if(positionId != 2
+                    && positionId != 3
+                    && positionId != 6){
+                    $("#showCreate").hide();
+                }else {
+                    $("#showCreate").hide();
+                }
             }
         }
     });

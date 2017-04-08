@@ -127,7 +127,7 @@ public class ProductService implements IProductService {
         Integer positionId = employee.getPosition().getId();
         Integer employeeId = employee.getId();
 
-        if (positionId.equals(2)) {
+        if (positionId.equals(2) || positionId.equals(6)) {
             filter.setEmployeeId(employeeId);
         } else if (positionId.equals(3)) {
             filter.setGroupId(employee.getGroup().getId());
@@ -155,6 +155,7 @@ public class ProductService implements IProductService {
         finance.setRefuseRate(0);
         finance.setTwoAuditNumber(0);
         finance.setPromoteNumber(0);
+        finance.setSettlementNumber(0);
         finance.setEndApproachNumber(0);
         finance.setEndNumber(0);
         finance.setPayWaitNumber(0);
@@ -192,8 +193,21 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public SearchResult<ProductVoucher> searchProductVoucher(ProductFilter filter) {
+    public SearchResult<ProductVoucher> searchProductVoucher(ProductFilter filter, Employee employee) {
         SearchResult<ProductVoucher> result = new SearchResult<>();
+
+        Integer positionId = employee.getPosition().getId();
+        Integer employeeId = employee.getId();
+
+        setPermissionProductFilter(filter, employee);
+        if (positionId.equals(2) || positionId.equals(6)) {
+            filter.setEmployeeId(employeeId);
+        } else if (positionId.equals(3)) {
+            filter.setGroupId(employee.getGroup().getId());
+        }else if (positionId.equals(4)) {
+            return result;
+        }
+
         List<ProductVoucher> vouchers = productMapper.selectProductVoucherByFilter(filter);
 
         result.setResult(vouchers);

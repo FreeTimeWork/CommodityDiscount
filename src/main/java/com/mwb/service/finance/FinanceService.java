@@ -95,6 +95,8 @@ public class FinanceService implements IFinanceService {
                 finance.setPayTrailerNumber(finance.getPayTrailerNumber() - 1);
             } else if (ProductStatus.PAY_END == fromStatus) {
                 finance.setPayEndNumber(finance.getPayEndNumber() - 1);
+            }else if (ProductStatus.SETTLEMENT == fromStatus) {
+                finance.setSettlementNumber(finance.getSettlementNumber() - 1);
             }
         }
 
@@ -117,6 +119,8 @@ public class FinanceService implements IFinanceService {
                 finance.setPayTrailerNumber(finance.getPayTrailerNumber() + 1);
             } else if (ProductStatus.PAY_END == toStatus) {
                 finance.setPayEndNumber(finance.getPayEndNumber() + 1);
+            } else if (ProductStatus.SETTLEMENT == toStatus) {
+                finance.setSettlementNumber(finance.getSettlementNumber() + 1);
             }
         }
 

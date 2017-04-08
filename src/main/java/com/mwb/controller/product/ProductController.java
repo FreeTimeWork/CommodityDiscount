@@ -111,6 +111,10 @@ public class ProductController {
         }else if (ProductStatus.END == status
                 && product.getEmployee().getId().equals(employee.getId())) {
             vos.add(new ResourceVO(ProductStatus.PAY_WAIT.getDescription(), ProductStatus.PAY_WAIT.getId()));
+        }else if (ProductStatus.PAY_WAIT == status
+                && product.getEmployee().getId().equals(employee.getId())
+                && employee.getPosition().getId() == 6) {
+            vos.add(new ResourceVO(ProductStatus.SETTLEMENT.getDescription(), ProductStatus.SETTLEMENT.getId()));
         }else if (ProductStatus.PAY_RUN == status) {
             vos.add(new ResourceVO(ProductStatus.PAY_TRAILER.getDescription(), ProductStatus.PAY_TRAILER.getId()));
             vos.add(new ResourceVO(ProductStatus.PAY_END.getDescription(), ProductStatus.PAY_END.getId()));
@@ -133,12 +137,12 @@ public class ProductController {
         filter.setName(request.getName());
         filter.setGroupId(request.getGroupId());
         filter.setEmployeeId(request.getEmployeeId());
-        filter.setCreateBeginTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getCreateBeginTime()));
-        filter.setCreateEndTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getCreateEndTime()));
-        filter.setBeginFromTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getBeginFromTime()));
-        filter.setBeginToTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getBeginToTime()));
-        filter.setEndFromTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getEndFromTime()));
-        filter.setEndToTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getEndToTime()));
+        filter.setCreateBeginTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getCreateBeginTime()));
+        filter.setCreateEndTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getCreateEndTime()));
+        filter.setBeginFromTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getBeginFromTime()));
+        filter.setBeginToTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getBeginToTime()));
+        filter.setEndFromTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getEndFromTime()));
+        filter.setEndToTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getEndToTime()));
         filter.setReceiveMinNumber(request.getUseMinNumber());
         filter.setReceiveMaxNumber(request.getUseMaxNumber());
         filter.setSurplusMinNumber(request.getSurplusMinNumber());
@@ -311,17 +315,19 @@ public class ProductController {
     @RequestMapping(value = "/voucher/search")
     public ServiceResponse searchVoucher(SearchFinanceVoucherRequest request) throws ParseException {
         SearchFinanceVoucherResponse response = new SearchFinanceVoucherResponse();
+        Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
+
         ProductFilter filter = new ProductFilter();
         filter.setType(ProductType.fromId(request.getProductTypeId()));
         filter.setGroupId(request.getGroupId());
         filter.setEmployeeId(request.getEmployeeId());
         filter.setOrderAsc(request.getOrderByAsc() == null ? true : request.getOrderByAsc());
-        filter.setCreateBeginTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getCreateBeginTime()));
-        filter.setCreateEndTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getCreateEndTime()));
-        filter.setBeginFromTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getBeginFromTime()));
-        filter.setBeginToTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getBeginToTime()));
-        filter.setEndFromTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getEndFromTime()));
-        filter.setEndToTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getEndToTime()));
+        filter.setCreateBeginTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getCreateBeginTime()));
+        filter.setCreateEndTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getCreateEndTime()));
+        filter.setBeginFromTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getBeginFromTime()));
+        filter.setBeginToTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getBeginToTime()));
+        filter.setEndFromTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getEndFromTime()));
+        filter.setEndToTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getEndToTime()));
         filter.setMinChargePrice(request.getMinChargePrice());
         filter.setMaxChargePrice(request.getMaxChargePrice());
         filter.setMinDiscountPrice(request.getMinDiscountPrice());
@@ -337,7 +343,7 @@ public class ProductController {
         filter.setProductId(request.getProductId());
         filter.setPaged(true);
         filter.setPagingData(new PagingData(request.getPageNumber(), request.getPageSize()));
-        SearchResult<ProductVoucher> result = productService.searchProductVoucher(filter);
+        SearchResult<ProductVoucher> result = productService.searchProductVoucher(filter, employee);
 
         response.setVouchers(ProductVoucherVO.toVOs(result.getResult(), null));
         response.setPagingResult(result.getPagingResult());

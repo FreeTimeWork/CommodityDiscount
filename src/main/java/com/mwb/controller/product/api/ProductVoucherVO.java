@@ -57,7 +57,9 @@ public class ProductVoucherVO {
         }else {
             vo.setUseRatio(voucher.getUseNumber() * 100 / voucher.getReceiveNumber());
         }
-        if (employee != null && voucher.getProduct().getStatus() == ProductStatus.PAY_TRAILER
+        if (employee != null &&
+                (voucher.getProduct().getStatus() == ProductStatus.PAY_TRAILER
+                        || voucher.getProduct().getStatus() == ProductStatus.PAY_WAIT)
                 && voucher.getProduct().getEmployee().getId().equals(employee.getId())){
             vo.setShowSubmit(true);
         }

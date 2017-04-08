@@ -183,6 +183,7 @@ CREATE TABLE `t_finance` (
   `pay_run_number` int(10) unsigned NOT NULL,
   `pay_trailer_number` int(10) unsigned NOT NULL,
   `pay_end_number` int(10) unsigned NOT NULL,
+  `settlement_number` int(10) unsigned NOT NULL,
   `guest_unit_price` decimal(18,2) NOT NULL DEFAULT '0.00',
   `actual_charge_amount` decimal(18,2) NOT NULL DEFAULT '0.00',
   `should_charge_amount` decimal(18,2) NOT NULL DEFAULT '0.00',

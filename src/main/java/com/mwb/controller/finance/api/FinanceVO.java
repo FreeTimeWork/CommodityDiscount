@@ -27,6 +27,7 @@ public class FinanceVO {
     private Integer payRunNumber;//付款中数量
     private Integer payTrailerNumber;//拒绝付款数量
     private Integer payEndNumber;//已付款数量
+    private Integer settlementNumberNumber;//已结账数量
     private BigDecimal guestUnitPrice;//客单价
     private BigDecimal actualChargeAmount;//实收金额
     private BigDecimal shouldChargeAmount;//应收金额
@@ -47,6 +48,7 @@ public class FinanceVO {
         vo.setPayWaitNumber(finance.getPayWaitNumber());
         vo.setPayRunNumber(finance.getPayRunNumber());
         vo.setPayEndNumber(finance.getPayEndNumber());
+        vo.setSettlementNumberNumber(finance.getSettlementNumber());
         vo.setPayTrailerNumber(finance.getPayTrailerNumber());
         vo.setGuestUnitPrice(finance.getGuestUnitPrice());
         vo.setActualChargeAmount(finance.getActualChargeAmount());
@@ -191,6 +193,14 @@ public class FinanceVO {
 
     public void setPayEndNumber(Integer payEndNumber) {
         this.payEndNumber = payEndNumber;
+    }
+
+    public Integer getSettlementNumberNumber() {
+        return settlementNumberNumber;
+    }
+
+    public void setSettlementNumberNumber(Integer settlementNumberNumber) {
+        this.settlementNumberNumber = settlementNumberNumber;
     }
 
     public BigDecimal getGuestUnitPrice() {

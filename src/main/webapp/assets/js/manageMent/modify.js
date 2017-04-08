@@ -2,7 +2,25 @@ require.config(I360R.REQUIRE_CONFIG);
 
 require([ 'jquery', 'uiKit3', 'networkKit', 'coreKit', 'l10n', 'serviceUrls'],
     function($, uiKit, netKit, cKit, l10n, serviceUrls) {
-
+        $.ajax({
+            type: 'get',
+            async: false,
+            url: '/employee/currentEmployee',
+            success: function (data) {
+                if (data.employee != null && data.employee.fullName != null) {
+                    $("#userName").text(data.employee.fullName);
+                    var positionId = data.employee.positionId;
+                    if(positionId != 2
+                        && positionId != 3
+                        && positionId != 6){
+                        $("#showCreate").hide();
+                        $("#showEmployee").hide();
+                    }else {
+                        $("#showCreate").hide();
+                    }
+                }
+            }
+        });
         var label = l10n.label;
         var message = l10n.message;
         var ValueUtils = cKit.ValueUtils;
