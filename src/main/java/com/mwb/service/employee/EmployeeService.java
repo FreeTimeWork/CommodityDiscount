@@ -4,11 +4,15 @@ import com.mwb.controller.api.PagingResult;
 import com.mwb.dao.filter.EmployeeFilter;
 import com.mwb.dao.filter.SearchResult;
 import com.mwb.dao.mapper.EmployeeMapper;
+import com.mwb.dao.model.comm.BooleanResult;
 import com.mwb.dao.model.employee.Employee;
 import com.mwb.dao.model.employee.Group;
 import com.mwb.service.employee.api.IEmployeeService;
+import com.mwb.service.finance.api.IFinanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,14 +23,18 @@ public class EmployeeService implements IEmployeeService {
     private EmployeeMapper employeeMapper;
 
     @Override
-    public boolean createEmployee(Employee employee) {
-        boolean result = true;
+    @Transactional(readOnly = false,propagation = Propagation.REQUIRED)
+    public BooleanResult createEmployee(Employee employee) {
+        BooleanResult result = new BooleanResult();
         EmployeeFilter filter = new EmployeeFilter();
         filter.setMobile(employee.getMobile());
         int count = employeeMapper.countEmployeeByFilter(filter);
         if (count > 0) {
-            result = false;
+            result.setResult(false);
         } else {
+            if (employee.getGroup() != null) {
+                employeeMapper.updateGroup(employee.getGroup());
+            }
             employeeMapper.insertEmployee(employee);
         }
         return result;

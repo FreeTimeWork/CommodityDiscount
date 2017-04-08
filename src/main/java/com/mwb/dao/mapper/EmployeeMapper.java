@@ -29,6 +29,8 @@ public interface EmployeeMapper {
     // group
     public void insertGroup(Group group);
 
+    public void updateGroup(Group group);
+
     public List<Group> selectAllGroup();
 
     public Group selectGroupById(@Param("id") Integer id);

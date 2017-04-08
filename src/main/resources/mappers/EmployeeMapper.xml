@@ -114,6 +114,26 @@
         </where>
     </select>
 
+    <update
+            id="updateGroup"
+            parameterType="Group">
+        UPDATE
+        t_group
+        <set>
+            <if test="name != null">
+                name = #{name, javaType=string, jdbcType=CHAR},
+            </if>
+            <if test="employeeId != null">
+                employee_id = #{employeeId, javaType=int, jdbcType=INTEGER},
+            </if>
+            <if test="employeeName != null">
+                employee_name = #{employeeName, javaType=string, jdbcType=CHAR},
+            </if>
+        </set>
+        WHERE
+        id = #{id, javaType=int, jdbcType=INTEGER}
+    </update>
+
     <select id="selectEmployeeByFilter" parameterType="map" resultMap="employeeResult">
         SELECT
             <include refid="employeeColumns"/>,

@@ -186,7 +186,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     uid: 'groupId',
                     type: uiKit.Controller.SELECT,
                     options: groupOptions,
-                    validators: [uiKit.Validator.NONEMPTY]
+                    validators: [uiKit.Validator.EMPTY_NUMERIC]
                 },{
                     uid: 'positionId',
                     type: uiKit.Controller.SELECT,
