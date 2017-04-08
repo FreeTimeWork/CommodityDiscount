@@ -163,7 +163,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit'], function ($,
                 },{
                     uid : 'orderByAsc',
                     type : uiKit.Controller.SELECT,
-                    options: [{label: '',value: null},{label: '正序',value: true},{label: '倒序',value: false}]
+                    options: [{label: '排序',value: null},{label: '正序',value: true},{label: '倒序',value: false}]
                 },{
                     uid : 'beginPayTime',
                     type : uiKit.Controller.EDIT,
