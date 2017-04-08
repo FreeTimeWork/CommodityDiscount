@@ -165,14 +165,20 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     uid : 'storeTypeName',
                     type : uiKit.Controller.LABEL
                 },{
-                    uid : 'pictureUrl',
-                    type : uiKit.Controller.IMAGE,
-                    visible: function(data) {
-                        if (ValueUtils.isEmpty(data)) {
-                            return false;
-                        }
-                        return true;
-                    }
+                    uid : 'reservePrice',
+                    type : uiKit.Controller.LABEL
+                },{
+                    uid : 'couponUseNumber',
+                    type : uiKit.Controller.LABEL
+                },{
+                    uid : 'couponSurplusNumber',
+                    type : uiKit.Controller.LABEL
+                },{
+                    uid : 'couponAmount',
+                    type : uiKit.Controller.LABEL
+                },{
+                    uid : 'condition',
+                    type : uiKit.Controller.LABEL
                 },{
                     uid : 'pictureUrl1',
                     type : uiKit.Controller.IMAGE,

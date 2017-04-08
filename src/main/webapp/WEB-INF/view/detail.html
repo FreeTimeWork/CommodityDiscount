@@ -167,14 +167,29 @@
                                 <label uid="immediatelyStr"></label>
                             </div>
                             <div class="control-group" gid="">
-                                <label class="control-label">优惠券数量</label><label uid="couponUseNumber"></label>
+                                <label class="control-label">优惠券数量</label>
+                                <label style="display: inline-block" >领取/剩余&nbsp</label>
+                                <label style="display: inline-block" uid="couponUseNumber"></label>
+                                <label style="display: inline-block" >/</label>
+                                <label style="display: inline-block" uid="couponSurplusNumber"></label>
                             </div>
                             <div class="control-group" gid="couponBeginTime">
                                 <label class="control-label">优惠券有效期</label>
-                                <label style="display: inline-block" uid="couponBeginTime"></label> <label style="display: inline-block" uid="couponEndTime"></label>
+                                <label style="display: inline-block" uid="couponBeginTime"></label>
+                                <label style="display: inline-block" >&nbsp - &nbsp</label>
+                                <label style="display: inline-block" uid="couponEndTime"></label>
+                            </div>
+                            <div class="control-group" gid="">
+                                <label class="control-label">商品原价</label><label uid="reservePrice"></label>
+                            </div>
+                            <div class="control-group" gid="">
+                                <label class="control-label">优惠券金额</label><label uid="couponAmount"></label>
                             </div>
                             <div class="control-group" gid="">
                                 <label class="control-label">券后价格</label><label uid="discountPrice"></label>
+                            </div>
+                            <div class="control-group" gid="">
+                                <label class="control-label">使用条件</label><label uid="condition"></label>
                             </div>
                             <div class="control-group" gid="">
                                 <label class="control-label">佣金比例</label>
@@ -197,12 +212,10 @@
                                 <label uid="description"></label>
                             </div>
                             <div class="control-group" gid="">
-                                <label class="control-label">商家QQ</label><label style="display: inline-block" uid="qq"></label><span
-                                    style="margin-left: 10px;color: red">*</span>
+                                <label class="control-label">商家QQ</label><label style="display: inline-block" uid="qq"></label>
                             </div>
                             <div class="control-group" gid="">
-                                <label class="control-label">收费单价</label><label style="display: inline-block" uid="chargePrice"></label><span
-                                    style="margin-left: 10px;color: red">*</span>
+                                <label class="control-label">收费单价</label><label style="display: inline-block" uid="chargePrice"></label>
                             </div>
                         </form>
                         <div class="look">
