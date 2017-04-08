@@ -47,6 +47,8 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
     })
     var ValueUtils = cKit.ValueUtils;
 
+    var pictureOptions = []
+
     var activeOption = [{label: '普通活动',value: 1},{label: '预告商品',value: 2},{label: '淘抢购',value: 3},{label: '聚划算',value: 4}]
 
     var CurrentPage = (function (_super) {
@@ -58,47 +60,17 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             _super.call(this);
             thiz = this;
             this.searchParams = {};
-            this.init();
-            this.initCreateForm();
-        }
-
-        CurrentPage.prototype.init = function () {
-            var req = cKit.UrlUtils.getRequest();
-            var url ="/product/detail?id="+req.id;
-            var successHandler = function(self, result) {
-                if(result.pictures.length > 0){
-                    if(result.pictures[0]){
-                        result.pictureUrl1 = result.pictures[0]
-                    }
-                    if(result.pictures[1]){
-                        result.pictureUrl2 = result.pictures[1]
-                    }
-                    if(result.pictures[2]){
-                        result.pictureUrl3 = result.pictures[2]
-                    }
-                    if(result.pictures[3]){
-                        result.pictureUrl4 = result.pictures[3]
-                    }
-                    if(result.pictures[4]){
-                        result.pictureUrl5 = result.pictures[4]
-                    }
-                    if(result.pictures[5]){
-                        result.pictureUrl6 = result.pictures[5]
-                    }
-                    if(result.pictures[6]){
-                        result.pictureUrl7 = result.pictures[6]
-                    }
-                    if(result.pictures[7]){
-                        result.pictureUrl8 = result.pictures[7]
-                    }
-                }
-                thiz.initDetailForm(result)
-            };
-            var errorHandler = function(self, result) {
-                alert('请求失败');
-            };
-            var action = new netKit.SimpleGetAction(this, url,successHandler, errorHandler);
-            action.submit();
+            this.initDetailForm();
+            $('#productCopy').click(function () {
+                var e = document.getElementById('detailForm_url');
+                e.select();
+                document.execCommand('Copy')
+            })
+            $('#couponCopy').click(function () {
+                var e = document.getElementById('detailForm_couponUrl');
+                e.select();
+                document.execCommand('Copy')
+            })
         }
 
         CurrentPage.prototype.initDetailForm = function (model) {
@@ -137,7 +109,8 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     request.serviceScore = data.serviceScore;
                     request.speedScore = data.speedScore;
                     request.storeTypeId = data.storeTypeId;
-                    request.pictures = data.pictures;
+                    request.pictures = pictureOptions;
+                    request.supplementPictureUrl = data.supplementPictureUrl
                     var successHandler = function(self, result) {
                         alert('成功')
                     };
@@ -155,7 +128,13 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 },{
                     uid : 'activityTime',
                     type : uiKit.Controller.EDIT,
-                    validators : [uiKit.Validator.NONEMPTY]
+                    validators : [uiKit.Validator.DEFINE('这里不可以不填哦', function (value) {
+                        if(value){
+                            return true
+                        }else{
+                            return false
+                        }
+                    })]
                 },{
                     uid : 'url',
                     type : uiKit.Controller.EDIT,
@@ -170,16 +149,54 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     click: function () {
                         var couponUrl = this.getContainerForm().viewModel.couponUrl();
                         var productUrl = this.getContainerForm().viewModel.url();
-                        var url ="/product/grab?couponUrl="+couponUrl+"&productUrl="+productUrl;
-                        var successHandler = function(self, result) {
-                            thiz.detailForm.getViewModel().couponUrl(result.couponUrl)
-                            thiz.detailForm.getViewModel().url(result.url)
-                        };
-                        var errorHandler = function(self, result) {
-                            alert('请求参数错误');
-                        };
-                        var action = new netKit.SimpleGetAction(this, url,successHandler, errorHandler);
-                        action.submit();
+                        if(couponUrl && productUrl){
+                            var url ="/product/grab?couponUrl="+couponUrl+"&productUrl="+productUrl;
+                            var successHandler = function(self, result) {
+                                pictureOptions = result.pictures;
+                                thiz.detailForm.getViewModel().storeTypeName(result.storeTypeName)
+                                thiz.detailForm.getViewModel().storeDescriptionScore(result.storeDescriptionScore)
+                                thiz.detailForm.getViewModel().serviceScore(result.serviceScore)
+                                thiz.detailForm.getViewModel().speedScore(result.speedScore)
+                                thiz.detailForm.getViewModel().sales(result.sales)
+                                thiz.detailForm.getViewModel().couponUseNumber(result.couponUseNumber)
+                                thiz.detailForm.getViewModel().discountPrice(result.discountPrice)
+                                if(result.pictures.length > 0){
+                                    for(var i = 0; i < result.pictures.length; i++){
+                                        if(i==0){
+                                            thiz.detailForm.getViewModel().pictureUrl0(result.pictures[0])
+                                        }
+                                        if(i==1){
+                                            thiz.detailForm.getViewModel().pictureUrl1(result.pictures[1])
+                                        }
+                                        if(i==2){
+                                            thiz.detailForm.getViewModel().pictureUrl2(result.pictures[2])
+                                        }
+                                        if(i==3){
+                                            thiz.detailForm.getViewModel().pictureUrl3(result.pictures[3])
+                                        }
+                                        if(i==4){
+                                            thiz.detailForm.getViewModel().pictureUrl4(result.pictures[4])
+                                        }
+                                        if(i==5){
+                                            thiz.detailForm.getViewModel().pictureUrl5(result.pictures[5])
+                                        }
+                                        if(i==6){
+                                            thiz.detailForm.getViewModel().pictureUrl6(result.pictures[6])
+                                        }
+                                        if(i==7){
+                                            thiz.detailForm.getViewModel().pictureUrl7(result.pictures[7])
+                                        }
+                                    }
+                                }
+                            };
+                            var errorHandler = function(self, result) {
+                                alert('请求参数错误');
+                            };
+                            var action = new netKit.SimpleGetAction(this, url,successHandler, errorHandler);
+                            action.submit();
+                        }else{
+                            alert('请先填写产品链接和优惠券链接在点击抓取按钮')
+                        }
                     }
                 },{
                     uid : 'productId',
@@ -199,6 +216,15 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     type : uiKit.Controller.LABEL
                 },{
                     uid : 'pictureUrl',
+                    type : uiKit.Controller.IMAGE,
+                    visible: function(data) {
+                        if (ValueUtils.isEmpty(data)) {
+                            return false;
+                        }
+                        return true;
+                    }
+                },{
+                    uid : 'pictureUrl0',
                     type : uiKit.Controller.IMAGE,
                     visible: function(data) {
                         if (ValueUtils.isEmpty(data)) {
@@ -270,15 +296,6 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         return true;
                     }
                 },{
-                    uid : 'pictureUrl8',
-                    type : uiKit.Controller.IMAGE,
-                    visible: function(data) {
-                        if (ValueUtils.isEmpty(data)) {
-                            return false;
-                        }
-                        return true;
-                    }
-                },{
                     uid : 'pictureSize',
                     type : uiKit.Controller.LABEL
                 },{
@@ -335,10 +352,10 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'qq',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.EDIT
                 },{
                     uid : 'chargePrice',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.EDIT
                 }]),
                 reset: false
             });

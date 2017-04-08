@@ -155,6 +155,8 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                             alert(result.resultMessage);
                         }else {
                             alert('成功');
+                            thiz.hide();
+                            currentPage.pageGrid.draw()
                         }
                     };
                     var errorHandler = function (self, result) {
@@ -229,6 +231,8 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                             alert(result.resultMessage);
                         }else {
                             alert('成功');
+                            thiz.hide()
+                            currentPage.pageGrid.draw()
                         }
                     };
                     var errorHandler = function (self, result) {
@@ -274,6 +278,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     request = data
                     var successHandler = function(self, result) {
                         alert('成功')
+                        thiz.hide()
                     };
                     var errorHandler = function(self, result) {
                         alert('请求失败');
