@@ -37,7 +37,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         success: function (data) {
             if (data.employee != null && data.employee.fullName != null) {
                 $("#userName").text(data.employee.fullName);
-                return;
+                if(data.employee.positionId != 2 && data.employee.positionId != 3 && data.employee.positionId != 6){
+                    $("#showCreate").hide();
+                }
             }
         }
     });
@@ -95,11 +97,11 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         return '<img src=\'' + cellValue + '\'/>'
                     }
                 }, {
+                    "data": "name"
+                }, {
                     "data": "chargePrice"
                 }, {
                     "data": "discountPrice"
-                }, {
-                    "data": "ratio"
                 }, {
                     "data": "couponBeginTime",
                     "render": function (data,type,rowObject,meta) {
@@ -117,7 +119,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     "render": function (data,type,rowObject,meta) {
                         var html = '';
                         html += '<sapn>' + data + '</sapn>' + '<span style="color: red;">'+ rowObject.ratio +'</span><br>'
-                        if(rowObject.hireTypeCode == "hireTypeCode"){
+                        if(rowObject.hireTypeCode == "DIRECTIONAL"){
                             html += '<a href=\'' + rowObject.planUrl + '\'>' + '查看计划链接' + '</a><br>'
                         }
                         html += '<span>'+ rowObject.activityName +'</span>'
