@@ -60,13 +60,57 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             _super.call(this);
             thiz = this;
             this.searchParams = {};
-            this.initDetailForm();
+            if(cKit.UrlUtils.getRequest().id){
+                this.init()
+            }else{
+                this.initDetailForm();
+            }
+
+        }
+
+        CurrentPage.prototype.init = function () {
+            var req = cKit.UrlUtils.getRequest();
+            var url ="/product/detail?id="+req.id;
+            var successHandler = function(self, result) {
+                if(result.pictures.length > 0){
+                    if(result.pictures[0]){
+                        result.pictureUrl0 = result.pictures[0]
+                    }
+                    if(result.pictures[1]){
+                        result.pictureUrl1 = result.pictures[1]
+                    }
+                    if(result.pictures[2]){
+                        result.pictureUrl2 = result.pictures[2]
+                    }
+                    if(result.pictures[3]){
+                        result.pictureUrl3 = result.pictures[3]
+                    }
+                    if(result.pictures[4]){
+                        result.pictureUrl4 = result.pictures[4]
+                    }
+                    if(result.pictures[5]){
+                        result.pictureUrl5 = result.pictures[5]
+                    }
+                    if(result.pictures[6]){
+                        result.pictureUrl6 = result.pictures[6]
+                    }
+                    if(result.pictures[7]){
+                        result.pictureUrl7 = result.pictures[7]
+                    }
+                }
+                thiz.initDetailForm(result)
+            };
+            var errorHandler = function(self, result) {
+                alert('请求失败');
+            };
+            var action = new netKit.SimpleGetAction(this, url,successHandler, errorHandler);
+            action.submit();
         }
 
         CurrentPage.prototype.initDetailForm = function (model) {
             this.detailForm = new uiKit.FormController({
                 id: 'detailForm',
-                model: {immediately:false},
+                model: model || {immediately:false},
                 submit: function(data) {
                     var url ='/product/create';
                     var request = {};
