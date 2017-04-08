@@ -1,5 +1,6 @@
 package com.mwb.dao.filter;
 
+import com.mwb.dao.model.product.Activity;
 import com.mwb.dao.model.product.ProductStatus;
 import com.mwb.dao.model.product.ProductType;
 import org.apache.commons.lang.StringUtils;
@@ -37,6 +38,7 @@ public class ProductFilter extends SearchFilter {
     private BigDecimal minPayPrice;   //付款价格
     private BigDecimal maxPayPrice;   //付款价格
     private ProductType type;
+    private Activity activity;
     private ProductStatus status;
     private List<ProductStatus> excludeStatus;
     private List<ProductStatus> includeStatus;
@@ -185,6 +187,14 @@ public class ProductFilter extends SearchFilter {
 
     public void setType(ProductType type) {
         this.type = type;
+    }
+
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
     }
 
     public List<ProductStatus> getIncludeStatus() {

@@ -181,9 +181,11 @@
 
     <select id="selectEmployeeById" resultMap="employeeResult" parameterType="map">
         SELECT
-            <include refid="employeeColumns"/>
+            <include refid="employeeColumns"/>,
+            <include refid="groupColumns"/>
         FROM
             t_employee ae
+            LEFT JOIN t_group g ON g.id = ae.group_id
         <where>
             ae.id = #{id, javaType=int, jdbcType=INTEGER}
         </where>
@@ -264,7 +266,7 @@
                 position_id = #{position.id, javaType=int, jdbcType=INTEGER},
             </if>
             <if test="group != null">
-                group_id = #{group.id, javaType=string, jdbcType=CHAR},
+                group_id = #{group.id, javaType=int, jdbcType=INTEGER},
             </if>
             <if test="status != null">
                 status_id = #{status.id, javaType=int, jdbcType=INTEGER},

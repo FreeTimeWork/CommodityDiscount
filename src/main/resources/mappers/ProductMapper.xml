@@ -239,6 +239,9 @@
         <if test="filter.type != null">
             AND p.type_id = #{filter.type.id, javaType=int, jdbcType=INTEGER}
         </if>
+        <if test="filter.activity != null">
+            AND p.activity_id = #{filter.activity.id, javaType=int, jdbcType=INTEGER}
+        </if>
         <if test="filter.status != null">
             AND p.status_id = #{filter.status.id, javaType=int, jdbcType=INTEGER}
         </if>

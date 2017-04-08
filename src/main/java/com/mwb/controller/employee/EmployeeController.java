@@ -59,17 +59,16 @@ public class EmployeeController {
         employee.setGender(Gender.fromCode(request.getGenderCode()));
         employee.setMobile(request.getMobile());
         employee.setPassword(MD5Tools.MD5(request.getPassword()));
-        employee.setGroup(new Group(request.getGroupId()));
+        if (request.getGroupId() != null) {
+            employee.setGroup(new Group(request.getGroupId()));
+        }
         employee.setPosition(new Position(request.getPositionId()));
         employee.setStatus(EmployeeStatus.IN_POSITION);
         if (employee.getPosition().getId().equals(3) && employee.getGroup() != null) {
             Group group = employee.getGroup();
             if (group.getId() != null) {
-                group.setEmployeeId(employee.getId());
                 group.setEmployeeName(employee.getFullName());
                 response.setMessage("已覆盖该组的组长");
-            } else {
-                employee.setGroup(null);
             }
         }
         BooleanResult result = employeeService.createEmployee(employee);
@@ -111,11 +110,17 @@ public class EmployeeController {
 
         Employee employee = new Employee();
         employee.setId(request.getEmployeeId());
-
+        Employee employeeDb = employeeService.getEmployeeById(request.getEmployeeId());
         if (request.getPositionId() != null) {
-            employee.setPosition(new Position(request.getPositionId()));
+            if (request.getPositionId().equals(2)) {
+                Group group = employeeDb.getGroup();
+                group.setEmployeeId(employeeDb.getId());
+                group.setEmployeeName(employeeDb.getFullName());
+                employee.setGroup(group);
+            }
+            employee.setPosition(new Position(3));
         } else if (request.getGroupId() != null) {
-            employee.setGroup(new Group(request.getGroupId()));
+            employee.setGroup(new Group(employeeDb.getFullName(),employeeDb.getId(),request.getGroupId()));
         } else if (request.isDismission()) {
             employee.setStatus(EmployeeStatus.OUT_OF_POSITION);
         }

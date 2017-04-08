@@ -81,7 +81,7 @@ CREATE TABLE `t_product` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `taoKe_id` char(32) DEFAULT NULL,
   `product_id` char(32) NOT NULL,
-  `name` char(32) NOT NULL,
+  `name` char(255) NOT NULL,
   `picture_url` varchar(255) DEFAULT NULL COMMENT '商品主图',
   `supplement_picture_url` varchar(255) DEFAULT NULL COMMENT '补充主图',
   `reserve_price` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '正常价格',
@@ -97,20 +97,19 @@ CREATE TABLE `t_product` (
   `coupon_receive_number` int(10) unsigned NOT NULL COMMENT '领取数量',
   `coupon_surplus_number` int(10) unsigned NOT NULL COMMENT '剩余数量',
   `condition` char(32) NOT NULL COMMENT '使用条件',
-  `features` char(32) DEFAULT NULL COMMENT '特色',
-  `description` char(32) DEFAULT NULL,
+  `features` text COMMENT '特色',
+  `description` text,
   `charge_price` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '收费单价',
   `create_time` datetime NOT NULL,
-  `update_status_time` datetime NOT NULL,
+  `update_status_time` datetime DEFAULT NULL,
   `ratio` decimal(18,2) NOT NULL DEFAULT '0.00' COMMENT '佣金比例',
-  `plan_url` char(32) DEFAULT NULL COMMENT '计划链接',
+  `plan_url` char(255) DEFAULT NULL COMMENT '计划链接',
   `hire_type_id` int(10) unsigned NOT NULL,
   `type_id` int(10) unsigned NOT NULL,
   `activity_id` int(10) unsigned NOT NULL,
   `status_id` int(10) unsigned NOT NULL,
   `store_id` int(10) unsigned NOT NULL,
   `employee_id` int(10) unsigned NOT NULL,
-  `task_id` int(16) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `hire_type_id` (`hire_type_id`),
   KEY `type_id` (`type_id`),
@@ -118,15 +117,15 @@ CREATE TABLE `t_product` (
   KEY `t_product_ibfk_4` (`status_id`),
   KEY `employee_id` (`employee_id`),
   KEY `t_product_ibfk_5` (`store_id`),
-  KEY `t_product_ibfk_6` (`task_id`),
   CONSTRAINT `t_product_ibfk_1` FOREIGN KEY (`hire_type_id`) REFERENCES `t_hire_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `t_product_ibfk_2` FOREIGN KEY (`type_id`) REFERENCES `t_product_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `t_product_ibfk_3` FOREIGN KEY (`activity_id`) REFERENCES `t_activity` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `t_product_ibfk_4` FOREIGN KEY (`status_id`) REFERENCES `t_product_status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `t_product_ibfk_5` FOREIGN KEY (`store_id`) REFERENCES `t_store` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `t_product_ibfk_6` FOREIGN KEY (`employee_id`) REFERENCES `t_employee` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `t_product_ibfk_7` FOREIGN KEY (`task_id`) REFERENCES `ru_task` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  CONSTRAINT `t_product_ibfk_6` FOREIGN KEY (`employee_id`) REFERENCES `t_employee` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
+
+
 
 -- 商品图片
 DROP TABLE IF EXISTS `t_product_picture`;

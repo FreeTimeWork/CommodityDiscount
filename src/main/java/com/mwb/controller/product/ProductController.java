@@ -114,6 +114,7 @@ public class ProductController {
         filter.setSurplusMaxNumber(request.getSurplusMaxNumber());
         filter.setStatus(ProductStatus.fromId(request.getStatusId()));
         filter.setType(ProductType.fromId(request.getTypeId()));
+        filter.setActivity(Activity.fromId(request.getActivityId()));
         filter.setPaged(true);
         filter.setPagingData(new PagingData(request.getPageNumber(), request.getPageSize()));
 
