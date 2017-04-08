@@ -14,9 +14,9 @@ require([ 'jquery', 'uiKit3', 'networkKit', 'coreKit', 'l10n', 'serviceUrls'],
                         && positionId != 3
                         && positionId != 6){
                         $("#showCreate").hide();
+                    }
+                    if(positionId != 1){
                         $("#showEmployee").hide();
-                    }else {
-                        $("#showCreate").hide();
                     }
                 }
             }

@@ -57,8 +57,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     && positionId != 3
                     && positionId != 6){
                     $("#showCreate").hide();
-                }else {
-                    $("#showCreate").hide();
+                }
+                if(positionId != 1){
+                    $("#showEmployee").hide();
                 }
             }
         }
@@ -138,7 +139,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 },
                 fields: uiKit.FormUtils.generateFields('detailForm', [{
                     uid : 'activityName',
-                    type : uiKit.Controller.LABEL,
+                    type : uiKit.Controller.LABEL
                 },{
                     uid : 'activityTime',
                     type : uiKit.Controller.LABEL
@@ -263,7 +264,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     uid : 'sales',
                     type : uiKit.Controller.LABEL
                 },{
-                    uid : 'immediately',
+                    uid : 'immediatelyStr',
                     type : uiKit.Controller.LABEL
                 },{
                     uid : 'couponBeginTime',
@@ -278,13 +279,13 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     uid : 'ratio',
                     type : uiKit.Controller.LABEL
                 },{
-                    uid : 'hireTypeId',
+                    uid : 'hireTypeName',
                     type : uiKit.Controller.LABEL
                 },{
                     uid : 'planUrl',
                     type : uiKit.Controller.LABEL
                 },{
-                    uid : 'supplementPictureUrl',
+                    uid : 'features',
                     type : uiKit.Controller.LABEL
                 },{
                     uid : 'description',

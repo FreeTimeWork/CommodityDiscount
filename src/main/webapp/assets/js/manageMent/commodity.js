@@ -42,8 +42,10 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     && positionId != 3
                     && positionId != 6){
                     $("#showCreate").hide();
-                }else {
-                    $("#showCreate").hide();
+                }
+
+                if(positionId != 1){
+                    $("#showEmployee").hide();
                 }
             }
         }
@@ -108,7 +110,10 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     "render": function (cellValue) {
                         return '<img src=\'' + cellValue + '\'/>'
                     },
-                    "width": "15%"
+                    "width": "10%"
+                }, {
+                    "data": "name",
+                    "width": "10%"
                 }, {
                     "data": "chargePrice",
                     "width": "5%"
@@ -116,8 +121,17 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     "data": "discountPrice",
                     "width": "5%"
                 }, {
-                    "data": "ratio",
-                    "width": "5%"
+                    "data": "hireTypeName",
+                    "render": function (data,type,rowObject,meta) {
+                        var html = '';
+                        html += '<sapn>' + data + '</sapn>' + '<span style="color: red;">'+ rowObject.ratio +'</span><br>'
+                        if(rowObject.hireTypeCode == "DIRECTIONAL"){
+                            html += '<a href=\'' + rowObject.planUrl + '\'>' + '查看计划链接' + '</a><br>'
+                        }
+                        html += '<span>'+ rowObject.activityName +'</span>'
+                        return html
+                    },
+                    "width": "10%"
                 }, {
                     "data": "couponBeginTime",
                     "render": function (data,type,rowObject,meta) {
@@ -131,18 +145,6 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         return html
                     },
                     "width": "15%"
-                }, {
-                    "data": "hireTypeName",
-                    "render": function (data,type,rowObject,meta) {
-                        var html = '';
-                        html += '<sapn>' + data + '</sapn>' + '<span style="color: red;">'+ rowObject.ratio +'</span><br>'
-                        if(rowObject.hireTypeCode == "hireTypeCode"){
-                            html += '<a href=\'' + rowObject.planUrl + '\'>' + '查看计划链接' + '</a><br>'
-                        }
-                        html += '<span>'+ rowObject.activityName +'</span>'
-                        return html
-                    },
-                    "width": "10%"
                 },{
                     "data": "employeeName",
                     "width": "10%"

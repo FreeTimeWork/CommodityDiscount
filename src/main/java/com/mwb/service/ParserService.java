@@ -297,7 +297,6 @@ public class ParserService {
             HttpEntity entity = response.getEntity();
             //解析实体中页面的内容，返回字符串形式
             content = EntityUtils.toString(entity);
-            System.out.println(content);
         } catch (IOException e) {
             e.printStackTrace();
         }

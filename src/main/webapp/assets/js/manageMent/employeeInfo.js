@@ -20,8 +20,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     && positionId != 3
                     && positionId != 6){
                     $("#showCreate").hide();
-                }else {
-                    $("#showCreate").hide();
+                }
+                if(positionId != 1){
+                    $("#showEmployee").hide();
                 }
             }
         }

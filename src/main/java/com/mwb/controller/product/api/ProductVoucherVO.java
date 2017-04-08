@@ -9,7 +9,6 @@ import org.apache.commons.collections.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,6 +34,9 @@ public class ProductVoucherVO {
     private boolean showSubmit;        //使用率
 
     public static ProductVoucherVO toVO(ProductVoucher voucher, Employee employee) {
+        if(voucher == null) {
+            return null;
+        }
         ProductVoucherVO vo = new ProductVoucherVO();
         Product product = voucher.getProduct();
         vo.setId(voucher.getId());

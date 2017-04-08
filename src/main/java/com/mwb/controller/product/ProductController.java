@@ -228,6 +228,7 @@ public class ProductController {
                 ProductPicture picture = new ProductPicture();
                 picture.setUrl(url);
                 picture.setProduct(product);
+                pictures.add(picture);
             }
             product.setPictures(pictures);
         }

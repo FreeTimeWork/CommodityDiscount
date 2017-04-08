@@ -24,8 +24,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     && positionId != 3
                     && positionId != 6){
                     $("#showCreate").hide();
-                }else {
-                    $("#showCreate").hide();
+                }
+                if(positionId != 1){
+                    $("#showEmployee").hide();
                 }
             }
         }
@@ -83,7 +84,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     selector: 'td:first-child'
                 },
                 "columns": [{
-                        "data": "id"
+                    "data": "id"
                 }, {
                     "data": "employeeName"
                 }, {
@@ -97,9 +98,13 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     "data": "pictureUrl",
                     "render": function (data) {
                         return '<img src=\'' + data + '\'/>'
-                    }
+                    },
+                    "width": "10%"
                 }, {
-                    "data": "name"
+                    "data": "name",
+                    "render": function (data,type,rowObject,meta) {
+                        return '<a href=\'' + rowObject.url + '\'>' + data + '</a>'
+                    }
                 }, {
                     "data": "discountPrice"
                 }, {

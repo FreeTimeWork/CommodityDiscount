@@ -8,6 +8,7 @@ import com.mwb.dao.model.product.Product;
 import com.mwb.dao.model.product.ProductPicture;
 import com.mwb.util.DateTimeUtility;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.BooleanUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class ProductDetailsResponse extends ServiceResponse {
     private String statusName;             //商品状态name
 
     private Boolean immediately;         //是否拍立减
+    private String immediatelyStr;         //是否拍立减
     private BigDecimal discountPrice;   //卷后价格
     private BigDecimal couponAmount;    //优惠券金额
     private String couponUrl;           //优惠券连接
@@ -88,6 +90,7 @@ public class ProductDetailsResponse extends ServiceResponse {
             response.setSales(product.getSales());
             response.setUrl(product.getUrl());
             response.setImmediately(product.getImmediately() != null && product.getImmediately().getValue());
+            response.setImmediatelyStr(BooleanUtils.isTrue(response.getImmediately()) ? "是" : "否");
             if (product.getProductType() != null) {
                 response.setProductTypeId(product.getProductType().getId());
                 response.setProductTypeName(product.getProductType().getDescription());
@@ -284,6 +287,14 @@ public class ProductDetailsResponse extends ServiceResponse {
 
     public void setImmediately(Boolean immediately) {
         this.immediately = immediately;
+    }
+
+    public String getImmediatelyStr() {
+        return immediatelyStr;
+    }
+
+    public void setImmediatelyStr(String immediatelyStr) {
+        this.immediatelyStr = immediatelyStr;
     }
 
     public BigDecimal getDiscountPrice() {
