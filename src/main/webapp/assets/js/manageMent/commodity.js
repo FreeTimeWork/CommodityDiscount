@@ -120,7 +120,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     "width": "15%"
                 }, {
                     "data": "name",
-                    "width": "15%"
+                    "width": "10%"
                 }, {
                     "data": "chargePrice",
                     "width": "5%"

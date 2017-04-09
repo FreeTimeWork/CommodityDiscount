@@ -136,6 +136,7 @@ public class ProductService implements IProductService {
             list.add(ProductStatus.PAY_RUN);
             list.add(ProductStatus.PAY_TRAILER);
             list.add(ProductStatus.PAY_END);
+            list.add(ProductStatus.SETTLEMENT);
             filter.setExcludeStatus(list);
         } else if (positionId.equals(5)) {
             List<ProductStatus> list = new ArrayList<>();

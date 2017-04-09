@@ -18,6 +18,7 @@ public class FinanceExcelConstants {
 	public static final String LABEL_PAY_RUN_NUM = "付款中数量";
 	public static final String LABEL_PAY_TRAILER_NUM = "拒绝付款数量";
 	public static final String LABEL_PAY_END_NUM = "已付款数量";
+	public static final String LABEL_SETTLEMENT_NUM = "已结算数量";
 	public static final String LABEL_GUEST_UNIT_PRICE = "客单价";
 	public static final String LABEL_ACTUAL_CHARGE_AMOUNT = "实收金额";
 	public static final String LABEL_SHOULD_CHARGE_AMOUNT = "应收金额";

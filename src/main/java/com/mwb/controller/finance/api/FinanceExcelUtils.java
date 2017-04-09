@@ -38,6 +38,7 @@ public class FinanceExcelUtils {
         ExcelUtility.createCell(sheet, rowIndex, columnIndex++, FinanceExcelConstants.LABEL_PAY_RUN_NUM, titleCellStyle);
         ExcelUtility.createCell(sheet, rowIndex, columnIndex++, FinanceExcelConstants.LABEL_PAY_TRAILER_NUM, titleCellStyle);
         ExcelUtility.createCell(sheet, rowIndex, columnIndex++, FinanceExcelConstants.LABEL_PAY_END_NUM, titleCellStyle);
+        ExcelUtility.createCell(sheet, rowIndex, columnIndex++, FinanceExcelConstants.LABEL_SETTLEMENT_NUM, titleCellStyle);
         ExcelUtility.createCell(sheet, rowIndex, columnIndex++, FinanceExcelConstants.LABEL_GUEST_UNIT_PRICE, titleCellStyle);
         ExcelUtility.createCell(sheet, rowIndex, columnIndex++, FinanceExcelConstants.LABEL_ACTUAL_CHARGE_AMOUNT, titleCellStyle);
         ExcelUtility.createCell(sheet, rowIndex, columnIndex++, FinanceExcelConstants.LABEL_SHOULD_CHARGE_AMOUNT, titleCellStyle);
@@ -62,6 +63,7 @@ public class FinanceExcelUtils {
             ExcelUtility.createCell(sheet, rowIndex, columnIndex++, vo.getPayRunNumber(), rowCellStyle);
             ExcelUtility.createCell(sheet, rowIndex, columnIndex++, vo.getPayTrailerNumber(), rowCellStyle);
             ExcelUtility.createCell(sheet, rowIndex, columnIndex++, vo.getPayEndNumber(), rowCellStyle);
+            ExcelUtility.createCell(sheet, rowIndex, columnIndex++, vo.getSettlementNumber(), rowCellStyle);
             ExcelUtility.createCell(sheet, rowIndex, columnIndex++, vo.getGuestUnitPrice(), rowCellStyle);
             ExcelUtility.createCell(sheet, rowIndex, columnIndex++, vo.getActualChargeAmount(), rowCellStyle);
             ExcelUtility.createCell(sheet, rowIndex, columnIndex++, vo.getShouldChargeAmount(), rowCellStyle);

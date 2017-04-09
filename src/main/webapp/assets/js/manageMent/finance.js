@@ -79,11 +79,11 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit'], function ($,
             thiz = this;
             this.searchParams = {};
             this.initSearchForm();
-            $('#export').click(function () {
+            $('#export11').click(function () {
                 $.ajax({
                     type: 'post',
                     data: {excel: true},
-                    url: '/finance',
+                    url: "/finance/search?excel=true",
                     success: function () {
                         alert('成功')
                     },
