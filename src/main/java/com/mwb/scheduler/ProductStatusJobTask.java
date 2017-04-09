@@ -28,7 +28,7 @@ public class ProductStatusJobTask {
         if (CollectionUtils.isNotEmpty(endProducts)) {
             for (Product product : endProducts) {
                 int hour = DateTimeUtility.minuteBetween(product.getUpdateStatusTime(), now) / 60;
-                if (hour > 24) {
+                if (hour >= 24) {
                     productService.modifyProductStatus(product.getId(), product.getEmployee().getId(), product.getStatus(), ProductStatus.PAY_WAIT);
                 }
             }
@@ -50,7 +50,7 @@ public class ProductStatusJobTask {
         List<Product> promoteProducts = productService.getProductByStatus(ProductStatus.PROMOTE);
         if (CollectionUtils.isNotEmpty(promoteProducts)) {
             for (Product product : promoteProducts) {
-                int hour = DateTimeUtility.minuteBetween(now, product.getUpdateStatusTime()) / 60;
+                int hour = DateTimeUtility.minuteBetween(now, product.getCouponEndTime()) / 60;
 
                 if (hour <= 24 && hour > 0) {
                     productService.modifyProductStatus(product.getId(), product.getEmployee().getId(), product.getStatus(), ProductStatus.END_APPROACH);
