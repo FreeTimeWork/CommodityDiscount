@@ -15,6 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
  */
 public class EmployeeInterceptor implements HandlerInterceptor {
     public String[] allowUrls;
+    @Autowired
+    private IEmployeeService employeeService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
@@ -22,6 +24,9 @@ public class EmployeeInterceptor implements HandlerInterceptor {
         String requestUrl = request.getRequestURI().replace(
                 request.getContextPath(), "");
 //todo
+        Employee employee = employeeService.getAllEmployee().get(0);
+        ApplicationContextUtils.getSession().setAttribute("employee", employee);
+
         return true;
 //        if (null != allowUrls && allowUrls.length >= 1)
 //            for (String url : allowUrls) {
