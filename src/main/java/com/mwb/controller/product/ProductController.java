@@ -152,6 +152,7 @@ public class ProductController {
         filter.setActivity(Activity.fromId(request.getActivityId()));
         filter.setPaged(true);
         filter.setPagingData(new PagingData(request.getPageNumber(), request.getPageSize()));
+        filter.setOrderAsc(request.getOrderAsc() == null ? true : request.getOrderAsc());
 
         SearchResult<Product> result = productService.searchProduct(filter, employee);
         List<ProductVO> productVOs = ProductVO.toVOs(result.getResult(), employee);

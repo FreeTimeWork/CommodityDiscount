@@ -77,7 +77,7 @@ public class ProductService implements IProductService {
         } else {
             int day = DateTimeUtility.daysBetween(finance.getCreateTime(), new Date());
             finance.setSubmitNumber(finance.getSubmitNumber() + 1);
-            finance.setAverageDaily(finance.getSubmitNumber() * 100 / day);
+            finance.setAverageDaily(finance.getSubmitNumber() / day);
 
             financeService.modifyFinance(finance);
         }
@@ -143,6 +143,7 @@ public class ProductService implements IProductService {
             list.add(ProductStatus.PAY_RUN);
             list.add(ProductStatus.PAY_TRAILER);
             list.add(ProductStatus.PAY_END);
+            list.add(ProductStatus.SETTLEMENT);
             filter.setIncludeStatus(list);
         }
     }

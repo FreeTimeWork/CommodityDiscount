@@ -31,6 +31,7 @@ public class ProductVO {
     private Integer couponUseNumber;    //领取数量
     private Integer couponSurplusNumber; //剩余数量
     private String employeeName;          //提交人
+    private String storeTypeName;          //提交人
     private String qq;                  //qq
     private String status;              //状态
     private String statusCode;              //状态Code
@@ -69,10 +70,19 @@ public class ProductVO {
         vo.setEmployeeName(product.getEmployee().getFullName());
         vo.setStatus(product.getStatus().getDescription());
         vo.setStatusCode(product.getStatus().getCode());
+        vo.setStoreTypeName(product.getStore().getType().getDescription());
         if (product.getEmployee().getId().equals(employee.getId())) {
             vo.setShowSubmit(true);
         }
         return vo;
+    }
+
+    public String getStoreTypeName() {
+        return storeTypeName;
+    }
+
+    public void setStoreTypeName(String storeTypeName) {
+        this.storeTypeName = storeTypeName;
     }
 
     public Integer getId() {

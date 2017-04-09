@@ -168,7 +168,11 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     request.pictures = pictureOptions;
                     request.supplementPictureUrl = data.supplementPictureUrl
                     var successHandler = function(self, result) {
-                        alert('成功')
+                        if(result.resultMessage != null) {
+                            alert(result.resultMessage);
+                        }else{
+                            alert('成功');
+                        }
                     };
                     var errorHandler = function(self, result) {
                         alert('请求失败');
@@ -434,7 +438,11 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     var url ="/product/vuncher/create";
                     var request = data;
                     var successHandler = function(self, result) {
-                        alert('成功')
+                        if(result.resultMessage != null) {
+                            alert(result.resultMessage);
+                        }else{
+                            alert('成功');
+                        }
                     };
                     var errorHandler = function(self, result) {
                         alert('请求失败');
