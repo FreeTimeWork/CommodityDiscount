@@ -100,7 +100,7 @@ public class ProductController {
     private List<ResourceVO> getProductApproveStatus(Product product, Employee employee) {
         List<ResourceVO> vos = new ArrayList<>();
         ProductStatus status = product.getStatus();
-        Integer positionId = product.getEmployee().getPosition().getId();
+        Integer positionId = employee.getPosition().getId();
         if (ProductStatus.AUDIT_RUN == status
                 && positionId.equals(4)) {
             vos.add(new ResourceVO(ProductStatus.TWO_AUDIT.getDescription(), ProductStatus.TWO_AUDIT.getId()));
