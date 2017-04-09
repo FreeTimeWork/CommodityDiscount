@@ -67,6 +67,12 @@ public class ProductController {
         daoLaoKeService.setDaTaoKeProduct(product);
 
         ProductDetailsResponse response = ProductDetailsResponse.toResponse(product);
+
+        if (StringUtils.isBlank(product.getName())) {
+            response.setMessage("商品地址错误!");
+            return response;
+        }
+
         response.setCreateHistory(getCreateHistory(product.getProductId()));
 
         return response;

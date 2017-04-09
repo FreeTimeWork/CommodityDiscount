@@ -14,24 +14,30 @@ import org.springframework.web.servlet.ModelAndView;
  * Created by fangchen.chai on 2017/4/5.
  */
 public class EmployeeInterceptor implements HandlerInterceptor {
-
-    @Autowired
-    private IEmployeeService employeeService;
+    public String[] allowUrls;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
 
-        Employee employee =(Employee)request.getSession().getAttribute("employee");
-        employee = employeeService.getAllEmployee().get(0);
-        ApplicationContextUtils.getSession().setAttribute("employee", employee);
-
-//        if (employee != null){
+        String requestUrl = request.getRequestURI().replace(
+                request.getContextPath(), "");
+//todo
+        return true;
+//        if (null != allowUrls && allowUrls.length >= 1)
+//            for (String url : allowUrls) {
+//                if (requestUrl.contains(url)) {
+//                    return true;
+//                }
+//            }
+//
+//        Employee employee = (Employee) request.getSession().getAttribute("employee");
+//
+//        if (employee != null) {
 //            return true;
 //        } else {
-//            response.sendRedirect(request.getContextPath()+"/index.html");
+//            response.sendRedirect(request.getContextPath() + "/login.html");
 //            return false;
 //        }
-        return true;
     }
 
     @Override
@@ -42,5 +48,13 @@ public class EmployeeInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
 
+    }
+
+    public String[] getAllowUrls() {
+        return allowUrls;
+    }
+
+    public void setAllowUrls(String[] allowUrls) {
+        this.allowUrls = allowUrls;
     }
 }

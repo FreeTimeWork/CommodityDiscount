@@ -22,6 +22,12 @@ public class LoginController {
     @Autowired
     private IEmployeeService employeeService;
 
+    @RequestMapping(value = "/login.html")
+    public String loginHtml() {
+
+        return "login";
+    }
+
     @ResponseBody
     @RequestMapping(value = "/login")
     public ServiceResponse login(LoginRequest request) {

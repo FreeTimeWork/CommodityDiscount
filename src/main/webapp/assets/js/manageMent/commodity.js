@@ -123,10 +123,10 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     "width": "10%"
                 }, {
                     "data": "chargePrice",
-                    "width": "5%"
+                    "width": "8%"
                 }, {
                     "data": "discountPrice",
-                    "width": "5%"
+                    "width": "8%"
                 }, {
                     "data": "hireTypeName",
                     "render": function (data,type,rowObject,meta) {
@@ -154,7 +154,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     "width": "15%"
                 },{
                     "data": "employeeName",
-                    "width": "5%"
+                    "width": "8%"
                 }, {
                     "data": "status",
                     "width": "5%"

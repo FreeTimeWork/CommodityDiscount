@@ -58,7 +58,6 @@ public class ProductStatusJobTask {
             }
         }
 
-        //// TODO: 2017/4/6
         //复审--》推广
         List<Product> twoAuditProducts = productService.getProductByStatus(ProductStatus.TWO_AUDIT);
         if (CollectionUtils.isNotEmpty(twoAuditProducts)) {

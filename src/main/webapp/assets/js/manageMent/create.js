@@ -206,6 +206,11 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         if(couponUrl && productUrl){
                             var url ="/product/grab?couponUrl="+couponUrl+"&productUrl="+productUrl;
                             var successHandler = function(self, result) {
+                                if(result.resultMessage != null) {
+                                    alert(result.resultMessage);
+                                }else{
+                                    alert('抓取成功');
+                                }
                                 pictureOptions = result.pictures;
                                 thiz.detailForm.getViewModel().storeTypeName(result.storeTypeName)
                                 thiz.detailForm.getViewModel().storeDescriptionScore(result.storeDescriptionScore)
