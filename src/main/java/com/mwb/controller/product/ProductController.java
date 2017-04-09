@@ -91,6 +91,19 @@ public class ProductController {
 
             response.setApproveStatus(getProductApproveStatus(product, employee));
             response.setTask(product.getTask());
+
+            if (employee.getId().equals(product.getEmployee().getId())
+                    && (product.getStatus() == ProductStatus.PAY_WAIT
+                    || product.getStatus() == ProductStatus.PAY_TRAILER)) {
+                response.setShowEdit(true);
+            }
+            if (product.getStatus() == ProductStatus.PAY_RUN
+                    || product.getStatus() == ProductStatus.PAY_RUN
+                    || product.getStatus() == ProductStatus.PAY_TRAILER
+                    || product.getStatus() == ProductStatus.PAY_END
+                    || product.getStatus() == ProductStatus.SETTLEMENT) {
+                response.setShowVoucher(true);
+            }
         }
 
         return response;
@@ -106,23 +119,23 @@ public class ProductController {
             vos.add(new ResourceVO(ProductStatus.TWO_AUDIT.getDescription(), ProductStatus.TWO_AUDIT.getId()));
             vos.add(new ResourceVO(ProductStatus.REJECTED.getDescription(), ProductStatus.REJECTED.getId()));
             vos.add(new ResourceVO(ProductStatus.TRAILER.getDescription(), ProductStatus.TRAILER.getId()));
-        }else if (ProductStatus.TWO_AUDIT == status
+        } else if (ProductStatus.TWO_AUDIT == status
                 && positionId.equals(4)) {
             vos.add(new ResourceVO(ProductStatus.PROMOTE.getDescription(), ProductStatus.PROMOTE.getId()));
             vos.add(new ResourceVO(ProductStatus.REJECTED.getDescription(), ProductStatus.REJECTED.getId()));
             vos.add(new ResourceVO(ProductStatus.TRAILER.getDescription(), ProductStatus.TRAILER.getId()));
-        }else if (ProductStatus.PROMOTE == status
+        } else if (ProductStatus.PROMOTE == status
                 && product.getEmployee().getId().equals(employee.getId())) {
             vos.add(new ResourceVO(ProductStatus.END.getDescription(), ProductStatus.END.getId()));
             vos.add(new ResourceVO(ProductStatus.PAY_WAIT.getDescription(), ProductStatus.PAY_WAIT.getId()));
-        }else if (ProductStatus.END == status
+        } else if (ProductStatus.END == status
                 && product.getEmployee().getId().equals(employee.getId())) {
             vos.add(new ResourceVO(ProductStatus.PAY_WAIT.getDescription(), ProductStatus.PAY_WAIT.getId()));
-        }else if (ProductStatus.PAY_WAIT == status
+        } else if (ProductStatus.PAY_WAIT == status
                 && product.getEmployee().getId().equals(employee.getId())
                 && employee.getPosition().getId() == 6) {
             vos.add(new ResourceVO(ProductStatus.SETTLEMENT.getDescription(), ProductStatus.SETTLEMENT.getId()));
-        }else if (ProductStatus.PAY_RUN == status
+        } else if (ProductStatus.PAY_RUN == status
                 && positionId.equals(5)) {
             vos.add(new ResourceVO(ProductStatus.PAY_TRAILER.getDescription(), ProductStatus.PAY_TRAILER.getId()));
             vos.add(new ResourceVO(ProductStatus.PAY_END.getDescription(), ProductStatus.PAY_END.getId()));

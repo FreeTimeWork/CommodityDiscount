@@ -578,7 +578,10 @@
             #{product.id, javaType=int, jdbcType=INTEGER}
         )
     </insert>
-
+    <delete id="deleteProductVoucher" >
+        DELETE FROM t_product_voucher
+        WHERE  product_id = #{productId, javaType=int, jdbcType=INTEGER}
+    </delete>
     <insert
         id="insertVoucherPicture"
         parameterType="VoucherPicture"

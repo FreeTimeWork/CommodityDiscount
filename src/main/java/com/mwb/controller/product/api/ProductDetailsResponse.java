@@ -70,6 +70,8 @@ public class ProductDetailsResponse extends ServiceResponse {
     private List<String> pictures;          // 图片链接
     private ProductVoucherVO voucher;          // 凭证信息
     private Task task;
+    private boolean showVoucher;
+    private boolean showEdit;
     private List<ResourceVO> approveStatus;
 
     public static ProductDetailsResponse toResponse(Product product) {
@@ -503,6 +505,22 @@ public class ProductDetailsResponse extends ServiceResponse {
 
     public void setVoucher(ProductVoucherVO voucher) {
         this.voucher = voucher;
+    }
+
+    public boolean isShowEdit() {
+        return showEdit;
+    }
+
+    public void setShowEdit(boolean showEdit) {
+        this.showEdit = showEdit;
+    }
+
+    public boolean isShowVoucher() {
+        return showVoucher;
+    }
+
+    public void setShowVoucher(boolean showVoucher) {
+        this.showVoucher = showVoucher;
     }
 
     public String getSupplementPictureUrl() {

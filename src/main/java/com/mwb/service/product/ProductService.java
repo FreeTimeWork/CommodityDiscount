@@ -227,6 +227,8 @@ public class ProductService implements IProductService {
     @Override
     @Transactional
     public void createProductVoucher(ProductVoucher voucher, Product product) {
+        productMapper.deleteProductVoucher(product.getId());
+
         productMapper.insertProductVoucher(voucher);
 
         if (CollectionUtils.isNotEmpty(voucher.getPictures())) {
