@@ -1,5 +1,10 @@
 package com.mwb.service.product;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import com.mwb.controller.api.PagingResult;
 import com.mwb.dao.filter.ProductFilter;
 import com.mwb.dao.filter.SearchResult;
@@ -22,11 +27,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by MengWeiBo on 2017-04-01
@@ -61,6 +61,16 @@ public class ProductService implements IProductService {
     @Override
     @Transactional
     public void createProduct(Product product) {
+        //存入流程变量
+        Task task = new Task();
+        Variable variable = new Variable("createdById", product.getEmployee().getId() + "");
+        List<Variable> variables = new ArrayList<>();
+        variables.add(variable);
+        task.setVariables(variables);
+        //创建流程
+        bpmService.createTask(task);
+        product.setTask(task);
+
         createStore(product.getStore());
 
         productMapper.insertProduct(product);
@@ -81,15 +91,6 @@ public class ProductService implements IProductService {
 
             financeService.modifyFinance(finance);
         }
-
-        //存入流程变量
-        Task task = new Task();
-        Variable variable = new Variable("createdById", product.getEmployee().getId() + "");
-        List<Variable> variables = new ArrayList<>();
-        variables.add(variable);
-        task.setVariables(variables);
-        //创建流程
-        bpmService.createTask(task);
     }
 
     @Override

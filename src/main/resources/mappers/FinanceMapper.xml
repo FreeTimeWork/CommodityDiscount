@@ -152,6 +152,7 @@
 		    pay_run_number,
 		    pay_trailer_number,
 		    pay_end_number,
+		    settlement_number,
 		    guest_unit_price,
 		    actual_charge_amount,
 		    should_charge_amount,

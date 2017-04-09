@@ -147,9 +147,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 $('#approve').html(html)
                 $('#approve input').on('click', function () {
                     var request = {};
-                    request.productId = thiz.detailForm.viewModel.productId();
+                    request.productId = thiz.detailForm.viewModel.id();
                     request.productStatusId = $(this).attr('data-id')
-                    var url ="/product/approve/claim";
+                    var url ="/product/approve/check";
 
                     var successHandler = function(self, result){
                         alert('成功')

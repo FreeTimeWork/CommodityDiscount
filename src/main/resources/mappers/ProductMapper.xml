@@ -515,7 +515,8 @@
             activity_id,
             status_id,
             store_id,
-            employee_id
+            employee_id,
+            task_id
         ) VALUES (
             #{taoKeId, javaType=string, jdbcType=CHAR},
             #{productId, javaType=string, jdbcType=CHAR},
@@ -547,7 +548,8 @@
             #{activity.id, javaType=int, jdbcType=INTEGER},
             #{status.id, javaType=int, jdbcType=INTEGER},
             #{store.id, javaType=int, jdbcType=INTEGER},
-            #{employee.id, javaType=int, jdbcType=INTEGER}
+            #{employee.id, javaType=int, jdbcType=INTEGER},
+            #{task.id, javaType=int, jdbcType=INTEGER}
         )
     </insert>
 
