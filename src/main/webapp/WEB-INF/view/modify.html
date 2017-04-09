@@ -70,19 +70,22 @@
                 <p class="bottom_right_tit">修改密码</p>
 
                 <form id="changePasswordForm">
-                    <div class="control-group" style="width: 300px;margin: 0 auto">
-                        <label class="control-label" style="display: inline-block">旧密码</label>
-                        <input type="password" uid="oldPassword">
-                    </div>
-                    <div class="control-group" style="width: 300px;margin: 0 auto">
+                    <!--<div class="control-group" style="width: 300px;margin: 0 auto" gid="password">-->
+                    <!--<label class="control-label" style="display: inline-block">旧密码</label>-->
+                    <!--<input type="password" uid="oldPassword">-->
+                    <!--<span hid="password"></span>-->
+                    <!--</div>-->
+                    <div class="control-group" style="width: 300px;margin: 0 auto" gid="newPassword">
                         <label class="control-label" style="display: inline-block">新密码</label>
                         <input type="password" uid="newPassword">
+                        <span hid="newPassword"></span>
                     </div>
-                    <div class="control-group" style="width: 300px;margin: 0 auto">
-                        <label class="control-label" style="display: inline-block">重复新密码</label>
-                        <input type="password" uid="confirmNewPassword">
-                    </div>
-                    <button style="margin: 0 auto   " type="submit" class="btn btn-primary btn-large blue">提交</button>
+                    <!--<div class="control-group" style="width: 300px;margin: 0 auto">-->
+                    <!--<label class="control-label" style="display: inline-block" gid="confirmNewPassword">重复新密码</label>-->
+                    <!--<input type="password" uid="confirmNewPassword">-->
+                    <!--<span hid="confirmNewPassword"></span>-->
+                    <!--</div>-->
+                    <input type="submit" class="btn btn-primary btn-large blue" value="提交" style="display: block;margin: 0 auto">
                 </form>
             </div>
         </div>
