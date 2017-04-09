@@ -79,11 +79,17 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit'], function ($,
             thiz = this;
             this.searchParams = {};
             this.initSearchForm();
-            $('#export11').click(function () {
+            $('#export').click(function () {
+                if($('#searchForm_orderByAsc option:selected').text() == '排序'){
+                    orderByAsc = null
+                }else if($('#searchForm_orderByAsc option:selected').text() == '正序'){
+                    orderByAsc = true
+                }else{
+                    orderByAsc = false
+                }
                 $.ajax({
-                    type: 'post',
-                    data: {excel: true},
-                    url: "/finance/search?excel=true",
+                    type: 'get',
+                    url: "/finance/search?excel=true" + "&groupId=" + $('#searchForm_groupId').val() + "&employeeId=" + $('#searchForm_employeeId').val() + "&statusId=" + $("#searchForm_statusId").val() + "&orderByAsc=" + orderByAsc,
                     success: function () {
                         alert('成功')
                     },
@@ -179,7 +185,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit'], function ($,
                 },{
                     uid : 'orderByAsc',
                     type : uiKit.Controller.SELECT,
-                    options: [{label: '',value: null},{label: '正序',value: true},{label: '倒序',value: false}]
+                    options: [{label: '排序',value: null},{label: '正序',value: true},{label: '倒序',value: false}]
                 }]),
                 reset: false
             });

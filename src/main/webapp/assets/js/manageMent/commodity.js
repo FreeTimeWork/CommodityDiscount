@@ -123,10 +123,10 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     "width": "10%"
                 }, {
                     "data": "chargePrice",
-                    "width": "8%"
+                    "width": "5%"
                 }, {
                     "data": "discountPrice",
-                    "width": "8%"
+                    "width": "5%"
                 }, {
                     "data": "hireTypeName",
                     "render": function (data,type,rowObject,meta) {
@@ -154,7 +154,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     "width": "15%"
                 },{
                     "data": "employeeName",
-                    "width": "8%"
+                    "width": "5%"
                 }, {
                     "data": "status",
                     "width": "5%"
@@ -318,7 +318,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         onDetailClick: function (id ) {
             window.open('/frontend/detail.html?id='+ id);
         },
-        onReSubmitClick: function () {
+        onReSubmitClick: function (id) {
             window.open('/frontend/create.html?id='+ id);
         }
 
