@@ -93,14 +93,21 @@ public class EmployeeController {
 
     @ResponseBody
     @RequestMapping(value = "/modify/password")
-    public ServiceResponse modifyPassword(String password) {
+    public ServiceResponse modifyPassword(@RequestBody ModifyPasswordRequest request) {
+        ServiceResponse response = new ServiceResponse();
         Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
 
-        employee.setPassword(MD5Tools.MD5(password.trim()));
+        Integer employeeId = request.getEmployeeId();
+        String password = request.getPassword();
+        if (employeeId.equals(employee.getId())) {
+            employee.setPassword(MD5Tools.MD5(password.trim()));
+            employeeService.modifyEmployee(employee);
+            response.setMessage("成功！");
+        } else {
+            response.setMessage("失败！");
+        }
 
-        employeeService.modifyEmployee(employee);
-
-        return new ServiceResponse();
+        return response;
     }
 
     //分组，升级，离职
