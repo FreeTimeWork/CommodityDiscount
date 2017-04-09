@@ -100,14 +100,15 @@ public class ProductController {
     private List<ResourceVO> getProductApproveStatus(Product product, Employee employee) {
         List<ResourceVO> vos = new ArrayList<>();
         ProductStatus status = product.getStatus();
-        if (ProductStatus.AUDIT_RUN == status) {
+        Integer positionId = product.getEmployee().getPosition().getId();
+        if (ProductStatus.AUDIT_RUN == status
+                && positionId.equals(4)) {
             vos.add(new ResourceVO(ProductStatus.TWO_AUDIT.getDescription(), ProductStatus.TWO_AUDIT.getId()));
             vos.add(new ResourceVO(ProductStatus.REJECTED.getDescription(), ProductStatus.REJECTED.getId()));
             vos.add(new ResourceVO(ProductStatus.TRAILER.getDescription(), ProductStatus.TRAILER.getId()));
-        }else if (ProductStatus.TWO_AUDIT == status) {
+        }else if (ProductStatus.TWO_AUDIT == status
+                && positionId.equals(4)) {
             vos.add(new ResourceVO(ProductStatus.PROMOTE.getDescription(), ProductStatus.PROMOTE.getId()));
-            vos.add(new ResourceVO(ProductStatus.END.getDescription(), ProductStatus.END.getId()));
-            vos.add(new ResourceVO(ProductStatus.PAY_WAIT.getDescription(), ProductStatus.PAY_WAIT.getId()));
             vos.add(new ResourceVO(ProductStatus.REJECTED.getDescription(), ProductStatus.REJECTED.getId()));
             vos.add(new ResourceVO(ProductStatus.TRAILER.getDescription(), ProductStatus.TRAILER.getId()));
         }else if (ProductStatus.PROMOTE == status
@@ -121,7 +122,8 @@ public class ProductController {
                 && product.getEmployee().getId().equals(employee.getId())
                 && employee.getPosition().getId() == 6) {
             vos.add(new ResourceVO(ProductStatus.SETTLEMENT.getDescription(), ProductStatus.SETTLEMENT.getId()));
-        }else if (ProductStatus.PAY_RUN == status) {
+        }else if (ProductStatus.PAY_RUN == status
+                && positionId.equals(5)) {
             vos.add(new ResourceVO(ProductStatus.PAY_TRAILER.getDescription(), ProductStatus.PAY_TRAILER.getId()));
             vos.add(new ResourceVO(ProductStatus.PAY_END.getDescription(), ProductStatus.PAY_END.getId()));
         }
