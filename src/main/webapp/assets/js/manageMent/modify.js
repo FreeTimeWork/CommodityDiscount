@@ -10,7 +10,7 @@ require([ 'jquery', 'uiKit3', 'networkKit', 'coreKit'],
             success: function (data) {
                 if (data.employee != null && data.employee.fullName != null) {
                     $("#userName").text(data.employee.fullName);
-                    EMPLOYEEID = data.employee.positionId
+                    EMPLOYEEID = data.employee.id;
                     var positionId = data.employee.positionId;
                     if(positionId != 2
                         && positionId != 3
@@ -44,13 +44,16 @@ require([ 'jquery', 'uiKit3', 'networkKit', 'coreKit'],
                         confirmNewPassword: ''
                     },
                     submit : function(data) {
-                        var url = '/employee/modify';
+                        var url = '/employee/modify/password';
                         var request = {}
                         request.employeeId = EMPLOYEEID;
                         request.password = data.newPassword
 
                         delete request.confirmNewPassword;
                         var successHandler = function(self, result) {
+                            if(result.resultMessage != null){
+                                alert(result.resultMessage);
+                            }
                             if (result.resultCode == STATUS_SUCCESS) {
                                 thiz.searchForm.reset();
                             } else {
