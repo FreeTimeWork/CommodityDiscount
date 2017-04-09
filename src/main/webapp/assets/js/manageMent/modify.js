@@ -1,7 +1,8 @@
 require.config(I360R.REQUIRE_CONFIG);
 
-require([ 'jquery', 'uiKit3', 'networkKit', 'coreKit', 'l10n', 'serviceUrls'],
+require([ 'jquery', 'uiKit3', 'networkKit', 'coreKit'],
     function($, uiKit, netKit, cKit, l10n, serviceUrls) {
+        var EMPLOYEEID = '';
         $.ajax({
             type: 'get',
             async: false,
@@ -9,6 +10,7 @@ require([ 'jquery', 'uiKit3', 'networkKit', 'coreKit', 'l10n', 'serviceUrls'],
             success: function (data) {
                 if (data.employee != null && data.employee.fullName != null) {
                     $("#userName").text(data.employee.fullName);
+                    EMPLOYEEID = data.employee.positionId
                     var positionId = data.employee.positionId;
                     if(positionId != 2
                         && positionId != 3
@@ -21,8 +23,6 @@ require([ 'jquery', 'uiKit3', 'networkKit', 'coreKit', 'l10n', 'serviceUrls'],
                 }
             }
         });
-        var label = l10n.label;
-        var message = l10n.message;
         var ValueUtils = cKit.ValueUtils;
         var CurrentPage = (function(_super) {
             cKit.__extends(CurrentPage, _super);
@@ -44,39 +44,44 @@ require([ 'jquery', 'uiKit3', 'networkKit', 'coreKit', 'l10n', 'serviceUrls'],
                         confirmNewPassword: ''
                     },
                     submit : function(data) {
-                        var url = serviceUrls.employee.changepsw;
-                        var request = _.clone(data);
+                        var url = '/employee/modify';
+                        var request = {}
+                        request.employeeId = EMPLOYEEID;
+                        request.password = data.newPassword
 
                         delete request.confirmNewPassword;
                         var successHandler = function(self, result) {
                             if (result.resultCode == STATUS_SUCCESS) {
                                 thiz.searchForm.reset();
-                                alert(message.setSucceed);
                             } else {
                                 alert(result.resultMessage);
                             }
                         };
                         var errorHandler = function(self, result) {
-                            alert(message.requestError);
+                            alert('失败');
                         };
                         var action = new netKit.SimplePostAction(this, url, request, successHandler, errorHandler);
                         action.submit();
 
                         return true;
                     },
-                    fields : uiKit.FormUtils.generateFields('changePasswordForm', [{
-                        uid : 'oldPassword',
-                        type : uiKit.Controller.EDIT,
-                        validators : [uiKit.Validator.PASSWORD]
-                    }, {
-                        uid : 'newPassword',
-                        type : uiKit.Controller.EDIT,
-                        validators : [uiKit.Validator.PASSWORD]
-                    }, {
-                        uid : 'confirmNewPassword',
-                        type : uiKit.Controller.EDIT,
-                        validators : [uiKit.Validator.PASSWORD, uiKit.Validator.REPEAT('newPassword')]
-                    }]),
+                    fields : uiKit.FormUtils.generateFields('changePasswordForm', [
+                        //    {
+                        //    uid : 'oldPassword',
+                        //    type : uiKit.Controller.EDIT,
+                        //    validators : [uiKit.Validator.PASSWORD]
+                        //},
+                        {
+                            uid : 'newPassword',
+                            type : uiKit.Controller.EDIT,
+                            validators : [uiKit.Validator.PASSWORD]
+                        }
+                        //    , {
+                        //    uid : 'confirmNewPassword',
+                        //    type : uiKit.Controller.EDIT,
+                        //    validators : [uiKit.Validator.PASSWORD, uiKit.Validator.REPEAT('newPassword')]
+                        //}
+                    ]),
                     reset : false
                 });
             };

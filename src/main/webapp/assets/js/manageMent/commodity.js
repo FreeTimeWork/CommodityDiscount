@@ -74,7 +74,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         cKit.__extends(CurrentPage, _super);
 
         var thiz;
-
+        $(".pay_list > li").on("click",function(){
+            $(this).addClass("on").siblings().removeClass("on")
+        });
         function CurrentPage() {
             _super.call(this);
             thiz = this;
@@ -184,6 +186,50 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 model: {},
                 submit: function(data) {
                     thiz.searchParams= data;
+                    var text=$(".pay_list li.on").text();
+                    var text1 = text.split('(')[0]
+                    if(text1 == '全部产品'){
+                        thiz.searchParams.statusId = 1
+                    }
+                    if(text1 == '待审核'){
+                        thiz.searchParams.statusId = 2
+                    }
+                    if(text1 == '审核中'){
+                        thiz.searchParams.statusId = 3
+                    }
+                    if(text1 == '驳回'){
+                        thiz.searchParams.statusId = 4
+                    }
+                    if(text1 == '拒绝'){
+                        thiz.searchParams.statusId = 5
+                    }
+                    if(text1 == '待二审'){
+                        thiz.searchParams.statusId = 6
+                    }
+                    if(text1 == '推广中'){
+                        thiz.searchParams.statusId = 7
+                    }
+                    if(text1 == '即将结束'){
+                        thiz.searchParams.statusId = 8
+                    }
+                    if(text1 == '已结束'){
+                        thiz.searchParams.statusId = 9
+                    }
+                    if(text1 == '代付款'){
+                        thiz.searchParams.statusId = 10
+                    }
+                    if(text1 == '付款中'){
+                        thiz.searchParams.statusId = 11
+                    }
+                    if(text1 == '拒绝付款'){
+                        thiz.searchParams.statusId = 12
+                    }
+                    if(text1 == '已付款'){
+                        thiz.searchParams.statusId = 13
+                    }
+                    if(text1 == '已结算'){
+                        thiz.searchParams.statusId = 11
+                    }
                     thiz.searchParams.createBeginTime = $('#searchForm_createBeginTime').val()
                     thiz.searchParams.createEndTime = $('#searchForm_createEndTime').val()
                     thiz.searchParams.beginFromTime = $('#searchForm_beginFromTime').val()
