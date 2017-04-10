@@ -28,11 +28,14 @@ public class ProductVoucherVO {
     private BigDecimal ratio;           //佣金比例
     private Integer couponUseNumber;    //使用数量
     private Integer couponReceiveNumber; //领取数量
+    private BigDecimal payAmount;//应收金额
     private BigDecimal shouldChargeAmount;//应收金额
     private BigDecimal actualChargeAmount;       //付款金额
     private BigDecimal conversionRate;        //使用率
+    private Integer useRatio;        //使用率
+    private boolean showSubmit;        //使用率
 
-    public static ProductVoucherVO toVO(ProductVoucher voucher) {
+    public static ProductVoucherVO toVO(ProductVoucher voucher,Employee employee) {
         if (voucher == null) {
             return null;
         }
@@ -52,18 +55,28 @@ public class ProductVoucherVO {
         vo.setCouponUseNumber(voucher.getUseNumber());
         vo.setCouponReceiveNumber(voucher.getReceiveNumber());
         vo.setShouldChargeAmount(voucher.getShouldChargeAmount());
-        vo.setActualChargeAmount(voucher.getPayAmount());
+        vo.setPayAmount(voucher.getPayAmount());
+        vo.setActualChargeAmount(voucher.getActualChargeAmount());
         vo.setConversionRate(voucher.getConversionRate());
-
+        if (voucher.getReceiveNumber().equals(0)) {
+            vo.setUseRatio(0);
+        }else {
+            vo.setUseRatio(voucher.getUseNumber() * 100 / voucher.getReceiveNumber());
+        }
+        if (employee != null &&
+                (voucher.getProduct().getStatus() == ProductStatus.PAY_RUN)
+                && (employee.getPosition().getId().equals(1)||employee.getPosition().getId().equals(5))){
+            vo.setShowSubmit(true);
+        }
         return vo;
     }
 
-    public static List<ProductVoucherVO> toVOs(List<ProductVoucher> vouchers) {
+    public static List<ProductVoucherVO> toVOs(List<ProductVoucher> vouchers, Employee employee) {
         List<ProductVoucherVO> vos = new ArrayList<>();
 
         if (CollectionUtils.isNotEmpty(vouchers)) {
             for (ProductVoucher voucher : vouchers) {
-                vos.add(toVO(voucher));
+                vos.add(toVO(voucher, employee));
             }
         }
         return vos;
@@ -181,6 +194,14 @@ public class ProductVoucherVO {
         this.shouldChargeAmount = shouldChargeAmount;
     }
 
+    public BigDecimal getPayAmount() {
+        return payAmount;
+    }
+
+    public void setPayAmount(BigDecimal payAmount) {
+        this.payAmount = payAmount;
+    }
+
     public BigDecimal getActualChargeAmount() {
         return actualChargeAmount;
     }
@@ -195,5 +216,21 @@ public class ProductVoucherVO {
 
     public void setConversionRate(BigDecimal conversionRate) {
         this.conversionRate = conversionRate;
+    }
+
+    public Integer getUseRatio() {
+        return useRatio;
+    }
+
+    public boolean getShowSubmit() {
+        return showSubmit;
+    }
+
+    public void setShowSubmit(boolean showSubmit) {
+        this.showSubmit = showSubmit;
+    }
+
+    public void setUseRatio(Integer useRatio) {
+        this.useRatio = useRatio;
     }
 }

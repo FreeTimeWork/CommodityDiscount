@@ -87,7 +87,7 @@ public class ProductController {
         ProductDetailsResponse response = ProductDetailsResponse.toResponse(product);
 
         if (product != null) {
-            response.setVoucher(ProductVoucherVO.toVO(product.getVoucher()));
+            response.setVoucher(ProductVoucherVO.toVO(product.getVoucher(), employee));
 
             response.setApproveStatus(getProductApproveStatus(product, employee));
             response.setTask(product.getTask());
@@ -363,7 +363,7 @@ public class ProductController {
         filter.setPagingData(new PagingData(request.getPageNumber(), request.getPageSize()));
         SearchResult<ProductVoucher> result = productService.searchProductVoucher(filter, employee);
 
-        response.setVouchers(ProductVoucherVO.toVOs(result.getResult()));
+        response.setVouchers(ProductVoucherVO.toVOs(result.getResult(), null));
         response.setPagingResult(result.getPagingResult());
 
         return response;

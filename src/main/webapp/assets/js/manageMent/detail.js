@@ -68,7 +68,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
 
     var booLeans = '';
 
-    var files = [];
+    var files = '';
 
     var activeOption = [{label: '普通活动',value: 1},{label: '预告商品',value: 2},{label: '淘抢购',value: 3},{label: '聚划算',value: 4}]
 
@@ -94,12 +94,12 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             })
             $('#fileUpload1').change(function (e) {
                 var file = e.target.files[0]
-                files.push(file)
+                files = file
             })
-            $('#fileUpload2').change(function (e) {
-                var file = e.target.files[0]
-                files.push(file)
-            })
+            //$('#fileUpload2').change(function (e) {
+            //    var file = e.target.files[0]
+            //    files.push(file)
+            //})
         }
 
         CurrentPage.prototype.init = function () {
