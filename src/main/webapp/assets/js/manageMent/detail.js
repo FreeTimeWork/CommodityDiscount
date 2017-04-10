@@ -1,11 +1,11 @@
 require.config(I360R.REQUIRE_CONFIG)
-require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSelect'], function ($,_,uiKit,netKit,cKit,dataTableSelect) {
+require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSelect'], function ($, _, uiKit, netKit, cKit, dataTableSelect) {
     $(function () {
         $(".fa_li>a").click(function () {
 
             $(this).css("background", "#1481b3").parent().siblings("li").find(".floor").css("background", "#065c85")
 //
-            $(this).parent().find(".jia").toggleClass("sub","add");
+            $(this).parent().find(".jia").toggleClass("sub", "add");
 
             $(this).parent().find("ul").toggle().parent().siblings("li").find("ul").hide();
         })
@@ -14,9 +14,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             $(this).css({"background": "#fff"}).find("a").css({"color": "red"}).parent().siblings("li").css({"background": "#efefef"}).find("a").css({"color": "#666"})
 
         })
-        $(".zhou_2_ul>li").on("click",function(){
+        $(".zhou_2_ul>li").on("click", function () {
 
-            var num=$(this).index();
+            var num = $(this).index();
             console.log(num)
             $(this).addClass("on").siblings().removeClass("on")
             $(".zhou_2_floor>div").eq(num).addClass("dis").siblings("").removeClass("dis")
@@ -53,12 +53,12 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             if (data.employee != null && data.employee.fullName != null) {
                 $("#userName").text(data.employee.fullName);
                 var positionId = data.employee.positionId;
-                if(positionId != 2
+                if (positionId != 2
                     && positionId != 3
-                    && positionId != 6){
+                    && positionId != 6) {
                     $("#showCreate").hide();
                 }
-                if(positionId != 1){
+                if (positionId != 1) {
                     $("#showEmployee").hide();
                 }
             }
@@ -70,7 +70,10 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
 
     var files = '';
 
-    var activeOption = [{label: '普通活动',value: 1},{label: '预告商品',value: 2},{label: '淘抢购',value: 3},{label: '聚划算',value: 4}]
+    var activeOption = [{label: '普通活动', value: 1}, {label: '预告商品', value: 2}, {label: '淘抢购', value: 3}, {
+        label: '聚划算',
+        value: 4
+    }]
 
     var CurrentPage = (function (_super) {
         cKit.__extends(CurrentPage, _super);
@@ -100,51 +103,55 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             //    var file = e.target.files[0]
             //    files.push(file)
             //})
+            var req = cKit.UrlUtils.getRequest();
+            if(req.bill == 'bill'){
+                $('.zhou_2_ul>li').eq(0).click()
+            }
         }
 
         CurrentPage.prototype.init = function () {
             var req = cKit.UrlUtils.getRequest();
-            var url ="/product/detail?id="+req.id;
-            var successHandler = function(self, result) {
-                if(result.pictures.length > 0){
-                    if(result.pictures[0]){
+            var url = "/product/detail?id=" + req.id;
+            var successHandler = function (self, result) {
+                if (result.pictures.length > 0) {
+                    if (result.pictures[0]) {
                         result.pictureUrl1 = result.pictures[0]
                     }
-                    if(result.pictures[1]){
+                    if (result.pictures[1]) {
                         result.pictureUrl2 = result.pictures[1]
                     }
-                    if(result.pictures[2]){
+                    if (result.pictures[2]) {
                         result.pictureUrl3 = result.pictures[2]
                     }
-                    if(result.pictures[3]){
+                    if (result.pictures[3]) {
                         result.pictureUrl4 = result.pictures[3]
                     }
-                    if(result.pictures[4]){
+                    if (result.pictures[4]) {
                         result.pictureUrl5 = result.pictures[4]
                     }
-                    if(result.pictures[5]){
+                    if (result.pictures[5]) {
                         result.pictureUrl6 = result.pictures[5]
                     }
-                    if(result.pictures[6]){
+                    if (result.pictures[6]) {
                         result.pictureUrl7 = result.pictures[6]
                     }
-                    if(result.pictures[7]){
+                    if (result.pictures[7]) {
                         result.pictureUrl8 = result.pictures[7]
                     }
                 }
-                if(result.showEdit == false){
+                if (result.showEdit == false) {
                     booLeans = false
-                }else{
+                } else {
                     booLeans = true
                 }
-                if(result.showVoucher == false){
+                if (result.showVoucher == false) {
                     $('.zhou_2_ul').eq(1).hide()
-                }else{
+                } else {
                     $('.zhou_2_ul').eq(1).show()
                 }
                 thiz.initDetailForm(result)
                 var html = '';
-                for(var i = 0; i < result.approveStatus.length; i++){
+                for (var i = 0; i < result.approveStatus.length; i++) {
                     var id = result.approveStatus[i].value;
                     var label = result.approveStatus[i].label;
                     html += '<input data-id=\'' + id + '\' value=\'' + label + '\' style="margin-right: 20px;" type="button">'
@@ -154,24 +161,24 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     var request = {};
                     request.productId = thiz.detailForm.viewModel.id();
                     request.productStatusId = $(this).attr('data-id')
-                    var url ="/product/approve/check";
+                    var url = "/product/approve/check";
 
-                    var successHandler = function(self, result){
+                    var successHandler = function (self, result) {
                         alert('成功')
                     };
-                    var errorHandler = function(self, result){
+                    var errorHandler = function (self, result) {
 
                     };
-                    var action = new netKit.SimpleAsyncPostAction(this, url ,request, successHandler, errorHandler);
+                    var action = new netKit.SimpleAsyncPostAction(this, url, request, successHandler, errorHandler);
                     action.submit()
                 })
 
                 thiz.initCreateForm(result.voucher)
             };
-            var errorHandler = function(self, result) {
+            var errorHandler = function (self, result) {
                 alert('请求失败');
             };
-            var action = new netKit.SimpleGetAction(this, url,successHandler, errorHandler);
+            var action = new netKit.SimpleGetAction(this, url, successHandler, errorHandler);
             action.submit();
         }
 
@@ -179,174 +186,174 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             this.detailForm = new uiKit.FormController({
                 id: 'detailForm',
                 model: model || {},
-                submit: function(data) {
+                submit: function (data) {
 
                 },
                 fields: uiKit.FormUtils.generateFields('detailForm', [{
-                    uid : 'activityName',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'activityTime',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'url',
-                    type : uiKit.Controller.TEXT_AREA
-                },{
-                    uid : 'couponUrl',
-                    type : uiKit.Controller.TEXT_AREA
-                },{
-                    uid : 'productId',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'storeDiscriptionScore',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'serviceScore',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'speedScore',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'storeTypeName',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'reservePrice',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'couponUseNumber',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'couponSurplusNumber',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'couponAmount',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'condition',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'pictureUrl1',
-                    type : uiKit.Controller.IMAGE,
-                    visible: function(data) {
+                    uid: 'activityName',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'activityTime',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'url',
+                    type: uiKit.Controller.TEXT_AREA
+                }, {
+                    uid: 'couponUrl',
+                    type: uiKit.Controller.TEXT_AREA
+                }, {
+                    uid: 'productId',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'storeDiscriptionScore',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'serviceScore',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'speedScore',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'storeTypeName',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'reservePrice',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'couponUseNumber',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'couponSurplusNumber',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'couponAmount',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'condition',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'pictureUrl1',
+                    type: uiKit.Controller.IMAGE,
+                    visible: function (data) {
                         if (ValueUtils.isEmpty(data)) {
                             return false;
                         }
                         return true;
                     }
-                },{
-                    uid : 'pictureUrl2',
-                    type : uiKit.Controller.IMAGE,
-                    visible: function(data) {
+                }, {
+                    uid: 'pictureUrl2',
+                    type: uiKit.Controller.IMAGE,
+                    visible: function (data) {
                         if (ValueUtils.isEmpty(data)) {
                             return false;
                         }
                         return true;
                     }
-                },{
-                    uid : 'pictureUrl3',
-                    type : uiKit.Controller.IMAGE,
-                    visible: function(data) {
+                }, {
+                    uid: 'pictureUrl3',
+                    type: uiKit.Controller.IMAGE,
+                    visible: function (data) {
                         if (ValueUtils.isEmpty(data)) {
                             return false;
                         }
                         return true;
                     }
-                },{
-                    uid : 'pictureUrl4',
-                    type : uiKit.Controller.IMAGE,
-                    visible: function(data) {
+                }, {
+                    uid: 'pictureUrl4',
+                    type: uiKit.Controller.IMAGE,
+                    visible: function (data) {
                         if (ValueUtils.isEmpty(data)) {
                             return false;
                         }
                         return true;
                     }
-                },{
-                    uid : 'pictureUrl5',
-                    type : uiKit.Controller.IMAGE,
-                    visible: function(data) {
+                }, {
+                    uid: 'pictureUrl5',
+                    type: uiKit.Controller.IMAGE,
+                    visible: function (data) {
                         if (ValueUtils.isEmpty(data)) {
                             return false;
                         }
                         return true;
                     }
-                },{
-                    uid : 'pictureUrl6',
-                    type : uiKit.Controller.IMAGE,
-                    visible: function(data) {
+                }, {
+                    uid: 'pictureUrl6',
+                    type: uiKit.Controller.IMAGE,
+                    visible: function (data) {
                         if (ValueUtils.isEmpty(data)) {
                             return false;
                         }
                         return true;
                     }
-                },{
-                    uid : 'pictureUrl7',
-                    type : uiKit.Controller.IMAGE,
-                    visible: function(data) {
+                }, {
+                    uid: 'pictureUrl7',
+                    type: uiKit.Controller.IMAGE,
+                    visible: function (data) {
                         if (ValueUtils.isEmpty(data)) {
                             return false;
                         }
                         return true;
                     }
-                },{
-                    uid : 'pictureUrl8',
-                    type : uiKit.Controller.IMAGE,
-                    visible: function(data) {
+                }, {
+                    uid: 'pictureUrl8',
+                    type: uiKit.Controller.IMAGE,
+                    visible: function (data) {
                         if (ValueUtils.isEmpty(data)) {
                             return false;
                         }
                         return true;
                     }
-                },{
-                    uid : 'pictureSize',
-                    type : uiKit.Controller.LABEL
-                },{
+                }, {
+                    uid: 'pictureSize',
+                    type: uiKit.Controller.LABEL
+                }, {
                     uid: 'supplementPictureUrl',
                     type: uiKit.Controller.LABEL
-                },{
-                    uid : 'productTypeName',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'name',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'reservePrice',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'sales',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'immediatelyStr',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'couponBeginTime',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'couponEndTime',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'disCountPrice',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'ratio',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'hireTypeName',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'planUrl',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'features',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'description',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'qq',
-                    type : uiKit.Controller.LABEL
-                },{
-                    uid : 'chargePrice',
-                    type : uiKit.Controller.LABEL
+                }, {
+                    uid: 'productTypeName',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'name',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'reservePrice',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'sales',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'immediatelyStr',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'couponBeginTime',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'couponEndTime',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'disCountPrice',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'ratio',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'hireTypeName',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'planUrl',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'features',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'description',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'qq',
+                    type: uiKit.Controller.LABEL
+                }, {
+                    uid: 'chargePrice',
+                    type: uiKit.Controller.LABEL
                 }]),
                 reset: false
             });
@@ -357,8 +364,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             this.createForm = new uiKit.FormController({
                 id: 'createForm',
                 model: model || {},
-                submit: function(data) {
-                    var url ="/product/vuncher/create";
+                submit: function (data) {
                     var request = new FormData();
                     request.append('couponReceiveNumber', data.couponReceiveNumber);
                     request.append('payAmount', data.payAmount);
@@ -367,82 +373,96 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     request.append('actualChargeAmount', data.actualChargeAmount);
                     request.append('conversionRate', data.conversionRate);
                     if(files.length == 0){
-                        alert('请选择图片')
-                        return
+
                     }else{
                         request.append('files', files);
                     }
+                    $.ajax({
 
-                    var successHandler = function(self, result){
+                        type: 'POST',
 
-                    };
-                    var errorHandler = function(self, result){
+                        url: '/product/voucher/create',
 
-                    };
-                    var action = new netKit.SimpleAsyncPostAction(this, url ,request, successHandler, errorHandler);
-                    action.submit()
+                        data: request,
+
+                        contentType: false,
+
+                        processData: false,
+
+                        success: function (data) {
+
+
+                        }, //success end
+                        error: function (data) {
+
+                        }
+                    }) //ajax end
+
                 },
                 fields: uiKit.FormUtils.generateFields('createForm', [{
-                    uid : 'couponReceiveNumber',
-                    node : 'couponReceiveNumber',
-                    type : uiKit.Controller.EDIT,
+                    uid: 'couponReceiveNumber',
+                    node: 'couponReceiveNumber',
+                    type: uiKit.Controller.EDIT,
                     readOnly: booLeans,
-                    validators : [uiKit.Validator.NONEMPTY]
-                },{
-                    uid : 'payAmount',
-                    node : 'payAmount',
-                    type : uiKit.Controller.EDIT,
+                    validators: [uiKit.Validator.NONEMPTY]
+                }, {
+                    uid: 'payAmount',
+                    node: 'payAmount',
+                    type: uiKit.Controller.EDIT,
                     readOnly: booLeans,
-                    validators : [uiKit.Validator.NONEMPTY]
-                },{
-                    uid : 'couponUseNumber',
-                    node : 'couponUseNumber',
-                    type : uiKit.Controller.EDIT,
+                    validators: [uiKit.Validator.NONEMPTY]
+                }, {
+                    uid: 'couponUseNumber',
+                    node: 'couponUseNumber',
+                    type: uiKit.Controller.EDIT,
                     readOnly: booLeans,
-                    validators : [uiKit.Validator.NONEMPTY]
-                },{
-                    uid : 'shouldChargeAmount',
-                    node : 'shouldChargeAmount',
-                    type : uiKit.Controller.EDIT,
+                    validators: [uiKit.Validator.NONEMPTY]
+                }, {
+                    uid: 'shouldChargeAmount',
+                    node: 'shouldChargeAmount',
+                    type: uiKit.Controller.EDIT,
                     readOnly: booLeans,
-                    validators : [uiKit.Validator.NONEMPTY]
-                },{
-                    uid : 'actualChargeAmount',
-                    node : 'actualChargeAmount',
-                    type : uiKit.Controller.EDIT,
+                    validators: [uiKit.Validator.NONEMPTY]
+                }, {
+                    uid: 'actualChargeAmount',
+                    node: 'actualChargeAmount',
+                    type: uiKit.Controller.EDIT,
                     readOnly: booLeans,
-                    validators : [uiKit.Validator.NONEMPTY]
-                },{
-                    uid : 'conversionRate',
-                    node : 'conversionRate',
-                    type : uiKit.Controller.EDIT,
+                    validators: [uiKit.Validator.NONEMPTY]
+                }, {
+                    uid: 'conversionRate',
+                    node: 'conversionRate',
+                    type: uiKit.Controller.EDIT,
                     readOnly: booLeans,
-                    validators : [uiKit.Validator.NONEMPTY]
-                },{
-                    uid : 'withoutRate',
-                    node : 'withoutRate',
-                    type : uiKit.Controller.EDIT
+                    validators: [uiKit.Validator.NONEMPTY]
+                }, {
+                    uid: 'withoutRate',
+                    node: 'withoutRate',
+                    type: uiKit.Controller.EDIT
                     //,
                     //readOnly: booLeans
                     //,
                     //validators : [uiKit.Validator.NONEMPTY]
-                },{
-                    uid : 'payTime',
-                    node : 'payTime',
-                    type : uiKit.Controller.EDIT,
-                    visible: function () {
-                        if(booLeans){
+                }, {
+                    uid: 'payTime',
+                    node: 'payTime',
+                    type: uiKit.Controller.EDIT,
+                    visible: function (value) {
+                        if(value == ''){
+                            return false
+                        }else if (booLeans) {
+                            $("#createForm_payTime").css("disabled",true)
                             return true
                         }
-                        return false
+                        return true
                     }
-                },{
-                    uid : 'approveStatus',
-                    node : 'approveStatus',
-                    type : uiKit.Controller.RADIO_GROUP,
-                    options: [{label: '拒绝付款',value: false},{label: '已付款',value: true}],
+                }, {
+                    uid: 'approveStatus',
+                    node: 'approveStatus',
+                    type: uiKit.Controller.RADIO_GROUP,
+                    options: [{label: '拒绝付款', value: false}, {label: '已付款', value: true}],
                     visible: function () {
-                        if(booLeans){
+                        if (booLeans) {
                             return true
                         }
                         return false
@@ -454,12 +474,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
 
         return CurrentPage;
     })(cKit.CoreObject);
-    var pageController = new uiKit.PageController({
-
-
-    });
+    var pageController = new uiKit.PageController({});
     var currentPage = null;
-    $(document).ready(function() {
+    $(document).ready(function () {
         currentPage = new CurrentPage();
     });
 

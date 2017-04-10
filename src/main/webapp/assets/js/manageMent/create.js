@@ -383,12 +383,14 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'couponBeginTime',
-                    type : uiKit.Controller.DATE_PICKER,
-                    node : 'couponBeginTime'
+                    type : uiKit.Controller.EDIT,
+                    node : 'couponBeginTime',
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'couponEndTime',
-                    type : uiKit.Controller.DATE_PICKER,
-                    node : 'couponEndTime'
+                    type : uiKit.Controller.EDIT,
+                    node : 'couponEndTime',
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'disCountPrice',
                     type : uiKit.Controller.LABEL

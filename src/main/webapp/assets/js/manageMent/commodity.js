@@ -166,7 +166,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         if(rowObject.showSubmit) {
                             html += '<a style="margin-right: 10px;" onclick="currentPage().onReSubmitClick(\'' + id + '\')">再次提交</a>'
                             if(rowObject.statusCode == "PAY_WAIT") {
-                                html += '<a style="margin-right: 10px;" onclick="currentPage().onSubmitBillClick()">提交结账</a>'
+                                html += '<a style="margin-right: 10px;" onclick="currentPage().onSubmitBillClick(\'' + id + '\')">提交结账</a>'
                             }
                         }
                         return html;
@@ -320,6 +320,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         },
         onReSubmitClick: function (id) {
             window.open('/frontend/create.html?id='+ id);
+        },
+        onSubmitBillClick: function (id) {
+            window.open('/frontend/create.html?bill=bill' + '&id=' + id);
         }
 
     });
