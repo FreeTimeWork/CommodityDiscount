@@ -171,6 +171,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                             alert(result.resultMessage);
                         }else{
                             alert('成功');
+                            window.open('/frontend/commodity.html');
                         }
                     };
                     var errorHandler = function(self, result) {
@@ -448,6 +449,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                             alert(result.resultMessage);
                         }else{
                             alert('成功');
+                            window.open('/frontend/commodity.html');
                         }
                     };
                     var errorHandler = function(self, result) {

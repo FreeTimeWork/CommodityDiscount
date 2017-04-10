@@ -23,7 +23,6 @@ import com.mwb.controller.product.api.SearchProductResponse;
 import com.mwb.controller.util.ApplicationContextUtils;
 import com.mwb.dao.filter.ProductFilter;
 import com.mwb.dao.filter.SearchResult;
-import com.mwb.dao.model.bpm.Task;
 import com.mwb.dao.model.comm.Bool;
 import com.mwb.dao.model.comm.Log;
 import com.mwb.dao.model.comm.PagingData;

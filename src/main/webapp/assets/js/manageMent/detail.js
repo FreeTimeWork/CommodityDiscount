@@ -141,7 +141,7 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
                 if (result.showEdit == false) {
                     booLeans = true;
 
-                    $('.last').hide()
+                    $('#showButton').hide()
                 } else {
                     booLeans = false
                 }
@@ -375,8 +375,10 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
                     request.append('shouldChargeAmount', data.shouldChargeAmount);
                     request.append('actualChargeAmount', data.actualChargeAmount);
                     request.append('conversionRate', data.conversionRate);
-                    if(files.length == 0){
+                    request.append('withoutRate', data.withoutRate);
+                    //request.append('payTime', data.payTime);
 
+                    if(files.length == 0){
                     }else{
                         request.append('files', files);
                     }
@@ -451,13 +453,13 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
                     node: 'payTime',
                     type: uiKit.Controller.EDIT,
                     visible: function (value) {
-                        if(value == ''){
-                            return false
-                        }else if (booLeans) {
-                            $("#createForm_payTime").css("disabled",true)
-                            return true
-                        }
-                        return true
+                        //if(value == ''){
+                        //    return false
+                        //}else if (booLeans) {
+                        //    $("#createForm_payTime").css("disabled",true)
+                        //    return true
+                        //}
+                        return false;
                     }
                 }, {
                     uid: 'approveStatus',
@@ -465,9 +467,9 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
                     type: uiKit.Controller.RADIO_GROUP,
                     options: [{label: '拒绝付款', value: false}, {label: '已付款', value: true}],
                     visible: function () {
-                        if (booLeans) {
-                            return true
-                        }
+                        //if (booLeans) {
+                        //    return true
+                        //}
                         return false
                     }
                 }]),
