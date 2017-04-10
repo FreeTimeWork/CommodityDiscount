@@ -69,9 +69,9 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
 
     var files = '';
 
-    var activeOption = [{label: '普通活动', value: 1}, {label: '预告商品', value: 2}, {label: '淘抢购', value: 3}, {
+    var activeOption = [{label: '普通活动', value: 1}, {label: '预告商品', value: 4}, {label: '淘抢购', value: 2}, {
         label: '聚划算',
-        value: 4
+        value: 3
     }]
 
     var CurrentPage = (function (_super) {
@@ -139,14 +139,14 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
                     }
                 }
                 if (result.showEdit == false) {
-                    booLeans = false
-                } else {
                     booLeans = true
+                } else {
+                    booLeans = false
                 }
                 if (result.showVoucher == false) {
-                    $('.zhou_2_ul').eq(1).hide()
+                    $('#showVoucher').hide()
                 } else {
-                    $('.zhou_2_ul').eq(1).show()
+                    $('#showVoucher').eq(1).show()
                 }
                 thiz.initDetailForm(result)
                 var html = '';
