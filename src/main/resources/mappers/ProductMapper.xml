@@ -75,6 +75,7 @@
             <result property="createTime" column="voucher_create_time"/>
             <result property="conversionRate" column="voucher_conversion_rate"/>
             <result property="withoutUrl" column="voucher_without_url"/>
+            <result property="payTime" column="voucher_pay_time"/>
 
         <association property="product" javaType="Product" resultMap="productResult"/>
         <collection property="pictures" ofType="VoucherPicture" resultMap="voucherPictureResult"/>
@@ -164,6 +165,7 @@
         v.create_time AS voucher_create_time,
         v.conversion_rate AS voucher_conversion_rate,
         v.without_url AS voucher_without_url,
+        v.pay_time AS voucher_pay_time,
         v.product_id AS voucher_product_id
     </sql>
 
@@ -403,6 +405,20 @@
         <include refid="pagingLimit" />
     </select>
 
+    <select id="selectProductVoucherByProductId"
+        resultMap="voucherResult">
+        SELECT
+            <include refid="productColumns"/>,
+            <include refid="employeeColumns"/>,
+            <include refid="voucherColumns"/>
+        FROM
+            t_product_voucher v
+            INNER JOIN t_product p ON v.product_id = p.id
+            INNER JOIN t_employee ae ON ae.id = p.employee_id
+          WHERE
+            p.id =  #{productId, javaType=int, jdbcType=INTEGER}
+    </select>
+
     <select id="countProductVoucherByFilter"
         resultType="int">
         SELECT
@@ -567,6 +583,7 @@
             create_time,
             conversion_rate,
             without_url,
+            pay_time,
             product_id
         ) VALUES (
             #{receiveNumber, javaType=int, jdbcType=INTEGER},
@@ -577,13 +594,21 @@
             #{createTime, javaType=date, jdbcType=TIMESTAMP},
             #{conversionRate, javaType=bigdecimal, jdbcType=DECIMAL},
             #{withoutUrl, javaType=string, jdbcType=CHAR},
+            #{payTime, javaType=date, jdbcType=TIMESTAMP},
             #{product.id, javaType=int, jdbcType=INTEGER}
         )
     </insert>
+
     <delete id="deleteProductVoucher" >
         DELETE FROM t_product_voucher
         WHERE  product_id = #{productId, javaType=int, jdbcType=INTEGER}
     </delete>
+
+    <delete id="deleteVoucherPicture" >
+        DELETE FROM t_voucher_picture
+        WHERE  voucher_id = #{voucherId, javaType=int, jdbcType=INTEGER}
+    </delete>
+
     <insert
         id="insertVoucherPicture"
         parameterType="VoucherPicture"

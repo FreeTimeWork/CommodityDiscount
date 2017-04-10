@@ -298,15 +298,21 @@ public class ProductController {
 
         List<VoucherPicture> pictures = new ArrayList<>();
         if (!files.isEmpty()) {
-            String realPath = "\\image\\";
+            String realPath = "/image/";
             try {
-                String filePath = realPath + files.getOriginalFilename();
+                long  endTime=System.currentTimeMillis();
+
+                String filePath = realPath + + endTime +files.getOriginalFilename();
                 VoucherPicture picture = new VoucherPicture();
                 picture.setUrl(filePath);
                 picture.setVoucher(voucher);
                 pictures.add(picture);
 
-                files.transferTo(new File(filePath));
+                File saveDir = new File(filePath);
+                if (!saveDir.getParentFile().exists())
+                    saveDir.getParentFile().mkdirs();
+
+                files.transferTo(saveDir);
             } catch (IOException e) {
                 LOG.error("createProductVoucher is err.");
             }
