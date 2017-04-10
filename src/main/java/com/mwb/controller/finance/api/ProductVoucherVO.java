@@ -30,11 +30,10 @@ public class ProductVoucherVO {
     private Integer couponReceiveNumber; //领取数量
     private BigDecimal shouldChargeAmount;//应收金额
     private BigDecimal actualChargeAmount;       //付款金额
-    private Integer conversionRate;        //使用率
-    private boolean showSubmit;        //使用率
+    private BigDecimal conversionRate;        //使用率
 
-    public static ProductVoucherVO toVO(ProductVoucher voucher, Employee employee) {
-        if(voucher == null) {
+    public static ProductVoucherVO toVO(ProductVoucher voucher) {
+        if (voucher == null) {
             return null;
         }
         ProductVoucherVO vo = new ProductVoucherVO();
@@ -54,37 +53,20 @@ public class ProductVoucherVO {
         vo.setCouponReceiveNumber(voucher.getReceiveNumber());
         vo.setShouldChargeAmount(voucher.getShouldChargeAmount());
         vo.setActualChargeAmount(voucher.getPayAmount());
-        if (voucher.getReceiveNumber().equals(0)) {
-            vo.setConversionRate(0);
-        }else {
-            vo.setConversionRate(voucher.getUseNumber() * 100 / voucher.getReceiveNumber());
-        }
-        if (employee != null &&
-                (voucher.getProduct().getStatus() == ProductStatus.PAY_TRAILER
-                        || voucher.getProduct().getStatus() == ProductStatus.PAY_WAIT)
-                && voucher.getProduct().getEmployee().getId().equals(employee.getId())){
-            vo.setShowSubmit(true);
-        }
+        vo.setConversionRate(voucher.getConversionRate());
+
         return vo;
     }
 
-    public static List<ProductVoucherVO> toVOs(List<ProductVoucher> vouchers, Employee employee) {
+    public static List<ProductVoucherVO> toVOs(List<ProductVoucher> vouchers) {
         List<ProductVoucherVO> vos = new ArrayList<>();
 
         if (CollectionUtils.isNotEmpty(vouchers)) {
             for (ProductVoucher voucher : vouchers) {
-                vos.add(toVO(voucher, employee));
+                vos.add(toVO(voucher));
             }
         }
         return vos;
-    }
-
-    public boolean isShowSubmit() {
-        return showSubmit;
-    }
-
-    public void setShowSubmit(boolean showSubmit) {
-        this.showSubmit = showSubmit;
     }
 
     public Integer getId() {
@@ -207,11 +189,11 @@ public class ProductVoucherVO {
         this.actualChargeAmount = actualChargeAmount;
     }
 
-    public Integer getConversionRate() {
+    public BigDecimal getConversionRate() {
         return conversionRate;
     }
 
-    public void setConversionRate(Integer conversionRate) {
+    public void setConversionRate(BigDecimal conversionRate) {
         this.conversionRate = conversionRate;
     }
 }

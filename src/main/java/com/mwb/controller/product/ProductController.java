@@ -87,12 +87,12 @@ public class ProductController {
         ProductDetailsResponse response = ProductDetailsResponse.toResponse(product);
 
         if (product != null) {
-            response.setVoucher(ProductVoucherVO.toVO(product.getVoucher(), employee));
+            response.setVoucher(ProductVoucherVO.toVO(product.getVoucher()));
 
             response.setApproveStatus(getProductApproveStatus(product, employee));
             response.setTask(product.getTask());
 
-            if (employee.getId().equals(product.getEmployee().getId())
+            if ((employee.getId().equals(product.getEmployee().getId()) || employee.getPosition().getId().equals(1))
                     && (product.getStatus() == ProductStatus.PAY_WAIT
                     || product.getStatus() == ProductStatus.PAY_TRAILER)) {
                 response.setShowEdit(true);
@@ -115,28 +115,28 @@ public class ProductController {
         ProductStatus status = product.getStatus();
         Integer positionId = employee.getPosition().getId();
         if (ProductStatus.AUDIT_RUN == status
-                && positionId.equals(4)) {
+                && (positionId.equals(4) || employee.getPosition().getId().equals(1))) {
             vos.add(new ResourceVO(ProductStatus.TWO_AUDIT.getDescription(), ProductStatus.TWO_AUDIT.getId()));
             vos.add(new ResourceVO(ProductStatus.REJECTED.getDescription(), ProductStatus.REJECTED.getId()));
             vos.add(new ResourceVO(ProductStatus.TRAILER.getDescription(), ProductStatus.TRAILER.getId()));
         } else if (ProductStatus.TWO_AUDIT == status
-                && positionId.equals(4)) {
+                && (positionId.equals(4) || employee.getPosition().getId().equals(1))) {
             vos.add(new ResourceVO(ProductStatus.PROMOTE.getDescription(), ProductStatus.PROMOTE.getId()));
             vos.add(new ResourceVO(ProductStatus.REJECTED.getDescription(), ProductStatus.REJECTED.getId()));
             vos.add(new ResourceVO(ProductStatus.TRAILER.getDescription(), ProductStatus.TRAILER.getId()));
         } else if (ProductStatus.PROMOTE == status
-                && product.getEmployee().getId().equals(employee.getId())) {
+                && (product.getEmployee().getId().equals(employee.getId()) || employee.getPosition().getId().equals(1))) {
             vos.add(new ResourceVO(ProductStatus.END.getDescription(), ProductStatus.END.getId()));
             vos.add(new ResourceVO(ProductStatus.PAY_WAIT.getDescription(), ProductStatus.PAY_WAIT.getId()));
         } else if (ProductStatus.END == status
-                && product.getEmployee().getId().equals(employee.getId())) {
+                && (product.getEmployee().getId().equals(employee.getId()) || employee.getPosition().getId().equals(1))) {
             vos.add(new ResourceVO(ProductStatus.PAY_WAIT.getDescription(), ProductStatus.PAY_WAIT.getId()));
         } else if (ProductStatus.PAY_WAIT == status
-                && product.getEmployee().getId().equals(employee.getId())
-                && employee.getPosition().getId() == 6) {
+                && ((product.getEmployee().getId().equals(employee.getId())
+                && employee.getPosition().getId() == 6) || employee.getPosition().getId().equals(1))) {
             vos.add(new ResourceVO(ProductStatus.SETTLEMENT.getDescription(), ProductStatus.SETTLEMENT.getId()));
         } else if (ProductStatus.PAY_RUN == status
-                && positionId.equals(5)) {
+                && (positionId.equals(5) || employee.getPosition().getId().equals(1))) {
             vos.add(new ResourceVO(ProductStatus.PAY_TRAILER.getDescription(), ProductStatus.PAY_TRAILER.getId()));
             vos.add(new ResourceVO(ProductStatus.PAY_END.getDescription(), ProductStatus.PAY_END.getId()));
         }
@@ -368,7 +368,7 @@ public class ProductController {
         filter.setPagingData(new PagingData(request.getPageNumber(), request.getPageSize()));
         SearchResult<ProductVoucher> result = productService.searchProductVoucher(filter, employee);
 
-        response.setVouchers(ProductVoucherVO.toVOs(result.getResult(), null));
+        response.setVouchers(ProductVoucherVO.toVOs(result.getResult()));
         response.setPagingResult(result.getPagingResult());
 
         return response;
