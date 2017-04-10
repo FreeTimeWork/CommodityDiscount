@@ -45,6 +45,8 @@ public interface ProductMapper {
 
     public void deleteProductVoucher(@Param("productId") Integer productId);
 
+    public void deleteVoucherPicture(@Param("voucherId") Integer voucherId);
+
     public void insertVoucherPicture(VoucherPicture voucherPicture);
 
     public void insertProductPicture(ProductPicture productPicture);
