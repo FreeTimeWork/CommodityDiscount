@@ -1,14 +1,14 @@
 package com.mwb.controller.interceptor;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.mwb.controller.util.ApplicationContextUtils;
 import com.mwb.dao.model.employee.Employee;
 import com.mwb.service.employee.api.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by fangchen.chai on 2017/4/5.

@@ -23,6 +23,7 @@ import com.mwb.controller.product.api.SearchProductResponse;
 import com.mwb.controller.util.ApplicationContextUtils;
 import com.mwb.dao.filter.ProductFilter;
 import com.mwb.dao.filter.SearchResult;
+import com.mwb.dao.model.bpm.Task;
 import com.mwb.dao.model.comm.Bool;
 import com.mwb.dao.model.comm.Log;
 import com.mwb.dao.model.comm.PagingData;
@@ -37,6 +38,7 @@ import com.mwb.dao.model.product.Store;
 import com.mwb.dao.model.product.voucher.ProductVoucher;
 import com.mwb.dao.model.product.voucher.VoucherPicture;
 import com.mwb.service.ParserService;
+import com.mwb.service.bpm.api.IBpmService;
 import com.mwb.service.dataoke.api.IDaoLaoKeService;
 import com.mwb.service.product.api.IProductService;
 import com.mwb.util.DateTimeUtility;
@@ -64,6 +66,9 @@ public class ProductController {
 
     @Autowired
     private IProductService productService;
+
+    @Autowired
+    private IBpmService bpmService;
 
     @ResponseBody
     @RequestMapping(value = "/grab")
@@ -393,13 +398,11 @@ public class ProductController {
         if (product == null) {
             return new ServiceResponse();
         }
-
-        //审单员
-        if (employee.getPosition().getId().equals(4)) {
-            productService.modifyProductStatus(product.getId(), employee.getId(), product.getStatus(), ProductStatus.AUDIT_RUN);
-        } else if (employee.getPosition().getId().equals(5)) { //财务
-            productService.modifyProductStatus(product.getId(), employee.getId(), product.getStatus(), ProductStatus.PAY_RUN);
-        }
+        Task task = new Task();
+        task.setEmployeeId(employee.getId());
+        task.setId(product.getTask().getId());
+        bpmService.modifyTask(task);
+        productService.modifyProductStatus(product.getId(), product.getEmployee().getId(), product.getStatus(), ProductStatus.AUDIT_RUN);
 
         return new ServiceResponse();
     }

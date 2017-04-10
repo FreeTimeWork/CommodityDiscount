@@ -266,7 +266,15 @@
             </foreach>
             )
         </if>
-
+        <if test="filter.task != null">
+           <if test="filter.task.employeeId != null">
+               AND (
+               rt.employee_id = #{filter.task.employeeId, javaType=int, jdbcType=INTEGER}
+               OR ae.id = #{filter.employeeId, javaType=int, jdbcType=INTEGER}
+               OR rt.employee_id IS NULL
+               )
+           </if>
+        </if>
     </sql>
 
     <select id="selectProductById"
@@ -349,6 +357,7 @@
             INNER JOIN t_employee ae ON ae.id = p.employee_id
             INNER JOIN t_store s ON s.id = p.store_id
             LEFT JOIN t_product_voucher v ON v.product_id = p.id
+            LEFT JOIN ru_task rt ON rt.id = p.task_id
         <where>
             <include refid="productFilter"/>
         </where>
@@ -374,6 +383,7 @@
             LEFT JOIN t_product_picture pp ON pp.product_id = p.id
             LEFT JOIN t_product_voucher v ON v.product_id = p.id
             LEFT JOIN t_voucher_picture vp ON vp.voucher_id = v.id
+            LEFT JOIN ru_task rt ON rt.id = p.task_id
         <where>
             <include refid="productFilter"/>
         </where>
