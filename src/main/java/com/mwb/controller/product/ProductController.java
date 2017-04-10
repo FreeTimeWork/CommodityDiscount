@@ -293,7 +293,7 @@ public class ProductController {
         voucher.setCreateTime(new Date());
         voucher.setConversionRate(request.getConversionRate());
         voucher.setWithoutUrl(request.getWithoutRate());
-        voucher.setPayTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getPayTime()));
+//        voucher.setPayTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getPayTime()));
         voucher.setProduct(product);
 
         List<VoucherPicture> pictures = new ArrayList<>();
@@ -395,9 +395,9 @@ public class ProductController {
         }
 
         //审单员
-        if (employee.getPosition().getId().equals(4)) {
+        if (request.getProductStatusId().equals(2)) {
             productService.modifyProductStatus(product.getId(), employee.getId(), product.getStatus(), ProductStatus.AUDIT_RUN);
-        } else if (employee.getPosition().getId().equals(5)) { //财务
+        } else{ //财务
             productService.modifyProductStatus(product.getId(), employee.getId(), product.getStatus(), ProductStatus.PAY_RUN);
         }
 
