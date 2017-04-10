@@ -12,9 +12,8 @@ require([ 'jquery', 'uiKit3', 'networkKit', 'coreKit'],
                     $("#userName").text(data.employee.fullName);
                     EMPLOYEEID = data.employee.id;
                     var positionId = data.employee.positionId;
-                    if(positionId != 2
-                        && positionId != 3
-                        && positionId != 6){
+                    if(positionId == 4
+                        && positionId == 5){
                         $("#showCreate").hide();
                     }
                     if(positionId != 1){
