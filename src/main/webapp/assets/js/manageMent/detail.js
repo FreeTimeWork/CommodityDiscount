@@ -104,11 +104,6 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
 
         CurrentPage.prototype.init = function () {
             var req = cKit.UrlUtils.getRequest();
-            if(req.edit == 'false'){
-                booLeans = true
-            }else{
-                booLeans = false
-            }
             var url ="/product/detail?id="+req.id;
             var successHandler = function(self, result) {
                 if(result.pictures.length > 0){
@@ -136,6 +131,16 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     if(result.pictures[7]){
                         result.pictureUrl8 = result.pictures[7]
                     }
+                }
+                if(result.showEdit == false){
+                    booLeans = false
+                }else{
+                    booLeans = true
+                }
+                if(result.showVoucher == false){
+                    $('.zhou_2_ul').eq(1).hide()
+                }else{
+                    $('.zhou_2_ul').eq(1).show()
                 }
                 thiz.initDetailForm(result)
                 var html = '';
@@ -381,37 +386,67 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     uid : 'couponReceiveNumber',
                     node : 'couponReceiveNumber',
                     type : uiKit.Controller.EDIT,
-                    readOnly: booLeans
+                    readOnly: booLeans,
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'payAmount',
                     node : 'payAmount',
                     type : uiKit.Controller.EDIT,
-                    readOnly: booLeans
+                    readOnly: booLeans,
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'couponUseNumber',
                     node : 'couponUseNumber',
                     type : uiKit.Controller.EDIT,
-                    readOnly: booLeans
+                    readOnly: booLeans,
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'shouldChargeAmount',
                     node : 'shouldChargeAmount',
                     type : uiKit.Controller.EDIT,
-                    readOnly: booLeans
+                    readOnly: booLeans,
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'actualChargeAmount',
                     node : 'actualChargeAmount',
                     type : uiKit.Controller.EDIT,
-                    readOnly: booLeans
+                    readOnly: booLeans,
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'conversionRate',
                     node : 'conversionRate',
                     type : uiKit.Controller.EDIT,
-                    readOnly: booLeans
+                    readOnly: booLeans,
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'withoutRate',
                     node : 'withoutRate',
+                    type : uiKit.Controller.EDIT
+                    //,
+                    //readOnly: booLeans
+                    //,
+                    //validators : [uiKit.Validator.NONEMPTY]
+                },{
+                    uid : 'payTime',
+                    node : 'payTime',
                     type : uiKit.Controller.EDIT,
-                    readOnly: booLeans
+                    visible: function () {
+                        if(booLeans){
+                            return true
+                        }
+                        return false
+                    }
+                },{
+                    uid : 'approveStatus',
+                    node : 'approveStatus',
+                    type : uiKit.Controller.RADIO_GROUP,
+                    options: [{label: '拒绝付款',value: false},{label: '已付款',value: true}],
+                    visible: function () {
+                        if(booLeans){
+                            return true
+                        }
+                        return false
+                    }
                 }]),
                 reset: false
             })
@@ -421,10 +456,6 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
     })(cKit.CoreObject);
     var pageController = new uiKit.PageController({
 
-
-        onDeailClick: function (id ) {
-            window.open('/zhou_1(3)%20(1)/view/detail.html?id=') + id;
-        }
 
     });
     var currentPage = null;

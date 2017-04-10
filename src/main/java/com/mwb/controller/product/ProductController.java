@@ -264,7 +264,7 @@ public class ProductController {
     @ResponseBody
     @RequestMapping(value = "/voucher/create")
     public ServiceResponse createProductVoucher(
-            @RequestParam("files") MultipartFile[] files,
+            @RequestParam("files") MultipartFile files,
             CreateProductVoucherRequest request) {
 
         Product product = productService.getProductById(request.getId());
@@ -281,34 +281,29 @@ public class ProductController {
         voucher.setProduct(product);
 
         List<VoucherPicture> pictures = new ArrayList<>();
-        if (files != null && files.length > 0) {
+        if (files.isEmpty()) {
             String realPath = "\\image\\";
+            try {
+                String filePath = realPath + files.getOriginalFilename();
+                VoucherPicture picture = new VoucherPicture();
+                picture.setUrl(filePath);
+                picture.setVoucher(voucher);
+                pictures.add(picture);
 
-            for (int i = 0; i < files.length; i++) {
-                try {
-                    MultipartFile file = files[i];
-                    if (file.isEmpty()) {
-                        continue;
-                    }
-                    String filePath = realPath + file.getOriginalFilename();
-
-                    VoucherPicture picture = new VoucherPicture();
-                    picture.setUrl(filePath);
-                    picture.setVoucher(voucher);
-                    pictures.add(picture);
-
-                    file.transferTo(new File(filePath));
-                } catch (IOException e) {
-                    LOG.error("createProductVoucher is err.");
-                }
+                files.transferTo(new File(filePath));
+            } catch (IOException e) {
+                LOG.error("createProductVoucher is err.");
             }
+
         }
 
         voucher.setPictures(pictures);
 
         productService.createProductVoucher(voucher, product);
 
-        return new ServiceResponse();
+        return new
+
+                ServiceResponse();
 
     }
 

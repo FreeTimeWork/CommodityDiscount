@@ -241,22 +241,58 @@
                             <p><label style="display :inline-block">提交时间：</label><label style="display :inline-block" uid="createTime"></label></p>
                             <p><label style="display :inline-block">优惠开始时间：</label><label style="display :inline-block" uid="couponBeginTime"></label></p>
                             <p><label style="display :inline-block">优惠结束时间：</label><label style="display :inline-block" uid="couponEndTime"></label></p>
-                            <p><label style="display :inline-block">领取数量：</label><input type="text"
-                                                                                        uid="couponReceiveNumber"/></p>
-                            <p><label style="display :inline-block">支付金额：</label><input type="text" uid="payAmount"/>
-                            </p>
-                            <p><label style="display :inline-block">使用数量；</label><input type="text"
-                                                                                        uid="couponUseNumber"/></p>
-                            <p><label style="display :inline-block">应收款金额：</label><input type="text"
-                                                                                         uid="shouldChargeAmount"/></p>
-                            <p><label style="display :inline-block">实际收款金额：</label><input type="text"
-                                                                                          uid="actualChargeAmount"/></p>
-                            <p><label style="display :inline-block">转化率：</label><input type="text"
-                                                                                       id="conversionRate"/></p>
+                            <div class="control-group" gid="">
+                                <label style="display :inline-block">领取数量：</label>
+                                <input type="text" uid="couponReceiveNumber"/>
+                                <span hid="couponReceiveNumber"></span>
+                            </div>
+
+                            <div class="control-group" gid="payAmount">
+                                <label style="display :inline-block">支付金额：</label>
+                                <input type="text" uid="payAmount"/>
+                                <span hid="payAmount"></span>
+                            </div>
+
+                            <div class="control-group" gid="couponUseNumber">
+                                <label style="display :inline-block">使用数量：</label>
+                                <input type="text" uid="couponUseNumber"/>
+                                <span hid="couponUseNumber"></span>
+                            </div>
+
+                            <div class="control-group" gid="shouldChargeAmount">
+                                <label style="display :inline-block">应收款金额：</label>
+                                <input type="text" uid="shouldChargeAmount"/>
+                                <span hid="shouldChargeAmount"></span>
+                            </div>
+
+                            <div class="control-group" gid="actualChargeAmount">
+                                <label style="display :inline-block">应收款金额：</label>
+                                <input type="text" uid="actualChargeAmount"/>
+                                <span hid="actualChargeAmount"></span>
+                            </div>
+
+                            <div class="control-group" gid="conversionRate">
+                                <label style="display :inline-block">转化率：</label>
+                                <input type="text" uid="conversionRate"/>
+                                <span hid="conversionRate"></span>
+                            </div>
+
+                            <div class="control-group" gid="approveStatus">
+                                <label class="helpinline">审核状态:</label>
+                              <span class="controls radioControls" style="margin-left: 10px;">
+                                  <label class="radio inline"><input uid="approveStatus" type="radio"/></label>
+                              </span>
+                            </div>
+                            <div class="control-group" gid="payTime">
+                                <label class="helpinline"> 付款时间：</label>
+                                <span class="date">
+                                    <input uid="payTime" size="16" type="text" readonly class="form_datetime">
+                                </span>
+                            </div>
                             <img src="img/pic-1_05.png" alt="" id="zhou_2_img"/>
-                            <p><label style="display :inline-block">图片描述</label><span>3333333333333</span><input uid="fileUpload1"
-                                                                                                                 type="file"/> <input id="fileUpload2"
-                                                                                                                                      type="file"/><input type="text" uid="withoutRate" placeholder="请输入图片链接地址"/></p>
+                            <p style="margin-top: 10px;"><label style="display :inline-block">图片描述</label><input type="text" uid="pictureDescribtion"><input id="fileUpload1"
+                                                                                                                                                             type="file"/> <input id="fileUpload2"
+                                                                                                                                                                                  type="file"/><input type="text" uid="withoutRate" placeholder="请输入图片链接地址"/></p>
                             <p class="last"><input style="margin-right:10px;" type="submit" value="确定" class="btn red"/><input
                                     type="reset" value="重置" class="btn red"/></p>
                         </form>
