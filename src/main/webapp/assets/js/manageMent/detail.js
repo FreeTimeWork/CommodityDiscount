@@ -53,9 +53,8 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
             if (data.employee != null && data.employee.fullName != null) {
                 $("#userName").text(data.employee.fullName);
                 var positionId = data.employee.positionId;
-                if (positionId != 2
-                    && positionId != 3
-                    && positionId != 6) {
+                if(positionId == 4
+                    && positionId == 5){
                     $("#showCreate").hide();
                 }
                 if (positionId != 1) {
