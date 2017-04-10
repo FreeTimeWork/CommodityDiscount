@@ -282,7 +282,7 @@ public class ProductController {
         voucher.setProduct(product);
 
         List<VoucherPicture> pictures = new ArrayList<>();
-        if (files.isEmpty()) {
+        if (!files.isEmpty()) {
             String realPath = "\\image\\";
             try {
                 String filePath = realPath + files.getOriginalFilename();
