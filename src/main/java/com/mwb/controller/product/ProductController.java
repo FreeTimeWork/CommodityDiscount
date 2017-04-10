@@ -259,9 +259,9 @@ public class ProductController {
         product.setStore(store);
         store.setQq(request.getQq());
         store.setStoreId(dataokeProduct.getStore().getStoreId());
-        store.setDescriptionScore(request.getStoreDescriptionScore());
-        store.setServiceScore(request.getServiceScore());
-        store.setSpeedScore(request.getSpeedScore());
+        store.setDescriptionScore(grapProduct.getStore().getDescriptionScore());
+        store.setServiceScore(grapProduct.getStore().getServiceScore());
+        store.setSpeedScore(grapProduct.getStore().getSpeedScore());
         store.setType(dataokeProduct.getStore().getType());
 
         if (CollectionUtils.isNotEmpty(grapProduct.getPictures())) {

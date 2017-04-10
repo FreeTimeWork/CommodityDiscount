@@ -66,6 +66,7 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
     var ValueUtils = cKit.ValueUtils;
 
     var booLeans = '';
+    var booVoucher = '';
 
     var files = '';
 
@@ -140,13 +141,14 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
                 }
                 if (result.showEdit == false) {
                     booLeans = true;
-
-                    $('#showButton').hide()
+                    $('#showButton').hide();
+                    booVoucher = true
                 } else {
-                    booLeans = false
+                    booLeans = false;
+                    booVoucher =false;
                 }
                 if (result.showVoucher == false) {
-                    $('#showVoucher').hide()
+                    $('#showVoucher').hide();
                 } else {
                     $('#showVoucher').eq(1).show()
                 }
@@ -451,14 +453,13 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
                 }, {
                     uid: 'payTime',
                     node: 'payTime',
-                    type: uiKit.Controller.EDIT,
+                    type: uiKit.Controller.LABEL,
                     visible: function (value) {
-                        //if(value == ''){
-                        //    return false
-                        //}else if (booLeans) {
-                        //    $("#createForm_payTime").css("disabled",true)
-                        //    return true
-                        //}
+                        if(value == ''){
+                            return false
+                        }else if (booVoucher) {
+                            return true
+                        }
                         return false;
                     }
                 }, {

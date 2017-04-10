@@ -340,3 +340,4 @@ INSERT INTO `t_product_status` VALUES ( '1', 'AUDIT_WAIT', '待审核' ), ( '2',
 INSERT INTO `t_store_type` VALUES ('1', 'TAOBAO', '淘宝'), ('2', 'TMALL', '天猫');
 
 INSERT INTO `t_product_type` VALUES ('1', 'WOMAN', '女裝'), ('2', 'MAN', '男裝'), ('3', 'UNDERWEAR', '內衣'), ('4', 'MATERNAL', '母婴'), ( '5', 'COSMETICS', 'COSMETICS' ), ('6', 'OCCUPY', '居家'), ('7', 'SHOES', '鞋包配饰'), ('8', 'FOOD', '美食'), ('9', 'CAR', '文体车品'), ( '10', 'APPLIANCE', '数码家电' );
+INSERT INTO `t_employee` VALUES (1, 'admin', 'M', 'admin', '21232F297A57A5A743894A0E4A801FC3', NULL, 1, '2017-4-10 23:50:36', 1);
