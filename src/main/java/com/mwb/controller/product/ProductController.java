@@ -97,7 +97,8 @@ public class ProductController {
                     || product.getStatus() == ProductStatus.PAY_TRAILER)) {
                 response.setShowEdit(true);
             }
-            if (product.getStatus() == ProductStatus.PAY_RUN
+            if (product.getStatus() == ProductStatus.PAY_WAIT
+                    ||   product.getStatus() == ProductStatus.PAY_RUN
                     || product.getStatus() == ProductStatus.PAY_RUN
                     || product.getStatus() == ProductStatus.PAY_TRAILER
                     || product.getStatus() == ProductStatus.PAY_END

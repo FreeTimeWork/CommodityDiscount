@@ -169,7 +169,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                             }
                         }
                         if(rowObject.showReceive) {
-                            html += '<a style="margin-right: 10px;" onclick="currentPage().onReSubmitClick(\'' + id + '\')">认领</a>'
+                            html += '<a style="margin-right: 10px;" onclick="currentPage().onReceive(\'' + id + '\')">认领</a>'
                         }
                         return html;
                     }
@@ -185,7 +185,8 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     })
                 }
             }).api()
-        }
+        },
+
 
         CurrentPage.prototype.initSearchForm = function () {
             this.searchForm = new uiKit.FormController({
@@ -325,9 +326,24 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         },
         onSubmitBillClick: function (id) {
             window.open('/frontend/create.html?bill=bill' + '&id=' + id);
-        }
-
+        },
+        onReceive: function (productId) {
+            var url ="/product/approve/claim";
+            var request = {
+                productId: productId,
+                productStatusId: "2"
+            };
+            var successHandler = function(self, result) {
+                alert('成功');
+            };
+            var errorHandler = function(self, result) {
+                alert('请求失败');
+            };
+            var action = new netKit.SimplePostAction(this,url , request,successHandler, errorHandler);
+            action.submit();
+        },
     });
+
     var currentPage = null;
     $(document).ready(function() {
         currentPage = new CurrentPage();
