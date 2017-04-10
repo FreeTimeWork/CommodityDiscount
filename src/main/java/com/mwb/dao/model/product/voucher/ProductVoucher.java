@@ -21,6 +21,7 @@ public class ProductVoucher implements Serializable {
     private Date createTime;
     private BigDecimal conversionRate;//转化率
     private String withoutUrl;//外部链接
+    private Date payTime;//付款时间
     private Product product;
     private List<VoucherPicture> pictures;
 
@@ -94,6 +95,14 @@ public class ProductVoucher implements Serializable {
 
     public void setWithoutUrl(String withoutUrl) {
         this.withoutUrl = withoutUrl;
+    }
+
+    public Date getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(Date payTime) {
+        this.payTime = payTime;
     }
 
     public Product getProduct() {

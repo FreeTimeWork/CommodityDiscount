@@ -35,6 +35,8 @@ public interface ProductMapper {
 
     public List<ProductVoucher> selectProductVoucherByFilter(@Param("filter") ProductFilter filter);
 
+    public ProductVoucher selectProductVoucherByProductId(@Param("productId") Integer productId);
+
     public int countProductVoucherByFilter(@Param("filter") ProductFilter filter);
 
     public List<VoucherPicture> selectVoucherPictureByVoucherId(@Param("voucherId") Integer voucherId);

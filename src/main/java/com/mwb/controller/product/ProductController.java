@@ -265,7 +265,7 @@ public class ProductController {
     @RequestMapping(value = "/voucher/create")
     public ServiceResponse createProductVoucher(
             @RequestParam("files") MultipartFile files,
-            CreateProductVoucherRequest request) {
+            CreateProductVoucherRequest request) throws Exception {
 
         Product product = productService.getProductById(request.getId());
 
@@ -278,6 +278,7 @@ public class ProductController {
         voucher.setCreateTime(new Date());
         voucher.setConversionRate(request.getConversionRate());
         voucher.setWithoutUrl(request.getWithoutRate());
+        voucher.setPayTime(DateTimeUtility.parseYYYYMMDD(request.getPayTime()));
         voucher.setProduct(product);
 
         List<VoucherPicture> pictures = new ArrayList<>();
@@ -301,9 +302,7 @@ public class ProductController {
 
         productService.createProductVoucher(voucher, product);
 
-        return new
-
-                ServiceResponse();
+        return new ServiceResponse();
 
     }
 

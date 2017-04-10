@@ -225,10 +225,25 @@ public class ProductService implements IProductService {
         return result;
     }
 
+    private void deleteProductVoucher (Product product){
+        ProductVoucher voucher = productMapper.selectProductVoucherByProductId(product.getId());
+        if (voucher != null) {
+            Finance finance = financeService.getFinanceByEmployeeId(product.getEmployee().getId());
+
+            finance.setShouldChargeAmount(finance.getShouldChargeAmount().subtract(voucher.getShouldChargeAmount()));
+            finance.setActualChargeAmount(finance.getActualChargeAmount().subtract(voucher.getActualChargeAmount()));
+            finance.setGuestUnitPrice(finance.getActualChargeAmount().divide(new BigDecimal(finance.getPayEndNumber()), 2));
+
+            financeService.modifyFinance(finance);
+
+            productMapper.deleteProductVoucher(product.getId());
+        }
+
+    }
     @Override
     @Transactional
     public void createProductVoucher(ProductVoucher voucher, Product product) {
-        productMapper.deleteProductVoucher(product.getId());
+        deleteProductVoucher(product);
 
         productMapper.insertProductVoucher(voucher);
 
@@ -240,7 +255,12 @@ public class ProductService implements IProductService {
 
         Finance finance = financeService.getFinanceByEmployeeId(product.getEmployee().getId());
         finance.setPayRunNumber(finance.getPayRunNumber() + 1);
-        finance.setPayWaitNumber(finance.getPayEndNumber() - 1);
+        if (product.getStatus() == ProductStatus.PAY_WAIT) {
+            finance.setPayWaitNumber(finance.getPayEndNumber() - 1);
+        }else if (product.getStatus() == ProductStatus.PAY_TRAILER){
+            finance.setPayTrailerNumber(finance.getPayTrailerNumber() - 1);
+        }
+
         finance.setShouldChargeAmount(finance.getShouldChargeAmount().add(voucher.getShouldChargeAmount()));
         finance.setActualChargeAmount(finance.getActualChargeAmount().add(voucher.getActualChargeAmount()));
         finance.setGuestUnitPrice(finance.getActualChargeAmount().divide(new BigDecimal(finance.getPayEndNumber()), 2));

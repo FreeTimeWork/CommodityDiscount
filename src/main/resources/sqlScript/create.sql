@@ -278,6 +278,7 @@ CREATE TABLE `t_product_voucher` (
   `create_time` datetime NOT NULL,
   `conversion_rate` decimal(18,2) NOT NULL DEFAULT '0.00',
   `without_url` varchar(255) DEFAULT NULL,
+  `pay_time` datetime DEFAULT NULL,
   `product_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `product_id` (`product_id`),

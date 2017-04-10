@@ -32,6 +32,7 @@ public class ProductVoucherVO {
     private BigDecimal shouldChargeAmount;//应收金额
     private BigDecimal actualChargeAmount;       //付款金额
     private BigDecimal conversionRate;        //使用率
+    private String payTime;        //使用率
     private Integer useRatio;        //使用率
     private boolean showSubmit;        //使用率
 
@@ -58,6 +59,7 @@ public class ProductVoucherVO {
         vo.setPayAmount(voucher.getPayAmount());
         vo.setActualChargeAmount(voucher.getActualChargeAmount());
         vo.setConversionRate(voucher.getConversionRate());
+        vo.setPayTime(DateTimeUtility.formatYYYYMMDD(voucher.getPayTime()));
         if (voucher.getReceiveNumber().equals(0)) {
             vo.setUseRatio(0);
         }else {
@@ -216,6 +218,14 @@ public class ProductVoucherVO {
 
     public void setConversionRate(BigDecimal conversionRate) {
         this.conversionRate = conversionRate;
+    }
+
+    public String getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(String payTime) {
+        this.payTime = payTime;
     }
 
     public Integer getUseRatio() {
