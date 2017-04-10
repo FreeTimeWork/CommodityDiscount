@@ -2,6 +2,7 @@ package com.mwb.controller.product.api;
 
 import com.mwb.dao.model.employee.Employee;
 import com.mwb.dao.model.product.Product;
+import com.mwb.dao.model.product.ProductStatus;
 import com.mwb.util.DateTimeUtility;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -36,6 +37,7 @@ public class ProductVO {
     private String status;              //状态
     private String statusCode;              //状态Code
     private boolean showSubmit;              //状态提交
+    private boolean showReceive;              //状态提交
 
     public static List<ProductVO> toVOs(List<Product> products, Employee employee) {
         List<ProductVO> productVOs = new ArrayList<>();
@@ -71,8 +73,12 @@ public class ProductVO {
         vo.setStatus(product.getStatus().getDescription());
         vo.setStatusCode(product.getStatus().getCode());
         vo.setStoreTypeName(product.getStore().getType().getDescription());
-        if (product.getEmployee().getId().equals(employee.getId())) {
+        if (product.getEmployee().getId().equals(employee.getId()) || employee.getPosition().getId().equals(1)) {
             vo.setShowSubmit(true);
+        }
+        if (product.getStatus() == ProductStatus.AUDIT_WAIT &&
+                (employee.getPosition().getId().equals(1) || employee.getPosition().getId().equals(4))) {
+            vo.setShowReceive(true);
         }
         return vo;
     }
@@ -251,5 +257,13 @@ public class ProductVO {
 
     public void setShowSubmit(boolean showSubmit) {
         this.showSubmit = showSubmit;
+    }
+
+    public boolean isShowReceive() {
+        return showReceive;
+    }
+
+    public void setShowReceive(boolean showReceive) {
+        this.showReceive = showReceive;
     }
 }

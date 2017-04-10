@@ -192,7 +192,9 @@ public class ProductController {
         ServiceResponse response = new ServiceResponse();
 
         ParserService parserService = new ParserService(request.getUrl());
-        Product dataokeProduct = daoLaoKeService.getDaTaoKeProduct(parserService.grabProduct().getProductId());
+        Product grapProduct = parserService.grabProduct();
+
+        Product dataokeProduct = daoLaoKeService.getDaTaoKeProduct(grapProduct.getProductId());
         if (dataokeProduct == null) {
             response.setMessage("商品地址错误!");
             return response;
@@ -244,7 +246,7 @@ public class ProductController {
         store.setSpeedScore(request.getSpeedScore());
         store.setType(dataokeProduct.getStore().getType());
 
-        if (CollectionUtils.isNotEmpty(request.getPictures())) {
+        if (CollectionUtils.isNotEmpty(grapProduct.getPictures())) {
             List<ProductPicture> pictures = new ArrayList<>();
             for (String url : request.getPictures()) {
                 ProductPicture picture = new ProductPicture();

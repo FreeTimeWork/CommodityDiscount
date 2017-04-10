@@ -168,6 +168,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                                 html += '<a style="margin-right: 10px;" onclick="currentPage().onSubmitBillClick(\'' + id + '\')">提交结账</a>'
                             }
                         }
+                        if(rowObject.showReceive) {
+                            html += '<a style="margin-right: 10px;" onclick="currentPage().onReSubmitClick(\'' + id + '\')">认领</a>'
+                        }
                         return html;
                     }
                 }],
