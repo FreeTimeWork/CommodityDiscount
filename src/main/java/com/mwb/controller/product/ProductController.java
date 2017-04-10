@@ -293,7 +293,7 @@ public class ProductController {
         voucher.setCreateTime(new Date());
         voucher.setConversionRate(request.getConversionRate());
         voucher.setWithoutUrl(request.getWithoutRate());
-        voucher.setPayTime(DateTimeUtility.parseYYYYMMDD(request.getPayTime()));
+        voucher.setPayTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getPayTime()));
         voucher.setProduct(product);
 
         List<VoucherPicture> pictures = new ArrayList<>();

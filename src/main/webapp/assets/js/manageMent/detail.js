@@ -139,7 +139,9 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
                     }
                 }
                 if (result.showEdit == false) {
-                    booLeans = true
+                    booLeans = true;
+
+                    $('.last').hide()
                 } else {
                     booLeans = false
                 }
@@ -173,7 +175,7 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
                     action.submit()
                 })
 
-                thiz.initCreateForm(result.voucher)
+                thiz.initCreateForm(result.voucher, result.id)
             };
             var errorHandler = function (self, result) {
                 alert('请求失败');
@@ -360,12 +362,13 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
         };
 
 
-        CurrentPage.prototype.initCreateForm = function (model) {
+        CurrentPage.prototype.initCreateForm = function (model, id) {
             this.createForm = new uiKit.FormController({
                 id: 'createForm',
                 model: model || {},
                 submit: function (data) {
                     var request = new FormData();
+                    request.append('id', id);
                     request.append('couponReceiveNumber', data.couponReceiveNumber);
                     request.append('payAmount', data.payAmount);
                     request.append('couponUseNumber', data.couponUseNumber);

@@ -234,9 +234,14 @@ public class ProductService implements IProductService {
 
             finance.setShouldChargeAmount(finance.getShouldChargeAmount().subtract(voucher.getShouldChargeAmount()));
             finance.setActualChargeAmount(finance.getActualChargeAmount().subtract(voucher.getActualChargeAmount()));
-            finance.setGuestUnitPrice(finance.getActualChargeAmount().divide(new BigDecimal(finance.getPayEndNumber()), 2));
-
+            if (finance.getPayEndNumber() > 0 ) {
+                finance.setGuestUnitPrice(finance.getActualChargeAmount().divide(new BigDecimal(finance.getPayEndNumber()), 2));
+            }else {
+                finance.setGuestUnitPrice(finance.getActualChargeAmount());
+            }
             financeService.modifyFinance(finance);
+
+            productMapper.deleteVoucherPicture(voucher.getId());
 
             productMapper.deleteProductVoucher(product.getId());
         }
@@ -258,14 +263,18 @@ public class ProductService implements IProductService {
         Finance finance = financeService.getFinanceByEmployeeId(product.getEmployee().getId());
         finance.setPayRunNumber(finance.getPayRunNumber() + 1);
         if (product.getStatus() == ProductStatus.PAY_WAIT) {
-            finance.setPayWaitNumber(finance.getPayEndNumber() - 1);
+            finance.setPayWaitNumber(finance.getPayWaitNumber() - 1);
         }else if (product.getStatus() == ProductStatus.PAY_TRAILER){
             finance.setPayTrailerNumber(finance.getPayTrailerNumber() - 1);
         }
 
         finance.setShouldChargeAmount(finance.getShouldChargeAmount().add(voucher.getShouldChargeAmount()));
         finance.setActualChargeAmount(finance.getActualChargeAmount().add(voucher.getActualChargeAmount()));
-        finance.setGuestUnitPrice(finance.getActualChargeAmount().divide(new BigDecimal(finance.getPayEndNumber()), 2));
+        if (finance.getPayEndNumber() > 0 ) {
+            finance.setGuestUnitPrice(finance.getActualChargeAmount().divide(new BigDecimal(finance.getPayEndNumber()), 2));
+        }else {
+            finance.setGuestUnitPrice(finance.getActualChargeAmount());
+        }
 
         financeService.modifyFinance(finance);
 
