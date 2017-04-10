@@ -29,8 +29,8 @@ public class ProductVoucherVO {
     private Integer couponUseNumber;    //使用数量
     private Integer couponReceiveNumber; //领取数量
     private BigDecimal shouldChargeAmount;//应收金额
-    private BigDecimal payAmount;       //付款金额
-    private Integer useRatio;        //使用率
+    private BigDecimal actualChargeAmount;       //付款金额
+    private Integer conversionRate;        //使用率
     private boolean showSubmit;        //使用率
 
     public static ProductVoucherVO toVO(ProductVoucher voucher, Employee employee) {
@@ -53,11 +53,11 @@ public class ProductVoucherVO {
         vo.setCouponUseNumber(voucher.getUseNumber());
         vo.setCouponReceiveNumber(voucher.getReceiveNumber());
         vo.setShouldChargeAmount(voucher.getShouldChargeAmount());
-        vo.setPayAmount(voucher.getPayAmount());
+        vo.setActualChargeAmount(voucher.getPayAmount());
         if (voucher.getReceiveNumber().equals(0)) {
-            vo.setUseRatio(0);
+            vo.setConversionRate(0);
         }else {
-            vo.setUseRatio(voucher.getUseNumber() * 100 / voucher.getReceiveNumber());
+            vo.setConversionRate(voucher.getUseNumber() * 100 / voucher.getReceiveNumber());
         }
         if (employee != null &&
                 (voucher.getProduct().getStatus() == ProductStatus.PAY_TRAILER
@@ -199,19 +199,19 @@ public class ProductVoucherVO {
         this.shouldChargeAmount = shouldChargeAmount;
     }
 
-    public BigDecimal getPayAmount() {
-        return payAmount;
+    public BigDecimal getActualChargeAmount() {
+        return actualChargeAmount;
     }
 
-    public void setPayAmount(BigDecimal payAmount) {
-        this.payAmount = payAmount;
+    public void setActualChargeAmount(BigDecimal actualChargeAmount) {
+        this.actualChargeAmount = actualChargeAmount;
     }
 
-    public Integer getUseRatio() {
-        return useRatio;
+    public Integer getConversionRate() {
+        return conversionRate;
     }
 
-    public void setUseRatio(Integer useRatio) {
-        this.useRatio = useRatio;
+    public void setConversionRate(Integer conversionRate) {
+        this.conversionRate = conversionRate;
     }
 }
