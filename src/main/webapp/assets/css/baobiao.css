@@ -15,7 +15,7 @@
 .login_box .login_inn .ps{margin: 10px 14px; display: inline-block;float: left;width:14px;height:16px;background:url(../img/password.png) no-repeat}
 .bg_box{width:100%;height:100%;position:fixed;top:0px;left:0px;background:rgba(0,0,0,0.5);display:none;}
 .bg_box .bg_inn{width:400px;height:300px;margin-top:-150px;margin-left:-200px;top:50%;left:50%;position:absolute;background:#fff;
-   border:10px solid rgba(0,0,0,0.5);position:relative;
+    border:10px solid rgba(0,0,0,0.5);position:relative;
 
 }
 ul{}
@@ -29,7 +29,7 @@ ul{}
 .bg_box .bg_inn .bg_list_1 ul li{float:left}
 .bg_box .bg_inn .bg_list_1 ul a{padding:5px 10px; border:1px solid #666}
 .bg_box .bg_inn .bg_list_1 ul a:hover{border:2px solid orange}
-/* µÇÂ¼×¢²á */
+/* ï¿½ï¿½Â¼×¢ï¿½ï¿½ */
 .xindengluyelogomain {
     clear:both;
     height:auto;
@@ -130,7 +130,7 @@ ul{}
     font-weight:normal;
     font-size:13px;
     color:#eb7600;
-    font-family:"Î¢ÈíÑÅºÚ", "ºÚÌå";
+    font-family:"Î¢ï¿½ï¿½ï¿½Åºï¿½", "ï¿½ï¿½ï¿½ï¿½";
     line-height:1.8em;
 }
 
@@ -140,7 +140,7 @@ ul{}
     background:#fedeba;
     border:#fedeba 1px solid;
     font-size:14px;
-    font-family:"Î¢ÈíÑÅºÚ", "ºÚÌå";
+    font-family:"Î¢ï¿½ï¿½ï¿½Åºï¿½", "ï¿½ï¿½ï¿½ï¿½";
     color:#333;
     padding:0 5px;
 }
@@ -152,7 +152,7 @@ ul{}
     background:url(../img/xindengluPhoto.png) 0 -64px no-repeat;
     border:#fedeba 1px solid;
     font-size:14px;
-    font-family:"Î¢ÈíÑÅºÚ", "ºÚÌå";
+    font-family:"Î¢ï¿½ï¿½ï¿½Åºï¿½", "ï¿½ï¿½ï¿½ï¿½";
     color:#333;
     padding:0 5px;
 }
@@ -164,7 +164,7 @@ ul{}
     background:url(../image/xindengluPhoto.png) 0 -102px no-repeat;
     border:#fc7122 1px solid;
     font-size:14px;
-    font-family:"Î¢ÈíÑÅºÚ", "ºÚÌå";
+    font-family:"Î¢ï¿½ï¿½ï¿½Åºï¿½", "ï¿½ï¿½ï¿½ï¿½";
     color:#333;
     padding:0 5px;
 }
@@ -173,7 +173,7 @@ ul{}
     font-style:normal;
     font-size:11px;
     color:#868686;
-    font-family:"Î¢ÈíÑÅºÚ", "ºÚÌå";
+    font-family:"Î¢ï¿½ï¿½ï¿½Åºï¿½", "ï¿½ï¿½ï¿½ï¿½";
     line-height:1.8em;
     float:left;
     clear:both;
@@ -196,7 +196,7 @@ ul{}
     float:left;
     border:#fc7122 1px solid;
     font-size:14px;
-    font-family:"Î¢ÈíÑÅºÚ", "ºÚÌå";
+    font-family:"Î¢ï¿½ï¿½ï¿½Åºï¿½", "ï¿½ï¿½ï¿½ï¿½";
     color:#333;
     padding:0 5px;
 }
@@ -217,7 +217,7 @@ ul{}
     border:none;
     float:left;
     font-size:14px;
-    font-family:"Î¢ÈíÑÅºÚ", "ºÚÌå";
+    font-family:"Î¢ï¿½ï¿½ï¿½Åºï¿½", "ï¿½ï¿½ï¿½ï¿½";
     color:#333;
     padding:0 5px;
 }
@@ -229,7 +229,7 @@ ul{}
     float:left;
     border:#fc7122 1px solid;
     font-size:14px;
-    font-family:"Î¢ÈíÑÅºÚ", "ºÚÌå";
+    font-family:"Î¢ï¿½ï¿½ï¿½Åºï¿½", "ï¿½ï¿½ï¿½ï¿½";
     color:#333;
     padding:0 5px;
 }
@@ -242,7 +242,7 @@ ul{}
     background:#fc7122;
     color:#FFF;
     text-align:center;
-    font-family:"Î¢ÈíÑÅºÚ", "ºÚÌå";
+    font-family:"Î¢ï¿½ï¿½ï¿½Åºï¿½", "ï¿½ï¿½ï¿½ï¿½";
     cursor:pointer;
 }
 
@@ -254,7 +254,7 @@ ul{}
     background:#bcbcbc;
     color:#FFF;
     text-align:center;
-    font-family:"Î¢ÈíÑÅºÚ", "ºÚÌå";
+    font-family:"Î¢ï¿½ï¿½ï¿½Åºï¿½", "ï¿½ï¿½ï¿½ï¿½";
     cursor:pointer;
 }
 
@@ -266,7 +266,7 @@ ul{}
     background:#bcbcbc;
     color:#FFF;
     text-align:center;
-    font-family:"Î¢ÈíÑÅºÚ", "ºÚÌå";
+    font-family:"Î¢ï¿½ï¿½ï¿½Åºï¿½", "ï¿½ï¿½ï¿½ï¿½";
     cursor:pointer;
 }
 
@@ -278,7 +278,7 @@ ul{}
     background:#fc7122;
     color:#FFF;
     text-align:center;
-    font-family:"Î¢ÈíÑÅºÚ", "ºÚÌå";
+    font-family:"Î¢ï¿½ï¿½ï¿½Åºï¿½", "ï¿½ï¿½ï¿½ï¿½";
     cursor:pointer;
 }
 
@@ -391,7 +391,7 @@ ul{}
     float:left;
     margin:1px 0 0 15px;
     color:#fc7122;
-    font-family:"Î¢ÈíÑÅºÚ", "ºÚÌå";
+    font-family:"Î¢ï¿½ï¿½ï¿½Åºï¿½", "ï¿½ï¿½ï¿½ï¿½";
     text-decoration:none;
 }
 
@@ -407,13 +407,13 @@ ul{}
 
 .xindengluyemianzidongdenglu b {
     font-size:13px;
-    font-family:"Î¢ÈíÑÅºÚ", "ºÚÌå";
+    font-family:"Î¢ï¿½ï¿½ï¿½Åºï¿½", "ï¿½ï¿½ï¿½ï¿½";
     color:#fc7122;
     float:left;
     margin:1px 0 0 5px;
 }
 
-/* ÊÖ»ú×¢²á */
+/* ï¿½Ö»ï¿½×¢ï¿½ï¿½ */
 .shoujizhucemain {
     border-top:#fedeba 1px solid;
     width:985px;
@@ -535,7 +535,7 @@ ul{}
     color:#fc7122;
 }
 
-/* ÃÜÂëÕÒ»Ø  */
+/* ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½  */
 .mimazhaohuiCenter {
     width:985px;
     height:auto;
@@ -827,7 +827,7 @@ ul{}
 .yanzhengshenfen ul li b a:hover {
     text-decoration:underline;
 }
-.cont{width:1366px;margin:0 auto;overflow:hidden;}
+.cont{width:100%;margin:0 auto;overflow:hidden;}
 .top{width:100%;height:42px;margin:0 auto;background:#0e93d1;}
 body{font-family:"Microsoft Yahei"}
 .top .top_left{float:left;}
@@ -840,8 +840,8 @@ body{font-family:"Microsoft Yahei"}
 .top .top_right{float:right;}
 .top .top_right a{color:#fff;display:inline-block;width:55px;height:40px;margin-right:10px;line-height:42px;}
 .bottom{}
-.bottom .bottom_left{float:left;background:#065c85;height:600px;width:13%;}
-.bottom .bottom_left_2{float:left;background:#38b9f5;height:600px;width:8px;position:relative;}
+.bottom .bottom_left{float:left;background:#065c85;height:1000px;width:13%;}
+.bottom .bottom_left_2{float:left;background:#38b9f5;height:1000px;width:8px;position:relative;}
 .bottom .bottom_left_2>img{display:inline-block;position:absolute;top:50%;left:0px;width:8px;height:15px;margin-top:-7.5px;}
 .bottom .bottom_left>ul>li{color:#fff;line-height:40px;overflow:hidden;}
 .bottom .bottom_left li a{padding-right:10px;}
@@ -854,7 +854,7 @@ body{font-family:"Microsoft Yahei"}
 .bottom .bottom_left li .jia{margin-left:47px;display:inline-block;width:14px;height:14px;margin-top:15px;}
 .bottom .bottom_left li span.add{margin-left:47px;display:inline-block;width:14px;height:14px;margin-top:15px;background:url(../img/pic-4_03.png) no-repeat 0px 0px;background-size:100%;position:relative;top:2px;}
 .bottom .bottom_left li span.sub{margin-left:47px;display:inline-block;width:14px;height:14px;margin-top:15px;background:url(../img/pic-5_06.png) no-repeat 0px 8px;background-size:100%;}
-.bottom .bottom_right{float:left;width:82%;height:600px;overflow-y: scroll;}
+.bottom .bottom_right{float:left;width:82%;height:1000px;overflow-y: scroll;}
 .bottom .bottom_right .bottom_right_son{padding:20px 10px;position:relative;}
 .bottom .bottom_right .bottom_right_son .bottom_add{position:absolute;top:5px;right:20px;padding:10px 10px;background:red}
 .bottom .bottom_right .bottom_right_son .bottom_right_tit{padding-bottom:5px;border-bottom:1px solid #666;font-size:26px;color:#666}

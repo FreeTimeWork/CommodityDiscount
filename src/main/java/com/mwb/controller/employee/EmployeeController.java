@@ -8,6 +8,7 @@ import com.mwb.controller.employee.api.*;
 import com.mwb.controller.util.ApplicationContextUtils;
 import com.mwb.dao.filter.EmployeeFilter;
 import com.mwb.dao.filter.SearchResult;
+import com.mwb.dao.model.comm.BooleanResult;
 import com.mwb.dao.model.comm.Log;
 import com.mwb.dao.model.comm.PagingData;
 import com.mwb.dao.model.employee.Employee;
@@ -50,21 +51,33 @@ public class EmployeeController {
     @ResponseBody
     @RequestMapping(value = "/create")
     public ServiceResponse createEmployee(@RequestBody CreateEmployeeRequest request) {
+        ServiceResponse response = new ServiceResponse();
 
-        //// TODO: 2017/4/7 校验手机号
         Employee employee = new Employee();
         employee.setFullName(request.getFullName());
         employee.setCreateTime(new Date());
         employee.setGender(Gender.fromCode(request.getGenderCode()));
         employee.setMobile(request.getMobile());
         employee.setPassword(MD5Tools.MD5(request.getPassword()));
-        employee.setGroup(new Group(request.getGroupId()));
+        if (request.getGroupId() != null) {
+            employee.setGroup(new Group(request.getGroupId()));
+        }
         employee.setPosition(new Position(request.getPositionId()));
         employee.setStatus(EmployeeStatus.IN_POSITION);
+        if (employee.getPosition().getId().equals(3) && employee.getGroup() != null) {
+            Group group = employee.getGroup();
+            if (group.getId() != null) {
+                group.setEmployeeName(employee.getFullName());
+                response.setMessage("已覆盖该组的组长");
+            }
+        }
+        BooleanResult result = employeeService.createEmployee(employee);
 
-        employeeService.createEmployee(employee);
+        if (!result.isResult()) {
+            response.setMessage("手机号重复！");
+        }
 
-        return new ServiceResponse();
+        return response;
     }
 
     @ResponseBody
@@ -80,14 +93,21 @@ public class EmployeeController {
 
     @ResponseBody
     @RequestMapping(value = "/modify/password")
-    public ServiceResponse modifyPassword(String password) {
+    public ServiceResponse modifyPassword(@RequestBody ModifyPasswordRequest request) {
+        ServiceResponse response = new ServiceResponse();
         Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
 
-        employee.setPassword(MD5Tools.MD5(password.trim()));
+        Integer employeeId = request.getEmployeeId();
+        String password = request.getPassword();
+        if (employeeId.equals(employee.getId())) {
+            employee.setPassword(MD5Tools.MD5(password.trim()));
+            employeeService.modifyEmployee(employee);
+            response.setMessage("成功！");
+        } else {
+            response.setMessage("失败！");
+        }
 
-        employeeService.modifyEmployee(employee);
-
-        return new ServiceResponse();
+        return response;
     }
 
     //分组，升级，离职
@@ -97,11 +117,17 @@ public class EmployeeController {
 
         Employee employee = new Employee();
         employee.setId(request.getEmployeeId());
-
+        Employee employeeDb = employeeService.getEmployeeById(request.getEmployeeId());
         if (request.getPositionId() != null) {
-            employee.setPosition(new Position(request.getPositionId()));
+            if (request.getPositionId().equals(2)) {
+                Group group = employeeDb.getGroup();
+                group.setEmployeeId(employeeDb.getId());
+                group.setEmployeeName(employeeDb.getFullName());
+                employee.setGroup(group);
+            }
+            employee.setPosition(new Position(3));
         } else if (request.getGroupId() != null) {
-            employee.setGroup(new Group(request.getGroupId()));
+            employee.setGroup(new Group(employeeDb.getFullName(),employeeDb.getId(),request.getGroupId()));
         } else if (request.isDismission()) {
             employee.setStatus(EmployeeStatus.OUT_OF_POSITION);
         }

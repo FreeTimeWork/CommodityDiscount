@@ -36,13 +36,13 @@
                             class="jia add"></span></a>
                     <ul>
                         <li><a href="/frontend/commodity.html" target="_blank">商品列表</a></li>
-                        <li><a href="/frontend/detail.html" target="_blank">添加新商品</a></li>
+                        <li id="showCreate"><a href="/frontend/create.html" target="_blank">添加新商品</a></li>
 
                     </ul>
 
                 </li>
 
-                <li class="fa_li">
+                <li  class="fa_li">
                     <a href="#" class="floor"><img src="../../assets/img/pic-3_13.png" alt=""/><span>报表统计</span> <span
                             class="jia add"></span></a>
                     <ul>
@@ -51,12 +51,11 @@
                     </ul>
                 </li>
 
-                <li class="fa_li">
+                <li id="showEmployee" class="fa_li" >
                     <a href="#" class="floor"><img src="../../assets/img/pic-3_13.png" alt=""/><span>员工管理</span> <span
                             class="jia add"></span></a>
                     <ul>
                         <li><a href="/frontend/employeeInfo.html" target="_blank">员工信息</a></li>
-                        <li><a href="/frontend/report.html" target="_blank">权限管理</a></li>
                     </ul>
                 </li>
 
@@ -67,17 +66,12 @@
         </div>
         <div class="bottom_right">
             <div class="bottom_right_son dis">
-                <a href="create.html"><p class="bottom_add">添加新商品</p></a>
-
                 <p class="bottom_right_tit">管理中心-商品列表</p>
-                <ul class="pay_list clearfix">
-                    <li class="on">待付款(23)</li>
-                    <li>付款中(234)</li>
-                    <li>拒绝付款(44)</li>
-                    <li>已付款(4567)</li>
-                </ul>
+                <h1><ul class="pay_list clearfix">
+                    <li class="on"></li>
+                </ul></h1>
                 <form id="searchForm">
-                    <select uid="name" class="input-medium">
+                    <select uid="activityId" class="input-medium">
                     </select>
                     <select uid="typeId" class="input-medium">
                     </select>
@@ -122,13 +116,15 @@
                         </span>
                         </span>
                     <label class="control-label helpinline"> 优惠券领取：</label><input type="text" uid="useMinNumber" class="input-medium"/>~<input type="text" uid="useMaxNumber" class="input-medium"/>
-                    <br/>
                     <label class="control-label helpinline"> 优惠券剩余：</label><input type="text" uid="surplusMinNumber" class="input-medium">~<input type="text" uid="surplusMaxNumber" class="input-medium"/>
                     <span class="">
-                            <label class="control-label helpinline">商品编号：</label> <input type="text" uid="productNamw" class="input-medium"/>
+                            <label class="control-label helpinline">商品编号：</label> <input type="text" uid="id" class="input-medium"/>
                         </span>
                         <span class="">
                            <label class="control-label helpinline">商品ID：</label><input type="text" uid="productId" class="input-medium"></span>
+                   <span class="">
+                           <label class="control-label helpinline">关键字：</label><input type="text" uid="name" class="input-medium"></span>
+
                     <input type="submit" class="btn btn-primary red" value="搜索" />
                     </p>
 
@@ -139,7 +135,7 @@
                        id="employeeGrid">
                     <thead>
                     <tr>
-                        <td class="select-checkbox" id="selectAllBtn"></td>
+                        <th>编号</th>
                         <th>提交时间</th>
                         <th>图片</th>
                         <th>产品名称</th>

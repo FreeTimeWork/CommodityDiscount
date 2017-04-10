@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -49,7 +51,7 @@ public class FinanceController {
 
     @ResponseBody
     @RequestMapping(value = "/search")
-    public ServiceResponse search(SearchFinanceRequest request,HttpServletResponse httpResponse) throws IOException {
+    public ServiceResponse search(SearchFinanceRequest request, HttpServletResponse httpResponse, boolean excel) throws IOException {
         SearchFinanceResponse searchFinanceResponse = new SearchFinanceResponse();
         Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
         if (employee == null) {
@@ -75,7 +77,14 @@ public class FinanceController {
         searchFinanceResponse.setPagingResult(result.getPagingResult());
 
         //生成excel
-        if (request.isExcel()) {
+        if (excel) {
+            Collections.sort(vos, new Comparator<FinanceVO>() {
+                @Override
+                public int compare(FinanceVO o1, FinanceVO o2) {
+                    return o1.getRanking().compareTo(o2.getRanking());
+                }
+
+            });
 
             HttpServletRequest httpRequest = ApplicationContextUtils.getRequest();
             FileInputStream in = null;

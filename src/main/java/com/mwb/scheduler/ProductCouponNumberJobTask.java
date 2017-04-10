@@ -27,8 +27,11 @@ public class ProductCouponNumberJobTask {
     public void run() throws Exception {
         ProductFilter filter = new ProductFilter();
         List<ProductStatus> statuses = new ArrayList<>();
+        statuses.add(ProductStatus.PAY_WAIT);
+        statuses.add(ProductStatus.PAY_RUN);
         statuses.add(ProductStatus.PAY_TRAILER);
         statuses.add(ProductStatus.PAY_END);
+        statuses.add(ProductStatus.SETTLEMENT);
         filter.setExcludeStatus(statuses);
         filter.setPaged(true);
         int i = 1;

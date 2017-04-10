@@ -19,7 +19,15 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         success: function (data) {
             if (data.employee != null && data.employee.fullName != null) {
                 $("#userName").text(data.employee.fullName);
-                return;
+                var positionId = data.employee.positionId;
+                if(positionId != 2
+                    && positionId != 3
+                    && positionId != 6){
+                    $("#showCreate").hide();
+                }
+                if(positionId != 1){
+                    $("#showEmployee").hide();
+                }
             }
         }
     });
@@ -76,13 +84,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     selector: 'td:first-child'
                 },
                 "columns": [{
-                    "data": null,
-                    "width": "4%",
-                    "className": 'select-checkbox',
-                    "orderable": false,
-                    "render": function() {
-                        return "";
-                    }
+                    "data": "id"
                 }, {
                     "data": "employeeName"
                 }, {
@@ -93,14 +95,20 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         return '<span style="color: blue;">' + data + '</sapn><br>' + '<span style="color: red;">' + rowObject.couponEndTime + '</sapn>'
                     }
                 }, {
-                    "data": "picturnUrl",
+                    "data": "pictureUrl",
                     "render": function (data) {
-                        return '<img src=\'' + data + '\'>'
+                        return '<img src=\'' + data + '\'/>'
+                    },
+                    "width": "10%"
+                }, {
+                    "data": "name",
+                    "render": function (data,type,rowObject,meta) {
+                        return '<a href=\'' + rowObject.url + '\'>' + data + '</a>'
                     }
                 }, {
                     "data": "discountPrice"
                 }, {
-                    "data": "chargePrice",
+                    "data": "chargePrice"
                 }, {
                     "data": "ratio"
                 }, {
@@ -112,7 +120,10 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 },{
                     "data": "payAmount"
                 },{
-                    "data": "useRatio"
+                    "data": "useRatio",
+                    "render": function (cellValue) {
+                        return cellValue + '%'
+                    }
                 }],
                 ajax: function (data,callBack,setting) {
                     netKit.TableAction(data,callBack,setting,{
@@ -144,7 +155,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     type : uiKit.Controller.SELECT,
                     options: activitieOptions
                 },{
-                    uid : 'gronpId',
+                    uid : 'groupId',
                     type : uiKit.Controller.SELECT,
                     options: groupOptions
                 },{
@@ -158,7 +169,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 },{
                     uid : 'orderAsc',
                     type : uiKit.Controller.SELECT,
-                    options: [{label: '',value: null},{label: '正序',value: true},{label: '倒序',value: false}]
+                    options: [{label: '排序',value: null},{label: '正序',value: true},{label: '倒序',value: false}]
                 },{
                     uid : 'typeId',
                     type : uiKit.Controller.SELECT,
@@ -209,6 +220,4 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
     $(document).ready(function() {
         currentPage = new CurrentPage();
     });
-
-
-})
+});

@@ -98,6 +98,8 @@ public class ResourceController {
                     if (employee.getGroup() == null || !group.getId().equals(employee.getGroup().getId())) {
                         continue;
                     }
+                }else if (positionId.equals(6)) {
+                    break;
                 }
 
                 ResourceVO vo = new ResourceVO(group.getName(), group.getId());
@@ -125,6 +127,8 @@ public class ResourceController {
                     if (emp.getGroup() == null || !emp.getGroup().getId().equals(employee.getGroup().getId())) {
                         continue;
                     }
+                }else if (positionId.equals(6)) {
+                    break;
                 }
                 ResourceVO vo = new ResourceVO(emp.getFullName(), emp.getId());
                 employeeVos.add(vo);

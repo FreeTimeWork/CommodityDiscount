@@ -1,13 +1,14 @@
 package com.mwb.controller.finance.api;
 
+import com.mwb.dao.model.employee.Employee;
 import com.mwb.dao.model.product.Product;
+import com.mwb.dao.model.product.ProductStatus;
 import com.mwb.dao.model.product.voucher.ProductVoucher;
 import com.mwb.util.DateTimeUtility;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,11 +28,18 @@ public class ProductVoucherVO {
     private BigDecimal ratio;           //佣金比例
     private Integer couponUseNumber;    //使用数量
     private Integer couponReceiveNumber; //领取数量
+    private BigDecimal payAmount;//应收金额
     private BigDecimal shouldChargeAmount;//应收金额
-    private BigDecimal payAmount;       //付款金额
+    private BigDecimal actualChargeAmount;       //付款金额
+    private BigDecimal conversionRate;        //使用率
+    private String payTime;        //使用率
     private Integer useRatio;        //使用率
+    private boolean showSubmit;        //使用率
 
-    public static ProductVoucherVO toVO(ProductVoucher voucher) {
+    public static ProductVoucherVO toVO(ProductVoucher voucher,Employee employee) {
+        if (voucher == null) {
+            return null;
+        }
         ProductVoucherVO vo = new ProductVoucherVO();
         Product product = voucher.getProduct();
         vo.setId(voucher.getId());
@@ -49,20 +57,28 @@ public class ProductVoucherVO {
         vo.setCouponReceiveNumber(voucher.getReceiveNumber());
         vo.setShouldChargeAmount(voucher.getShouldChargeAmount());
         vo.setPayAmount(voucher.getPayAmount());
+        vo.setActualChargeAmount(voucher.getActualChargeAmount());
+        vo.setConversionRate(voucher.getConversionRate());
+        vo.setPayTime(DateTimeUtility.formatYYYYMMDD(voucher.getPayTime()));
         if (voucher.getReceiveNumber().equals(0)) {
             vo.setUseRatio(0);
         }else {
             vo.setUseRatio(voucher.getUseNumber() * 100 / voucher.getReceiveNumber());
         }
-
+        if (employee != null &&
+                (voucher.getProduct().getStatus() == ProductStatus.PAY_RUN)
+                && (employee.getPosition().getId().equals(1)||employee.getPosition().getId().equals(5))){
+            vo.setShowSubmit(true);
+        }
         return vo;
     }
 
-    public static List<ProductVoucherVO> toVOs(List<ProductVoucher> vouchers) {
+    public static List<ProductVoucherVO> toVOs(List<ProductVoucher> vouchers, Employee employee) {
         List<ProductVoucherVO> vos = new ArrayList<>();
+
         if (CollectionUtils.isNotEmpty(vouchers)) {
             for (ProductVoucher voucher : vouchers) {
-                vos.add(toVO(voucher));
+                vos.add(toVO(voucher, employee));
             }
         }
         return vos;
@@ -188,8 +204,40 @@ public class ProductVoucherVO {
         this.payAmount = payAmount;
     }
 
+    public BigDecimal getActualChargeAmount() {
+        return actualChargeAmount;
+    }
+
+    public void setActualChargeAmount(BigDecimal actualChargeAmount) {
+        this.actualChargeAmount = actualChargeAmount;
+    }
+
+    public BigDecimal getConversionRate() {
+        return conversionRate;
+    }
+
+    public void setConversionRate(BigDecimal conversionRate) {
+        this.conversionRate = conversionRate;
+    }
+
+    public String getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(String payTime) {
+        this.payTime = payTime;
+    }
+
     public Integer getUseRatio() {
         return useRatio;
+    }
+
+    public boolean getShowSubmit() {
+        return showSubmit;
+    }
+
+    public void setShowSubmit(boolean showSubmit) {
+        this.showSubmit = showSubmit;
     }
 
     public void setUseRatio(Integer useRatio) {

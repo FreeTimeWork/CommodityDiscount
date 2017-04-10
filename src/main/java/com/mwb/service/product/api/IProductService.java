@@ -31,7 +31,7 @@ public interface IProductService {
 
     public void modifyProductStatus(Integer id, Integer employeeId, ProductStatus fromStatus, ProductStatus toStatus);
 
-    public SearchResult<ProductVoucher> searchProductVoucher(ProductFilter filter);
+    public SearchResult<ProductVoucher> searchProductVoucher(ProductFilter filter, Employee employee);
 
     public void createProductVoucher(ProductVoucher voucher, Product product);
 

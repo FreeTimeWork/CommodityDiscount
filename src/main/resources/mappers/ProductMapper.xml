@@ -6,6 +6,8 @@
 
     <resultMap id="employeeResult" type="Employee" extends="com.mwb.dao.mapper.EmployeeMapper.employeeResult"/>
 
+    <resultMap id="taskResult" type="Task" extends="com.mwb.dao.mapper.BpmMapper.taskResult"/>
+
     <resultMap
         id="storeResult"
         type="Store">
@@ -57,6 +59,7 @@
         <association property="store" javaType="Store" resultMap="storeResult"/>
         <association property="employee" javaType="Employee" resultMap="employeeResult"/>
         <association property="voucher" javaType="ProductVoucher" resultMap="voucherResult"/>
+        <association property="task" javaType="Task" resultMap="taskResult"/>
         <collection property="pictures" ofType="ProductPicture" resultMap="productPictureResult"/>
     </resultMap>
 
@@ -99,6 +102,10 @@
 
     <sql id="employeeColumns">
         <include refid="com.mwb.dao.mapper.EmployeeMapper.employeeColumns"/>
+    </sql>
+
+    <sql id="taskColumns">
+        <include refid="com.mwb.dao.mapper.BpmMapper.taskColumns"/>
     </sql>
 
     <sql id="storeColumns">
@@ -239,6 +246,9 @@
         <if test="filter.type != null">
             AND p.type_id = #{filter.type.id, javaType=int, jdbcType=INTEGER}
         </if>
+        <if test="filter.activity != null">
+            AND p.activity_id = #{filter.activity.id, javaType=int, jdbcType=INTEGER}
+        </if>
         <if test="filter.status != null">
             AND p.status_id = #{filter.status.id, javaType=int, jdbcType=INTEGER}
         </if>
@@ -266,13 +276,13 @@
             <include refid="employeeColumns"/>,
             <include refid="storeColumns"/>,
             <include refid="voucherColumns"/>,
-            <include refid="productPictureColumns"/>
+            <include refid="taskColumns"/>
         FROM
             t_product p
         INNER JOIN t_employee ae ON ae.id = p.employee_id
         INNER JOIN t_store s ON s.id = p.store_id
-        LEFT JOIN t_product_picture pp ON pp.product_id = p.id
         LEFT JOIN t_product_voucher v ON v.product_id = p.id
+        LEFT JOIN ru_task rt ON rt.id = p.task_id
         <where>
             p.id = #{id, javaType=int, jdbcType=INTEGER}
         </where>
@@ -284,13 +294,11 @@
             <include refid="productColumns"/>,
             <include refid="employeeColumns"/>,
             <include refid="storeColumns"/>,
-            <include refid="voucherColumns"/>,
-            <include refid="productPictureColumns"/>
+            <include refid="voucherColumns"/>
         FROM
             t_product p
         INNER JOIN t_employee ae ON ae.id = p.employee_id
         INNER JOIN t_store s ON s.id = p.store_id
-        LEFT JOIN t_product_picture pp ON pp.product_id = p.id
         LEFT JOIN t_product_voucher v ON v.product_id = p.id
         <where>
             p.product_id = #{productId, javaType=string, jdbcType=CHAR}
@@ -303,13 +311,11 @@
             <include refid="productColumns"/>,
             <include refid="employeeColumns"/>,
             <include refid="storeColumns"/>,
-            <include refid="voucherColumns"/>,
-            <include refid="productPictureColumns"/>
+            <include refid="voucherColumns"/>
         FROM
             t_product p
         INNER JOIN t_employee ae ON ae.id = p.employee_id
         INNER JOIN t_store s ON s.id = p.store_id
-        LEFT JOIN t_product_picture pp ON pp.product_id = p.id
         LEFT JOIN t_product_voucher v ON v.product_id = p.id
         <where>
             <if test="employeeId != null" >
@@ -321,19 +327,27 @@
         </where>
     </select>
 
+    <select id="selectProductPictureByProductId"
+       resultMap="productPictureResult">
+        SELECT
+            <include refid="productPictureColumns"/>
+        FROM
+            t_product_picture pp
+        WHERE
+            pp.product_id = #{productId, javaType=int, jdbcType=INTEGER}
+    </select>
+
     <select id="selectProductByFilter"
        resultMap="productResult">
         SELECT
             <include refid="productColumns"/>,
             <include refid="employeeColumns"/>,
             <include refid="storeColumns"/>,
-            <include refid="voucherColumns"/>,
-            <include refid="productPictureColumns"/>
+            <include refid="voucherColumns"/>
         FROM
             t_product p
             INNER JOIN t_employee ae ON ae.id = p.employee_id
             INNER JOIN t_store s ON s.id = p.store_id
-            LEFT JOIN t_product_picture pp ON pp.product_id = p.id
             LEFT JOIN t_product_voucher v ON v.product_id = p.id
         <where>
             <include refid="productFilter"/>
@@ -501,7 +515,8 @@
             activity_id,
             status_id,
             store_id,
-            employee_id
+            employee_id,
+            task_id
         ) VALUES (
             #{taoKeId, javaType=string, jdbcType=CHAR},
             #{productId, javaType=string, jdbcType=CHAR},
@@ -533,7 +548,8 @@
             #{activity.id, javaType=int, jdbcType=INTEGER},
             #{status.id, javaType=int, jdbcType=INTEGER},
             #{store.id, javaType=int, jdbcType=INTEGER},
-            #{employee.id, javaType=int, jdbcType=INTEGER}
+            #{employee.id, javaType=int, jdbcType=INTEGER},
+            #{task.id, javaType=int, jdbcType=INTEGER}
         )
     </insert>
 
@@ -564,7 +580,10 @@
             #{product.id, javaType=int, jdbcType=INTEGER}
         )
     </insert>
-
+    <delete id="deleteProductVoucher" >
+        DELETE FROM t_product_voucher
+        WHERE  product_id = #{productId, javaType=int, jdbcType=INTEGER}
+    </delete>
     <insert
         id="insertVoucherPicture"
         parameterType="VoucherPicture"

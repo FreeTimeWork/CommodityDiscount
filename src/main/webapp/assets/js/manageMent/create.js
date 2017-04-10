@@ -44,8 +44,29 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         error: function () {
             alert('请求失败')
         }
-    })
+    });
+    $.ajax({
+        type: 'get',
+        async: false,
+        url: '/employee/currentEmployee',
+        success: function (data) {
+            if (data.employee != null && data.employee.fullName != null) {
+                $("#userName").text(data.employee.fullName);
+                var positionId = data.employee.positionId;
+                if(positionId != 2
+                    && positionId != 3
+                    && positionId != 6){
+                    $("#showCreate").hide();
+                }
+                if(positionId != 1){
+                    $("#showEmployee").hide();
+                }
+            }
+        }
+    });
     var ValueUtils = cKit.ValueUtils;
+
+    var pictureOptions = []
 
     var activeOption = [{label: '普通活动',value: 1},{label: '预告商品',value: 2},{label: '淘抢购',value: 3},{label: '聚划算',value: 4}]
 
@@ -58,8 +79,12 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             _super.call(this);
             thiz = this;
             this.searchParams = {};
-            this.init();
-            this.initCreateForm();
+            if(cKit.UrlUtils.getRequest().id){
+                this.init()
+            }else{
+                this.initDetailForm();
+            }
+
         }
 
         CurrentPage.prototype.init = function () {
@@ -68,28 +93,28 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             var successHandler = function(self, result) {
                 if(result.pictures.length > 0){
                     if(result.pictures[0]){
-                        result.pictureUrl1 = result.pictures[0]
+                        result.pictureUrl0 = result.pictures[0]
                     }
                     if(result.pictures[1]){
-                        result.pictureUrl2 = result.pictures[1]
+                        result.pictureUrl1 = result.pictures[1]
                     }
                     if(result.pictures[2]){
-                        result.pictureUrl3 = result.pictures[2]
+                        result.pictureUrl2 = result.pictures[2]
                     }
                     if(result.pictures[3]){
-                        result.pictureUrl4 = result.pictures[3]
+                        result.pictureUrl3 = result.pictures[3]
                     }
                     if(result.pictures[4]){
-                        result.pictureUrl5 = result.pictures[4]
+                        result.pictureUrl4 = result.pictures[4]
                     }
                     if(result.pictures[5]){
-                        result.pictureUrl6 = result.pictures[5]
+                        result.pictureUrl5 = result.pictures[5]
                     }
                     if(result.pictures[6]){
-                        result.pictureUrl7 = result.pictures[6]
+                        result.pictureUrl6 = result.pictures[6]
                     }
                     if(result.pictures[7]){
-                        result.pictureUrl8 = result.pictures[7]
+                        result.pictureUrl7 = result.pictures[7]
                     }
                 }
                 thiz.initDetailForm(result)
@@ -104,12 +129,12 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         CurrentPage.prototype.initDetailForm = function (model) {
             this.detailForm = new uiKit.FormController({
                 id: 'detailForm',
-                model: model || {},
+                model: model || {immediately:false},
                 submit: function(data) {
                     var url ='/product/create';
                     var request = {};
                     request.activityId = data.activityId;
-                    request.productId = data.productId;
+                    //request.productId = data.productId;
                     request.name = data.name;
                     request.pictureUrl = data.pictureUrl;
                     request.reservePrice = data.reservePrice;
@@ -123,23 +148,31 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     request.couponUrl = data.couponUrl;
                     request.couponBeginTime = data.couponBeginTime;
                     request.couponEndTime = data.couponEndTime;
-                    request.couponUseNumber = data.couponUseNumber;
-                    request.couponSurplusNumber = data.couponSurplusNumber;
+                    //request.couponUseNumber = data.couponUseNumber;
+                    //request.couponSurplusNumber = data.couponSurplusNumber;
                     request.condition = data.condition;
                     request.features = data.features;
                     request.description = data.description;
                     request.chargePrice = data.chargePrice;
                     request.createTime = data.createTime;
                     request.ratio = data.ratio;
-                    request.planUrl = data.planUrl;
+                    if(data.planUrl){
+                        request.planUrl = data.planUrl;
+                    }
                     request.hireTypeId = data.hireTypeId;
                     request.storeDescriptionScore = data.storeDescriptionScore;
                     request.serviceScore = data.serviceScore;
                     request.speedScore = data.speedScore;
                     request.storeTypeId = data.storeTypeId;
-                    request.pictures = data.pictures;
+                    request.qq = data.qq;
+                    request.pictures = pictureOptions;
+                    request.supplementPictureUrl = data.supplementPictureUrl
                     var successHandler = function(self, result) {
-                        alert('成功')
+                        if(result.resultMessage != null) {
+                            alert(result.resultMessage);
+                        }else{
+                            alert('成功');
+                        }
                     };
                     var errorHandler = function(self, result) {
                         alert('请求失败');
@@ -154,8 +187,8 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'activityTime',
-                    type : uiKit.Controller.EDIT,
-                    validators : [uiKit.Validator.NONEMPTY]
+                    type : uiKit.Controller.EDIT
+
                 },{
                     uid : 'url',
                     type : uiKit.Controller.EDIT,
@@ -170,21 +203,68 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     click: function () {
                         var couponUrl = this.getContainerForm().viewModel.couponUrl();
                         var productUrl = this.getContainerForm().viewModel.url();
-                        var url ="/product/grab?couponUrl="+couponUrl+"&productUrl="+productUrl;
-                        var successHandler = function(self, result) {
-                            thiz.detailForm.getViewModel().couponUrl(result.couponUrl)
-                            thiz.detailForm.getViewModel().url(result.url)
-                        };
-                        var errorHandler = function(self, result) {
-                            alert('请求参数错误');
-                        };
-                        var action = new netKit.SimpleGetAction(this, url,successHandler, errorHandler);
-                        action.submit();
+                        if(couponUrl && productUrl){
+                            var url ="/product/grab?couponUrl="+couponUrl+"&productUrl="+productUrl;
+                            var successHandler = function(self, result) {
+                                if(result.resultMessage != null) {
+                                    alert(result.resultMessage);
+                                }else{
+                                    alert('抓取成功');
+                                }
+                                pictureOptions = result.pictures;
+                                thiz.detailForm.getViewModel().storeTypeName(result.storeTypeName)
+                                thiz.detailForm.getViewModel().storeDescriptionScore(result.storeDescriptionScore)
+                                thiz.detailForm.getViewModel().productId(result.productId + result.createHistory)
+                                thiz.detailForm.getViewModel().reservePrice(result.reservePrice)
+                                thiz.detailForm.getViewModel().serviceScore(result.serviceScore)
+                                thiz.detailForm.getViewModel().speedScore(result.speedScore)
+                                thiz.detailForm.getViewModel().condition(result.condition)
+                                thiz.detailForm.getViewModel().couponAmount(result.couponAmount)
+                                thiz.detailForm.getViewModel().sales(result.sales)
+                                thiz.detailForm.getViewModel().couponUseNumber("剩余" + result.couponUseNumber +"张" + "已领取(" + result.couponSurplusNumber +")")
+                                thiz.detailForm.getViewModel().discountPrice(result.discountPrice)
+                                thiz.detailForm.getViewModel().name(result.name)
+                                if(result.pictures.length > 0){
+                                    for(var i = 0; i < result.pictures.length; i++){
+                                        if(i==0){
+                                            thiz.detailForm.getViewModel().pictureUrl0(result.pictures[0])
+                                        }
+                                        if(i==1){
+                                            thiz.detailForm.getViewModel().pictureUrl1(result.pictures[1])
+                                        }
+                                        if(i==2){
+                                            thiz.detailForm.getViewModel().pictureUrl2(result.pictures[2])
+                                        }
+                                        if(i==3){
+                                            thiz.detailForm.getViewModel().pictureUrl3(result.pictures[3])
+                                        }
+                                        if(i==4){
+                                            thiz.detailForm.getViewModel().pictureUrl4(result.pictures[4])
+                                        }
+                                        if(i==5){
+                                            thiz.detailForm.getViewModel().pictureUrl5(result.pictures[5])
+                                        }
+                                        if(i==6){
+                                            thiz.detailForm.getViewModel().pictureUrl6(result.pictures[6])
+                                        }
+                                        if(i==7){
+                                            thiz.detailForm.getViewModel().pictureUrl7(result.pictures[7])
+                                        }
+                                    }
+                                }
+                            };
+                            var errorHandler = function(self, result) {
+                                alert('请求参数错误');
+                            };
+                            var action = new netKit.SimpleGetAction(this, url,successHandler, errorHandler);
+                            action.submit();
+                        }else{
+                            alert('请先填写产品链接和优惠券链接在点击抓取按钮')
+                        }
                     }
                 },{
                     uid : 'productId',
-                    type : uiKit.Controller.EDIT,
-                    validators : [uiKit.Validator.NONEMPTY]
+                    type : uiKit.Controller.LABEL
                 },{
                     uid : 'storeDiscriptionScore',
                     type : uiKit.Controller.LABEL
@@ -199,6 +279,15 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     type : uiKit.Controller.LABEL
                 },{
                     uid : 'pictureUrl',
+                    type : uiKit.Controller.IMAGE,
+                    visible: function(data) {
+                        if (ValueUtils.isEmpty(data)) {
+                            return false;
+                        }
+                        return true;
+                    }
+                },{
+                    uid : 'pictureUrl0',
                     type : uiKit.Controller.IMAGE,
                     visible: function(data) {
                         if (ValueUtils.isEmpty(data)) {
@@ -270,15 +359,6 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         return true;
                     }
                 },{
-                    uid : 'pictureUrl8',
-                    type : uiKit.Controller.IMAGE,
-                    visible: function(data) {
-                        if (ValueUtils.isEmpty(data)) {
-                            return false;
-                        }
-                        return true;
-                    }
-                },{
                     uid : 'pictureSize',
                     type : uiKit.Controller.LABEL
                 },{
@@ -303,12 +383,14 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'couponBeginTime',
-                    type : uiKit.Controller.DATE_PICKER,
-                    node : 'couponBeginTime'
+                    type : uiKit.Controller.EDIT,
+                    node : 'couponBeginTime',
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'couponEndTime',
-                    type : uiKit.Controller.DATE_PICKER,
-                    node : 'couponEndTime'
+                    type : uiKit.Controller.EDIT,
+                    node : 'couponEndTime',
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'disCountPrice',
                     type : uiKit.Controller.LABEL
@@ -324,21 +406,32 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 },{
                     uid : 'planUrl',
                     type : uiKit.Controller.TEXT_AREA,
-                    validators : [uiKit.Validator.NONEMPTY]
+                    visible: function () {
+                        var type = this.getContainerForm().getViewModel().hireTypeId();
+                        if(type == '1'){
+                            return true
+                        }else {
+                            return false
+                        }
+                    }
+
                 },{
                     uid : 'supplementPictureUrl',
-                    type : uiKit.Controller.TEXT_AREA,
-                    validators : [uiKit.Validator.NONEMPTY]
+                    type : uiKit.Controller.TEXT_AREA
+                },{
+                    uid : 'features',
+                    type : uiKit.Controller.TEXT_AREA
                 },{
                     uid : 'description',
-                    type : uiKit.Controller.TEXT_AREA,
-                    validators : [uiKit.Validator.NONEMPTY]
+                    type : uiKit.Controller.TEXT_AREA
                 },{
                     uid : 'qq',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.EDIT,
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'chargePrice',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.EDIT,
+                    validators : [uiKit.Validator.NONEMPTY]
                 }]),
                 reset: false
             });
@@ -352,7 +445,11 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     var url ="/product/vuncher/create";
                     var request = data;
                     var successHandler = function(self, result) {
-                        alert('成功')
+                        if(result.resultMessage != null) {
+                            alert(result.resultMessage);
+                        }else{
+                            alert('成功');
+                        }
                     };
                     var errorHandler = function(self, result) {
                         alert('请求失败');

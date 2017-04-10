@@ -1,8 +1,14 @@
+import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+
 import com.alibaba.fastjson.JSON;
-import com.mwb.controller.product.api.CreateProductRequest;
 import com.mwb.controller.product.api.CreateProductVoucherRequest;
 import com.mwb.dao.filter.FinanceFilter;
-import com.mwb.dao.filter.ProductFilter;
 import com.mwb.dao.mapper.FinanceMapper;
 import com.mwb.dao.mapper.ProductMapper;
 import com.mwb.dao.model.comm.Bool;
@@ -13,23 +19,13 @@ import com.mwb.dao.model.product.voucher.ProductVoucher;
 import com.mwb.dao.model.product.voucher.VoucherPicture;
 import com.mwb.service.dataoke.api.IDaoLaoKeService;
 import com.mwb.util.DateTimeUtility;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.lang.reflect.Field;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
 
 /**
  * Created by MengWeiBo on 2017-04-05
  */
 public class ProductMapperTest extends AbstractPersistenceTest {
 
-    //    @Autowired
+//        @Autowired
     public ProductMapper mapper;
 
     //        @Autowired
@@ -81,18 +77,19 @@ public class ProductMapperTest extends AbstractPersistenceTest {
         printJSON(store);
     }
 
-    //    @Test
+//        @Test
     public void selectProduct() throws Exception {
 
-        Product product = mapper.selectProductById(1);
-        mapper.updateProduct(product);
+        Product product = mapper.selectProductById(2);
+//        mapper.updateProduct(product);
 //        List<Product> products = mapper.selectProductByStatus(null, ProductStatus.AUDIT_RUN);
 
-        ProductFilter productFilter = newInstance(ProductFilter.class);
+//        ProductFilter productFilter = newInstance(ProductFilter.class);
 
-        List<ProductVoucher> products = mapper.selectProductVoucherByFilter(productFilter);
-        int a = mapper.countProductByFilter(productFilter);
-        printJSON(products);
+//        List<ProductVoucher> products = mapper.selectProductVoucherByFilter(productFilter);
+//        int a = mapper.countProductByFilter(productFilter);
+//        printJSON(products);
+            System.out.println(product);
     }
 
     //    @Test

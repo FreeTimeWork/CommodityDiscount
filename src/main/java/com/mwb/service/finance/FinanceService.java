@@ -23,16 +23,21 @@ public class FinanceService implements IFinanceService {
     private FinanceMapper financeMapper;
 
     public SearchResult<Finance> searchFinance(FinanceFilter filter, Employee employee) {
+        SearchResult<Finance> result = new SearchResult<>();
+
         if (employee != null) {
             Integer positionId = employee.getPosition().getId();
-            if (positionId.equals(2)) {
+            if (positionId.equals(2) || positionId.equals(6)) {
                 filter.setEmployeeId(employee.getId());
             } else if (positionId.equals(3)) {
                 filter.setGroupId(employee.getGroup().getId());
+            }else if (positionId.equals(4)) {
+                return result;
             }
+        } else {
+            return result;
         }
 
-        SearchResult<Finance> result = new SearchResult<>();
         List<Finance> finances = financeMapper.selectFinanceByFilter(filter);
 
         result.setResult(finances);
@@ -95,6 +100,8 @@ public class FinanceService implements IFinanceService {
                 finance.setPayTrailerNumber(finance.getPayTrailerNumber() - 1);
             } else if (ProductStatus.PAY_END == fromStatus) {
                 finance.setPayEndNumber(finance.getPayEndNumber() - 1);
+            } else if (ProductStatus.SETTLEMENT == fromStatus) {
+                finance.setSettlementNumber(finance.getSettlementNumber() - 1);
             }
         }
 
@@ -117,6 +124,8 @@ public class FinanceService implements IFinanceService {
                 finance.setPayTrailerNumber(finance.getPayTrailerNumber() + 1);
             } else if (ProductStatus.PAY_END == toStatus) {
                 finance.setPayEndNumber(finance.getPayEndNumber() + 1);
+            } else if (ProductStatus.SETTLEMENT == toStatus) {
+                finance.setSettlementNumber(finance.getSettlementNumber() + 1);
             }
         }
 
