@@ -1,13 +1,14 @@
 package com.mwb.dao.filter;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+import com.mwb.dao.model.bpm.Task;
 import com.mwb.dao.model.product.Activity;
 import com.mwb.dao.model.product.ProductStatus;
 import com.mwb.dao.model.product.ProductType;
 import org.apache.commons.lang.StringUtils;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by MengWeiBo on 2017-03-31
@@ -42,6 +43,16 @@ public class ProductFilter extends SearchFilter {
     private ProductStatus status;
     private List<ProductStatus> excludeStatus;
     private List<ProductStatus> includeStatus;
+
+    private Task task;
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
+    }
 
     public Integer getId() {
         return id;

@@ -53,9 +53,8 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             if (data.employee != null && data.employee.fullName != null) {
                 $("#userName").text(data.employee.fullName);
                 var positionId = data.employee.positionId;
-                if(positionId != 2
-                    && positionId != 3
-                    && positionId != 6){
+                if(positionId == 4
+                    && positionId == 5){
                     $("#showCreate").hide();
                 }
                 if(positionId != 1){
@@ -154,7 +153,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     request.features = data.features;
                     request.description = data.description;
                     request.chargePrice = data.chargePrice;
-                    request.createTime = data.createTime;
+                    //request.createTime = data.createTime;
                     request.ratio = data.ratio;
                     if(data.planUrl){
                         request.planUrl = data.planUrl;
@@ -172,6 +171,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                             alert(result.resultMessage);
                         }else{
                             alert('成功');
+                            window.open('/frontend/commodity.html');
                         }
                     };
                     var errorHandler = function(self, result) {
@@ -383,12 +383,14 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'couponBeginTime',
-                    type : uiKit.Controller.DATE_PICKER,
-                    node : 'couponBeginTime'
+                    type : uiKit.Controller.EDIT,
+                    node : 'couponBeginTime',
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'couponEndTime',
-                    type : uiKit.Controller.DATE_PICKER,
-                    node : 'couponEndTime'
+                    type : uiKit.Controller.EDIT,
+                    node : 'couponEndTime',
+                    validators : [uiKit.Validator.NONEMPTY]
                 },{
                     uid : 'disCountPrice',
                     type : uiKit.Controller.LABEL
@@ -447,6 +449,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                             alert(result.resultMessage);
                         }else{
                             alert('成功');
+                            window.open('/frontend/commodity.html');
                         }
                     };
                     var errorHandler = function(self, result) {

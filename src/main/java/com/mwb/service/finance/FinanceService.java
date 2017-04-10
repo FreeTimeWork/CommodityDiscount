@@ -1,5 +1,7 @@
 package com.mwb.service.finance;
 
+import java.util.List;
+
 import com.mwb.controller.api.PagingResult;
 import com.mwb.dao.filter.FinanceFilter;
 import com.mwb.dao.filter.SearchResult;
@@ -10,8 +12,6 @@ import com.mwb.dao.model.product.ProductStatus;
 import com.mwb.service.finance.api.IFinanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * Created by MengWeiBo on 2017-04-01
@@ -82,7 +82,7 @@ public class FinanceService implements IFinanceService {
 
     private void setStatusNumber(Finance finance, ProductStatus fromStatus, ProductStatus toStatus) {
         if (fromStatus != null) {
-            if (ProductStatus.TRAILER == toStatus) {
+            if (ProductStatus.TRAILER == fromStatus) {
                 finance.setRefuseNumber(finance.getRefuseNumber() - 1);
             } else if (ProductStatus.TWO_AUDIT == fromStatus) {
                 finance.setTwoAuditNumber(finance.getTwoAuditNumber() - 1);

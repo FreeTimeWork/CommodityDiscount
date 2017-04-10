@@ -1,5 +1,10 @@
 package com.mwb.service.product;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import com.mwb.controller.api.PagingResult;
 import com.mwb.dao.filter.ProductFilter;
 import com.mwb.dao.filter.SearchResult;
@@ -22,11 +27,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by MengWeiBo on 2017-04-01
@@ -61,6 +61,16 @@ public class ProductService implements IProductService {
     @Override
     @Transactional
     public void createProduct(Product product) {
+        //存入流程变量
+        Task task = new Task();
+        Variable variable = new Variable("createdById", product.getEmployee().getId() + "");
+        List<Variable> variables = new ArrayList<>();
+        variables.add(variable);
+        task.setVariables(variables);
+        //创建流程
+        bpmService.createTask(task);
+        product.setTask(task);
+
         createStore(product.getStore());
 
         productMapper.insertProduct(product);
@@ -77,19 +87,12 @@ public class ProductService implements IProductService {
         } else {
             int day = DateTimeUtility.daysBetween(finance.getCreateTime(), new Date());
             finance.setSubmitNumber(finance.getSubmitNumber() + 1);
+            if (day == 0)
+                day += 1;
             finance.setAverageDaily(finance.getSubmitNumber() / day);
 
             financeService.modifyFinance(finance);
         }
-
-        //存入流程变量
-        Task task = new Task();
-        Variable variable = new Variable("createdById", product.getEmployee().getId() + "");
-        List<Variable> variables = new ArrayList<>();
-        variables.add(variable);
-        task.setVariables(variables);
-        //创建流程
-        bpmService.createTask(task);
     }
 
     @Override
@@ -126,7 +129,9 @@ public class ProductService implements IProductService {
         }
         Integer positionId = employee.getPosition().getId();
         Integer employeeId = employee.getId();
-
+        Task task = new Task();
+        task.setEmployeeId(employeeId);
+        filter.setTask(task);
         if (positionId.equals(2) || positionId.equals(6)) {
             filter.setEmployeeId(employeeId);
         } else if (positionId.equals(3)) {
@@ -224,10 +229,30 @@ public class ProductService implements IProductService {
         return result;
     }
 
+    private void deleteProductVoucher (Product product){
+        ProductVoucher voucher = productMapper.selectProductVoucherByProductId(product.getId());
+        if (voucher != null) {
+            Finance finance = financeService.getFinanceByEmployeeId(product.getEmployee().getId());
+
+            finance.setShouldChargeAmount(finance.getShouldChargeAmount().subtract(voucher.getShouldChargeAmount()));
+            finance.setActualChargeAmount(finance.getActualChargeAmount().subtract(voucher.getActualChargeAmount()));
+            if (finance.getPayEndNumber() > 0 ) {
+                finance.setGuestUnitPrice(finance.getActualChargeAmount().divide(new BigDecimal(finance.getPayEndNumber()), 2));
+            }else {
+                finance.setGuestUnitPrice(finance.getActualChargeAmount());
+            }
+            financeService.modifyFinance(finance);
+
+            productMapper.deleteVoucherPicture(voucher.getId());
+
+            productMapper.deleteProductVoucher(product.getId());
+        }
+
+    }
     @Override
     @Transactional
     public void createProductVoucher(ProductVoucher voucher, Product product) {
-        productMapper.deleteProductVoucher(product.getId());
+        deleteProductVoucher(product);
 
         productMapper.insertProductVoucher(voucher);
 
@@ -239,10 +264,19 @@ public class ProductService implements IProductService {
 
         Finance finance = financeService.getFinanceByEmployeeId(product.getEmployee().getId());
         finance.setPayRunNumber(finance.getPayRunNumber() + 1);
-        finance.setPayWaitNumber(finance.getPayEndNumber() - 1);
+        if (product.getStatus() == ProductStatus.PAY_WAIT) {
+            finance.setPayWaitNumber(finance.getPayWaitNumber() - 1);
+        }else if (product.getStatus() == ProductStatus.PAY_TRAILER){
+            finance.setPayTrailerNumber(finance.getPayTrailerNumber() - 1);
+        }
+
         finance.setShouldChargeAmount(finance.getShouldChargeAmount().add(voucher.getShouldChargeAmount()));
         finance.setActualChargeAmount(finance.getActualChargeAmount().add(voucher.getActualChargeAmount()));
-        finance.setGuestUnitPrice(finance.getActualChargeAmount().divide(new BigDecimal(finance.getPayEndNumber()), 2));
+        if (finance.getPayEndNumber() > 0 ) {
+            finance.setGuestUnitPrice(finance.getActualChargeAmount().divide(new BigDecimal(finance.getPayEndNumber()), 2));
+        }else {
+            finance.setGuestUnitPrice(finance.getActualChargeAmount());
+        }
 
         financeService.modifyFinance(finance);
 

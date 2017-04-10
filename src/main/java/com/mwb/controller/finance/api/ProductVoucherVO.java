@@ -28,13 +28,16 @@ public class ProductVoucherVO {
     private BigDecimal ratio;           //佣金比例
     private Integer couponUseNumber;    //使用数量
     private Integer couponReceiveNumber; //领取数量
+    private BigDecimal payAmount;//应收金额
     private BigDecimal shouldChargeAmount;//应收金额
-    private BigDecimal payAmount;       //付款金额
+    private BigDecimal actualChargeAmount;       //付款金额
+    private BigDecimal conversionRate;        //使用率
+    private String payTime;        //使用率
     private Integer useRatio;        //使用率
     private boolean showSubmit;        //使用率
 
-    public static ProductVoucherVO toVO(ProductVoucher voucher, Employee employee) {
-        if(voucher == null) {
+    public static ProductVoucherVO toVO(ProductVoucher voucher,Employee employee) {
+        if (voucher == null) {
             return null;
         }
         ProductVoucherVO vo = new ProductVoucherVO();
@@ -54,15 +57,17 @@ public class ProductVoucherVO {
         vo.setCouponReceiveNumber(voucher.getReceiveNumber());
         vo.setShouldChargeAmount(voucher.getShouldChargeAmount());
         vo.setPayAmount(voucher.getPayAmount());
+        vo.setActualChargeAmount(voucher.getActualChargeAmount());
+        vo.setConversionRate(voucher.getConversionRate());
+        vo.setPayTime(DateTimeUtility.formatYYYYMMDD(voucher.getPayTime()));
         if (voucher.getReceiveNumber().equals(0)) {
             vo.setUseRatio(0);
         }else {
             vo.setUseRatio(voucher.getUseNumber() * 100 / voucher.getReceiveNumber());
         }
         if (employee != null &&
-                (voucher.getProduct().getStatus() == ProductStatus.PAY_TRAILER
-                        || voucher.getProduct().getStatus() == ProductStatus.PAY_WAIT)
-                && voucher.getProduct().getEmployee().getId().equals(employee.getId())){
+                (voucher.getProduct().getStatus() == ProductStatus.PAY_RUN)
+                && (employee.getPosition().getId().equals(1)||employee.getPosition().getId().equals(5))){
             vo.setShowSubmit(true);
         }
         return vo;
@@ -77,14 +82,6 @@ public class ProductVoucherVO {
             }
         }
         return vos;
-    }
-
-    public boolean isShowSubmit() {
-        return showSubmit;
-    }
-
-    public void setShowSubmit(boolean showSubmit) {
-        this.showSubmit = showSubmit;
     }
 
     public Integer getId() {
@@ -207,8 +204,40 @@ public class ProductVoucherVO {
         this.payAmount = payAmount;
     }
 
+    public BigDecimal getActualChargeAmount() {
+        return actualChargeAmount;
+    }
+
+    public void setActualChargeAmount(BigDecimal actualChargeAmount) {
+        this.actualChargeAmount = actualChargeAmount;
+    }
+
+    public BigDecimal getConversionRate() {
+        return conversionRate;
+    }
+
+    public void setConversionRate(BigDecimal conversionRate) {
+        this.conversionRate = conversionRate;
+    }
+
+    public String getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(String payTime) {
+        this.payTime = payTime;
+    }
+
     public Integer getUseRatio() {
         return useRatio;
+    }
+
+    public boolean getShowSubmit() {
+        return showSubmit;
+    }
+
+    public void setShowSubmit(boolean showSubmit) {
+        this.showSubmit = showSubmit;
     }
 
     public void setUseRatio(Integer useRatio) {

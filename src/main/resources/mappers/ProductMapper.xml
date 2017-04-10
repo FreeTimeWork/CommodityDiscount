@@ -75,6 +75,7 @@
             <result property="createTime" column="voucher_create_time"/>
             <result property="conversionRate" column="voucher_conversion_rate"/>
             <result property="withoutUrl" column="voucher_without_url"/>
+            <result property="payTime" column="voucher_pay_time"/>
 
         <association property="product" javaType="Product" resultMap="productResult"/>
         <collection property="pictures" ofType="VoucherPicture" resultMap="voucherPictureResult"/>
@@ -164,6 +165,7 @@
         v.create_time AS voucher_create_time,
         v.conversion_rate AS voucher_conversion_rate,
         v.without_url AS voucher_without_url,
+        v.pay_time AS voucher_pay_time,
         v.product_id AS voucher_product_id
     </sql>
 
@@ -266,7 +268,15 @@
             </foreach>
             )
         </if>
-
+        <if test="filter.task != null">
+           <if test="filter.task.employeeId != null">
+               AND (
+               rt.employee_id = #{filter.task.employeeId, javaType=int, jdbcType=INTEGER}
+               OR ae.id = #{filter.employeeId, javaType=int, jdbcType=INTEGER}
+               OR rt.employee_id IS NULL
+               )
+           </if>
+        </if>
     </sql>
 
     <select id="selectProductById"
@@ -349,6 +359,7 @@
             INNER JOIN t_employee ae ON ae.id = p.employee_id
             INNER JOIN t_store s ON s.id = p.store_id
             LEFT JOIN t_product_voucher v ON v.product_id = p.id
+            LEFT JOIN ru_task rt ON rt.id = p.task_id
         <where>
             <include refid="productFilter"/>
         </where>
@@ -374,6 +385,7 @@
             LEFT JOIN t_product_picture pp ON pp.product_id = p.id
             LEFT JOIN t_product_voucher v ON v.product_id = p.id
             LEFT JOIN t_voucher_picture vp ON vp.voucher_id = v.id
+            LEFT JOIN ru_task rt ON rt.id = p.task_id
         <where>
             <include refid="productFilter"/>
         </where>
@@ -401,6 +413,20 @@
             </otherwise>
         </choose>
         <include refid="pagingLimit" />
+    </select>
+
+    <select id="selectProductVoucherByProductId"
+        resultMap="voucherResult">
+        SELECT
+            <include refid="productColumns"/>,
+            <include refid="employeeColumns"/>,
+            <include refid="voucherColumns"/>
+        FROM
+            t_product_voucher v
+            INNER JOIN t_product p ON v.product_id = p.id
+            INNER JOIN t_employee ae ON ae.id = p.employee_id
+          WHERE
+            p.id =  #{productId, javaType=int, jdbcType=INTEGER}
     </select>
 
     <select id="countProductVoucherByFilter"
@@ -515,7 +541,8 @@
             activity_id,
             status_id,
             store_id,
-            employee_id
+            employee_id,
+            task_id
         ) VALUES (
             #{taoKeId, javaType=string, jdbcType=CHAR},
             #{productId, javaType=string, jdbcType=CHAR},
@@ -547,7 +574,8 @@
             #{activity.id, javaType=int, jdbcType=INTEGER},
             #{status.id, javaType=int, jdbcType=INTEGER},
             #{store.id, javaType=int, jdbcType=INTEGER},
-            #{employee.id, javaType=int, jdbcType=INTEGER}
+            #{employee.id, javaType=int, jdbcType=INTEGER},
+            #{task.id, javaType=int, jdbcType=INTEGER}
         )
     </insert>
 
@@ -565,6 +593,7 @@
             create_time,
             conversion_rate,
             without_url,
+            pay_time,
             product_id
         ) VALUES (
             #{receiveNumber, javaType=int, jdbcType=INTEGER},
@@ -575,13 +604,21 @@
             #{createTime, javaType=date, jdbcType=TIMESTAMP},
             #{conversionRate, javaType=bigdecimal, jdbcType=DECIMAL},
             #{withoutUrl, javaType=string, jdbcType=CHAR},
+            #{payTime, javaType=date, jdbcType=TIMESTAMP},
             #{product.id, javaType=int, jdbcType=INTEGER}
         )
     </insert>
+
     <delete id="deleteProductVoucher" >
         DELETE FROM t_product_voucher
         WHERE  product_id = #{productId, javaType=int, jdbcType=INTEGER}
     </delete>
+
+    <delete id="deleteVoucherPicture" >
+        DELETE FROM t_voucher_picture
+        WHERE  voucher_id = #{voucherId, javaType=int, jdbcType=INTEGER}
+    </delete>
+
     <insert
         id="insertVoucherPicture"
         parameterType="VoucherPicture"

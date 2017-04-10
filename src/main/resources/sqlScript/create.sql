@@ -111,6 +111,30 @@ CREATE TABLE `ru_variable` (
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+
+-- 初始数据
+INSERT INTO t_permission VALUES (1,'audit.wait.read','待审核'),(2,'audit.now.read','审核中'),(3,'audit.reject.read','驳回'),(4,'audit.refuse.read','拒绝'),(5,'audit.review.read','待复审'),(6,'store.generalize.read','推广中'),
+(7,'date.about.end.read','即将结束'),(8,'date.end.read','结束'),(9,'payment.replace.read','代付款'),(10,'payment.now.read','付款中'),(11,'payment.end.read','已付款'),(12,'payment.refuse.read','拒绝付款'),(13,'finance.report.read','查看财务报表'),
+(14,'store.submit','提交商品'),(15,'accounts.submit','提交结账'),(16,'employee.add','添加成员'),(17,'employee.upgrade','升级业务员');
+
+INSERT INTO t_position VALUES (1,'管理员'),(2,'业务员'),(3,'组长'),(4,'审单员'),(5,'财务'),(6,'零');
+
+INSERT INTO t_employee_status VALUES (1,'IN_POSITION','在职'),(2,'OUT_OF_POSITION','离职');
+
+
+use coupon;
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 -- 商品活动类型表
 DROP TABLE IF EXISTS `t_activity`;
 CREATE TABLE `t_activity` (
@@ -211,6 +235,7 @@ CREATE TABLE `t_product` (
   `status_id` int(10) unsigned NOT NULL,
   `store_id` int(10) unsigned NOT NULL,
   `employee_id` int(10) unsigned NOT NULL,
+  `task_id` int(16) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `hire_type_id` (`hire_type_id`),
   KEY `type_id` (`type_id`),
@@ -218,12 +243,14 @@ CREATE TABLE `t_product` (
   KEY `t_product_ibfk_4` (`status_id`),
   KEY `employee_id` (`employee_id`),
   KEY `t_product_ibfk_5` (`store_id`),
+  KEY `t_product_ibfk_6` (`task_id`),
   CONSTRAINT `t_product_ibfk_1` FOREIGN KEY (`hire_type_id`) REFERENCES `t_hire_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `t_product_ibfk_2` FOREIGN KEY (`type_id`) REFERENCES `t_product_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `t_product_ibfk_3` FOREIGN KEY (`activity_id`) REFERENCES `t_activity` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `t_product_ibfk_4` FOREIGN KEY (`status_id`) REFERENCES `t_product_status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `t_product_ibfk_5` FOREIGN KEY (`store_id`) REFERENCES `t_store` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `t_product_ibfk_6` FOREIGN KEY (`employee_id`) REFERENCES `t_employee` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `t_product_ibfk_6` FOREIGN KEY (`employee_id`) REFERENCES `t_employee` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `t_product_ibfk_7` FOREIGN KEY (`task_id`) REFERENCES `ru_task` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
 
 
@@ -251,6 +278,7 @@ CREATE TABLE `t_product_voucher` (
   `create_time` datetime NOT NULL,
   `conversion_rate` decimal(18,2) NOT NULL DEFAULT '0.00',
   `without_url` varchar(255) DEFAULT NULL,
+  `pay_time` datetime DEFAULT NULL,
   `product_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `product_id` (`product_id`),
@@ -295,6 +323,14 @@ CREATE TABLE `t_finance` (
   CONSTRAINT `t_finance_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `t_employee` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
 INSERT INTO `t_activity` VALUES ( '1', 'ORDINARY', '普通活动' ), ('2', 'ROB', '淘抢购'), ('3', 'BARGAIN', '聚划算'), ( '4', 'TRAILER', '预告商品' );
 
 INSERT INTO `t_hire_type` VALUES ('1', 'DIRECTIONAL', '定向'), ('2', 'GENERAL', '通用'), ('3', 'MAGPIE', '鹊桥');
@@ -304,13 +340,3 @@ INSERT INTO `t_product_status` VALUES ( '1', 'AUDIT_WAIT', '待审核' ), ( '2',
 INSERT INTO `t_store_type` VALUES ('1', 'TAOBAO', '淘宝'), ('2', 'TMALL', '天猫');
 
 INSERT INTO `t_product_type` VALUES ('1', 'WOMAN', '女裝'), ('2', 'MAN', '男裝'), ('3', 'UNDERWEAR', '內衣'), ('4', 'MATERNAL', '母婴'), ( '5', 'COSMETICS', 'COSMETICS' ), ('6', 'OCCUPY', '居家'), ('7', 'SHOES', '鞋包配饰'), ('8', 'FOOD', '美食'), ('9', 'CAR', '文体车品'), ( '10', 'APPLIANCE', '数码家电' );
-
-
--- 初始数据
-INSERT INTO t_permission VALUES (1,'audit.wait.read','待审核'),(2,'audit.now.read','审核中'),(3,'audit.reject.read','驳回'),(4,'audit.refuse.read','拒绝'),(5,'audit.review.read','待复审'),(6,'store.generalize.read','推广中'),
-(7,'date.about.end.read','即将结束'),(8,'date.end.read','结束'),(9,'payment.replace.read','代付款'),(10,'payment.now.read','付款中'),(11,'payment.end.read','已付款'),(12,'payment.refuse.read','拒绝付款'),(13,'finance.report.read','查看财务报表'),
-(14,'store.submit','提交商品'),(15,'accounts.submit','提交结账'),(16,'employee.add','添加成员'),(17,'employee.upgrade','升级业务员');
-
-INSERT INTO t_position VALUES (1,'管理员'),(2,'业务员'),(3,'组长'),(4,'审单员'),(5,'财务'),(6,'零');
-
-INSERT INTO t_employee_status VALUES (1,'IN_POSITION','在职'),(2,'OUT_OF_POSITION','离职');

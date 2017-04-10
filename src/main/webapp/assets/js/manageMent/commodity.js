@@ -38,9 +38,8 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             if (data.employee != null && data.employee.fullName != null) {
                 $("#userName").text(data.employee.fullName);
                 var positionId = data.employee.positionId;
-                if(positionId != 2
-                    && positionId != 3
-                    && positionId != 6){
+                if(positionId == 4
+                    && positionId == 5){
                     $("#showCreate").hide();
                 }
 
@@ -165,9 +164,12 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         html += '<a style="margin-right: 10px;" onclick="currentPage().onDetailClick(\'' + id + '\')">查看</a>'
                         if(rowObject.showSubmit) {
                             html += '<a style="margin-right: 10px;" onclick="currentPage().onReSubmitClick(\'' + id + '\')">再次提交</a>'
-                            if(rowObject.statusCode == "PAY_WAIT") {
-                                html += '<a style="margin-right: 10px;" onclick="currentPage().onSubmitBillClick()">提交结账</a>'
-                            }
+                            //if(rowObject.statusCode == "PAY_WAIT") {
+                            //    html += '<a style="margin-right: 10px;" onclick="currentPage().onSubmitBillClick(\'' + id + '\')">提交结账</a>'
+                            //}
+                        }
+                        if(rowObject.showReceive) {
+                            html += '<a style="margin-right: 10px;" onclick="currentPage().onReceive(\'' + id + '\')">认领</a>'
                         }
                         return html;
                     }
@@ -183,7 +185,8 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     })
                 }
             }).api()
-        }
+        },
+
 
         CurrentPage.prototype.initSearchForm = function () {
             this.searchForm = new uiKit.FormController({
@@ -320,9 +323,27 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         },
         onReSubmitClick: function (id) {
             window.open('/frontend/create.html?id='+ id);
-        }
-
+        },
+        onSubmitBillClick: function (id) {
+            window.open('/frontend/create.html?bill=bill' + '&id=' + id);
+        },
+        onReceive: function (productId) {
+            var url ="/product/approve/claim";
+            var request = {
+                productId: productId,
+                productStatusId: "2"
+            };
+            var successHandler = function(self, result) {
+                alert('成功');
+            };
+            var errorHandler = function(self, result) {
+                alert('请求失败');
+            };
+            var action = new netKit.SimplePostAction(this,url , request,successHandler, errorHandler);
+            action.submit();
+        },
     });
+
     var currentPage = null;
     $(document).ready(function() {
         currentPage = new CurrentPage();

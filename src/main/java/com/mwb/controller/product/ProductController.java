@@ -1,23 +1,44 @@
 package com.mwb.controller.product;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
 import com.mwb.controller.finance.api.ProductVoucherVO;
 import com.mwb.controller.finance.api.SearchFinanceVoucherRequest;
 import com.mwb.controller.finance.api.SearchFinanceVoucherResponse;
 import com.mwb.controller.frontend.api.ResourceVO;
-import com.mwb.controller.product.api.*;
+import com.mwb.controller.product.api.BaseApproveRequest;
+import com.mwb.controller.product.api.CreateProductRequest;
+import com.mwb.controller.product.api.CreateProductVoucherRequest;
+import com.mwb.controller.product.api.ProductDetailsResponse;
+import com.mwb.controller.product.api.ProductVO;
+import com.mwb.controller.product.api.SearchProductRequest;
+import com.mwb.controller.product.api.SearchProductResponse;
 import com.mwb.controller.util.ApplicationContextUtils;
 import com.mwb.dao.filter.ProductFilter;
 import com.mwb.dao.filter.SearchResult;
+import com.mwb.dao.model.bpm.Task;
 import com.mwb.dao.model.comm.Bool;
 import com.mwb.dao.model.comm.Log;
 import com.mwb.dao.model.comm.PagingData;
 import com.mwb.dao.model.employee.Employee;
-import com.mwb.dao.model.product.*;
+import com.mwb.dao.model.product.Activity;
+import com.mwb.dao.model.product.HireType;
+import com.mwb.dao.model.product.Product;
+import com.mwb.dao.model.product.ProductPicture;
+import com.mwb.dao.model.product.ProductStatus;
+import com.mwb.dao.model.product.ProductType;
+import com.mwb.dao.model.product.Store;
 import com.mwb.dao.model.product.voucher.ProductVoucher;
 import com.mwb.dao.model.product.voucher.VoucherPicture;
 import com.mwb.service.ParserService;
+import com.mwb.service.bpm.api.IBpmService;
 import com.mwb.service.dataoke.api.IDaoLaoKeService;
 import com.mwb.service.product.api.IProductService;
 import com.mwb.util.DateTimeUtility;
@@ -30,13 +51,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by MengWeiBo on 2017-04-01
@@ -52,6 +66,9 @@ public class ProductController {
 
     @Autowired
     private IProductService productService;
+
+    @Autowired
+    private IBpmService bpmService;
 
     @ResponseBody
     @RequestMapping(value = "/grab")
@@ -92,12 +109,13 @@ public class ProductController {
             response.setApproveStatus(getProductApproveStatus(product, employee));
             response.setTask(product.getTask());
 
-            if (employee.getId().equals(product.getEmployee().getId())
+            if ((employee.getId().equals(product.getEmployee().getId()) || employee.getPosition().getId().equals(1))
                     && (product.getStatus() == ProductStatus.PAY_WAIT
                     || product.getStatus() == ProductStatus.PAY_TRAILER)) {
                 response.setShowEdit(true);
             }
-            if (product.getStatus() == ProductStatus.PAY_RUN
+            if (product.getStatus() == ProductStatus.PAY_WAIT
+                    ||   product.getStatus() == ProductStatus.PAY_RUN
                     || product.getStatus() == ProductStatus.PAY_RUN
                     || product.getStatus() == ProductStatus.PAY_TRAILER
                     || product.getStatus() == ProductStatus.PAY_END
@@ -115,28 +133,28 @@ public class ProductController {
         ProductStatus status = product.getStatus();
         Integer positionId = employee.getPosition().getId();
         if (ProductStatus.AUDIT_RUN == status
-                && positionId.equals(4)) {
+                && (positionId.equals(4) || employee.getPosition().getId().equals(1))) {
             vos.add(new ResourceVO(ProductStatus.TWO_AUDIT.getDescription(), ProductStatus.TWO_AUDIT.getId()));
             vos.add(new ResourceVO(ProductStatus.REJECTED.getDescription(), ProductStatus.REJECTED.getId()));
             vos.add(new ResourceVO(ProductStatus.TRAILER.getDescription(), ProductStatus.TRAILER.getId()));
         } else if (ProductStatus.TWO_AUDIT == status
-                && positionId.equals(4)) {
+                && (positionId.equals(4) || employee.getPosition().getId().equals(1))) {
             vos.add(new ResourceVO(ProductStatus.PROMOTE.getDescription(), ProductStatus.PROMOTE.getId()));
             vos.add(new ResourceVO(ProductStatus.REJECTED.getDescription(), ProductStatus.REJECTED.getId()));
             vos.add(new ResourceVO(ProductStatus.TRAILER.getDescription(), ProductStatus.TRAILER.getId()));
         } else if (ProductStatus.PROMOTE == status
-                && product.getEmployee().getId().equals(employee.getId())) {
+                && (product.getEmployee().getId().equals(employee.getId()) || employee.getPosition().getId().equals(1))) {
             vos.add(new ResourceVO(ProductStatus.END.getDescription(), ProductStatus.END.getId()));
             vos.add(new ResourceVO(ProductStatus.PAY_WAIT.getDescription(), ProductStatus.PAY_WAIT.getId()));
         } else if (ProductStatus.END == status
-                && product.getEmployee().getId().equals(employee.getId())) {
+                && (product.getEmployee().getId().equals(employee.getId()) || employee.getPosition().getId().equals(1))) {
             vos.add(new ResourceVO(ProductStatus.PAY_WAIT.getDescription(), ProductStatus.PAY_WAIT.getId()));
         } else if (ProductStatus.PAY_WAIT == status
-                && product.getEmployee().getId().equals(employee.getId())
-                && employee.getPosition().getId() == 6) {
+                && ((product.getEmployee().getId().equals(employee.getId())
+                && employee.getPosition().getId() == 6) || employee.getPosition().getId().equals(1))) {
             vos.add(new ResourceVO(ProductStatus.SETTLEMENT.getDescription(), ProductStatus.SETTLEMENT.getId()));
         } else if (ProductStatus.PAY_RUN == status
-                && positionId.equals(5)) {
+                && (positionId.equals(5) || employee.getPosition().getId().equals(1))) {
             vos.add(new ResourceVO(ProductStatus.PAY_TRAILER.getDescription(), ProductStatus.PAY_TRAILER.getId()));
             vos.add(new ResourceVO(ProductStatus.PAY_END.getDescription(), ProductStatus.PAY_END.getId()));
         }
@@ -192,7 +210,9 @@ public class ProductController {
         ServiceResponse response = new ServiceResponse();
 
         ParserService parserService = new ParserService(request.getUrl());
-        Product dataokeProduct = daoLaoKeService.getDaTaoKeProduct(parserService.grabProduct().getProductId());
+        Product grapProduct = parserService.grabProduct();
+
+        Product dataokeProduct = daoLaoKeService.getDaTaoKeProduct(grapProduct.getProductId());
         if (dataokeProduct == null) {
             response.setMessage("商品地址错误!");
             return response;
@@ -244,7 +264,7 @@ public class ProductController {
         store.setSpeedScore(request.getSpeedScore());
         store.setType(dataokeProduct.getStore().getType());
 
-        if (CollectionUtils.isNotEmpty(request.getPictures())) {
+        if (CollectionUtils.isNotEmpty(grapProduct.getPictures())) {
             List<ProductPicture> pictures = new ArrayList<>();
             for (String url : request.getPictures()) {
                 ProductPicture picture = new ProductPicture();
@@ -264,8 +284,8 @@ public class ProductController {
     @ResponseBody
     @RequestMapping(value = "/voucher/create")
     public ServiceResponse createProductVoucher(
-            @RequestParam("files") MultipartFile[] files,
-            CreateProductVoucherRequest request) {
+            @RequestParam("files") MultipartFile files,
+            CreateProductVoucherRequest request) throws Exception {
 
         Product product = productService.getProductById(request.getId());
 
@@ -278,30 +298,24 @@ public class ProductController {
         voucher.setCreateTime(new Date());
         voucher.setConversionRate(request.getConversionRate());
         voucher.setWithoutUrl(request.getWithoutRate());
+        voucher.setPayTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getPayTime()));
         voucher.setProduct(product);
 
         List<VoucherPicture> pictures = new ArrayList<>();
-        if (files != null && files.length > 0) {
+        if (!files.isEmpty()) {
             String realPath = "\\image\\";
+            try {
+                String filePath = realPath + files.getOriginalFilename();
+                VoucherPicture picture = new VoucherPicture();
+                picture.setUrl(filePath);
+                picture.setVoucher(voucher);
+                pictures.add(picture);
 
-            for (int i = 0; i < files.length; i++) {
-                try {
-                    MultipartFile file = files[i];
-                    if (file.isEmpty()) {
-                        continue;
-                    }
-                    String filePath = realPath + file.getOriginalFilename();
-
-                    VoucherPicture picture = new VoucherPicture();
-                    picture.setUrl(filePath);
-                    picture.setVoucher(voucher);
-                    pictures.add(picture);
-
-                    file.transferTo(new File(filePath));
-                } catch (IOException e) {
-                    LOG.error("createProductVoucher is err.");
-                }
+                files.transferTo(new File(filePath));
+            } catch (IOException e) {
+                LOG.error("createProductVoucher is err.");
             }
+
         }
 
         voucher.setPictures(pictures);
@@ -384,13 +398,11 @@ public class ProductController {
         if (product == null) {
             return new ServiceResponse();
         }
-
-        //审单员
-        if (employee.getPosition().getId().equals(4)) {
-            productService.modifyProductStatus(product.getId(), employee.getId(), product.getStatus(), ProductStatus.AUDIT_RUN);
-        } else if (employee.getPosition().getId().equals(5)) { //财务
-            productService.modifyProductStatus(product.getId(), employee.getId(), product.getStatus(), ProductStatus.PAY_RUN);
-        }
+        Task task = new Task();
+        task.setEmployeeId(employee.getId());
+        task.setId(product.getTask().getId());
+        bpmService.modifyTask(task);
+        productService.modifyProductStatus(product.getId(), product.getEmployee().getId(), product.getStatus(), ProductStatus.AUDIT_RUN);
 
         return new ServiceResponse();
     }
@@ -408,7 +420,7 @@ public class ProductController {
             return new ServiceResponse();
         }
 
-        productService.modifyProductStatus(product.getId(), employee.getId(), product.getStatus(), status);
+        productService.modifyProductStatus(product.getId(), product.getEmployee().getId(), product.getStatus(), status);
 
         return new ServiceResponse();
     }

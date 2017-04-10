@@ -35,6 +35,8 @@ public interface ProductMapper {
 
     public List<ProductVoucher> selectProductVoucherByFilter(@Param("filter") ProductFilter filter);
 
+    public ProductVoucher selectProductVoucherByProductId(@Param("productId") Integer productId);
+
     public int countProductVoucherByFilter(@Param("filter") ProductFilter filter);
 
     public List<VoucherPicture> selectVoucherPictureByVoucherId(@Param("voucherId") Integer voucherId);
@@ -42,6 +44,8 @@ public interface ProductMapper {
     public void insertProductVoucher(ProductVoucher productVoucher);
 
     public void deleteProductVoucher(@Param("productId") Integer productId);
+
+    public void deleteVoucherPicture(@Param("voucherId") Integer voucherId);
 
     public void insertVoucherPicture(VoucherPicture voucherPicture);
 
