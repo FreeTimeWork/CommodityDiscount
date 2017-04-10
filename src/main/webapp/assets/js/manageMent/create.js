@@ -153,7 +153,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     request.features = data.features;
                     request.description = data.description;
                     request.chargePrice = data.chargePrice;
-                    request.createTime = data.createTime;
+                    //request.createTime = data.createTime;
                     request.ratio = data.ratio;
                     if(data.planUrl){
                         request.planUrl = data.planUrl;
