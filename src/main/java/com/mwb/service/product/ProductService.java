@@ -87,6 +87,8 @@ public class ProductService implements IProductService {
         } else {
             int day = DateTimeUtility.daysBetween(finance.getCreateTime(), new Date());
             finance.setSubmitNumber(finance.getSubmitNumber() + 1);
+            if (day == 0)
+                day += 1;
             finance.setAverageDaily(finance.getSubmitNumber() / day);
 
             financeService.modifyFinance(finance);

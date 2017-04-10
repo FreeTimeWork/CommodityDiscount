@@ -1,12 +1,25 @@
 package com.mwb.controller.product;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
 import com.mwb.controller.finance.api.ProductVoucherVO;
 import com.mwb.controller.finance.api.SearchFinanceVoucherRequest;
 import com.mwb.controller.finance.api.SearchFinanceVoucherResponse;
 import com.mwb.controller.frontend.api.ResourceVO;
-import com.mwb.controller.product.api.*;
+import com.mwb.controller.product.api.BaseApproveRequest;
+import com.mwb.controller.product.api.CreateProductRequest;
+import com.mwb.controller.product.api.CreateProductVoucherRequest;
+import com.mwb.controller.product.api.ProductDetailsResponse;
+import com.mwb.controller.product.api.ProductVO;
+import com.mwb.controller.product.api.SearchProductRequest;
+import com.mwb.controller.product.api.SearchProductResponse;
 import com.mwb.controller.util.ApplicationContextUtils;
 import com.mwb.dao.filter.ProductFilter;
 import com.mwb.dao.filter.SearchResult;
@@ -14,7 +27,13 @@ import com.mwb.dao.model.comm.Bool;
 import com.mwb.dao.model.comm.Log;
 import com.mwb.dao.model.comm.PagingData;
 import com.mwb.dao.model.employee.Employee;
-import com.mwb.dao.model.product.*;
+import com.mwb.dao.model.product.Activity;
+import com.mwb.dao.model.product.HireType;
+import com.mwb.dao.model.product.Product;
+import com.mwb.dao.model.product.ProductPicture;
+import com.mwb.dao.model.product.ProductStatus;
+import com.mwb.dao.model.product.ProductType;
+import com.mwb.dao.model.product.Store;
 import com.mwb.dao.model.product.voucher.ProductVoucher;
 import com.mwb.dao.model.product.voucher.VoucherPicture;
 import com.mwb.service.ParserService;
@@ -30,13 +49,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by MengWeiBo on 2017-04-01
@@ -404,7 +416,7 @@ public class ProductController {
             return new ServiceResponse();
         }
 
-        productService.modifyProductStatus(product.getId(), employee.getId(), product.getStatus(), status);
+        productService.modifyProductStatus(product.getId(), product.getEmployee().getId(), product.getStatus(), status);
 
         return new ServiceResponse();
     }

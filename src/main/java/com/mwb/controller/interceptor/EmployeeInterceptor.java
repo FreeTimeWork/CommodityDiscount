@@ -3,7 +3,6 @@ package com.mwb.controller.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.mwb.controller.util.ApplicationContextUtils;
 import com.mwb.dao.model.employee.Employee;
 import com.mwb.service.employee.api.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,25 +23,25 @@ public class EmployeeInterceptor implements HandlerInterceptor {
         String requestUrl = request.getRequestURI().replace(
                 request.getContextPath(), "");
 //todo
-        Employee employee = employeeService.getAllEmployee().get(0);
-        ApplicationContextUtils.getSession().setAttribute("employee", employee);
+//        Employee employee = employeeService.getAllEmployee().get(0);
+//        ApplicationContextUtils.getSession().setAttribute("employee", employee);
+//
+//        return true;
+        if (null != allowUrls && allowUrls.length >= 1)
+            for (String url : allowUrls) {
+                if (requestUrl.contains(url)) {
+                    return true;
+                }
+            }
 
-        return true;
-//        if (null != allowUrls && allowUrls.length >= 1)
-//            for (String url : allowUrls) {
-//                if (requestUrl.contains(url)) {
-//                    return true;
-//                }
-//            }
-//
-//        Employee employee = (Employee) request.getSession().getAttribute("employee");
-//
-//        if (employee != null) {
-//            return true;
-//        } else {
-//            response.sendRedirect(request.getContextPath() + "/login.html");
-//            return false;
-//        }
+        Employee employee = (Employee) request.getSession().getAttribute("employee");
+
+        if (employee != null) {
+            return true;
+        } else {
+            response.sendRedirect(request.getContextPath() + "/login.html");
+            return false;
+        }
     }
 
     @Override
