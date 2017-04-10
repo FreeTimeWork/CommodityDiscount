@@ -14,6 +14,7 @@ public class CreateProductVoucherRequest {
     private BigDecimal actualChargeAmount;//实收金额
     private BigDecimal conversionRate;//转化率
     private String withoutRate;//外部链接
+    private String payTime;//外部链接
 
     public Integer getId() {
         return id;
@@ -77,5 +78,13 @@ public class CreateProductVoucherRequest {
 
     public void setWithoutRate(String withoutRate) {
         this.withoutRate = withoutRate;
+    }
+
+    public String getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(String payTime) {
+        this.payTime = payTime;
     }
 }
