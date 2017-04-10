@@ -164,9 +164,10 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
 
                     var successHandler = function (self, result) {
                         alert('成功')
+                        window.open('/frontend/commodity.html');
                     };
                     var errorHandler = function (self, result) {
-
+                        window.open('/frontend/commodity.html');
                     };
                     var action = new netKit.SimpleAsyncPostAction(this, url, request, successHandler, errorHandler);
                     action.submit()
