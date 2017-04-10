@@ -1,5 +1,10 @@
 package com.mwb.service.product;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import com.mwb.controller.api.PagingResult;
 import com.mwb.dao.filter.ProductFilter;
 import com.mwb.dao.filter.SearchResult;
@@ -23,11 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 /**
  * Created by MengWeiBo on 2017-04-01
  */
@@ -47,6 +47,9 @@ public class ProductService implements IProductService {
     public Product getProductById(Integer id) {
         Product product = productMapper.selectProductById(id);
 
+        if (product != null) {
+            product.setPictures(productMapper.selectProductPictureByProductId(product.getId()));
+        }
         if (product != null && product.getVoucher() != null) {
             List<VoucherPicture> pictures = productMapper.selectVoucherPictureByVoucherId(product.getVoucher().getId());
             product.getVoucher().setPictures(pictures);
@@ -58,6 +61,16 @@ public class ProductService implements IProductService {
     @Override
     @Transactional
     public void createProduct(Product product) {
+        //存入流程变量
+        Task task = new Task();
+        Variable variable = new Variable("createdById", product.getEmployee().getId() + "");
+        List<Variable> variables = new ArrayList<>();
+        variables.add(variable);
+        task.setVariables(variables);
+        //创建流程
+        bpmService.createTask(task);
+        product.setTask(task);
+
         createStore(product.getStore());
 
         productMapper.insertProduct(product);
@@ -74,19 +87,10 @@ public class ProductService implements IProductService {
         } else {
             int day = DateTimeUtility.daysBetween(finance.getCreateTime(), new Date());
             finance.setSubmitNumber(finance.getSubmitNumber() + 1);
-            finance.setAverageDaily(finance.getSubmitNumber() * 100 / day);
+            finance.setAverageDaily(finance.getSubmitNumber() / day);
 
             financeService.modifyFinance(finance);
         }
-
-        //存入流程变量
-        Task task = new Task();
-        Variable variable = new Variable("createdById", product.getEmployee().getId() + "");
-        List<Variable> variables = new ArrayList<>();
-        variables.add(variable);
-        task.setVariables(variables);
-        //创建流程
-        bpmService.createTask(task);
     }
 
     @Override
@@ -124,7 +128,7 @@ public class ProductService implements IProductService {
         Integer positionId = employee.getPosition().getId();
         Integer employeeId = employee.getId();
 
-        if (positionId.equals(2)) {
+        if (positionId.equals(2) || positionId.equals(6)) {
             filter.setEmployeeId(employeeId);
         } else if (positionId.equals(3)) {
             filter.setGroupId(employee.getGroup().getId());
@@ -133,6 +137,7 @@ public class ProductService implements IProductService {
             list.add(ProductStatus.PAY_RUN);
             list.add(ProductStatus.PAY_TRAILER);
             list.add(ProductStatus.PAY_END);
+            list.add(ProductStatus.SETTLEMENT);
             filter.setExcludeStatus(list);
         } else if (positionId.equals(5)) {
             List<ProductStatus> list = new ArrayList<>();
@@ -140,6 +145,7 @@ public class ProductService implements IProductService {
             list.add(ProductStatus.PAY_RUN);
             list.add(ProductStatus.PAY_TRAILER);
             list.add(ProductStatus.PAY_END);
+            list.add(ProductStatus.SETTLEMENT);
             filter.setIncludeStatus(list);
         }
     }
@@ -152,6 +158,7 @@ public class ProductService implements IProductService {
         finance.setRefuseRate(0);
         finance.setTwoAuditNumber(0);
         finance.setPromoteNumber(0);
+        finance.setSettlementNumber(0);
         finance.setEndApproachNumber(0);
         finance.setEndNumber(0);
         finance.setPayWaitNumber(0);
@@ -189,8 +196,21 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public SearchResult<ProductVoucher> searchProductVoucher(ProductFilter filter) {
+    public SearchResult<ProductVoucher> searchProductVoucher(ProductFilter filter, Employee employee) {
         SearchResult<ProductVoucher> result = new SearchResult<>();
+
+        Integer positionId = employee.getPosition().getId();
+        Integer employeeId = employee.getId();
+
+        setPermissionProductFilter(filter, employee);
+        if (positionId.equals(2) || positionId.equals(6)) {
+            filter.setEmployeeId(employeeId);
+        } else if (positionId.equals(3)) {
+            filter.setGroupId(employee.getGroup().getId());
+        }else if (positionId.equals(4)) {
+            return result;
+        }
+
         List<ProductVoucher> vouchers = productMapper.selectProductVoucherByFilter(filter);
 
         result.setResult(vouchers);
@@ -208,6 +228,8 @@ public class ProductService implements IProductService {
     @Override
     @Transactional
     public void createProductVoucher(ProductVoucher voucher, Product product) {
+        productMapper.deleteProductVoucher(product.getId());
+
         productMapper.insertProductVoucher(voucher);
 
         if (CollectionUtils.isNotEmpty(voucher.getPictures())) {

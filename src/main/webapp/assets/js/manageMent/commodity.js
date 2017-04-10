@@ -37,26 +37,46 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         success: function (data) {
             if (data.employee != null && data.employee.fullName != null) {
                 $("#userName").text(data.employee.fullName);
-                return;
+                var positionId = data.employee.positionId;
+                if(positionId != 2
+                    && positionId != 3
+                    && positionId != 6){
+                    $("#showCreate").hide();
+                }
+
+                if(positionId != 1){
+                    $("#showEmployee").hide();
+                }
             }
         }
     });
+
     $.ajax({
         type: 'get',
         async: false,
-        url: '/employee/currentEmployee',
+        url: '/resource/status',
         success: function (data) {
-            if (data.employee != null && data.employee.fullName != null) {
-                $("#userName").text(data.employee.fullName);
-                return;
+            var html = '';
+            for (var i = 0; i < data.status.length; i++){
+                if(i==0){
+                    html += '<li class="on">' + data.status[i].label + '(' + data.status[i].value + ')' + '</li>'
+                } else{
+                    html += '<li>' + data.status[i].label + '(' + data.status[i].value + ')' + '</li>'
+                }
             }
+            $('.pay_list').html(html)
+        },
+        error: function () {
+            alert('请求失败')
         }
     });
     var CurrentPage = (function (_super) {
         cKit.__extends(CurrentPage, _super);
 
         var thiz;
-
+        $(".pay_list > li").on("click",function(){
+            $(this).addClass("on").siblings().removeClass("on")
+        });
         function CurrentPage() {
             _super.call(this);
             thiz = this;
@@ -81,28 +101,44 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             });
             this.pageGrid = $('#employeeGrid').dataTable({
                 "serverSide": true,
-                "select": {
-                    style: 'multi',
-                    selector: 'td:first-child'
-                },
                 "columns": [{
-                    "data": null,
-                    "width": "4%",
-                    "className": 'select-checkbox',
-                    "orderable": false,
-                    "render": function() {
-                        return "";
-                    }
+                    "data": "id",
+                    "width": "5%"
                 }, {
-                    "data": "createTime"
+                    "data": "createTime",
+                    "width": "13%"
                 }, {
-                    "data": "pictureUrl"
+                    "data": "pictureUrl",
+
+                    "render": function (data,type,rowObject,meta) {
+                        var html = '';
+                        html += '<img src=\'' + rowObject.pictureUrl + '\'/><br>';
+                        html += '<sapn>' + rowObject.storeTypeName +'</sapn>' +'<br><sapn>ID:</sapn>';
+                        html += '<span>'+ rowObject.productId +'</span>'
+                        return html
+                    },
+                    "width": "15%"
                 }, {
-                    "data": "chargePrice"
+                    "data": "name",
+                    "width": "10%"
                 }, {
-                    "data": "discountPrice"
+                    "data": "chargePrice",
+                    "width": "5%"
                 }, {
-                    "data": "ratio"
+                    "data": "discountPrice",
+                    "width": "5%"
+                }, {
+                    "data": "hireTypeName",
+                    "render": function (data,type,rowObject,meta) {
+                        var html = '';
+                        html += '<sapn>' + data + '</sapn>' + '<span style="color: red;">'+ rowObject.ratio +'</span><br>'
+                        if(rowObject.hireTypeCode == "DIRECTIONAL"){
+                            html += '<a href=\'' + rowObject.planUrl + '\'>' + '查看计划链接' + '</a><br>'
+                        }
+                        html += '<span>'+ rowObject.activityName +'</span>'
+                        return html
+                    },
+                    "width": "10%"
                 }, {
                     "data": "couponBeginTime",
                     "render": function (data,type,rowObject,meta) {
@@ -114,28 +150,25 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         html += '<sapn>领取/剩余：</sapn>';
                         html += '<span style="color: red;">' + rowObject.couponUseNumber + '</span>' + '/' + '<span>' + rowObject.couponSurplusNumber + '</span>';
                         return html
-                    }
-                }, {
-                    "data": "hireTypeName",
-                    "render": function (data,type,rowObject,meta) {
-                        var html = '';
-                        html += '<sapn>' + data + '</sapn>' + '<span style="color: red;">'+ rowObject.ratio +'</span><br>'
-
-                        html += '<a href=\'' + rowObject.planUrl + '\'>' + '查看计划链接' + '</a><br>'
-                        html += '<span>'+ rowObject.activityName +'</span>'
-                        return html
-                    }
+                    },
+                    "width": "15%"
                 },{
-                    "data": "employeeName"
+                    "data": "employeeName",
+                    "width": "5%"
                 }, {
-                    "data": "status"
+                    "data": "status",
+                    "width": "5%"
                 },{
                     render: function (data,type,rowObject,meta) {
                         var id = rowObject.id;
-                        var html = ''
+                        var html = '';
                         html += '<a style="margin-right: 10px;" onclick="currentPage().onDetailClick(\'' + id + '\')">查看</a>'
-                        html += '<a style="margin-right: 10px;" onclick="currentPage().onReSubmitClick()">再次提交</a>'
-                        html += '<a style="margin-right: 10px;" onclick="currentPage().onSubmitBillClick()">提交结账</a>'
+                        if(rowObject.showSubmit) {
+                            html += '<a style="margin-right: 10px;" onclick="currentPage().onReSubmitClick(\'' + id + '\')">再次提交</a>'
+                            if(rowObject.statusCode == "PAY_WAIT") {
+                                html += '<a style="margin-right: 10px;" onclick="currentPage().onSubmitBillClick()">提交结账</a>'
+                            }
+                        }
                         return html;
                     }
                 }],
@@ -157,7 +190,57 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 id: 'searchForm',
                 model: {},
                 submit: function(data) {
-                    thiz.searchParams= data
+                    thiz.searchParams= data;
+                    var text=$(".pay_list li.on").text();
+                    var text1 = text.split('(')[0]
+                    if(text1 == '全部产品'){
+                        thiz.searchParams.statusId = null
+                    }
+                    if(text1 == '待审核'){
+                        thiz.searchParams.statusId = 1
+                    }
+                    if(text1 == '审核中'){
+                        thiz.searchParams.statusId = 2
+                    }
+                    if(text1 == '驳回'){
+                        thiz.searchParams.statusId = 3
+                    }
+                    if(text1 == '拒绝'){
+                        thiz.searchParams.statusId = 4
+                    }
+                    if(text1 == '待二审'){
+                        thiz.searchParams.statusId = 5
+                    }
+                    if(text1 == '推广中'){
+                        thiz.searchParams.statusId = 6
+                    }
+                    if(text1 == '即将结束'){
+                        thiz.searchParams.statusId = 7
+                    }
+                    if(text1 == '已结束'){
+                        thiz.searchParams.statusId = 8
+                    }
+                    if(text1 == '代付款'){
+                        thiz.searchParams.statusId = 9
+                    }
+                    if(text1 == '付款中'){
+                        thiz.searchParams.statusId = 10
+                    }
+                    if(text1 == '拒绝付款'){
+                        thiz.searchParams.statusId = 11
+                    }
+                    if(text1 == '已付款'){
+                        thiz.searchParams.statusId = 12
+                    }
+                    if(text1 == '已结算'){
+                        thiz.searchParams.statusId = 13
+                    }
+                    thiz.searchParams.createBeginTime = $('#searchForm_createBeginTime').val()
+                    thiz.searchParams.createEndTime = $('#searchForm_createEndTime').val()
+                    thiz.searchParams.beginFromTime = $('#searchForm_beginFromTime').val()
+                    thiz.searchParams.beginToTime = $('#searchForm_beginToTime').val()
+                    thiz.searchParams.endFromTime = $('#searchForm_endFromTime').val()
+                    thiz.searchParams.endToTime = $('#searchForm_endToTime').val()
                     if(!thiz.pageGrid){
                         thiz.initPageGrid()
                     }else{
@@ -165,7 +248,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     }
                 },
                 fields: uiKit.FormUtils.generateFields('searchForm', [{
-                    uid : 'name',
+                    uid : 'activityId',
                     type : uiKit.Controller.SELECT,
                     options: activitieOptions
                 },{
@@ -234,6 +317,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
 
         onDetailClick: function (id ) {
             window.open('/frontend/detail.html?id='+ id);
+        },
+        onReSubmitClick: function (id) {
+            window.open('/frontend/create.html?id='+ id);
         }
 
     });

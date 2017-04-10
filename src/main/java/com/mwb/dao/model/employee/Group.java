@@ -36,6 +36,12 @@ public class Group implements Serializable {
         this.id = id;
     }
 
+    public Group(String employeeName, Integer employeeId, Integer id) {
+        this.employeeName = employeeName;
+        this.employeeId = employeeId;
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }

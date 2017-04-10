@@ -4,12 +4,13 @@ import java.util.List;
 
 import com.mwb.dao.filter.EmployeeFilter;
 import com.mwb.dao.filter.SearchResult;
+import com.mwb.dao.model.comm.BooleanResult;
 import com.mwb.dao.model.employee.Employee;
 import com.mwb.dao.model.employee.Group;
 
 public interface IEmployeeService {
 
-	public void createEmployee(Employee employee);
+	public BooleanResult createEmployee(Employee employee);
 
 	public void modifyEmployee(Employee employee);
 
@@ -18,6 +19,8 @@ public interface IEmployeeService {
 	public SearchResult<Employee> searchEmployeeByFilter(EmployeeFilter filter);
 
 	public Employee getEmployeeByMobileAndPassword(String mobile, String password);
+
+	public Employee getEmployeeById(Integer id);
 
 	public void createGroup(Group group);
 

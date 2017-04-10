@@ -1,6 +1,6 @@
 package com.mwb.controller.exception;
 
-import org.slf4j.LoggerFactory;
+import com.mwb.dao.model.comm.Log;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -9,16 +9,13 @@ import org.springframework.web.servlet.ModelAndView;
  * 异常控制
  * 跳转页面
  */
-//// TODO: 2017/4/7  
-//@ControllerAdvice
+@ControllerAdvice
 public class ExceptionController {
-	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ExceptionController.class);
-
+	private static final Log LOG = Log.getLog(ExceptionController.class);
 	@ExceptionHandler({Exception.class})
 	public ModelAndView Exception(Exception ex){
 
-		LOGGER.error("出错了异常",ex);
-
+		LOG.error("出错了异常",ex);
 		ModelAndView mv = new ModelAndView("404");
 
 		mv.addObject("exception", ex);

@@ -44,8 +44,31 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         error: function () {
             alert('请求失败')
         }
-    })
+    });
+    $.ajax({
+        type: 'get',
+        async: false,
+        url: '/employee/currentEmployee',
+        success: function (data) {
+            if (data.employee != null && data.employee.fullName != null) {
+                $("#userName").text(data.employee.fullName);
+                var positionId = data.employee.positionId;
+                if(positionId != 2
+                    && positionId != 3
+                    && positionId != 6){
+                    $("#showCreate").hide();
+                }
+                if(positionId != 1){
+                    $("#showEmployee").hide();
+                }
+            }
+        }
+    });
     var ValueUtils = cKit.ValueUtils;
+
+    var booLeans = '';
+
+    var files = [];
 
     var activeOption = [{label: '普通活动',value: 1},{label: '预告商品',value: 2},{label: '淘抢购',value: 3},{label: '聚划算',value: 4}]
 
@@ -59,11 +82,33 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             thiz = this;
             this.searchParams = {};
             this.init();
-            this.initCreateForm();
+            $('#productCopy').click(function () {
+                var e = document.getElementById('detailForm_url');
+                e.select();
+                document.execCommand('Copy')
+            })
+            $('#couponCopy').click(function () {
+                var e = document.getElementById('detailForm_couponUrl');
+                e.select();
+                document.execCommand('Copy')
+            })
+            $('#fileUpload1').change(function (e) {
+                var file = e.target.files[0]
+                files.push(file)
+            })
+            $('#fileUpload2').change(function (e) {
+                var file = e.target.files[0]
+                files.push(file)
+            })
         }
 
         CurrentPage.prototype.init = function () {
             var req = cKit.UrlUtils.getRequest();
+            if(req.edit == 'false'){
+                booLeans = true
+            }else{
+                booLeans = false
+            }
             var url ="/product/detail?id="+req.id;
             var successHandler = function(self, result) {
                 if(result.pictures.length > 0){
@@ -93,6 +138,30 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     }
                 }
                 thiz.initDetailForm(result)
+                var html = '';
+                for(var i = 0; i < result.approveStatus.length; i++){
+                    var id = result.approveStatus[i].value;
+                    var label = result.approveStatus[i].label;
+                    html += '<input data-id=\'' + id + '\' value=\'' + label + '\' style="margin-right: 20px;" type="button">'
+                }
+                $('#approve').html(html)
+                $('#approve input').on('click', function () {
+                    var request = {};
+                    request.productId = thiz.detailForm.viewModel.id();
+                    request.productStatusId = $(this).attr('data-id')
+                    var url ="/product/approve/check";
+
+                    var successHandler = function(self, result){
+                        alert('成功')
+                    };
+                    var errorHandler = function(self, result){
+
+                    };
+                    var action = new netKit.SimpleAsyncPostAction(this, url ,request, successHandler, errorHandler);
+                    action.submit()
+                })
+
+                thiz.initCreateForm(result.voucher)
             };
             var errorHandler = function(self, result) {
                 alert('请求失败');
@@ -110,16 +179,16 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 },
                 fields: uiKit.FormUtils.generateFields('detailForm', [{
                     uid : 'activityName',
-                    type : uiKit.Controller.LABEL,
+                    type : uiKit.Controller.LABEL
                 },{
                     uid : 'activityTime',
                     type : uiKit.Controller.LABEL
                 },{
                     uid : 'url',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.TEXT_AREA
                 },{
                     uid : 'couponUrl',
-                    type : uiKit.Controller.LABEL
+                    type : uiKit.Controller.TEXT_AREA
                 },{
                     uid : 'productId',
                     type : uiKit.Controller.LABEL
@@ -136,14 +205,20 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     uid : 'storeTypeName',
                     type : uiKit.Controller.LABEL
                 },{
-                    uid : 'pictureUrl',
-                    type : uiKit.Controller.IMAGE,
-                    visible: function(data) {
-                        if (ValueUtils.isEmpty(data)) {
-                            return false;
-                        }
-                        return true;
-                    }
+                    uid : 'reservePrice',
+                    type : uiKit.Controller.LABEL
+                },{
+                    uid : 'couponUseNumber',
+                    type : uiKit.Controller.LABEL
+                },{
+                    uid : 'couponSurplusNumber',
+                    type : uiKit.Controller.LABEL
+                },{
+                    uid : 'couponAmount',
+                    type : uiKit.Controller.LABEL
+                },{
+                    uid : 'condition',
+                    type : uiKit.Controller.LABEL
                 },{
                     uid : 'pictureUrl1',
                     type : uiKit.Controller.IMAGE,
@@ -235,7 +310,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     uid : 'sales',
                     type : uiKit.Controller.LABEL
                 },{
-                    uid : 'immediately',
+                    uid : 'immediatelyStr',
                     type : uiKit.Controller.LABEL
                 },{
                     uid : 'couponBeginTime',
@@ -250,13 +325,13 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     uid : 'ratio',
                     type : uiKit.Controller.LABEL
                 },{
-                    uid : 'hireTypeId',
+                    uid : 'hireTypeName',
                     type : uiKit.Controller.LABEL
                 },{
                     uid : 'planUrl',
                     type : uiKit.Controller.LABEL
                 },{
-                    uid : 'supplementPictureUrl',
+                    uid : 'features',
                     type : uiKit.Controller.LABEL
                 },{
                     uid : 'description',
@@ -272,50 +347,71 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             });
         };
 
-        CurrentPage.prototype.initCreateForm = function () {
+
+        CurrentPage.prototype.initCreateForm = function (model) {
             this.createForm = new uiKit.FormController({
                 id: 'createForm',
-                model: {},
+                model: model || {},
                 submit: function(data) {
                     var url ="/product/vuncher/create";
-                    var request = data;
-                    var successHandler = function(self, result) {
-                        alert('成功')
+                    var request = new FormData();
+                    request.append('couponReceiveNumber', data.couponReceiveNumber);
+                    request.append('payAmount', data.payAmount);
+                    request.append('couponUseNumber', data.couponUseNumber);
+                    request.append('shouldChargeAmount', data.shouldChargeAmount);
+                    request.append('actualChargeAmount', data.actualChargeAmount);
+                    request.append('conversionRate', data.conversionRate);
+                    if(files.length == 0){
+                        alert('请选择图片')
+                        return
+                    }else{
+                        request.append('files', files);
+                    }
+
+                    var successHandler = function(self, result){
+
                     };
-                    var errorHandler = function(self, result) {
-                        alert('请求失败');
+                    var errorHandler = function(self, result){
+
                     };
-                    var action = new netKit.SimplePostAction(this,request, url,successHandler, errorHandler);
-                    action.submit();
+                    var action = new netKit.SimpleAsyncPostAction(this, url ,request, successHandler, errorHandler);
+                    action.submit()
                 },
                 fields: uiKit.FormUtils.generateFields('createForm', [{
                     uid : 'couponReceiveNumber',
                     node : 'couponReceiveNumber',
-                    type : uiKit.Controller.EDIT
+                    type : uiKit.Controller.EDIT,
+                    readOnly: booLeans
                 },{
                     uid : 'payAmount',
                     node : 'payAmount',
-                    type : uiKit.Controller.EDIT
+                    type : uiKit.Controller.EDIT,
+                    readOnly: booLeans
                 },{
                     uid : 'couponUseNumber',
                     node : 'couponUseNumber',
-                    type : uiKit.Controller.EDIT
+                    type : uiKit.Controller.EDIT,
+                    readOnly: booLeans
                 },{
                     uid : 'shouldChargeAmount',
                     node : 'shouldChargeAmount',
-                    type : uiKit.Controller.EDIT
+                    type : uiKit.Controller.EDIT,
+                    readOnly: booLeans
                 },{
                     uid : 'actualChargeAmount',
                     node : 'actualChargeAmount',
-                    type : uiKit.Controller.EDIT
+                    type : uiKit.Controller.EDIT,
+                    readOnly: booLeans
                 },{
                     uid : 'conversionRate',
                     node : 'conversionRate',
-                    type : uiKit.Controller.EDIT
+                    type : uiKit.Controller.EDIT,
+                    readOnly: booLeans
                 },{
                     uid : 'withoutRate',
                     node : 'withoutRate',
-                    type : uiKit.Controller.EDIT
+                    type : uiKit.Controller.EDIT,
+                    readOnly: booLeans
                 }]),
                 reset: false
             })

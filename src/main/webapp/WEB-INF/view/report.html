@@ -36,13 +36,13 @@
                             class="jia add"></span></a>
                     <ul>
                         <li><a href="/frontend/commodity.html" target="_blank">商品列表</a></li>
-                        <li><a href="/frontend/detail.html" target="_blank">添加新商品</a></li>
+                        <li id="showCreate"><a href="/frontend/create.html" target="_blank">添加新商品</a></li>
 
                     </ul>
 
                 </li>
 
-                <li class="fa_li">
+                <li  class="fa_li">
                     <a href="#" class="floor"><img src="../../assets/img/pic-3_13.png" alt=""/><span>报表统计</span> <span
                             class="jia add"></span></a>
                     <ul>
@@ -51,12 +51,11 @@
                     </ul>
                 </li>
 
-                <li class="fa_li">
+                <li id="showEmployee" class="fa_li" >
                     <a href="#" class="floor"><img src="../../assets/img/pic-3_13.png" alt=""/><span>员工管理</span> <span
                             class="jia add"></span></a>
                     <ul>
                         <li><a href="/frontend/employeeInfo.html" target="_blank">员工信息</a></li>
-                        <li><a href="/frontend/report.html" target="_blank">权限管理</a></li>
                     </ul>
                 </li>
 
@@ -67,7 +66,6 @@
         </div>
         <div class="bottom_right">
             <div class="bottom_right_son dis">
-                <p class="bottom_add">添加新商品</p>
 
                 <p class="bottom_right_tit">管理中心-商品报表</p>
                 <form id="searchForm">
@@ -84,13 +82,6 @@
                     </select>
                     <select uid="typeId" class="input-medium">
                     </select>
-                    <br/>
-                        <span class="">
-                            <label class="control-label helpinline">商品编号：</label> <input type="text" uid="productNamw" class="input-medium"/>
-                        </span>
-                        <span class="">
-                           <label class="control-label helpinline">商品ID：</label><input type="text" uid="productId" class="input-medium">
-                        </span>
                     <br/>
                         <span class="">
                             <label class="control-label helpinline"> 提交时间：</label>
@@ -113,7 +104,6 @@
                             <input uid="beginToTime" size="16" type="text" value="" readonly class="form_datetime">
                         </span>
                         </span>
-                    <br/>
                     <span class="">
                             <label class="control-label helpinline"> 优惠券结束时间：</label>
                         <span class="date">
@@ -125,22 +115,21 @@
                         </span>
                         </span>
                     <label class="control-label helpinline"> 优惠券领取：</label><input type="text" uid="useMinNumber" class="input-medium"/>~<input type="text" uid="useMaxNumber" class="input-medium"/>
-                    <br/>
                     <label class="control-label helpinline"> 优惠券剩余：</label><input type="text" uid="surplusMinNumber" class="input-medium">~<input type="text" uid="surplusMaxNumber" class="input-medium"/>
                     <label class="control-label helpinline"> 服务费用：</label><input type="text" uid="minChargePrice" class="input-medium"/>~<input type="text" uid="maxChargePrice" class="input-medium"/>
                     <label class="control-label helpinline"> 券后价格：</label><input type="text" uid="minDiscountPrice" class="input-medium"/>~<input type="text" uid="maxDiscountPrice" class="input-medium"/>
                     <label class="control-label helpinline"> 付款金额：</label><input type="text" uid="minPayPrice" class="input-medium"/>~<input type="text" uid="maxPayPrice" class="input-medium"/>
                     <span class="">
-                            <label class="control-label inline">商品编号：</label>
-                            <input type="text"uid="productNumber" class="input-medium"/>
+                            <label class="control-label helpinline">商品编号：</label>
+                            <input type="text"uid="id" class="input-medium"/>
                     </span>
                     <span class="">
-                            <label class="control-label inline">商品ID：</label>
+                            <label class="control-label helpinline">商品ID：</label>
                             <input type="text"uid="projectId" class="input-medium"/>
                     </span>
                     <span class="">
-                            <label class="control-label inline">关键字：</label>
-                            <input type="text"uid="keyWord" class="input-medium"/>
+                            <label class="control-label helpinline">关键字：</label>
+                            <input type="text"uid="name" class="input-medium"/>
                     </span>
                     <input type="submit" class="btn btn-primary red" value="搜索" />
                     </p>
@@ -152,7 +141,7 @@
                        id="employeeGrid">
                     <thead>
                     <tr>
-                        <td class="select-checkbox" id="selectAllBtn"></td>
+                        <th>编号</th>
                         <th>业务员</th>
                         <th>提交时间</th>
                         <th>优惠券有限期</th>

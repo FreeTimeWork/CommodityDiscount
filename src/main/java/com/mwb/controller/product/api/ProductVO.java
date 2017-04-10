@@ -1,5 +1,6 @@
 package com.mwb.controller.product.api;
 
+import com.mwb.dao.model.employee.Employee;
 import com.mwb.dao.model.product.Product;
 import com.mwb.util.DateTimeUtility;
 import org.apache.commons.collections.CollectionUtils;
@@ -22,6 +23,7 @@ public class ProductVO {
     private BigDecimal discountPrice;   //卷后价格
     private BigDecimal ratio;           //佣金比例
     private String hireTypeName;          //佣金类型
+    private String hireTypeCode;          //佣金类型
     private String planUrl;             //计划链接
     private String activityName;          //活动类别
     private String couponBeginTime;       //优惠券开始时间
@@ -29,20 +31,23 @@ public class ProductVO {
     private Integer couponUseNumber;    //领取数量
     private Integer couponSurplusNumber; //剩余数量
     private String employeeName;          //提交人
+    private String storeTypeName;          //提交人
     private String qq;                  //qq
     private String status;              //状态
+    private String statusCode;              //状态Code
+    private boolean showSubmit;              //状态提交
 
-    public static List<ProductVO> toVOs(List<Product> products) {
+    public static List<ProductVO> toVOs(List<Product> products, Employee employee) {
         List<ProductVO> productVOs = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(products)) {
             for (Product product : products) {
-                productVOs.add(toVO(product));
+                productVOs.add(toVO(product, employee));
             }
         }
         return productVOs;
     }
 
-    public static ProductVO toVO(Product product) {
+    public static ProductVO toVO(Product product, Employee employee) {
         ProductVO vo = new ProductVO();
 
         vo.setId(product.getId());
@@ -54,6 +59,7 @@ public class ProductVO {
         vo.setDiscountPrice(product.getDiscountPrice());
         vo.setRatio(product.getRatio());
         vo.setHireTypeName(product.getHireType().getDescription());
+        vo.setHireTypeCode(product.getHireType().getCode());
         vo.setPlanUrl(product.getPlanUrl());
         vo.setActivityName(product.getActivity().getDescription());
         vo.setCouponBeginTime(DateTimeUtility.formatYYYYMMDDHHMMSS(product.getCouponBeginTime()));
@@ -63,8 +69,20 @@ public class ProductVO {
         vo.setQq(product.getStore().getQq());
         vo.setEmployeeName(product.getEmployee().getFullName());
         vo.setStatus(product.getStatus().getDescription());
-
+        vo.setStatusCode(product.getStatus().getCode());
+        vo.setStoreTypeName(product.getStore().getType().getDescription());
+        if (product.getEmployee().getId().equals(employee.getId())) {
+            vo.setShowSubmit(true);
+        }
         return vo;
+    }
+
+    public String getStoreTypeName() {
+        return storeTypeName;
+    }
+
+    public void setStoreTypeName(String storeTypeName) {
+        this.storeTypeName = storeTypeName;
     }
 
     public Integer getId() {
@@ -209,5 +227,29 @@ public class ProductVO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getHireTypeCode() {
+        return hireTypeCode;
+    }
+
+    public void setHireTypeCode(String hireTypeCode) {
+        this.hireTypeCode = hireTypeCode;
+    }
+
+    public String getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public boolean isShowSubmit() {
+        return showSubmit;
+    }
+
+    public void setShowSubmit(boolean showSubmit) {
+        this.showSubmit = showSubmit;
     }
 }

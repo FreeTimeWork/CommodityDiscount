@@ -74,7 +74,9 @@
         <if test="filter.positionId != null">
             ae.position_id = #{filter.positionId, javaType=int, jdbcType=INTEGER}
         </if>
-
+        <if test="filter.mobile != null">
+            ae.mobile = #{filter.mobile, javaType=string, jdbcType=CHAR}
+        </if>
     </sql>
     <insert id="insertGroup" parameterType="Group" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_group (
@@ -111,6 +113,26 @@
             g.name = #{name,javaType=string, jdbcType=CHAR}
         </where>
     </select>
+
+    <update
+            id="updateGroup"
+            parameterType="Group">
+        UPDATE
+        t_group
+        <set>
+            <if test="name != null">
+                name = #{name, javaType=string, jdbcType=CHAR},
+            </if>
+            <if test="employeeId != null">
+                employee_id = #{employeeId, javaType=int, jdbcType=INTEGER},
+            </if>
+            <if test="employeeName != null">
+                employee_name = #{employeeName, javaType=string, jdbcType=CHAR},
+            </if>
+        </set>
+        WHERE
+        id = #{id, javaType=int, jdbcType=INTEGER}
+    </update>
 
     <select id="selectEmployeeByFilter" parameterType="map" resultMap="employeeResult">
         SELECT
@@ -159,9 +181,11 @@
 
     <select id="selectEmployeeById" resultMap="employeeResult" parameterType="map">
         SELECT
-            <include refid="employeeColumns"/>
+            <include refid="employeeColumns"/>,
+            <include refid="groupColumns"/>
         FROM
             t_employee ae
+            LEFT JOIN t_group g ON g.id = ae.group_id
         <where>
             ae.id = #{id, javaType=int, jdbcType=INTEGER}
         </where>
@@ -242,7 +266,7 @@
                 position_id = #{position.id, javaType=int, jdbcType=INTEGER},
             </if>
             <if test="group != null">
-                group_id = #{group.id, javaType=string, jdbcType=CHAR},
+                group_id = #{group.id, javaType=int, jdbcType=INTEGER},
             </if>
             <if test="status != null">
                 status_id = #{status.id, javaType=int, jdbcType=INTEGER},

@@ -24,6 +24,7 @@ public class Finance implements Serializable {
     private Integer payWaitNumber;//代付款数量
     private Integer payRunNumber;//付款中数量
     private Integer payTrailerNumber;//拒绝付款数量
+    private Integer settlementNumber;//结账数量
     private Integer payEndNumber;//已付款数量
     private BigDecimal guestUnitPrice;//客单价
     private BigDecimal actualChargeAmount;//实收金额
@@ -125,6 +126,14 @@ public class Finance implements Serializable {
 
     public void setPayTrailerNumber(Integer payTrailerNumber) {
         this.payTrailerNumber = payTrailerNumber;
+    }
+
+    public Integer getSettlementNumber() {
+        return settlementNumber;
+    }
+
+    public void setSettlementNumber(Integer settlementNumber) {
+        this.settlementNumber = settlementNumber;
     }
 
     public Integer getPayEndNumber() {

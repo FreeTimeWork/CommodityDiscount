@@ -23,6 +23,7 @@
         <result property="payRunNumber" column="finance_pay_run_number"/>
         <result property="payTrailerNumber" column="finance_pay_trailer_number"/>
         <result property="payEndNumber" column="finance_pay_end_number"/>
+        <result property="settlementNumber" column="finance_settlement_number"/>
         <result property="guestUnitPrice" column="finance_guest_unit_price"/>
         <result property="actualChargeAmount" column="finance_actual_charge_amount"/>
         <result property="shouldChargeAmount" column="finance_should_charge_amount"/>
@@ -66,6 +67,7 @@
         f.pay_run_number AS finance_pay_run_number,
         f.pay_trailer_number AS finance_pay_trailer_number,
         f.pay_end_number AS finance_pay_end_number,
+        f.settlement_number AS finance_settlement_number,
         f.guest_unit_price AS finance_guest_unit_price,
         f.actual_charge_amount AS finance_actual_charge_amount,
         f.should_charge_amount AS finance_should_charge_amount,
@@ -150,6 +152,7 @@
 		    pay_run_number,
 		    pay_trailer_number,
 		    pay_end_number,
+		    settlement_number,
 		    guest_unit_price,
 		    actual_charge_amount,
 		    should_charge_amount,
@@ -168,6 +171,7 @@
 		    #{payRunNumber, javaType=int, jdbcType=INTEGER},
 		    #{payTrailerNumber, javaType=int, jdbcType=INTEGER},
 		    #{payEndNumber, javaType=int, jdbcType=INTEGER},
+		    #{settlementNumber, javaType=int, jdbcType=INTEGER},
 		    #{guestUnitPrice, javaType=bigdecimal, jdbcType=DECIMAL},
 		    #{actualChargeAmount, javaType=bigdecimal, jdbcType=DECIMAL},
 		    #{shouldChargeAmount, javaType=bigdecimal, jdbcType=DECIMAL},
@@ -217,6 +221,9 @@
             </if>
             <if test="payEndNumber != null">
                 pay_end_number = #{payEndNumber, javaType=int, jdbcType=INTEGER},
+            </if>
+            <if test="settlementNumber != null">
+                settlement_number = #{settlementNumber, javaType=int, jdbcType=INTEGER},
             </if>
             <if test="guestUnitPrice != null">
                 guest_unit_price = #{guestUnitPrice, javaType=bigdecimal, jdbcType=DECIMAL},

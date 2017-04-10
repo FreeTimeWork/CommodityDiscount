@@ -5,6 +5,7 @@ import com.mwb.controller.api.ServiceResponse;
 import com.mwb.controller.finance.api.ProductVoucherVO;
 import com.mwb.controller.finance.api.SearchFinanceVoucherRequest;
 import com.mwb.controller.finance.api.SearchFinanceVoucherResponse;
+import com.mwb.controller.frontend.api.ResourceVO;
 import com.mwb.controller.product.api.*;
 import com.mwb.controller.util.ApplicationContextUtils;
 import com.mwb.dao.filter.ProductFilter;
@@ -66,6 +67,12 @@ public class ProductController {
         daoLaoKeService.setDaTaoKeProduct(product);
 
         ProductDetailsResponse response = ProductDetailsResponse.toResponse(product);
+
+        if (StringUtils.isBlank(product.getName())) {
+            response.setMessage("商品地址错误!");
+            return response;
+        }
+
         response.setCreateHistory(getCreateHistory(product.getProductId()));
 
         return response;
@@ -79,13 +86,62 @@ public class ProductController {
         Product product = productService.getProductById(id);
         ProductDetailsResponse response = ProductDetailsResponse.toResponse(product);
 
-        Integer positionId = employee.getPosition().getId();
-        if (!positionId.equals(1) && !positionId.equals(5)) {
-            response.setVoucher(null);
+        if (product != null) {
+            response.setVoucher(ProductVoucherVO.toVO(product.getVoucher(), employee));
+
+            response.setApproveStatus(getProductApproveStatus(product, employee));
+            response.setTask(product.getTask());
+
+            if (employee.getId().equals(product.getEmployee().getId())
+                    && (product.getStatus() == ProductStatus.PAY_WAIT
+                    || product.getStatus() == ProductStatus.PAY_TRAILER)) {
+                response.setShowEdit(true);
+            }
+            if (product.getStatus() == ProductStatus.PAY_RUN
+                    || product.getStatus() == ProductStatus.PAY_RUN
+                    || product.getStatus() == ProductStatus.PAY_TRAILER
+                    || product.getStatus() == ProductStatus.PAY_END
+                    || product.getStatus() == ProductStatus.SETTLEMENT) {
+                response.setShowVoucher(true);
+            }
         }
 
         return response;
 
+    }
+
+    private List<ResourceVO> getProductApproveStatus(Product product, Employee employee) {
+        List<ResourceVO> vos = new ArrayList<>();
+        ProductStatus status = product.getStatus();
+        Integer positionId = employee.getPosition().getId();
+        if (ProductStatus.AUDIT_RUN == status
+                && positionId.equals(4)) {
+            vos.add(new ResourceVO(ProductStatus.TWO_AUDIT.getDescription(), ProductStatus.TWO_AUDIT.getId()));
+            vos.add(new ResourceVO(ProductStatus.REJECTED.getDescription(), ProductStatus.REJECTED.getId()));
+            vos.add(new ResourceVO(ProductStatus.TRAILER.getDescription(), ProductStatus.TRAILER.getId()));
+        } else if (ProductStatus.TWO_AUDIT == status
+                && positionId.equals(4)) {
+            vos.add(new ResourceVO(ProductStatus.PROMOTE.getDescription(), ProductStatus.PROMOTE.getId()));
+            vos.add(new ResourceVO(ProductStatus.REJECTED.getDescription(), ProductStatus.REJECTED.getId()));
+            vos.add(new ResourceVO(ProductStatus.TRAILER.getDescription(), ProductStatus.TRAILER.getId()));
+        } else if (ProductStatus.PROMOTE == status
+                && product.getEmployee().getId().equals(employee.getId())) {
+            vos.add(new ResourceVO(ProductStatus.END.getDescription(), ProductStatus.END.getId()));
+            vos.add(new ResourceVO(ProductStatus.PAY_WAIT.getDescription(), ProductStatus.PAY_WAIT.getId()));
+        } else if (ProductStatus.END == status
+                && product.getEmployee().getId().equals(employee.getId())) {
+            vos.add(new ResourceVO(ProductStatus.PAY_WAIT.getDescription(), ProductStatus.PAY_WAIT.getId()));
+        } else if (ProductStatus.PAY_WAIT == status
+                && product.getEmployee().getId().equals(employee.getId())
+                && employee.getPosition().getId() == 6) {
+            vos.add(new ResourceVO(ProductStatus.SETTLEMENT.getDescription(), ProductStatus.SETTLEMENT.getId()));
+        } else if (ProductStatus.PAY_RUN == status
+                && positionId.equals(5)) {
+            vos.add(new ResourceVO(ProductStatus.PAY_TRAILER.getDescription(), ProductStatus.PAY_TRAILER.getId()));
+            vos.add(new ResourceVO(ProductStatus.PAY_END.getDescription(), ProductStatus.PAY_END.getId()));
+        }
+
+        return vos;
     }
 
     @ResponseBody
@@ -102,23 +158,25 @@ public class ProductController {
         filter.setName(request.getName());
         filter.setGroupId(request.getGroupId());
         filter.setEmployeeId(request.getEmployeeId());
-        filter.setCreateBeginTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getCreateBeginTime()));
-        filter.setCreateEndTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getCreateEndTime()));
-        filter.setBeginFromTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getBeginFromTime()));
-        filter.setBeginToTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getBeginToTime()));
-        filter.setEndFromTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getEndFromTime()));
-        filter.setEndToTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getEndToTime()));
+        filter.setCreateBeginTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getCreateBeginTime()));
+        filter.setCreateEndTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getCreateEndTime()));
+        filter.setBeginFromTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getBeginFromTime()));
+        filter.setBeginToTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getBeginToTime()));
+        filter.setEndFromTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getEndFromTime()));
+        filter.setEndToTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getEndToTime()));
         filter.setReceiveMinNumber(request.getUseMinNumber());
         filter.setReceiveMaxNumber(request.getUseMaxNumber());
         filter.setSurplusMinNumber(request.getSurplusMinNumber());
         filter.setSurplusMaxNumber(request.getSurplusMaxNumber());
         filter.setStatus(ProductStatus.fromId(request.getStatusId()));
         filter.setType(ProductType.fromId(request.getTypeId()));
+        filter.setActivity(Activity.fromId(request.getActivityId()));
         filter.setPaged(true);
         filter.setPagingData(new PagingData(request.getPageNumber(), request.getPageSize()));
+        filter.setOrderAsc(request.getOrderAsc() == null ? true : request.getOrderAsc());
 
         SearchResult<Product> result = productService.searchProduct(filter, employee);
-        List<ProductVO> productVOs = ProductVO.toVOs(result.getResult());
+        List<ProductVO> productVOs = ProductVO.toVOs(result.getResult(), employee);
 
         response.setProducts(productVOs);
         response.setPagingResult(result.getPagingResult());
@@ -131,29 +189,38 @@ public class ProductController {
     @RequestMapping(value = "/create")
     public ServiceResponse create(@RequestBody CreateProductRequest request) throws ParseException {
         Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
+        ServiceResponse response = new ServiceResponse();
+
+        ParserService parserService = new ParserService(request.getUrl());
+        Product dataokeProduct = daoLaoKeService.getDaTaoKeProduct(parserService.grabProduct().getProductId());
+        if (dataokeProduct == null) {
+            response.setMessage("商品地址错误!");
+            return response;
+        }
 
         Product product = new Product();
 
-        product.setProductId(request.getProductId());
+        product.setTaoKeId(dataokeProduct.getTaoKeId());
+        product.setProductId(dataokeProduct.getProductId());
         product.setName(request.getName());
-        product.setPictureUrl(request.getPictureUrl());
+        product.setPictureUrl(dataokeProduct.getPictureUrl());
         product.setSupplementPictureUrl(request.getSupplementPictureUrl());
         product.setReservePrice(request.getReservePrice());
         product.setSales(request.getSales());
         product.setUrl(request.getUrl());
-        product.setActivityTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getActivityTime()));
+        product.setActivityTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getActivityTime()));
         product.setImmediately(Bool.fromValue(request.getImmediately()));
         product.setDiscountPrice(request.getDiscountPrice());
-        product.setCouponAmount(request.getCouponAmount());
+        product.setCouponAmount(dataokeProduct.getCouponAmount());
         product.setCouponUrl(request.getCouponUrl());
         if (StringUtils.isBlank(request.getCouponBeginTime())) {
             product.setCouponBeginTime(product.getActivityTime());
         } else {
-            product.setCouponBeginTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getCouponBeginTime()));
+            product.setCouponBeginTime(DateTimeUtility.parseYYYYMMDD(request.getCouponBeginTime()));
         }
-        product.setCouponEndTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getCouponEndTime()));
-        product.setCouponReceiveNumber(request.getCouponUseNumber());
-        product.setCouponSurplusNumber(request.getCouponSurplusNumber());
+        product.setCouponEndTime(DateTimeUtility.parseYYYYMMDD(request.getCouponEndTime()));
+        product.setCouponReceiveNumber(dataokeProduct.getCouponReceiveNumber());
+        product.setCouponSurplusNumber(dataokeProduct.getCouponSurplusNumber());
         product.setCondition(request.getCondition());
         product.setFeatures(request.getFeatures());
         product.setDescription(request.getDescription());
@@ -171,10 +238,11 @@ public class ProductController {
         Store store = new Store();
         product.setStore(store);
         store.setQq(request.getQq());
+        store.setStoreId(dataokeProduct.getStore().getStoreId());
         store.setDescriptionScore(request.getStoreDescriptionScore());
         store.setServiceScore(request.getServiceScore());
         store.setSpeedScore(request.getSpeedScore());
-        store.setType(StoreType.fromId(request.getStoreTypeId()));
+        store.setType(dataokeProduct.getStore().getType());
 
         if (CollectionUtils.isNotEmpty(request.getPictures())) {
             List<ProductPicture> pictures = new ArrayList<>();
@@ -182,6 +250,7 @@ public class ProductController {
                 ProductPicture picture = new ProductPicture();
                 picture.setUrl(url);
                 picture.setProduct(product);
+                pictures.add(picture);
             }
             product.setPictures(pictures);
         }
@@ -248,15 +317,16 @@ public class ProductController {
 
         if (CollectionUtils.isNotEmpty(products)) {
             StringBuilder str = new StringBuilder();
-            str.append("(历史推广记录:");
+            str.append("&nbsp&nbsp&nbsp【历史推广记录:");
             for (Product product : products) {
                 str.append(product.getEmployee().getFullName());
                 str.append("(");
                 str.append(product.getEmployee().getStatus().getDescription());
                 str.append(")");
                 str.append(DateTimeUtility.formatYYYYMMDD(product.getCreateTime()));
+                str.append(",&nbsp&nbsp");
             }
-            str.append(")");
+            str.append("】");
 
             return str.toString();
         } else {
@@ -268,17 +338,19 @@ public class ProductController {
     @RequestMapping(value = "/voucher/search")
     public ServiceResponse searchVoucher(SearchFinanceVoucherRequest request) throws ParseException {
         SearchFinanceVoucherResponse response = new SearchFinanceVoucherResponse();
+        Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
+
         ProductFilter filter = new ProductFilter();
         filter.setType(ProductType.fromId(request.getProductTypeId()));
         filter.setGroupId(request.getGroupId());
         filter.setEmployeeId(request.getEmployeeId());
         filter.setOrderAsc(request.getOrderByAsc() == null ? true : request.getOrderByAsc());
-        filter.setCreateBeginTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getCreateBeginTime()));
-        filter.setCreateEndTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getCreateEndTime()));
-        filter.setBeginFromTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getBeginFromTime()));
-        filter.setBeginToTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getBeginToTime()));
-        filter.setEndFromTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getEndFromTime()));
-        filter.setEndToTime(DateTimeUtility.parseYYYYMMDDHHMMSS(request.getEndToTime()));
+        filter.setCreateBeginTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getCreateBeginTime()));
+        filter.setCreateEndTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getCreateEndTime()));
+        filter.setBeginFromTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getBeginFromTime()));
+        filter.setBeginToTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getBeginToTime()));
+        filter.setEndFromTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getEndFromTime()));
+        filter.setEndToTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getEndToTime()));
         filter.setMinChargePrice(request.getMinChargePrice());
         filter.setMaxChargePrice(request.getMaxChargePrice());
         filter.setMinDiscountPrice(request.getMinDiscountPrice());
@@ -294,9 +366,9 @@ public class ProductController {
         filter.setProductId(request.getProductId());
         filter.setPaged(true);
         filter.setPagingData(new PagingData(request.getPageNumber(), request.getPageSize()));
-        SearchResult<ProductVoucher> result = productService.searchProductVoucher(filter);
+        SearchResult<ProductVoucher> result = productService.searchProductVoucher(filter, employee);
 
-        response.setVouchers(ProductVoucherVO.toVOs(result.getResult()));
+        response.setVouchers(ProductVoucherVO.toVOs(result.getResult(), null));
         response.setPagingResult(result.getPagingResult());
 
         return response;

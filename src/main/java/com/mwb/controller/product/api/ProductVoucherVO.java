@@ -1,7 +1,10 @@
-package com.mwb.controller.product.api;
+package com.mwb.controller.finance.api;
 
+import com.mwb.dao.model.employee.Employee;
+import com.mwb.dao.model.product.Product;
+import com.mwb.dao.model.product.ProductStatus;
 import com.mwb.dao.model.product.voucher.ProductVoucher;
-import com.mwb.dao.model.product.voucher.VoucherPicture;
+import com.mwb.util.DateTimeUtility;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.math.BigDecimal;
@@ -9,42 +12,79 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  Created by Administrator on 2017/4/4 0004.
+ * Created by mwb on 2017/4/4 0004.
  */
 public class ProductVoucherVO {
     private Integer id;
-    private Integer receiveNumber; //领取数量
-    private Integer useNumber; //使用数量
-    private BigDecimal payAmount; //付款金额
-    private BigDecimal shouldChargeAmount; //应收金额
-    private BigDecimal actualChargeAmount;//实收金额
-    private BigDecimal conversionRate;//转化率
-    private String withoutRate;//外部链接
-    private List<String> pictures;
+    private String employeeName;
+    private String createTime;
+    private String couponBeginTime;       //优惠券开始时间
+    private String couponEndTime;         //优惠券结束时间
+    private String pictureUrl;             //商品主图
+    private String url;                 //商品链接
+    private String name;                //商品名称
+    private BigDecimal discountPrice;   //卷后价格
+    private BigDecimal chargePrice;        //收费单价
+    private BigDecimal ratio;           //佣金比例
+    private Integer couponUseNumber;    //使用数量
+    private Integer couponReceiveNumber; //领取数量
+    private BigDecimal shouldChargeAmount;//应收金额
+    private BigDecimal payAmount;       //付款金额
+    private Integer useRatio;        //使用率
+    private boolean showSubmit;        //使用率
 
-    public static ProductVoucherVO toVO(ProductVoucher voucher) {
-        if (voucher == null) {
+    public static ProductVoucherVO toVO(ProductVoucher voucher, Employee employee) {
+        if(voucher == null) {
             return null;
         }
         ProductVoucherVO vo = new ProductVoucherVO();
-
-        vo.setId(voucher.getProduct().getId());
-        vo.setReceiveNumber(voucher.getReceiveNumber());
-        vo.setUseNumber(voucher.getUseNumber());
-        vo.setPayAmount(voucher.getPayAmount());
+        Product product = voucher.getProduct();
+        vo.setId(voucher.getId());
+        vo.setEmployeeName(product.getEmployee().getFullName());
+        vo.setCreateTime(DateTimeUtility.formatYYYYMMDDHHMMSS(product.getCreateTime()));
+        vo.setCouponBeginTime(DateTimeUtility.formatYYYYMMDDHHMMSS(product.getCouponBeginTime()));
+        vo.setCouponEndTime(DateTimeUtility.formatYYYYMMDDHHMMSS(product.getCouponEndTime()));
+        vo.setPictureUrl(product.getPictureUrl());
+        vo.setUrl(product.getUrl());
+        vo.setName(product.getName());
+        vo.setDiscountPrice(product.getDiscountPrice());
+        vo.setChargePrice(product.getChargePrice());
+        vo.setRatio(product.getRatio());
+        vo.setCouponUseNumber(voucher.getUseNumber());
+        vo.setCouponReceiveNumber(voucher.getReceiveNumber());
         vo.setShouldChargeAmount(voucher.getShouldChargeAmount());
-        vo.setActualChargeAmount(voucher.getActualChargeAmount());
-        vo.setConversionRate(voucher.getConversionRate());
-        vo.setWithoutRate(voucher.getWithoutUrl());
-        List<String> pictures = new ArrayList<>();
-        if (CollectionUtils.isNotEmpty(voucher.getPictures())) {
-            for (VoucherPicture picture : voucher.getPictures()) {
-                pictures.add(picture.getUrl());
+        vo.setPayAmount(voucher.getPayAmount());
+        if (voucher.getReceiveNumber().equals(0)) {
+            vo.setUseRatio(0);
+        }else {
+            vo.setUseRatio(voucher.getUseNumber() * 100 / voucher.getReceiveNumber());
+        }
+        if (employee != null &&
+                (voucher.getProduct().getStatus() == ProductStatus.PAY_TRAILER
+                        || voucher.getProduct().getStatus() == ProductStatus.PAY_WAIT)
+                && voucher.getProduct().getEmployee().getId().equals(employee.getId())){
+            vo.setShowSubmit(true);
+        }
+        return vo;
+    }
+
+    public static List<ProductVoucherVO> toVOs(List<ProductVoucher> vouchers, Employee employee) {
+        List<ProductVoucherVO> vos = new ArrayList<>();
+
+        if (CollectionUtils.isNotEmpty(vouchers)) {
+            for (ProductVoucher voucher : vouchers) {
+                vos.add(toVO(voucher, employee));
             }
         }
-        vo.setPictures(pictures);
+        return vos;
+    }
 
-        return vo;
+    public boolean isShowSubmit() {
+        return showSubmit;
+    }
+
+    public void setShowSubmit(boolean showSubmit) {
+        this.showSubmit = showSubmit;
     }
 
     public Integer getId() {
@@ -55,28 +95,100 @@ public class ProductVoucherVO {
         this.id = id;
     }
 
-    public Integer getReceiveNumber() {
-        return receiveNumber;
+    public String getEmployeeName() {
+        return employeeName;
     }
 
-    public void setReceiveNumber(Integer receiveNumber) {
-        this.receiveNumber = receiveNumber;
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
     }
 
-    public Integer getUseNumber() {
-        return useNumber;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setUseNumber(Integer useNumber) {
-        this.useNumber = useNumber;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
-    public BigDecimal getPayAmount() {
-        return payAmount;
+    public String getCouponBeginTime() {
+        return couponBeginTime;
     }
 
-    public void setPayAmount(BigDecimal payAmount) {
-        this.payAmount = payAmount;
+    public void setCouponBeginTime(String couponBeginTime) {
+        this.couponBeginTime = couponBeginTime;
+    }
+
+    public String getCouponEndTime() {
+        return couponEndTime;
+    }
+
+    public void setCouponEndTime(String couponEndTime) {
+        this.couponEndTime = couponEndTime;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public BigDecimal getDiscountPrice() {
+        return discountPrice;
+    }
+
+    public void setDiscountPrice(BigDecimal discountPrice) {
+        this.discountPrice = discountPrice;
+    }
+
+    public BigDecimal getChargePrice() {
+        return chargePrice;
+    }
+
+    public void setChargePrice(BigDecimal chargePrice) {
+        this.chargePrice = chargePrice;
+    }
+
+    public BigDecimal getRatio() {
+        return ratio;
+    }
+
+    public void setRatio(BigDecimal ratio) {
+        this.ratio = ratio;
+    }
+
+    public Integer getCouponUseNumber() {
+        return couponUseNumber;
+    }
+
+    public void setCouponUseNumber(Integer couponUseNumber) {
+        this.couponUseNumber = couponUseNumber;
+    }
+
+    public Integer getCouponReceiveNumber() {
+        return couponReceiveNumber;
+    }
+
+    public void setCouponReceiveNumber(Integer couponReceiveNumber) {
+        this.couponReceiveNumber = couponReceiveNumber;
     }
 
     public BigDecimal getShouldChargeAmount() {
@@ -87,35 +199,19 @@ public class ProductVoucherVO {
         this.shouldChargeAmount = shouldChargeAmount;
     }
 
-    public BigDecimal getActualChargeAmount() {
-        return actualChargeAmount;
+    public BigDecimal getPayAmount() {
+        return payAmount;
     }
 
-    public void setActualChargeAmount(BigDecimal actualChargeAmount) {
-        this.actualChargeAmount = actualChargeAmount;
+    public void setPayAmount(BigDecimal payAmount) {
+        this.payAmount = payAmount;
     }
 
-    public BigDecimal getConversionRate() {
-        return conversionRate;
+    public Integer getUseRatio() {
+        return useRatio;
     }
 
-    public void setConversionRate(BigDecimal conversionRate) {
-        this.conversionRate = conversionRate;
-    }
-
-    public String getWithoutRate() {
-        return withoutRate;
-    }
-
-    public void setWithoutRate(String withoutRate) {
-        this.withoutRate = withoutRate;
-    }
-
-    public List<String> getPictures() {
-        return pictures;
-    }
-
-    public void setPictures(List<String> pictures) {
-        this.pictures = pictures;
+    public void setUseRatio(Integer useRatio) {
+        this.useRatio = useRatio;
     }
 }

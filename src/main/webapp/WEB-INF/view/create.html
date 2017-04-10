@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="../../assets/them/DT_bootstrap.css"/>
     <link rel="stylesheet" href="../../assets/lib/jquery/datatable/css/select.dataTables.min.css"/>
     <link rel="stylesheet" href="../../assets/them/default.css"/>
-    <link rel="stylesheet" href="../../assets/them/style.css"/>
     <link rel="stylesheet" href="../../assets/them/style-metro.css"/>
     <link rel="stylesheet" href="../../assets/them/style-responsive.css"/>
     <link rel="stylesheet" href="../../assets/css/base.css"/>
@@ -42,13 +41,13 @@
                             class="jia add"></span></a>
                     <ul>
                         <li><a href="/frontend/commodity.html" target="_blank">商品列表</a></li>
-                        <li><a href="/frontend/detail.html" target="_blank">添加新商品</a></li>
+                        <li id="showCreate"><a href="/frontend/create.html" target="_blank">添加新商品</a></li>
 
                     </ul>
 
                 </li>
 
-                <li class="fa_li">
+                <li  class="fa_li">
                     <a href="#" class="floor"><img src="../../assets/img/pic-3_13.png" alt=""/><span>报表统计</span> <span
                             class="jia add"></span></a>
                     <ul>
@@ -57,12 +56,11 @@
                     </ul>
                 </li>
 
-                <li class="fa_li">
+                <li id="showEmployee" class="fa_li" >
                     <a href="#" class="floor"><img src="../../assets/img/pic-3_13.png" alt=""/><span>员工管理</span> <span
                             class="jia add"></span></a>
                     <ul>
                         <li><a href="/frontend/employeeInfo.html" target="_blank">员工信息</a></li>
-                        <li><a href="/frontend/report.html" target="_blank">权限管理</a></li>
                     </ul>
                 </li>
 
@@ -75,10 +73,6 @@
             <div class="bottom_right_son dis">
                 <a href="/frontend/commodity.html" class="bottom_add">商品列表</a>
                 <p class="bottom_right_tit">管理中心-商品列表</p>
-                <ul class="zhou_2_ul clearfix">
-                    <li class="on">通用信息</li>
-                    <li>添加凭证</li>
-                </ul>
                 <div class="zhou_2_floor">
                     <div class="zhou_2_ty dis">
                         <form id="detailForm" class="form-horizontal">
@@ -89,38 +83,43 @@
                               </span>
                             </div>
                             <div class="control-group" gid="activityTime">
-                                <label class="control-label helpinline"> 提交时间：</label>
+                                <label class="control-label helpinline"> 活动时间</label>
                                 <span class="date">
                                     <input uid="activityTime" size="16" type="text" value="" readonly class="form_datetime">
                                 </span>
                             </div>
                             <div class="control-group" gid="url">
-                                <label class="control-label">产品链接</label><textarea style="width300px;heightauto;"
-                                                                                   uid="url"></textarea>
+                                <label class="control-label">产品链接</label>
+                                <textarea
+                                          uid="url"></textarea>
                             </div>
                             <div class="control-group" gid="couponUrl">
-                                <label class="control-label">优惠券链接</label><textarea style="width300px;heightauto;"
-                                                                                    uid="couponUrl"></textarea>
+                                <label class="control-label">优惠券链接</label>
+                                <textarea style="width300px;heightauto;"
+                                          uid="couponUrl"></textarea>
                             </div>
                             <input style="margin: 0 0 20px 160px" type="button" uid="grapInfo" value="抓取产品信息"/>
                             <div class="control-group" gid="productId">
-                                <label class="control-label">商品ID</label><input type="text" uid="productId"/>
+                                <label class="control-label">商品ID</label><label uid="productId"></label>
                             </div>
                             <div class="control-group" gid="productId">
                                 <label class="control-label">店铺类型</label><label uid="storeTypeName"></label>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">店铺确认</label>描述相符<span
+                                <label class="control-label">店铺确认</label>描述相符:&nbsp<span
                                     uid="storeDescriptionScore"></span><br/>
-                                <span>服务态度<span uid="serviceScore"></span></span><br/>
-                                <span style="margin-left: 216px;">发货速度<span uid="speedScore"></span></span>
+                                <span>服务态度:&nbsp<span uid="serviceScore"></span></span><br/>
+                                <span style="margin-left: 216px;">发货速度:&nbsp<span uid="speedScore"></span></span>
                             </div>
-                            <div class="control-group" gid="attachmentUrl1">
+                            <div class="control-group" gid="pictureUrl">
                                 <label class="control-label">商品图片</label>
                                 <div class="controls">
                                     <div class="imageCon">
                             <span>
-                                <img class="bigImg" uid="pictureUrl"/>
+                                <img class="bigImg" uid="pictureUrl0"/>
+                            </span>
+                            <span gid="">
+                                <img class="bigImg" uid="pictureUrl1"/>
                             </span>
                             <span gid="">
                                 <img class="bigImg" uid="pictureUrl2"/>
@@ -140,17 +139,11 @@
                             <span gid="">
                                 <img class="bigImg" uid="pictureUrl7"/>
                             </span>
-                            <span gid="">
-                                <img class="bigImg" uid="pictureUrl8"/>
-                            </span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="control-group" gid="">
-                                <label class="control-label">图片尺寸</label><label uid="pictureSize"></label>
-                            </div>
                             <div class="control-group" gid="productId">
-                                <label class="control-label" uid="supplementPictureUrl">补充主图</label><textarea></textarea>
+                                <label class="control-label">补充主图</label><textarea uid="supplementPictureUrl"></textarea>
                             </div>
                             <div class="control-group" gid="productTypeId">
                                 <label class="control-label">商品分类</label>
@@ -158,6 +151,9 @@
                             </div>
                             <div class="control-group" gid="name">
                                 <label class="control-label">商品名称</label><textarea uid="name"></textarea><span>10-20字，简单概括</span>
+                            </div>
+                            <div class="control-group" gid="reservePrice">
+                                <label class="control-label">商品价格</label><label uid="reservePrice"></label>
                             </div>
                             <div class="control-group" gid="sales">
                                 <label class="control-label">30天内销量</label><label uid="sales"></label>
@@ -170,7 +166,13 @@
                                 【默认为否】
                             </div>
                             <div class="control-group" gid="">
+                                <label class="control-label">优惠券金额</label><label uid="couponAmount"></label>
+                            </div>
+                            <div class="control-group" gid="">
                                 <label class="control-label">优惠券数量</label><label uid="couponUseNumber"></label>
+                            </div>
+                            <div class="control-group" gid="">
+                                <label class="control-label">使用条件</label><label uid="condition"></label>
                             </div>
                             <div class="control-group" gid="couponBeginTime">
                                 <label class="control-label">优惠券有效期</label><input type="text"
@@ -192,18 +194,18 @@
                             <div class="control-group" gid="planUrl">
                                 <label class="control-label">计划链接</label><textarea uid="planUrl"></textarea>
                             </div>
-                            <div class="control-group" gid="supplementPictureUrl">
-                                <label class="control-label">卖家填写</label><textarea uid="supplementPictureUrl"></textarea><span>20-100个字,精简文案，突出产品亮点。需求痛点，注意不要用空格</span>
+                            <div class="control-group" gid="features">
+                                <label class="control-label">卖点填写</label><textarea uid="features"></textarea><span>20-100个字,精简文案，突出产品亮点。需求痛点，注意不要用空格</span>
                             </div>
                             <div class="control-group" gid="description">
                                 <label class="control-label">备注信息</label><textarea uid="description"></textarea>
                             </div>
-                            <div class="control-group" gid="">
-                                <label class="control-label">商家QQ</label><label style="display: inline-block" uid="qq"></label><span
+                            <div class="control-group" gid="qq">
+                                <label class="control-label">商家QQ</label><input type="text" style="display: inline-block" uid="qq"/><span
                                     style="margin-left: 10px;color: red">*</span>
                             </div>
                             <div class="control-group" gid="">
-                                <label class="control-label">收费单价</label><label style="display: inline-block" uid="chargePrice"></label><span
+                                <label class="control-label">收费单价</label><input type="text" style="display: inline-block" uid="chargePrice"/><span
                                     style="margin-left: 10px;color: red">*</span>
                             </div>
                             <p class="last"><input type="submit" value="确定" class="sure"/><input type="reset" value="重置"
@@ -222,31 +224,6 @@
 
                         </div>
 
-                    </div>
-                    <div class="zhou_2_pz">
-                        <form id="createForm">
-                            <p><label style="display :inline-block">产品编号：</label><span>12344</span></p>
-                            <p><label style="display :inline-block">提交时间：</label><span>2017-3-4 </span></p>
-                            <p><label style="display :inline-block">优惠开始时间：</label><span>2017-3-4 </span></p>
-                            <p><label style="display :inline-block">优惠结束时间：</label><span>2017-3-5</span></p>
-                            <p><label style="display :inline-block">领取数量：</label><input type="text"
-                                                                                        uid="couponReceiveNumber"/></p>
-                            <p><label style="display :inline-block">支付金额：</label><input type="text" uid="payAmount"/>
-                            </p>
-                            <p><label style="display :inline-block">使用数量；</label><input type="text"
-                                                                                        uid="couponUseNumber"/></p>
-                            <p><label style="display :inline-block">应收款金额：</label><input type="text"
-                                                                                         uid="shouldChargeAmount"/></p>
-                            <p><label style="display :inline-block">实际收款金额：</label><input type="text"
-                                                                                          uid="actualChargeAmount"/></p>
-                            <p><label style="display :inline-block">转化率：</label><input type="text"
-                                                                                       uid="conversionRate"/></p>
-                            <img src="img/pic-1_05.png" alt="" id="zhou_2_img"/>
-                            <p><label style="display :inline-block">图片描述</label><span>3333333333333</span><input
-                                    type="file"/> <input type="text" uid="withoutRate" placeholder="请输入图片链接地址"/></p>
-                            <p class="last"><input style="margin-right:10px;" type="submit" value="确定" class="btn red"/><input
-                                    type="reset" value="重置" class="btn red"/></p>
-                        </form>
                     </div>
                 </div>
             </div>

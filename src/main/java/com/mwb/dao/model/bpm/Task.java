@@ -3,6 +3,8 @@ package com.mwb.dao.model.bpm;
 
 import java.util.List;
 
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+
 /**
  * Created by Fangchen.chai on 2017/4/5.
  */
@@ -33,5 +35,10 @@ public class Task {
 
     public void setVariables(List<Variable> variables) {
         this.variables = variables;
+    }
+
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this);
     }
 }

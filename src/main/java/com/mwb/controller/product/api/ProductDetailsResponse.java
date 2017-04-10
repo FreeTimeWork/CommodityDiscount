@@ -1,10 +1,14 @@
 package com.mwb.controller.product.api;
 
 import com.mwb.controller.api.ServiceResponse;
+import com.mwb.controller.finance.api.ProductVoucherVO;
+import com.mwb.controller.frontend.api.ResourceVO;
+import com.mwb.dao.model.bpm.Task;
 import com.mwb.dao.model.product.Product;
 import com.mwb.dao.model.product.ProductPicture;
 import com.mwb.util.DateTimeUtility;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.BooleanUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -34,6 +38,7 @@ public class ProductDetailsResponse extends ServiceResponse {
     private String statusName;             //商品状态name
 
     private Boolean immediately;         //是否拍立减
+    private String immediatelyStr;         //是否拍立减
     private BigDecimal discountPrice;   //卷后价格
     private BigDecimal couponAmount;    //优惠券金额
     private String couponUrl;           //优惠券连接
@@ -64,6 +69,10 @@ public class ProductDetailsResponse extends ServiceResponse {
     private String storeTypeName;           //店铺类型
     private List<String> pictures;          // 图片链接
     private ProductVoucherVO voucher;          // 凭证信息
+    private Task task;
+    private boolean showVoucher;
+    private boolean showEdit;
+    private List<ResourceVO> approveStatus;
 
     public static ProductDetailsResponse toResponse(Product product) {
         ProductDetailsResponse response = new ProductDetailsResponse();
@@ -83,6 +92,7 @@ public class ProductDetailsResponse extends ServiceResponse {
             response.setSales(product.getSales());
             response.setUrl(product.getUrl());
             response.setImmediately(product.getImmediately() != null && product.getImmediately().getValue());
+            response.setImmediatelyStr(BooleanUtils.isTrue(response.getImmediately()) ? "是" : "否");
             if (product.getProductType() != null) {
                 response.setProductTypeId(product.getProductType().getId());
                 response.setProductTypeName(product.getProductType().getDescription());
@@ -132,10 +142,17 @@ public class ProductDetailsResponse extends ServiceResponse {
             }
             response.setPictures(pictures);
 
-            response.setVoucher(ProductVoucherVO.toVO(product.getVoucher()));
         }
 
         return response;
+    }
+
+    public List<ResourceVO> getApproveStatus() {
+        return approveStatus;
+    }
+
+    public void setApproveStatus(List<ResourceVO> approveStatus) {
+        this.approveStatus = approveStatus;
     }
 
     public Integer getId() {
@@ -144,6 +161,14 @@ public class ProductDetailsResponse extends ServiceResponse {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
     }
 
     public Integer getActivityId() {
@@ -264,6 +289,14 @@ public class ProductDetailsResponse extends ServiceResponse {
 
     public void setImmediately(Boolean immediately) {
         this.immediately = immediately;
+    }
+
+    public String getImmediatelyStr() {
+        return immediatelyStr;
+    }
+
+    public void setImmediatelyStr(String immediatelyStr) {
+        this.immediatelyStr = immediatelyStr;
     }
 
     public BigDecimal getDiscountPrice() {
@@ -472,6 +505,22 @@ public class ProductDetailsResponse extends ServiceResponse {
 
     public void setVoucher(ProductVoucherVO voucher) {
         this.voucher = voucher;
+    }
+
+    public boolean isShowEdit() {
+        return showEdit;
+    }
+
+    public void setShowEdit(boolean showEdit) {
+        this.showEdit = showEdit;
+    }
+
+    public boolean isShowVoucher() {
+        return showVoucher;
+    }
+
+    public void setShowVoucher(boolean showVoucher) {
+        this.showVoucher = showVoucher;
     }
 
     public String getSupplementPictureUrl() {
