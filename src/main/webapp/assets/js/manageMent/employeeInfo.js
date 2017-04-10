@@ -82,8 +82,11 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         var businessPerson = rowObject.businessPerson;
                         var statusCode = rowObject.statusCode;
                         var html = '';
-                        if(businessPerson){
+
+                        if (positionId == 3){
                             html += '<a style="margin-right: 10px;" onclick="currentPage().onGroupClick(\'' + employeeId + '\',\'' + positionId + '\')">分组</a>'
+                        }
+                        if(businessPerson){
                             html += '<a style="margin-right: 10px;" onclick="currentPage().onUpgradeClick(\'' + employeeId + '\',\'' + positionId + '\',\'' + groupId + '\')">升级</a>'
                         }
                         if(statusCode == "IN_POSITION") {
@@ -341,6 +344,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         alert(result.resultMessage);
                     }else {
                         alert('成功');
+                        window.open('/frontend/employeeInfo.html');
                     }
                 };
                 var errorHandler = function(self, result) {
@@ -363,6 +367,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
             };
             var successHandler = function(self, result) {
                 alert('成功')
+                window.open('/frontend/employeeInfo.html');
             };
             var errorHandler = function(self, result) {
                 alert('请求失败');
