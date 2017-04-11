@@ -142,27 +142,30 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
                 }
                 if (result.showEdit == false) {
                     booLeans = true;
-                    $('.readonly').show()
-                    booVoucher = true
+                    $('#submitBill').hide();
+                    $('#ppp').hide();
                 } else {
                     booLeans = false;
-                    booVoucher =false;
                     $('.readonly').hide()
                 }
+
                 if (result.showVoucher == false) {
                     $('#showVoucher').hide();
                 } else {
                     $('#showVoucher').eq(1).show()
                 }
+
                 booSubmit = result.voucher.showSubmit
-                if(result.voucher.showSubmit){
+
+                if(booSubmit){
                     $('#approveSubmit').show();
+                    $('.readonly').show()
+
                     $('#submitBill').hide();
                     $('#ppp').hide();
-
                 }else{
                     $('#approveSubmit').hide();
-                    $('#submitBill').show();
+                    $('.readonly').hide();
                 }
                 thiz.initDetailForm(result)
                 var html = '';

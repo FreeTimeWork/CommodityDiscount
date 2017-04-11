@@ -151,7 +151,8 @@ public class ProductController {
             vos.add(new ResourceVO(ProductStatus.PAY_WAIT.getDescription(), ProductStatus.PAY_WAIT.getId()));
         } else if (ProductStatus.PAY_WAIT == status
                 && ((product.getEmployee().getId().equals(employee.getId())
-                && employee.getPosition().getId() == 6) || employee.getPosition().getId().equals(1))) {
+                && positionId == 6)
+                || positionId.equals(1))) {
             vos.add(new ResourceVO(ProductStatus.SETTLEMENT.getDescription(), ProductStatus.SETTLEMENT.getId()));
         } else if (ProductStatus.PAY_RUN == status
                 && (positionId.equals(5) || employee.getPosition().getId().equals(1))) {

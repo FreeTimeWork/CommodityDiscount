@@ -38,7 +38,7 @@ public class ProductVoucherVO {
     private boolean showSubmit;        //使用率
     private List<String> pictures;        //使用率
 
-    public static ProductVoucherVO toVO(ProductVoucher voucher,Employee employee) {
+    public static ProductVoucherVO toVO(ProductVoucher voucher, Employee employee) {
         if (voucher == null) {
             return null;
         }
