@@ -7,6 +7,7 @@ public class BaseApproveRequest {
 
     private Integer productStatusId;
     private Integer productId;
+    private String payTime;
 
     public Integer getProductStatusId() {
         return productStatusId;
@@ -22,5 +23,13 @@ public class BaseApproveRequest {
 
     public void setProductId(Integer productId) {
         this.productId = productId;
+    }
+
+    public String getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(String payTime) {
+        this.payTime = payTime;
     }
 }
