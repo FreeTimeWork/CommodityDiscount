@@ -9,7 +9,7 @@ import java.util.List;
 
 import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
-import com.mwb.controller.finance.api.ProductVoucherVO;
+import com.mwb.controller.product.api.ProductVoucherVO;
 import com.mwb.controller.finance.api.SearchFinanceVoucherRequest;
 import com.mwb.controller.finance.api.SearchFinanceVoucherResponse;
 import com.mwb.controller.frontend.api.ResourceVO;
