@@ -1,9 +1,10 @@
-package com.mwb.controller.finance.api;
+package com.mwb.controller.product.api;
 
 import com.mwb.dao.model.employee.Employee;
 import com.mwb.dao.model.product.Product;
 import com.mwb.dao.model.product.ProductStatus;
 import com.mwb.dao.model.product.voucher.ProductVoucher;
+import com.mwb.dao.model.product.voucher.VoucherPicture;
 import com.mwb.util.DateTimeUtility;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -35,6 +36,7 @@ public class ProductVoucherVO {
     private String payTime;        //使用率
     private Integer useRatio;        //使用率
     private boolean showSubmit;        //使用率
+    private List<String> pictures;        //使用率
 
     public static ProductVoucherVO toVO(ProductVoucher voucher,Employee employee) {
         if (voucher == null) {
@@ -70,6 +72,13 @@ public class ProductVoucherVO {
                 && (employee.getPosition().getId().equals(1)||employee.getPosition().getId().equals(5))){
             vo.setShowSubmit(true);
         }
+        List<String> pictures = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(voucher.getPictures())) {
+            for (VoucherPicture picture : voucher.getPictures()) {
+                pictures.add(picture.getUrl());
+            }
+        }
+        vo.setPictures(pictures);
         return vo;
     }
 
@@ -242,5 +251,13 @@ public class ProductVoucherVO {
 
     public void setUseRatio(Integer useRatio) {
         this.useRatio = useRatio;
+    }
+
+    public List<String> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<String> pictures) {
+        this.pictures = pictures;
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 
 import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
-import com.mwb.controller.finance.api.ProductVoucherVO;
+import com.mwb.controller.product.api.ProductVoucherVO;
 import com.mwb.controller.finance.api.SearchFinanceVoucherRequest;
 import com.mwb.controller.finance.api.SearchFinanceVoucherResponse;
 import com.mwb.controller.frontend.api.ResourceVO;
@@ -155,8 +155,8 @@ public class ProductController {
             vos.add(new ResourceVO(ProductStatus.SETTLEMENT.getDescription(), ProductStatus.SETTLEMENT.getId()));
         } else if (ProductStatus.PAY_RUN == status
                 && (positionId.equals(5) || employee.getPosition().getId().equals(1))) {
-            vos.add(new ResourceVO(ProductStatus.PAY_TRAILER.getDescription(), ProductStatus.PAY_TRAILER.getId()));
-            vos.add(new ResourceVO(ProductStatus.PAY_END.getDescription(), ProductStatus.PAY_END.getId()));
+//            vos.add(new ResourceVO(ProductStatus.PAY_TRAILER.getDescription(), ProductStatus.PAY_TRAILER.getId()));
+//            vos.add(new ResourceVO(ProductStatus.PAY_END.getDescription(), ProductStatus.PAY_END.getId()));
         }
 
         return vos;
@@ -259,9 +259,9 @@ public class ProductController {
         product.setStore(store);
         store.setQq(request.getQq());
         store.setStoreId(dataokeProduct.getStore().getStoreId());
-        store.setDescriptionScore(request.getStoreDescriptionScore());
-        store.setServiceScore(request.getServiceScore());
-        store.setSpeedScore(request.getSpeedScore());
+        store.setDescriptionScore(grapProduct.getStore().getDescriptionScore());
+        store.setServiceScore(grapProduct.getStore().getServiceScore());
+        store.setSpeedScore(grapProduct.getStore().getSpeedScore());
         store.setType(dataokeProduct.getStore().getType());
 
         if (CollectionUtils.isNotEmpty(grapProduct.getPictures())) {

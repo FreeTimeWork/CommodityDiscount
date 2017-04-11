@@ -1,7 +1,6 @@
 package com.mwb.controller.product.api;
 
 import com.mwb.controller.api.ServiceResponse;
-import com.mwb.controller.finance.api.ProductVoucherVO;
 import com.mwb.controller.frontend.api.ResourceVO;
 import com.mwb.dao.model.bpm.Task;
 import com.mwb.dao.model.product.Product;

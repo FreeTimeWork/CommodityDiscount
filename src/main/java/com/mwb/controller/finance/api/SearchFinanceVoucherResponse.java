@@ -1,6 +1,7 @@
 package com.mwb.controller.finance.api;
 
 import com.mwb.controller.api.PagingResponse;
+import com.mwb.controller.product.api.ProductVoucherVO;
 
 import java.util.List;
 
