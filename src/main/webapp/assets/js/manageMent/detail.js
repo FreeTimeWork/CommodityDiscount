@@ -415,9 +415,10 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
                         var url = '/product/approve/check';
                         var request = {}
                         request.productId = thiz.createForm.viewModel.id();
-                        if(data.approveStatus == true){
+                        request.payTime = $('#createForm_payTime').val();
+                        if(data.approveStatus == "true"){
                             request.productStatusId = 12
-                        }else if(data.approveStatus == false){
+                        }else if(data.approveStatus == "false"){
                             request.productStatusId = 11
                         }
                         var successHandler = function(self, result) {
