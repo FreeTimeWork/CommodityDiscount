@@ -23,6 +23,7 @@ import com.mwb.controller.product.api.SearchProductResponse;
 import com.mwb.controller.util.ApplicationContextUtils;
 import com.mwb.dao.filter.ProductFilter;
 import com.mwb.dao.filter.SearchResult;
+import com.mwb.dao.model.bpm.Task;
 import com.mwb.dao.model.comm.Bool;
 import com.mwb.dao.model.comm.Log;
 import com.mwb.dao.model.comm.PagingData;
@@ -37,6 +38,7 @@ import com.mwb.dao.model.product.Store;
 import com.mwb.dao.model.product.voucher.ProductVoucher;
 import com.mwb.dao.model.product.voucher.VoucherPicture;
 import com.mwb.service.ParserService;
+import com.mwb.service.bpm.api.IBpmService;
 import com.mwb.service.dataoke.api.IDaoLaoKeService;
 import com.mwb.service.product.api.IProductService;
 import com.mwb.util.DateTimeUtility;
@@ -64,6 +66,9 @@ public class ProductController {
 
     @Autowired
     private IProductService productService;
+
+    @Autowired
+    private IBpmService bpmService;
 
     @ResponseBody
     @RequestMapping(value = "/grab")
@@ -254,9 +259,9 @@ public class ProductController {
         product.setStore(store);
         store.setQq(request.getQq());
         store.setStoreId(dataokeProduct.getStore().getStoreId());
-        store.setDescriptionScore(request.getStoreDescriptionScore());
-        store.setServiceScore(request.getServiceScore());
-        store.setSpeedScore(request.getSpeedScore());
+        store.setDescriptionScore(grapProduct.getStore().getDescriptionScore());
+        store.setServiceScore(grapProduct.getStore().getServiceScore());
+        store.setSpeedScore(grapProduct.getStore().getSpeedScore());
         store.setType(dataokeProduct.getStore().getType());
 
         if (CollectionUtils.isNotEmpty(grapProduct.getPictures())) {
@@ -293,26 +298,20 @@ public class ProductController {
         voucher.setCreateTime(new Date());
         voucher.setConversionRate(request.getConversionRate());
         voucher.setWithoutUrl(request.getWithoutRate());
-//        voucher.setPayTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getPayTime()));
+        voucher.setPayTime(DateTimeUtility.parseYYYYMMDDHHMM(request.getPayTime()));
         voucher.setProduct(product);
 
         List<VoucherPicture> pictures = new ArrayList<>();
         if (!files.isEmpty()) {
-            String realPath = "/image/";
+            String realPath = "\\image\\";
             try {
-                long  endTime=System.currentTimeMillis();
-
-                String filePath = realPath + + endTime +files.getOriginalFilename();
+                String filePath = realPath + files.getOriginalFilename();
                 VoucherPicture picture = new VoucherPicture();
                 picture.setUrl(filePath);
                 picture.setVoucher(voucher);
                 pictures.add(picture);
 
-                File saveDir = new File(filePath);
-                if (!saveDir.getParentFile().exists())
-                    saveDir.getParentFile().mkdirs();
-
-                files.transferTo(saveDir);
+                files.transferTo(new File(filePath));
             } catch (IOException e) {
                 LOG.error("createProductVoucher is err.");
             }
@@ -399,13 +398,11 @@ public class ProductController {
         if (product == null) {
             return new ServiceResponse();
         }
-
-        //审单员
-        if (request.getProductStatusId().equals(2)) {
-            productService.modifyProductStatus(product.getId(), employee.getId(), product.getStatus(), ProductStatus.AUDIT_RUN);
-        } else{ //财务
-            productService.modifyProductStatus(product.getId(), employee.getId(), product.getStatus(), ProductStatus.PAY_RUN);
-        }
+        Task task = new Task();
+        task.setEmployeeId(employee.getId());
+        task.setId(product.getTask().getId());
+        bpmService.modifyTask(task);
+        productService.modifyProductStatus(product.getId(), product.getEmployee().getId(), product.getStatus(), ProductStatus.AUDIT_RUN);
 
         return new ServiceResponse();
     }

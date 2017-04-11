@@ -129,7 +129,12 @@ public class ProductService implements IProductService {
         }
         Integer positionId = employee.getPosition().getId();
         Integer employeeId = employee.getId();
-
+        Task task = new Task();
+        task.setEmployeeId(employeeId);
+        filter.setTask(task);
+        if (positionId.equals(1)) {
+            filter.setTask(null);
+        }
         if (positionId.equals(2) || positionId.equals(6)) {
             filter.setEmployeeId(employeeId);
         } else if (positionId.equals(3)) {
