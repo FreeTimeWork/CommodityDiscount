@@ -115,7 +115,7 @@ public class ProductController {
                 response.setShowEdit(true);
             }
             if (product.getStatus() == ProductStatus.PAY_WAIT
-                    ||   product.getStatus() == ProductStatus.PAY_RUN
+                    || product.getStatus() == ProductStatus.PAY_RUN
                     || product.getStatus() == ProductStatus.PAY_RUN
                     || product.getStatus() == ProductStatus.PAY_TRAILER
                     || product.getStatus() == ProductStatus.PAY_END
@@ -151,7 +151,8 @@ public class ProductController {
             vos.add(new ResourceVO(ProductStatus.PAY_WAIT.getDescription(), ProductStatus.PAY_WAIT.getId()));
         } else if (ProductStatus.PAY_WAIT == status
                 && ((product.getEmployee().getId().equals(employee.getId())
-                && employee.getPosition().getId() == 6) || employee.getPosition().getId().equals(1))) {
+                && positionId == 6)
+                || positionId.equals(1))) {
             vos.add(new ResourceVO(ProductStatus.SETTLEMENT.getDescription(), ProductStatus.SETTLEMENT.getId()));
         } else if (ProductStatus.PAY_RUN == status
                 && (positionId.equals(5) || employee.getPosition().getId().equals(1))) {
@@ -303,16 +304,22 @@ public class ProductController {
 
         List<VoucherPicture> pictures = new ArrayList<>();
         if (!files.isEmpty()) {
-            String realPath = "\\image\\";
+            String path = ApplicationContextUtils.getSession().getServletContext().getRealPath("/image/");
+            String fileName = path + "/" + files.getOriginalFilename();
+            System.out.println(fileName);
             try {
-                String filePath = realPath + files.getOriginalFilename();
+                File targetFile = new File(fileName);
+                if (!targetFile.exists()) {
+                    targetFile.mkdirs();
+                }
+
                 VoucherPicture picture = new VoucherPicture();
-                picture.setUrl(filePath);
+                picture.setUrl(fileName);
                 picture.setVoucher(voucher);
                 pictures.add(picture);
 
-                files.transferTo(new File(filePath));
-            } catch (IOException e) {
+                files.transferTo(targetFile);
+            } catch (Exception e) {
                 LOG.error("createProductVoucher is err.");
             }
 

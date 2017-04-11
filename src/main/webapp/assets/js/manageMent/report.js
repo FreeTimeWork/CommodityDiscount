@@ -62,20 +62,6 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         }
 
         CurrentPage.prototype.initPageGrid = function () {
-            $("#selectAllBtn").click(function() {
-                if ($(this).parent("tr").hasClass("selected")) {
-                    thiz.pageGrid.rows().deselect();
-                    $(this).parent("tr").removeClass("selected");
-                } else {
-                    thiz.pageGrid.rows().select();
-                    $(this).parent("tr").addClass("selected");
-
-                }
-                var tt = thiz.pageGrid.rows({
-                    selected: true
-                }).data();
-
-            });
             this.pageGrid = $('#employeeGrid').dataTable({
                 "serverSide": true,
                 "select": {
@@ -143,6 +129,12 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 model: {},
                 submit: function(data) {
                     thiz.searchParams= data
+                    thiz.searchParams.createBeginTime = $('#searchForm_createBeginTime').val()
+                    thiz.searchParams.createEndTime = $('#searchForm_createEndTime').val()
+                    thiz.searchParams.beginFromTime = $('#searchForm_beginFromTime').val()
+                    thiz.searchParams.beginToTime = $('#searchForm_beginToTime').val()
+                    thiz.searchParams.endFromTime = $('#searchForm_endFromTime').val()
+                    thiz.searchParams.endToTime = $('#searchForm_endToTime').val()
                     if(!thiz.pageGrid){
                         thiz.initPageGrid()
                     }else{
