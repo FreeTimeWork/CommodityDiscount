@@ -115,7 +115,7 @@ public class ProductController {
                 response.setShowEdit(true);
             }
             if (product.getStatus() == ProductStatus.PAY_WAIT
-                    ||   product.getStatus() == ProductStatus.PAY_RUN
+                    || product.getStatus() == ProductStatus.PAY_RUN
                     || product.getStatus() == ProductStatus.PAY_RUN
                     || product.getStatus() == ProductStatus.PAY_TRAILER
                     || product.getStatus() == ProductStatus.PAY_END
@@ -303,16 +303,22 @@ public class ProductController {
 
         List<VoucherPicture> pictures = new ArrayList<>();
         if (!files.isEmpty()) {
-            String realPath = "\\image\\";
+//            String path = ApplicationContextUtils.getSession().getServletContext().getRealPath("/image/");
+            String fileName = "" + "/image/" + files.getOriginalFilename();
+            System.out.println(fileName);
             try {
-                String filePath = realPath + files.getOriginalFilename();
+                File targetFile = new File(fileName, fileName);
+                if (!targetFile.exists()) {
+                    targetFile.mkdirs();
+                }
+
                 VoucherPicture picture = new VoucherPicture();
-                picture.setUrl(filePath);
+                picture.setUrl(fileName);
                 picture.setVoucher(voucher);
                 pictures.add(picture);
 
-                files.transferTo(new File(filePath));
-            } catch (IOException e) {
+                files.transferTo(targetFile);
+            } catch (Exception e) {
                 LOG.error("createProductVoucher is err.");
             }
 

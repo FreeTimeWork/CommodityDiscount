@@ -193,12 +193,29 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 },{
                     uid : 'password',
                     type : uiKit.Controller.EDIT,
-                    validators: [uiKit.Validator.NONEMPTY]
+                    validators: [uiKit.Validator.PASSWORD]
                 },{
                     uid: 'groupId',
                     type: uiKit.Controller.SELECT,
                     options: groupOptions,
-                    validators: [uiKit.Validator.EMPTY_NUMERIC]
+                    validators: [uiKit.Validator.DEFINE('这里不可以不填哦！', function (value) {
+                        var positionId = this.getContainerForm().getViewModel().positionId();
+                        if(positionId  !== 2 && positionId !== 3){
+                            return true
+                        }else{
+                            if(value == 'NONE'){
+                                return false
+                            }
+                            return true
+                        }
+                    })],
+                    visible: function () {
+                        var positionId = this.getContainerForm().getViewModel().positionId();
+                        if(positionId == 2 || positionId == 3){
+                            return true
+                        }
+                        return false
+                    }
                 },{
                     uid: 'positionId',
                     type: uiKit.Controller.SELECT,

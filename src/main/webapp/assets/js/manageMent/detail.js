@@ -67,6 +67,7 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
 
     var booLeans = '';
     var booVoucher = '';
+    var booSubmit = '';
 
     var files = '';
 
@@ -141,16 +142,25 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
                 }
                 if (result.showEdit == false) {
                     booLeans = true;
-                    $('#showButton').hide();
+                    $('.readonly').show()
                     booVoucher = true
                 } else {
                     booLeans = false;
                     booVoucher =false;
+                    $('.readonly').hide()
                 }
                 if (result.showVoucher == false) {
                     $('#showVoucher').hide();
                 } else {
                     $('#showVoucher').eq(1).show()
+                }
+                booSubmit = result.voucher.showSubmit
+                if(result.voucher.showSubmit){
+                    $('#approveSubmit').show();
+                    $('#submitBill').hide();
+                }else{
+                    $('#approveSubmit').hide();
+                    $('#submitBill').show();
                 }
                 thiz.initDetailForm(result)
                 var html = '';
@@ -176,6 +186,33 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
                     var action = new netKit.SimpleAsyncPostAction(this, url, request, successHandler, errorHandler);
                     action.submit()
                 })
+
+                if (result.voucher.pictures.length > 0) {
+                    if (result.voucher.pictures[0]) {
+                        result.voucher.pictureUrl1 = result.voucher.pictures[0]
+                    }
+                    if (result.voucher.pictures[1]) {
+                        result.voucher.pictureUrl2 = result.voucher.pictures[1]
+                    }
+                    if (result.voucher.pictures[2]) {
+                        result.voucher.pictureUrl3 = result.voucher.pictures[2]
+                    }
+                    if (result.voucher.pictures[3]) {
+                        result.voucher.pictureUrl4 = result.voucher.pictures[3]
+                    }
+                    if (result.voucher.pictures[4]) {
+                        result.voucher.pictureUrl5 = result.voucher.pictures[4]
+                    }
+                    if (result.voucher.pictures[5]) {
+                        result.voucher.pictureUrl6 = result.voucher.pictures[5]
+                    }
+                    if (result.voucher.pictures[6]) {
+                        result.voucher.pictureUrl7 = result.voucher.pictures[6]
+                    }
+                    if (result.voucher.pictures[7]) {
+                        result.voucher.pictureUrl8 = result.voucher.pictures[7]
+                    }
+                }
 
                 thiz.initCreateForm(result.voucher, result.id)
             };
@@ -369,42 +406,59 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
                 id: 'createForm',
                 model: model || {},
                 submit: function (data) {
-                    var request = new FormData();
-                    request.append('id', id);
-                    request.append('couponReceiveNumber', data.couponReceiveNumber);
-                    request.append('payAmount', data.payAmount);
-                    request.append('couponUseNumber', data.couponUseNumber);
-                    request.append('shouldChargeAmount', data.shouldChargeAmount);
-                    request.append('actualChargeAmount', data.actualChargeAmount);
-                    request.append('conversionRate', data.conversionRate);
-                    request.append('withoutRate', data.withoutRate);
-                    //request.append('payTime', data.payTime);
-
-                    if(files.length == 0){
-                    }else{
-                        request.append('files', files);
-                    }
-                    $.ajax({
-
-                        type: 'POST',
-
-                        url: '/product/voucher/create',
-
-                        data: request,
-
-                        contentType: false,
-
-                        processData: false,
-
-                        success: function (data) {
-
-
-                        }, //success end
-                        error: function (data) {
-
+                    if(booSubmit){
+                        var url = '/product/approve/claim';
+                        var request = {}
+                        request.productId = thiz.createForm.viewModel.id();
+                        if(data.approveStatus == true){
+                            request.productStatusId = 12
+                        }else if(data.approveStatus == false){
+                            request.productStatusId = 11
                         }
-                    }) //ajax end
+                        var successHandler = function(self, result) {
+                            alert('成功')
+                        };
+                        var errorHandler = function(self, result) {
+                            alert('失败');
+                        };
+                        var action = new netKit.SimplePostAction(this, url, request, successHandler, errorHandler);
+                        action.submit();
+                    }else{
+                        var request = new FormData();
+                        request.append('id', id);
+                        request.append('couponReceiveNumber', data.couponReceiveNumber);
+                        request.append('payAmount', data.payAmount);
+                        request.append('couponUseNumber', data.couponUseNumber);
+                        request.append('shouldChargeAmount', data.shouldChargeAmount);
+                        request.append('actualChargeAmount', data.actualChargeAmount);
+                        request.append('conversionRate', data.conversionRate);
+                        request.append('withoutRate', data.withoutRate);
 
+                        if(files.length == 0){
+                        }else{
+                            request.append('files', files);
+                        }
+                        $.ajax({
+
+                            type: 'POST',
+
+                            url: '/product/voucher/create',
+
+                            data: request,
+
+                            contentType: false,
+
+                            processData: false,
+
+                            success: function (data) {
+
+
+                            }, //success end
+                            error: function (data) {
+
+                            }
+                        }) //ajax end
+                    }
                 },
                 fields: uiKit.FormUtils.generateFields('createForm', [{
                     uid: 'couponReceiveNumber',
@@ -466,12 +520,84 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
                     uid: 'approveStatus',
                     node: 'approveStatus',
                     type: uiKit.Controller.RADIO_GROUP,
-                    options: [{label: '拒绝付款', value: false}, {label: '已付款', value: true}],
+                    options: [{label: '拒绝付款', value: false}, {label: '付款', value: true}],
                     visible: function () {
                         //if (booLeans) {
                         //    return true
                         //}
                         return false
+                    }
+                }, {
+                    uid: 'pictureUrl1',
+                    type: uiKit.Controller.IMAGE,
+                    visible: function (data) {
+                        if (ValueUtils.isEmpty(data)) {
+                            return false;
+                        }
+                        return true;
+                    }
+                }, {
+                    uid: 'pictureUrl2',
+                    type: uiKit.Controller.IMAGE,
+                    visible: function (data) {
+                        if (ValueUtils.isEmpty(data)) {
+                            return false;
+                        }
+                        return true;
+                    }
+                }, {
+                    uid: 'pictureUrl3',
+                    type: uiKit.Controller.IMAGE,
+                    visible: function (data) {
+                        if (ValueUtils.isEmpty(data)) {
+                            return false;
+                        }
+                        return true;
+                    }
+                }, {
+                    uid: 'pictureUrl4',
+                    type: uiKit.Controller.IMAGE,
+                    visible: function (data) {
+                        if (ValueUtils.isEmpty(data)) {
+                            return false;
+                        }
+                        return true;
+                    }
+                }, {
+                    uid: 'pictureUrl5',
+                    type: uiKit.Controller.IMAGE,
+                    visible: function (data) {
+                        if (ValueUtils.isEmpty(data)) {
+                            return false;
+                        }
+                        return true;
+                    }
+                }, {
+                    uid: 'pictureUrl6',
+                    type: uiKit.Controller.IMAGE,
+                    visible: function (data) {
+                        if (ValueUtils.isEmpty(data)) {
+                            return false;
+                        }
+                        return true;
+                    }
+                }, {
+                    uid: 'pictureUrl7',
+                    type: uiKit.Controller.IMAGE,
+                    visible: function (data) {
+                        if (ValueUtils.isEmpty(data)) {
+                            return false;
+                        }
+                        return true;
+                    }
+                }, {
+                    uid: 'pictureUrl8',
+                    type: uiKit.Controller.IMAGE,
+                    visible: function (data) {
+                        if (ValueUtils.isEmpty(data)) {
+                            return false;
+                        }
+                        return true;
                     }
                 }]),
                 reset: false
