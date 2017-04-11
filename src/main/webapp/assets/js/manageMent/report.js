@@ -62,20 +62,6 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         }
 
         CurrentPage.prototype.initPageGrid = function () {
-            $("#selectAllBtn").click(function() {
-                if ($(this).parent("tr").hasClass("selected")) {
-                    thiz.pageGrid.rows().deselect();
-                    $(this).parent("tr").removeClass("selected");
-                } else {
-                    thiz.pageGrid.rows().select();
-                    $(this).parent("tr").addClass("selected");
-
-                }
-                var tt = thiz.pageGrid.rows({
-                    selected: true
-                }).data();
-
-            });
             this.pageGrid = $('#employeeGrid').dataTable({
                 "serverSide": true,
                 "select": {
@@ -142,7 +128,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 id: 'searchForm',
                 model: {},
                 submit: function(data) {
-                    thiz.searchParams= data;
+                    thiz.searchParams= data
                     thiz.searchParams.createBeginTime = $('#searchForm_createBeginTime').val()
                     thiz.searchParams.createEndTime = $('#searchForm_createEndTime').val()
                     thiz.searchParams.beginFromTime = $('#searchForm_beginFromTime').val()
