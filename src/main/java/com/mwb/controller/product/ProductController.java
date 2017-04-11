@@ -304,7 +304,7 @@ public class ProductController {
         List<VoucherPicture> pictures = new ArrayList<>();
         if (!files.isEmpty()) {
             String path = ApplicationContextUtils.getSession().getServletContext().getRealPath("/image/");
-            String fileName = path + files.getOriginalFilename();
+            String fileName = path + "/" + files.getOriginalFilename();
             System.out.println(fileName);
             try {
                 File targetFile = new File(fileName);

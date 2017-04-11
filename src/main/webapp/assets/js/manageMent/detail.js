@@ -158,6 +158,8 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
                 if(result.voucher.showSubmit){
                     $('#approveSubmit').show();
                     $('#submitBill').hide();
+                    $('#ppp').hide();
+
                 }else{
                     $('#approveSubmit').hide();
                     $('#submitBill').show();
@@ -407,7 +409,7 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
                 model: model || {},
                 submit: function (data) {
                     if(booSubmit){
-                        var url = '/product/approve/claim';
+                        var url = '/product/approve/check';
                         var request = {}
                         request.productId = thiz.createForm.viewModel.id();
                         if(data.approveStatus == true){
@@ -507,11 +509,10 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
                 }, {
                     uid: 'payTime',
                     node: 'payTime',
-                    type: uiKit.Controller.LABEL,
+                    type: uiKit.Controller.EDIT,
                     visible: function (value) {
-                        if(value == ''){
-                            return false
-                        }else if (booVoucher) {
+
+                        if (booSubmit) {
                             return true
                         }
                         return false;
@@ -522,9 +523,9 @@ require(['jquery', 'underscore', 'uiKit3', 'networkKit', 'coreKit', 'dataTableSe
                     type: uiKit.Controller.RADIO_GROUP,
                     options: [{label: '拒绝付款', value: false}, {label: '付款', value: true}],
                     visible: function () {
-                        //if (booLeans) {
-                        //    return true
-                        //}
+                        if (booSubmit) {
+                            return true
+                        }
                         return false
                     }
                 }, {
