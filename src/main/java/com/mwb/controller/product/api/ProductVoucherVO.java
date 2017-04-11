@@ -39,10 +39,11 @@ public class ProductVoucherVO {
     private List<String> pictures;        //使用率
 
     public static ProductVoucherVO toVO(ProductVoucher voucher, Employee employee) {
-        if (voucher == null) {
-            return null;
-        }
         ProductVoucherVO vo = new ProductVoucherVO();
+
+        if (voucher == null) {
+            return vo;
+        }
         Product product = voucher.getProduct();
         vo.setId(voucher.getId());
         vo.setEmployeeName(product.getEmployee().getFullName());
