@@ -1,6 +1,7 @@
 package com.mwb.http;
 
 import com.mwb.dao.model.comm.Log;
+import com.mwb.http.method.PostMethodWithGzip;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
@@ -83,8 +84,7 @@ public class SimpleHttpClient {
     
     private PostMethod processPost (String url, Map<String, String> params, Map<String, String> headers) throws Exception {
 
-//    	PostMethod method = new com.mwb.http.method.PostMethodWithGzip(url);
-    	PostMethod method = null;
+        PostMethod method = new PostMethodWithGzip(url);
 
         if (params != null) {
             Set<Entry<String, String>> entrySet = params.entrySet();
