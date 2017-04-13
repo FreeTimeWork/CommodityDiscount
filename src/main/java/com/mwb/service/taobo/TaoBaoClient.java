@@ -1,11 +1,14 @@
 package com.mwb.service.taobo;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mwb.dao.model.comm.Log;
 import com.mwb.dao.model.product.Product;
 import com.mwb.http.AbstractHttpClient;
 import com.mwb.service.taobo.api.*;
 import com.mwb.util.DateTimeUtility;
+import jdk.nashorn.api.scripting.JSObject;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +31,7 @@ public class TaoBaoClient extends AbstractHttpClient implements ITaoBaoClient {
     @Value("")
     private String redirectUri;
 
-    @Value("")
+    @Value("http://gw.api.taobao.com/router/rest")
     private String activityUrl;
 
     @Value("https://oauth.taobao.com/token")
@@ -56,8 +59,7 @@ public class TaoBaoClient extends AbstractHttpClient implements ITaoBaoClient {
     public AccessTokenMO getAccessToken() {
 
         AccessTokenMO accessToken = null;
-//        String url = "https://oauth.taobao.com/token";
-        String url = tokenUrl;
+        String url = "https://oauth.taobao.com/token";
         Map<String, String> props = new HashMap<>();
         props.put("grant_type", "authorization_code");
         props.put("code", code);
@@ -98,6 +100,12 @@ public class TaoBaoClient extends AbstractHttpClient implements ITaoBaoClient {
             props.put("sign", sign);
 
             String json = post(activityUrl, props, null);
+            JSONArray jsonArray = JSON.parseArray(json);
+            if (jsonArray != null && jsonArray.size() > 0){
+                JSObject object = (JSObject)jsonArray.get(0);
+                ActivityTaoBaoMO mo = JSONObject.parseObject(object.toString(),ActivityTaoBaoMO.class);
+                return mo;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -125,10 +133,15 @@ public class TaoBaoClient extends AbstractHttpClient implements ITaoBaoClient {
             props.put("sign", sign);
 
             String json = post(activityUrl, props, null);
+            JSONArray jsonArray = JSON.parseArray(json);
+            if (jsonArray != null && jsonArray.size() > 0){
+                JSObject object = (JSObject)jsonArray.get(0);
+                CouponTaoBaoMO mo = JSONObject.parseObject(object.toString(),CouponTaoBaoMO.class);
+                return mo;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         return null;
     }
@@ -145,6 +158,35 @@ public class TaoBaoClient extends AbstractHttpClient implements ITaoBaoClient {
 
     @Override
     public ProductTaoBaoMO getProductMO(String productId, String accessToken) {
+        if (StringUtils.isBlank(accessToken)) {
+            return null;
+        }
+        try {
+            Map<String, String> props = new HashMap<>();
+            String timestamp = DateTimeUtility.formatYYYYMMDDHHMMSS(new Date());
+            props.put("method", "taobao.product.get");
+            props.put("app_key", appKey);
+            props.put("sign_method", "md5");
+            props.put("timestamp", timestamp);
+            props.put("session", accessToken);
+            props.put("format", "json");
+            props.put("v", "2.0");
+            props.put("simplify", "true");
+            props.put("product_d", productId);
+            props.put("fields", "name,price,pic_url,sale_num,product_prop_imgs,product_imgs");
+            String sign = signTopRequest(props, appSecret);
+            props.put("sign", sign);
+
+            String json = post(activityUrl, props, null);
+            JSONArray jsonArray = JSON.parseArray(json);
+            if (jsonArray != null && jsonArray.size() > 0){
+                JSObject object = (JSObject)jsonArray.get(0);
+                ProductTaoBaoMO mo = JSONObject.parseObject(object.toString(),ProductTaoBaoMO.class);
+                return mo;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -152,7 +194,6 @@ public class TaoBaoClient extends AbstractHttpClient implements ITaoBaoClient {
     public Product getProduct(String productId, String couponId) {
         return null;
     }
-
 
     private static String signTopRequest(Map<String, String> params, String secret) throws IOException {
         // 第一步：检查参数是否已经排序

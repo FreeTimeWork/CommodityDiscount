@@ -303,26 +303,24 @@ public class ProductController {
         voucher.setProduct(product);
 
         List<VoucherPicture> pictures = new ArrayList<>();
-        if (!files.isEmpty()) {
-            String path = ApplicationContextUtils.getSession().getServletContext().getRealPath("/image/");
-            String fileName = path + "/" + files.getOriginalFilename();
-            System.out.println(fileName);
-            try {
-                File targetFile = new File(fileName);
-                if (!targetFile.exists()) {
-                    targetFile.mkdirs();
-                }
 
+        String contextPath = ApplicationContextUtils.getSession().getServletContext().getContextPath();
+
+        if (!files.isEmpty()) {
+            String filePath = ApplicationContextUtils.getSession().getServletContext().getRealPath("/")
+                    + "\\image\\" + files.getOriginalFilename();
+            String img = contextPath + "/image/" + files.getOriginalFilename();
+            try {
+                files.transferTo(new File(filePath));
                 VoucherPicture picture = new VoucherPicture();
-                picture.setUrl(fileName);
+                picture.setUrl(img);
                 picture.setVoucher(voucher);
                 pictures.add(picture);
 
-                files.transferTo(targetFile);
-            } catch (Exception e) {
-                LOG.error("createProductVoucher is err.");
+                files.transferTo(new File(filePath));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
         }
 
         voucher.setPictures(pictures);

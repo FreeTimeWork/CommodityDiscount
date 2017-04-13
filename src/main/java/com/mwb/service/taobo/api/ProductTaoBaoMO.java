@@ -21,8 +21,58 @@ public class ProductTaoBaoMO {
     private BigDecimal sale_num;
 
     @JSONField(name = "product_prop_imgs")
-//    @JSONField(name = "product_imgs")
     private List<PropMO> propMOs;
+
+    @JSONField(name = "product_imgs")
+    private List<PropMO> imgMOs;
+
+    public List<PropMO> getImgMOs() {
+        return imgMOs;
+    }
+
+    public void setImgMOs(List<PropMO> imgMOs) {
+        this.imgMOs = imgMOs;
+    }
+
+    public BigDecimal getName() {
+        return name;
+    }
+
+    public void setName(BigDecimal name) {
+        this.name = name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public String getPic_url() {
+        return pic_url;
+    }
+
+    public void setPic_url(String pic_url) {
+        this.pic_url = pic_url;
+    }
+
+    public BigDecimal getSale_num() {
+        return sale_num;
+    }
+
+    public void setSale_num(BigDecimal sale_num) {
+        this.sale_num = sale_num;
+    }
+
+    public List<PropMO> getPropMOs() {
+        return propMOs;
+    }
+
+    public void setPropMOs(List<PropMO> propMOs) {
+        this.propMOs = propMOs;
+    }
 
     @Override
     public String toString() {
