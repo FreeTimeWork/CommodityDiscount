@@ -129,9 +129,7 @@ public class ProductService implements IProductService {
         }
         Integer positionId = employee.getPosition().getId();
         Integer employeeId = employee.getId();
-        Task task = new Task();
-        task.setEmployeeId(employeeId);
-        filter.setTask(task);
+
         if (positionId.equals(1)) {
             filter.setTask(null);
         }
@@ -146,6 +144,9 @@ public class ProductService implements IProductService {
             list.add(ProductStatus.PAY_END);
             list.add(ProductStatus.SETTLEMENT);
             filter.setExcludeStatus(list);
+//            Task task = new Task();
+//            task.setEmployeeId(employeeId);
+//            filter.setTask(task);
         } else if (positionId.equals(5)) {
             List<ProductStatus> list = new ArrayList<>();
             list.add(ProductStatus.PAY_WAIT);

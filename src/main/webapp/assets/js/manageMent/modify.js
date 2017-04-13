@@ -2,6 +2,23 @@ require.config(I360R.REQUIRE_CONFIG);
 
 require([ 'jquery', 'uiKit3', 'networkKit', 'coreKit'],
     function($, uiKit, netKit, cKit, l10n, serviceUrls) {
+
+        $(function () {
+            $(".fa_li>a").click(function () {
+
+                $(this).css("background", "#1481b3").parent().siblings("li").find(".floor").css("background", "#065c85")
+                $(this).parent().find(".jia").toggleClass("sub");
+                $(this).parent().find("ul").toggle().parent().siblings("li").find("ul").hide()
+            })
+
+            $(".fa_li ul li").on("mouseover click", function () {
+                $(this).css({"background": "#fff"}).find("a").css({"color": "red"}).parent().siblings("li").css({"background": "#efefef"}).find("a").css({"color": "#666"})
+
+                $(".form_datetime").datetimepicker({
+                    format: "yyyy-mm-dd hh:ii"
+                });
+            })
+        });
         var EMPLOYEEID = '';
         $.ajax({
             type: 'get',

@@ -14,7 +14,8 @@ public class CreateProductVoucherRequest {
     private BigDecimal actualChargeAmount;//实收金额
     private BigDecimal conversionRate;//转化率
     private String withoutRate;//外部链接
-    private String payTime;//外部链接
+    private String payTime;//付款时间
+    private boolean approveStatus;//审核状态
 
     public Integer getId() {
         return id;
@@ -86,5 +87,13 @@ public class CreateProductVoucherRequest {
 
     public void setPayTime(String payTime) {
         this.payTime = payTime;
+    }
+
+    public boolean isApproveStatus() {
+        return approveStatus;
+    }
+
+    public void setApproveStatus(boolean approveStatus) {
+        this.approveStatus = approveStatus;
     }
 }

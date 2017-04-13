@@ -120,7 +120,7 @@
                                 <div class="controls">
                                     <div class="imageCon">
                             <span>
-                                <img class="bigImg" uid="pictureUrl"/>
+                                <img class="bigImg" uid="pictureUrl1"/>
                             </span>
                             <span gid="">
                                 <img class="bigImg" uid="pictureUrl2"/>
@@ -243,19 +243,19 @@
                             <p><label style="display :inline-block">优惠结束时间：</label><label style="display :inline-block" uid="couponEndTime"></label></p>
                             <div class="control-group" gid="">
                                 <label style="display :inline-block">领取数量：</label>
-                                <input type="text" uid="couponReceiveNumber"/>
+                                <input type="text" uid="couponReceiveNumber"/> <span class="readonly" style="color: blue">
                                 <span hid="couponReceiveNumber"></span>
                             </div>
 
                             <div class="control-group" gid="payAmount">
                                 <label style="display :inline-block">支付金额：</label>
-                                <input type="text" uid="payAmount"/>
+                                <input type="text" uid="payAmount"/> <span class="readonly" style="color: blue">(券后价格：<span uid="discountPrice"></span>)</span>
                                 <span hid="payAmount"></span>
                             </div>
 
                             <div class="control-group" gid="couponUseNumber">
                                 <label style="display :inline-block">使用数量：</label>
-                                <input type="text" uid="couponUseNumber"/>
+                                <input type="text" uid="couponUseNumber"/> <span class="readonly" style="color: blue">(服务单价：<span uid="chargePrice"></span>)</span>
                                 <span hid="couponUseNumber"></span>
                             </div>
 
@@ -283,16 +283,43 @@
                                   <label class="radio inline"><input uid="approveStatus" type="radio"/></label>
                               </span>
                             </div>
-                            <div class="control-group" gid="payTime">
-                                <p><label style="display :inline-block">付款时间：</label><label style="display :inline-block" uid="payTime"></label></p>
+                            <div class="control-group" gid="payTime" >
+                                <p>
+                                    <label style="display :inline-block">付款时间：</label>
+                                    <span class="date">
+                                        <input uid="payTime" size="16" type="text" readonly class="form_datetime">
+                                    </span>
+                                </p>
                                 <span hid="payTime"></span>
                             </div>
-                            <img src="img/pic-1_05.png" alt="" id="zhou_2_img"/>
-                            <div id="showButton">
-                            <p style="margin-top: 10px;"><label style="display :inline-block">图片描述</label><input type="text" uid="pictureDescribtion"><input id="fileUpload1"
-                                                                                                                                                             type="file"/> <input type="text" uid="withoutRate" placeholder="请输入图片链接地址"/></p>
-                            <p class="last"><input style="margin-right:10px;" type="submit" value="提交结账" class="btn red"/><input
-                                    type="reset" value="重置" class="btn red"/></p></div>
+                            <div class="imageCon">
+                            <span>
+                                <img class="bigImg" uid="pictureUrl1"/>
+                            </span>
+                            <span gid="">
+                                <img class="bigImg" uid="pictureUrl2"/>
+                            </span>
+                            <span gid="">
+                                <img class="bigImg" uid="pictureUrl3"/>
+                            </span>
+                            <span gid="">
+                                <img class="bigImg" uid="pictureUrl4"/>
+                            </span>
+                            <span gid="">
+                                <img class="bigImg" uid="pictureUrl5"/>
+                            </span>
+                            <span gid="">
+                                <img class="bigImg" uid="pictureUrl6"/>
+                            </span>
+                            <span gid="">
+                                <img class="bigImg" uid="pictureUrl7"/>
+                            </span>
+                            <span gid="">
+                                <img class="bigImg" uid="pictureUrl8"/>
+                            </span>
+                            </div>
+                                <p style="margin-top: 10px;" id="ppp"><label style="display :inline-block">图片描述</label><input id="fileUpload1" type="file"/> <input type="text" uid="withoutRate" placeholder="请输入图片链接地址"/></p>
+                                <p class="last"><input style="margin-right:10px;" type="submit" value="提交" id="approveSubmit" class="btn red readonly"/><input style="margin-right:10px;" type="submit" value="提交结账" id="submitBill" class="btn red"/></p>
                         </form>
                     </div>
                 </div>
