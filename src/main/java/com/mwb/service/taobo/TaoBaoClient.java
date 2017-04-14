@@ -1,5 +1,15 @@
 package com.mwb.service.taobo;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -8,13 +18,6 @@ import com.mwb.dao.model.product.Product;
 import com.mwb.http.AbstractHttpClient;
 import com.mwb.service.taobo.api.*;
 import com.mwb.util.DateTimeUtility;
-import jdk.nashorn.api.scripting.JSObject;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
-
-import java.io.IOException;
-import java.util.*;
 
 /**
  * Created by MengWeiBo on 2017-04-12
@@ -102,7 +105,7 @@ public class TaoBaoClient extends AbstractHttpClient implements ITaoBaoClient {
             String json = post(activityUrl, props, null);
             JSONArray jsonArray = JSON.parseArray(json);
             if (jsonArray != null && jsonArray.size() > 0){
-                JSObject object = (JSObject)jsonArray.get(0);
+                JSONObject object = jsonArray.getJSONObject(0);
                 ActivityTaoBaoMO mo = JSONObject.parseObject(object.toString(),ActivityTaoBaoMO.class);
                 return mo;
             }
@@ -135,7 +138,7 @@ public class TaoBaoClient extends AbstractHttpClient implements ITaoBaoClient {
             String json = post(activityUrl, props, null);
             JSONArray jsonArray = JSON.parseArray(json);
             if (jsonArray != null && jsonArray.size() > 0){
-                JSObject object = (JSObject)jsonArray.get(0);
+                JSONObject object = jsonArray.getJSONObject(0);
                 CouponTaoBaoMO mo = JSONObject.parseObject(object.toString(),CouponTaoBaoMO.class);
                 return mo;
             }
@@ -180,7 +183,7 @@ public class TaoBaoClient extends AbstractHttpClient implements ITaoBaoClient {
             String json = post(activityUrl, props, null);
             JSONArray jsonArray = JSON.parseArray(json);
             if (jsonArray != null && jsonArray.size() > 0){
-                JSObject object = (JSObject)jsonArray.get(0);
+                JSONObject object = jsonArray.getJSONObject(0);
                 ProductTaoBaoMO mo = JSONObject.parseObject(object.toString(),ProductTaoBaoMO.class);
                 return mo;
             }
