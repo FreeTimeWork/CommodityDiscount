@@ -10,7 +10,10 @@ import com.mwb.dao.model.product.Store;
 import com.mwb.dao.model.product.voucher.ProductVoucher;
 import com.mwb.dao.model.product.voucher.VoucherPicture;
 
+import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by MengWeiBo on 2017-04-01
@@ -40,4 +43,9 @@ public interface IProductService {
     public void createProductPicture(ProductPicture productPicture);
 
     public void createStore(Store store);
-}
+
+    public void setProduct (Product product);
+
+    public void setCoupon (Product product) throws Exception;
+
+    }

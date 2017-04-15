@@ -1,9 +1,8 @@
 package com.mwb.service.product;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.text.ParseException;
+import java.util.*;
 
 import com.mwb.controller.api.PagingResult;
 import com.mwb.dao.filter.ProductFilter;
@@ -13,15 +12,14 @@ import com.mwb.dao.model.bpm.Task;
 import com.mwb.dao.model.bpm.Variable;
 import com.mwb.dao.model.employee.Employee;
 import com.mwb.dao.model.finance.Finance;
-import com.mwb.dao.model.product.Product;
-import com.mwb.dao.model.product.ProductPicture;
-import com.mwb.dao.model.product.ProductStatus;
-import com.mwb.dao.model.product.Store;
+import com.mwb.dao.model.product.*;
 import com.mwb.dao.model.product.voucher.ProductVoucher;
 import com.mwb.dao.model.product.voucher.VoucherPicture;
 import com.mwb.service.bpm.api.IBpmService;
 import com.mwb.service.finance.api.IFinanceService;
+import com.mwb.service.product.api.CRequest;
 import com.mwb.service.product.api.IProductService;
+import com.mwb.service.taobo.api.*;
 import com.mwb.util.DateTimeUtility;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +40,9 @@ public class ProductService implements IProductService {
 
     @Autowired
     private IBpmService bpmService;
+
+    @Autowired
+    private ITaoBaoClient client;
 
     @Override
     public Product getProductById(Integer id) {
@@ -215,7 +216,7 @@ public class ProductService implements IProductService {
             filter.setEmployeeId(employeeId);
         } else if (positionId.equals(3)) {
             filter.setGroupId(employee.getGroup().getId());
-        }else if (positionId.equals(4)) {
+        } else if (positionId.equals(4)) {
             return result;
         }
 
@@ -233,16 +234,16 @@ public class ProductService implements IProductService {
         return result;
     }
 
-    private void deleteProductVoucher (Product product){
+    private void deleteProductVoucher(Product product) {
         ProductVoucher voucher = productMapper.selectProductVoucherByProductId(product.getId());
         if (voucher != null) {
             Finance finance = financeService.getFinanceByEmployeeId(product.getEmployee().getId());
 
             finance.setShouldChargeAmount(finance.getShouldChargeAmount().subtract(voucher.getShouldChargeAmount()));
             finance.setActualChargeAmount(finance.getActualChargeAmount().subtract(voucher.getActualChargeAmount()));
-            if (finance.getPayEndNumber() > 0 ) {
+            if (finance.getPayEndNumber() > 0) {
                 finance.setGuestUnitPrice(finance.getActualChargeAmount().divide(new BigDecimal(finance.getPayEndNumber()), 2));
-            }else {
+            } else {
                 finance.setGuestUnitPrice(finance.getActualChargeAmount());
             }
             financeService.modifyFinance(finance);
@@ -253,6 +254,7 @@ public class ProductService implements IProductService {
         }
 
     }
+
     @Override
     @Transactional
     public void createProductVoucher(ProductVoucher voucher, Product product) {
@@ -270,15 +272,15 @@ public class ProductService implements IProductService {
         finance.setPayRunNumber(finance.getPayRunNumber() + 1);
         if (product.getStatus() == ProductStatus.PAY_WAIT) {
             finance.setPayWaitNumber(finance.getPayWaitNumber() - 1);
-        }else if (product.getStatus() == ProductStatus.PAY_TRAILER){
+        } else if (product.getStatus() == ProductStatus.PAY_TRAILER) {
             finance.setPayTrailerNumber(finance.getPayTrailerNumber() - 1);
         }
 
         finance.setShouldChargeAmount(finance.getShouldChargeAmount().add(voucher.getShouldChargeAmount()));
         finance.setActualChargeAmount(finance.getActualChargeAmount().add(voucher.getActualChargeAmount()));
-        if (finance.getPayEndNumber() > 0 ) {
+        if (finance.getPayEndNumber() > 0) {
             finance.setGuestUnitPrice(finance.getActualChargeAmount().divide(new BigDecimal(finance.getPayEndNumber()), 2));
-        }else {
+        } else {
             finance.setGuestUnitPrice(finance.getActualChargeAmount());
         }
 
@@ -307,5 +309,40 @@ public class ProductService implements IProductService {
         productMapper.insertStore(store);
     }
 
+    public void setProduct(Product product) {
+        AccessTokenMO token = client.getAccessToken();
+        ProductTaoBaoMO mo = client.getProductMO(product.getProductId(), token.getAccessToken());
+        if (mo != null) {
+            product.setName(mo.getName());
+            product.setReservePrice(mo.getPrice());
+            product.setSales(mo.getSale_num());
+            product.setPictureUrl(mo.getPic_url());
+            //todo
+            product.setPictures(PropMO.toPicture(mo.getImgMOs()));
+        }
+    }
 
+    public void setCoupon(Product product) throws ParseException {
+        AccessTokenMO token = client.getAccessToken();
+        Map<String, String> map = CRequest.URLRequest(product.getCouponUrl());
+
+        String activityId = map.get("activityId");
+
+        ActivityTaoBaoMO activity = client.getProductActivity(activityId, token.getAccessToken());
+
+
+        if (activity != null) {
+            product.setCouponReceiveNumber(activity.getCouponReceiveNumber());
+            product.setCouponSurplusNumber(activity.getCouponTotal() - activity.getCouponReceiveNumber());
+
+            CouponTaoBaoMO coupon = client.getProductCoupon(activity.getCoupon_id(), token.getAccessToken());
+            if (coupon != null) {
+                product.setCouponAmount(coupon.getCouponAmount());
+                product.setCouponBeginTime(DateTimeUtility.parseYYYYMMDDHHMMSS(coupon.getCreatTime()));
+                product.setCouponEndTime(DateTimeUtility.parseYYYYMMDDHHMMSS(coupon.getEndTime()));
+                product.setCondition(coupon.getCondition() + "，每人限领" + activity.getPersonLimitCount() + "张");
+                product.setDiscountPrice(product.getReservePrice().subtract(coupon.getCouponAmount()));
+            }
+        }
+    }
 }

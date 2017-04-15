@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.mwb.controller.api.ContentType;
 import com.mwb.controller.api.ServiceResponse;
@@ -41,6 +42,7 @@ import com.mwb.service.ParserService;
 import com.mwb.service.bpm.api.IBpmService;
 import com.mwb.service.dataoke.api.IDaoLaoKeService;
 import com.mwb.service.product.api.IProductService;
+import com.mwb.service.taobo.api.ITaoBaoClient;
 import com.mwb.util.DateTimeUtility;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -69,6 +71,47 @@ public class ProductController {
 
     @Autowired
     private IBpmService bpmService;
+
+    @Autowired
+    private ITaoBaoClient client;
+
+    @ResponseBody
+    @RequestMapping(value = "/grab2")
+    public ServiceResponse grabCoupon(String couponUrl) throws Exception {
+
+        Product product = new Product();
+        product.setCouponUrl(couponUrl);
+
+        productService.setProduct(product);
+        productService.setCoupon(product);
+
+        ProductDetailsResponse response = ProductDetailsResponse.toResponse(product);
+
+        if (StringUtils.isBlank(product.getCondition())) {
+            response.setMessage("优惠券地址错误!");
+            return response;
+        }
+
+        return response;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/grab1")
+    public ServiceResponse grabProduct(String productUrl) {
+        ParserService parserService = new ParserService(productUrl);
+        Product product = parserService.grabProduct();
+
+        productService.setProduct(product);
+
+        ProductDetailsResponse response = ProductDetailsResponse.toResponse(product);
+
+        if (StringUtils.isBlank(product.getName())) {
+            response.setMessage("商品地址错误!");
+            return response;
+        }
+
+        return ProductDetailsResponse.toResponse(product);
+    }
 
     @ResponseBody
     @RequestMapping(value = "/grab")

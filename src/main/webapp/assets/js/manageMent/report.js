@@ -142,7 +142,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                     }
                 },
                 fields: uiKit.FormUtils.generateFields('searchForm', [{
-                    uid : 'name',
+                    uid : 'activityId',
                     type : uiKit.Controller.SELECT,
                     options: activitieOptions
                 },{
