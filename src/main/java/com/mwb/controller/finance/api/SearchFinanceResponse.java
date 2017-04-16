@@ -1,8 +1,8 @@
 package com.mwb.controller.finance.api;
 
-import com.mwb.controller.api.PagingResponse;
-
 import java.util.List;
+
+import com.mwb.controller.api.PagingResponse;
 
 
 /**
@@ -11,6 +11,15 @@ import java.util.List;
 public class SearchFinanceResponse extends PagingResponse {
     private static final long serialVersionUID = 1L;
     private List<FinanceVO> finances;
+    private FinanceVO countFinance;
+
+    public FinanceVO getCountFinance() {
+        return countFinance;
+    }
+
+    public void setCountFinance(FinanceVO countFinance) {
+        this.countFinance = countFinance;
+    }
 
     public List<FinanceVO> getFinances() {
         return finances;

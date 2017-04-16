@@ -1,11 +1,11 @@
 package com.mwb.controller.finance.api;
 
-import com.mwb.dao.model.finance.Finance;
-import org.apache.commons.collections.CollectionUtils;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.mwb.dao.model.finance.Finance;
+import org.apache.commons.collections.CollectionUtils;
 
 /**
  * Created by MengWeiBo on 2017-04-01
@@ -65,6 +65,26 @@ public class FinanceVO {
             }
         }
         return vos;
+    }
+
+    public FinanceVO() {
+
+        this.submitNumber = 0;
+        this.averageDaily = 0;
+        this.refuseRate = 0;
+        this.refuseNumber = 0;
+        this.twoAuditNumber = 0;
+        this.promoteNumber = 0;
+        this.endApproachNumber = 0;
+        this.endNumber = 0;
+        this.payWaitNumber = 0;
+        this.payRunNumber = 0;
+        this.payTrailerNumber = 0;
+        this.payEndNumber = 0;
+        this.settlementNumber = 0;
+        this.guestUnitPrice = BigDecimal.ZERO;
+        this.actualChargeAmount = BigDecimal.ZERO;
+        this.shouldChargeAmount = BigDecimal.ZERO;
     }
 
     public Integer getEmployeeId() {
