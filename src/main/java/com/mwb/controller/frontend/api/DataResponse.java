@@ -1,8 +1,8 @@
 package com.mwb.controller.frontend.api;
 
-import com.mwb.controller.api.ServiceResponse;
-
 import java.util.List;
+
+import com.mwb.controller.api.ServiceResponse;
 
 public class DataResponse extends ServiceResponse {
 
@@ -17,6 +17,7 @@ public class DataResponse extends ServiceResponse {
     private List<ResourceVO> groups;
     private List<ResourceVO> positions;
     private List<ResourceVO> employees;
+    private List<ResourceVO> conditions;
 
     public List<ResourceVO> getActivities() {
         return activities;
@@ -88,5 +89,13 @@ public class DataResponse extends ServiceResponse {
 
     public void setEmployees(List<ResourceVO> employees) {
         this.employees = employees;
+    }
+
+    public List<ResourceVO> getConditions() {
+        return conditions;
+    }
+
+    public void setConditions(List<ResourceVO> conditions) {
+        this.conditions = conditions;
     }
 }

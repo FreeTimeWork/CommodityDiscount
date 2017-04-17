@@ -1,5 +1,16 @@
 package com.mwb.controller.frontend;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.mwb.controller.api.ServiceResponse;
 import com.mwb.controller.frontend.api.DataResponse;
 import com.mwb.controller.frontend.api.ProductStatusResponse;
@@ -15,16 +26,6 @@ import com.mwb.dao.model.product.*;
 import com.mwb.service.employee.api.IEmployeeService;
 import com.mwb.service.position.api.IPositionService;
 import com.mwb.service.product.api.IProductService;
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by MengWeiBo on 2017-03-31
@@ -55,6 +56,12 @@ public class ResourceController {
 
         Integer positionId = employee.getPosition().getId();
 
+
+        List<ResourceVO> conditions = new ArrayList<>();
+        conditions.add(new ResourceVO("全部", null));
+        conditions.add(new ResourceVO("提报数量", "submitNumber"));
+        conditions.add(new ResourceVO("客单价", "guestUnitPrice"));
+        conditions.add(new ResourceVO("实收金额", "actualChargeAmount"));
 
         List<ResourceVO> productTypes = new ArrayList<>();
         productTypes.add(new ResourceVO("选择商品分类", null));
@@ -144,6 +151,7 @@ public class ResourceController {
         response.setGroups(groupVos);
         response.setPositions(positionVos);
         response.setEmployees(employeeVos);
+        response.setConditions(conditions);
 
         return response;
     }

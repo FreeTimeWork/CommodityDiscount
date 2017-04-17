@@ -61,6 +61,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit'], function ($,
             groupOptions = data.groups
             positionOptions = data.positions
             employeeOptions = data.employees
+            conditions = data.conditions
         },
         error: function () {
             alert('请求失败')
@@ -88,7 +89,10 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit'], function ($,
                 }
                 $.ajax({
                     type: 'get',
-                    url: "/finance/search?excel=true" + "&groupId=" + $('#searchForm_groupId').val() + "&employeeId=" + $('#searchForm_employeeId').val() + "&statusId=" + $("#searchForm_statusId").val() + "&orderByAsc=" + orderByAsc,
+                    url: "/finance/search?excel=true" + "&groupId=" + $('#searchForm_groupId').val()
+                    + "&employeeId=" + $('#searchForm_employeeId').val() + "&conditionId=" + $("#searchForm_conditionId").val() + "&orderByAsc=" + orderByAsc
+                    +  "&beginPayTime=" + $('#searchForm_beginPayTime').val() + "&endPayTime=" + $('#searchForm_endPayTime').val()
+                    +  "&beginSubmitTime=" + $('#searchForm_beginSubmitTime').val() + "&endSubmitTime=" + $('#searchForm_endSubmitTime').val(),
                     success: function () {
                         alert('成功')
                     },
@@ -178,9 +182,9 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit'], function ($,
                     type : uiKit.Controller.SELECT,
                     options: employeeOptions
                 },{
-                    uid : 'statusId',
+                    uid : 'conditionId',
                     type : uiKit.Controller.SELECT,
-                    options: employeeStatuOptions
+                    options: conditions
                 },{
                     uid : 'orderByAsc',
                     type : uiKit.Controller.SELECT,

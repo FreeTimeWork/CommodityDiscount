@@ -4,6 +4,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.mwb.controller.api.PagingResult;
 import com.mwb.dao.filter.FinanceFilter;
 import com.mwb.dao.filter.SearchResult;
@@ -15,9 +19,6 @@ import com.mwb.dao.model.product.Product;
 import com.mwb.dao.model.product.ProductStatus;
 import com.mwb.service.finance.api.IFinanceService;
 import com.mwb.util.DateTimeUtility;
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * Created by MengWeiBo on 2017-04-01
@@ -43,8 +44,6 @@ public class FinanceService implements IFinanceService {
             }else if (positionId.equals(4)) {
                 return result;
             }
-        } else {
-            return result;
         }
 
         List<Integer> employeeIds = productMapper.selectEmployeeIdByFilter(filter);
