@@ -12,6 +12,8 @@ public class SearchFinanceRequest extends PagingRequest {
     private Boolean orderByAsc;  //是否为升序排序
     private String beginPayTime; //付款开始时间
     private String endPayTime;   //付款结束时间
+    private String beginSubmitTime; //付款开始时间
+    private String endSubmitTime;   //付款结束时间
 
     public Integer getGroupId() {
         return groupId;
@@ -59,5 +61,21 @@ public class SearchFinanceRequest extends PagingRequest {
 
     public void setEndPayTime(String endPayTime) {
         this.endPayTime = endPayTime;
+    }
+
+    public String getBeginSubmitTime() {
+        return beginSubmitTime;
+    }
+
+    public void setBeginSubmitTime(String beginSubmitTime) {
+        this.beginSubmitTime = beginSubmitTime;
+    }
+
+    public String getEndSubmitTime() {
+        return endSubmitTime;
+    }
+
+    public void setEndSubmitTime(String endSubmitTime) {
+        this.endSubmitTime = endSubmitTime;
     }
 }

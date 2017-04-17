@@ -1,5 +1,8 @@
 package com.mwb.dao.mapper;
 
+import java.util.List;
+
+import com.mwb.dao.filter.FinanceFilter;
 import com.mwb.dao.filter.ProductFilter;
 import com.mwb.dao.model.product.Product;
 import com.mwb.dao.model.product.ProductPicture;
@@ -8,8 +11,6 @@ import com.mwb.dao.model.product.Store;
 import com.mwb.dao.model.product.voucher.ProductVoucher;
 import com.mwb.dao.model.product.voucher.VoucherPicture;
 import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
 
 /**
  * Created by MengWeiBo on 2017-04-01
@@ -52,4 +53,11 @@ public interface ProductMapper {
     public void insertProductPicture(ProductPicture productPicture);
 
     public void insertStore(Store store);
+
+//  Statistics
+    public List<Product> selectStatisticsProductByFilter(@Param("filter") FinanceFilter filter);
+
+    public List<Integer> selectEmployeeIdByFilter(@Param("filter") FinanceFilter filter);
+
+    public int countEmployeeIdByFilter(@Param("filter") FinanceFilter filter);
 }

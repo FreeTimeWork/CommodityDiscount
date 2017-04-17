@@ -12,13 +12,15 @@ import java.util.List;
 public class ProductTaoBaoMO {
 
     @JSONField(name = "name")
-    private BigDecimal name;
+    private String name;
     @JSONField(name = "price")
     private BigDecimal price;
+    @JSONField(name = "shop_price")
+    private BigDecimal shopPrice;
     @JSONField(name = "pic_url")
     private String pic_url;
     @JSONField(name = "sale_num")
-    private BigDecimal sale_num;
+    private Integer sale_num;
 
     @JSONField(name = "product_prop_imgs")
     private List<PropMO> propMOs;
@@ -34,11 +36,11 @@ public class ProductTaoBaoMO {
         this.imgMOs = imgMOs;
     }
 
-    public BigDecimal getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(BigDecimal name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -58,11 +60,11 @@ public class ProductTaoBaoMO {
         this.pic_url = pic_url;
     }
 
-    public BigDecimal getSale_num() {
+    public Integer getSale_num() {
         return sale_num;
     }
 
-    public void setSale_num(BigDecimal sale_num) {
+    public void setSale_num(Integer sale_num) {
         this.sale_num = sale_num;
     }
 
@@ -72,6 +74,14 @@ public class ProductTaoBaoMO {
 
     public void setPropMOs(List<PropMO> propMOs) {
         this.propMOs = propMOs;
+    }
+
+    public BigDecimal getShopPrice() {
+        return shopPrice;
+    }
+
+    public void setShopPrice(BigDecimal shopPrice) {
+        this.shopPrice = shopPrice;
     }
 
     @Override

@@ -83,7 +83,7 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         var statusCode = rowObject.statusCode;
                         var html = '';
 
-                        if (positionId == 3){
+                        if (positionId == 2){
                             html += '<a style="margin-right: 10px;" onclick="currentPage().onGroupClick(\'' + employeeId + '\',\'' + positionId + '\')">分组</a>'
                         }
                         if(businessPerson){
@@ -347,7 +347,14 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
         },
         onUpgradeClick: function (employeeId,positionId,groupId) {
             var url ="/employee/group/verify?groupId=" + groupId;
+            if (groupId == "null"){
+                alert("该员工暂无小组不能升级");
+                return false;
+            }
             var successHandler = function(self, result) {
+                if (!window.confirm("确认为组长？")){
+                    return false;
+                }
                 if (result && !window.confirm("确认覆盖现有组长？")){
                     return false;
                 }
@@ -361,7 +368,6 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                         alert(result.resultMessage);
                     }else {
                         alert('成功');
-                        window.open('/frontend/employeeInfo.html');
                     }
                 };
                 var errorHandler = function(self, result) {
@@ -382,9 +388,11 @@ require(['jquery','underscore', 'uiKit3', 'networkKit', 'coreKit','dataTableSele
                 employeeId: employeeId,
                 dismission: dismission
             };
+            if (!window.confirm("确认离职改员工？")){
+                return false;
+            }
             var successHandler = function(self, result) {
                 alert('成功')
-                window.open('/frontend/employeeInfo.html');
             };
             var errorHandler = function(self, result) {
                 alert('请求失败');

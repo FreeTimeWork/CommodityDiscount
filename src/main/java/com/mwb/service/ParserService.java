@@ -35,7 +35,9 @@ import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by MengWeiBo on 2017-03-29
@@ -115,6 +117,7 @@ public class ParserService {
             store = new Store();
             product.setStore(store);
         }
+        store.setType(StoreType.TAOBAO);
 
         try {
             String html = getContent(urlStr);
@@ -158,6 +161,7 @@ public class ParserService {
             store = new Store();
             product.setStore(store);
         }
+        store.setType(StoreType.TMALL);
         String html = getContent(urlStr);
         if (StringUtils.isBlank(html)) {
             return;

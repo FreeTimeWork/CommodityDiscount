@@ -18,10 +18,12 @@ import com.mwb.dao.model.product.Product;
 import com.mwb.http.AbstractHttpClient;
 import com.mwb.service.taobo.api.*;
 import com.mwb.util.DateTimeUtility;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by MengWeiBo on 2017-04-12
  */
+@Service("taoBaoClient")
 public class TaoBaoClient extends AbstractHttpClient implements ITaoBaoClient {
     private static final Log LOG = Log.getLog(TaoBaoClient.class);
 
@@ -176,7 +178,7 @@ public class TaoBaoClient extends AbstractHttpClient implements ITaoBaoClient {
             props.put("v", "2.0");
             props.put("simplify", "true");
             props.put("product_d", productId);
-            props.put("fields", "name,price,pic_url,sale_num,product_prop_imgs,product_imgs");
+            props.put("fields", "name,price,shop_price,pic_url,sale_num,product_prop_imgs,product_imgs");
             String sign = signTopRequest(props, appSecret);
             props.put("sign", sign);
 

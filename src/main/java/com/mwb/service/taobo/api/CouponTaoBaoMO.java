@@ -2,6 +2,8 @@ package com.mwb.service.taobo.api;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import java.math.BigDecimal;
+
 /**
  * Created by MengWeiBo on 2017-04-12
  */
@@ -12,13 +14,13 @@ public class CouponTaoBaoMO {
     @JSONField(name = "coupon_id")
     private String activityId;
     @JSONField(name = "denominations")
-    private String couponAmount;
+    private BigDecimal couponAmount;
     @JSONField(name = "creat_time")
     private String creatTime;
     @JSONField(name = "end_time")
     private String endTime;
     @JSONField(name = "condition")
-    private Integer condition;
+    private String condition;
     @JSONField(name = "create_channel")
     private String createChannel;
 
@@ -30,11 +32,11 @@ public class CouponTaoBaoMO {
         this.activityId = activityId;
     }
 
-    public String getCouponAmount() {
+    public BigDecimal getCouponAmount() {
         return couponAmount;
     }
 
-    public void setCouponAmount(String couponAmount) {
+    public void setCouponAmount(BigDecimal couponAmount) {
         this.couponAmount = couponAmount;
     }
 
@@ -54,11 +56,11 @@ public class CouponTaoBaoMO {
         this.endTime = endTime;
     }
 
-    public Integer getCondition() {
+    public String getCondition() {
         return condition;
     }
 
-    public void setCondition(Integer condition) {
+    public void setCondition(String condition) {
         this.condition = condition;
     }
 
