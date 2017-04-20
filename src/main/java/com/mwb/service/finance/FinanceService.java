@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 
+import com.mwb.dao.model.comm.PagingData;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,8 +33,9 @@ public class FinanceService implements IFinanceService {
     @Autowired
     private ProductMapper productMapper;
 
-    public SearchResult<Finance> searchFinance(FinanceFilter filter, Employee employee) {
+    public SearchResult<Finance> searchFinance(final FinanceFilter filter, Employee employee) {
         SearchResult<Finance> result = new SearchResult<>();
+
         List<Finance> finances = new ArrayList<>();
         if (employee != null) {
             Integer positionId = employee.getPosition().getId();
@@ -41,26 +43,17 @@ public class FinanceService implements IFinanceService {
                 filter.setEmployeeId(employee.getId());
             } else if (positionId.equals(3)) {
                 filter.setGroupId(employee.getGroup().getId());
-            }else if (positionId.equals(4)) {
+            } else if (positionId.equals(4)) {
                 return result;
             }
         }
 
-        List<Integer> employeeIds = productMapper.selectEmployeeIdByFilter(filter);
-
-        if (filter.isPaged() && filter.getPagingData() != null && CollectionUtils.isNotEmpty(employeeIds)) {
-            int recordNumber = productMapper.countEmployeeIdByFilter(filter);
-            PagingResult pagingResult = new PagingResult(recordNumber, filter.getPagingData());
-            result.setPagingResult(pagingResult);
-            result.setPaged(true);
-        }
-        if (CollectionUtils.isEmpty(employeeIds)) {
-            return result;
-        }
-        filter.setEmployeeId(null);
-        filter.setGroupId(null);
-        filter.setEmployeeIds(employeeIds);
         List<Product> products = productMapper.selectStatisticsProductByFilter(filter);
+
+        if (CollectionUtils.isEmpty(products)) {
+            return result;
+
+        }
         Map<Integer, List<Product>> emIdAndPro = new LinkedHashMap<>();
         //根据employeeId分组
         for (Product pro : products) {
@@ -76,8 +69,6 @@ public class FinanceService implements IFinanceService {
 
         for (Map.Entry<Integer, List<Product>> entry : emIdAndPro.entrySet()) {
             Employee financeEm = entry.getValue().get(0).getEmployee();
-            Date maxDate = null;
-            Date minDate = null;
             Finance finance = new Finance();
             Integer submitNumber = 0;//提报数量
             Integer averageDaily;//提报率  **
@@ -97,19 +88,7 @@ public class FinanceService implements IFinanceService {
             BigDecimal actualChargeAmount = BigDecimal.ZERO;//实收金额
             BigDecimal shouldChargeAmount = BigDecimal.ZERO;//应收金额
             for (Product pro : entry.getValue()) {
-                if (maxDate != null) {
-                    if (maxDate.before(pro.getCreateTime()))
-                        maxDate = pro.getCreateTime();
-                } else {
-                    maxDate = pro.getCreateTime();
-                }
 
-                if (minDate != null) {
-                    if (minDate.after(pro.getCreateTime()))
-                        minDate = pro.getCreateTime();
-                } else {
-                    minDate = pro.getCreateTime();
-                }
                 if (pro.getVoucher() != null) {
                     actualChargeAmount = actualChargeAmount.add(pro.getVoucher().getActualChargeAmount());
                     shouldChargeAmount = shouldChargeAmount.add(pro.getVoucher().getShouldChargeAmount());
@@ -134,7 +113,7 @@ public class FinanceService implements IFinanceService {
                 else if (pro.getStatus().equals(ProductStatus.SETTLEMENT))
                     settlementNumber++;
             }
-            averageDaily = submitNumber * 100 / (DateTimeUtility.daysBetween(minDate, maxDate));
+            averageDaily = submitNumber * 100 / products.size();
             if (submitNumber.equals(0))
                 submitNumber = 1;
             refuseRate = refuseNumber * 100 / submitNumber;
@@ -163,7 +142,61 @@ public class FinanceService implements IFinanceService {
             finances.add(finance);
         }
 
-        result.setResult(finances);
+        if (filter.getSearchRule() == null || filter.getSearchRule().equals("submitNumber")) {
+            Collections.sort(finances, new Comparator<Finance>() {
+                @Override
+                public int compare(Finance o1, Finance o2) {
+                    if (filter.getOrderByAsc()) {
+                        return o1.getSubmitNumber().compareTo(o2.getSubmitNumber());
+                    } else {
+                        return o2.getSubmitNumber().compareTo(o1.getSubmitNumber());
+                    }
+                }
+            });
+        } else if (filter.getSearchRule().equals("guestUnitPrice")) {
+            Collections.sort(finances, new Comparator<Finance>() {
+                @Override
+                public int compare(Finance o1, Finance o2) {
+                    if (filter.getOrderByAsc()) {
+                        return o1.getGuestUnitPrice().compareTo(o2.getGuestUnitPrice());
+                    } else {
+                        return o2.getGuestUnitPrice().compareTo(o1.getGuestUnitPrice());
+                    }
+                }
+            });
+        } else {
+            Collections.sort(finances, new Comparator<Finance>() {
+                @Override
+                public int compare(Finance o1, Finance o2) {
+                    if (filter.getOrderByAsc()) {
+                        return o1.getActualChargeAmount().compareTo(o2.getActualChargeAmount());
+                    } else {
+                        return o2.getActualChargeAmount().compareTo(o1.getActualChargeAmount());
+                    }
+                }
+            });
+        }
+
+        if (filter.isPaged()) {
+            List<Finance> resultFinance = new ArrayList<>();
+            PagingData data = filter.getPagingData();
+            int total = finances.size() > data.getPageSize() ? data.getPageSize(): finances.size();
+            for (int i = 0; i < total; i++) {
+                Integer index = (data.getPageNumber() - 1) * data.getPageSize();
+                Finance newFinance = finances.get(index + i);
+                if (filter.getOrderByAsc()) {
+                    newFinance.setRank(index + 1 + i);
+                } else {
+                    newFinance.setRank(finances.size() - index - i);
+                }
+                resultFinance.add(newFinance);
+            }
+
+            result.setPagingResult(new PagingResult(finances.size(), data));
+            result.setResult(resultFinance);
+        }else {
+            result.setResult(finances);
+        }
 
         return result;
     }

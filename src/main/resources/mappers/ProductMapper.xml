@@ -667,13 +667,6 @@
             AND v.pay_time <![CDATA[ >= ]]> #{filter.payDate.from, javaType=date, jdbcType=TIMESTAMP}
             AND v.pay_time <![CDATA[ < ]]> #{filter.payDate.to, javaType=date, jdbcType=TIMESTAMP}
         </if>
-        <if test="filter.employeeIds != null">
-            AND ae.id IN (
-            <foreach collection="filter.employeeIds" item="item" separator=",">
-                #{item, javaType=int, jdbcType=INTEGER}
-            </foreach>
-            )
-        </if>
 
     </sql>
 
@@ -690,36 +683,6 @@
         <where>
             <include refid="financeFilter"/>
         </where>
-    </select>
-
-    <select id="selectEmployeeIdByFilter" resultType="int">
-        SELECT
-        p.employee_id
-        FROM
-        t_product p
-        INNER JOIN t_employee ae ON ae.id = p.employee_id
-        LEFT JOIN t_product_voucher v ON v.product_id = p.id
-        <where>
-            <include refid="financeFilter"/>
-        </where>
-        GROUP BY p.employee_id
-        <include refid="pagingLimit" />
-    </select>
-
-    <select id="countEmployeeIdByFilter" resultType="int">
-        SELECT count(*) FROM (
-            SELECT
-            p.employee_id
-            FROM
-            t_product p
-            INNER JOIN t_employee ae ON ae.id = p.employee_id
-            LEFT JOIN t_product_voucher v ON v.product_id = p.id
-            <where>
-                <include refid="financeFilter"/>
-            </where>
-            GROUP BY p.employee_id
-        ) temp1
-
     </select>
 
 </mapper>

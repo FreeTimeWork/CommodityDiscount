@@ -41,7 +41,7 @@ public class ProductService implements IProductService {
     @Autowired
     private IBpmService bpmService;
 
-    @Autowired
+//    @Autowired
     private ITaoBaoClient client;
 
     @Override

@@ -12,17 +12,9 @@ public class FinanceFilter extends SearchFilter {
     private Integer employeeId;
     private EmployeeStatus status;    //筛选 员工状态
     private Boolean orderByAsc;  //是否为升序排序
-    private List<Integer> employeeIds;
     private TimeRange submitDate;
     private TimeRange payDate;
-
-    public List<Integer> getEmployeeIds() {
-        return employeeIds;
-    }
-
-    public void setEmployeeIds(List<Integer> employeeIds) {
-        this.employeeIds = employeeIds;
-    }
+    private String searchRule;
 
     public Integer getGroupId() {
         return groupId;
@@ -70,5 +62,13 @@ public class FinanceFilter extends SearchFilter {
 
     public void setPayDate(TimeRange payDate) {
         this.payDate = payDate;
+    }
+
+    public String getSearchRule() {
+        return searchRule;
+    }
+
+    public void setSearchRule(String searchRule) {
+        this.searchRule = searchRule;
     }
 }

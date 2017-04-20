@@ -57,7 +57,4 @@ public interface ProductMapper {
 //  Statistics
     public List<Product> selectStatisticsProductByFilter(@Param("filter") FinanceFilter filter);
 
-    public List<Integer> selectEmployeeIdByFilter(@Param("filter") FinanceFilter filter);
-
-    public int countEmployeeIdByFilter(@Param("filter") FinanceFilter filter);
 }

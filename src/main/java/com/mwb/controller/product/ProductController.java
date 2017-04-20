@@ -72,7 +72,7 @@ public class ProductController {
     @Autowired
     private IBpmService bpmService;
 
-    @Autowired
+//    @Autowired
     private ITaoBaoClient client;
 
     @ResponseBody

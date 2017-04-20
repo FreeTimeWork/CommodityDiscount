@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 /**
  * Created by MengWeiBo on 2017-04-12
  */
-@Service("taoBaoClient")
+//@Service("taoBaoClient")
 public class TaoBaoClient extends AbstractHttpClient implements ITaoBaoClient {
     private static final Log LOG = Log.getLog(TaoBaoClient.class);
 

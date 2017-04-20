@@ -8,7 +8,7 @@ import com.mwb.controller.api.PagingRequest;
 public class SearchFinanceRequest extends PagingRequest {
     private Integer groupId;
     private Integer employeeId;
-    private Integer statusId;    //筛选 员工状态
+    private String conditionId;
     private Boolean orderByAsc;  //是否为升序排序
     private String beginPayTime; //付款开始时间
     private String endPayTime;   //付款结束时间
@@ -31,12 +31,12 @@ public class SearchFinanceRequest extends PagingRequest {
         this.employeeId = employeeId;
     }
 
-    public Integer getStatusId() {
-        return statusId;
+    public String getConditionId() {
+        return conditionId;
     }
 
-    public void setStatusId(Integer statusId) {
-        this.statusId = statusId;
+    public void setConditionId(String conditionId) {
+        this.conditionId = conditionId;
     }
 
     public Boolean getOrderByAsc() {

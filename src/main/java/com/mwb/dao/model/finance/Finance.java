@@ -13,6 +13,7 @@ public class Finance implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
+    private Integer rank;
     private Integer submitNumber;//提报数量
     private Integer averageDaily;//提报率
     private Integer refuseRate;//拒绝率
@@ -38,6 +39,14 @@ public class Finance implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getRank() {
+        return rank;
+    }
+
+    public void setRank(Integer rank) {
+        this.rank = rank;
     }
 
     public Integer getSubmitNumber() {

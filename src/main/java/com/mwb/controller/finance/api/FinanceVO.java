@@ -34,7 +34,7 @@ public class FinanceVO {
 
     public static FinanceVO toVO(Finance finance) {
         FinanceVO vo = new FinanceVO();
-        vo.setId(finance.getId());
+        vo.setRanking(finance.getRank());
         vo.setEmployeeId(finance.getEmployee().getId());
         vo.setEmployeeName(finance.getEmployee().getFullName());
         vo.setSubmitNumber(finance.getSubmitNumber());
