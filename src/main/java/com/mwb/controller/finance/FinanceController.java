@@ -1,12 +1,7 @@
 package com.mwb.controller.finance;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Collections;
-import java.util.Comparator;
+import java.io.*;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +15,7 @@ import com.mwb.controller.finance.api.SearchFinanceResponse;
 import com.mwb.controller.util.ApplicationContextUtils;
 import com.mwb.dao.filter.FinanceFilter;
 import com.mwb.dao.filter.SearchResult;
+import com.mwb.dao.filter.TimeRange;
 import com.mwb.dao.model.comm.Log;
 import com.mwb.dao.model.comm.PagingData;
 import com.mwb.dao.model.employee.Employee;
@@ -51,7 +47,7 @@ public class FinanceController {
 
     @ResponseBody
     @RequestMapping(value = "/search")
-    public ServiceResponse search(SearchFinanceRequest request, HttpServletResponse httpResponse, boolean excel) throws IOException {
+    public ServiceResponse search(SearchFinanceRequest request, HttpServletResponse httpResponse, boolean excel) throws IOException, ParseException {
         SearchFinanceResponse searchFinanceResponse = new SearchFinanceResponse();
         Employee employee = (Employee) ApplicationContextUtils.getSession().getAttribute("employee");
         if (employee == null) {
@@ -65,26 +61,50 @@ public class FinanceController {
         filter.setStatus(EmployeeStatus.fromId(request.getStatusId()));
         filter.setPaged(true);
         filter.setPagingData(new PagingData(request.getPageNumber(), request.getPageSize()));
+        filter.setPayDate(TimeRange.toTimeRange(request.getBeginPayTime(), request.getEndPayTime()));
+        filter.setSubmitDate(TimeRange.toTimeRange(request.getBeginSubmitTime(), request.getEndSubmitTime()));
 
         SearchResult<Finance> result = financeService.searchFinance(filter, employee);
         List<FinanceVO> vos = FinanceVO.toVOs(result.getResult());
-
+        FinanceVO countFinance = new FinanceVO();
         for (FinanceVO vo : vos) {
-            int rank = financeService.getCurrentFinanceRank(vo.getEmployeeId());
-            vo.setRanking(rank);
+            countFinance.setSubmitNumber(vo.getSubmitNumber() + countFinance.getSubmitNumber());
+            countFinance.setAverageDaily(vo.getAverageDaily() + countFinance.getAverageDaily());
+            countFinance.setRefuseNumber(vo.getRefuseNumber() + countFinance.getRefuseNumber());
+            countFinance.setRefuseRate(vo.getRefuseRate() + countFinance.getRefuseRate());
+            countFinance.setTwoAuditNumber(vo.getTwoAuditNumber() + countFinance.getTwoAuditNumber());
+            countFinance.setPromoteNumber(vo.getPromoteNumber() + countFinance.getPromoteNumber());
+            countFinance.setEndApproachNumber(vo.getEndApproachNumber() + countFinance.getEndApproachNumber());
+            countFinance.setEndNumber(vo.getEndNumber() + countFinance.getEndNumber());
+            countFinance.setPayWaitNumber(vo.getPayWaitNumber() + countFinance.getPayWaitNumber());
+            countFinance.setPayRunNumber(vo.getPayRunNumber() + countFinance.getPayRunNumber());
+            countFinance.setPayEndNumber(vo.getPayEndNumber() + countFinance.getPayEndNumber());
+            countFinance.setSettlementNumber(vo.getSettlementNumber() + countFinance.getSettlementNumber());
+            countFinance.setPayTrailerNumber(vo.getPayTrailerNumber() + countFinance.getPayTrailerNumber());
+            countFinance.setGuestUnitPrice(vo.getGuestUnitPrice().add(countFinance.getGuestUnitPrice()));
+            countFinance.setActualChargeAmount(vo.getActualChargeAmount().add(countFinance.getActualChargeAmount()));
+            countFinance.setShouldChargeAmount(vo.getShouldChargeAmount().add(countFinance.getShouldChargeAmount()));
         }
+        //TODO 排名
+//        for (FinanceVO vo : vos) {
+//            int rank = financeService.getCurrentFinanceRank(vo.getEmployeeId());
+//            vo.setRanking(rank);
+//        }
+
+
+//        Collections.sort(vos, new Comparator<FinanceVO>() {
+//            @Override
+//            public int compare(FinanceVO o1, FinanceVO o2) {
+//                return o1.getRanking().compareTo(o2.getRanking());
+//            }
+//
+//        });
+
         searchFinanceResponse.setFinances(vos);
         searchFinanceResponse.setPagingResult(result.getPagingResult());
 
         //生成excel
         if (excel) {
-            Collections.sort(vos, new Comparator<FinanceVO>() {
-                @Override
-                public int compare(FinanceVO o1, FinanceVO o2) {
-                    return o1.getRanking().compareTo(o2.getRanking());
-                }
-
-            });
 
             HttpServletRequest httpRequest = ApplicationContextUtils.getRequest();
             FileInputStream in = null;

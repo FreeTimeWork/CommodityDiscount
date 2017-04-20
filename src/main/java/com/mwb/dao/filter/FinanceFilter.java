@@ -1,5 +1,7 @@
 package com.mwb.dao.filter;
 
+import java.util.List;
+
 import com.mwb.dao.model.employee.EmployeeStatus;
 
 /**
@@ -10,6 +12,17 @@ public class FinanceFilter extends SearchFilter {
     private Integer employeeId;
     private EmployeeStatus status;    //筛选 员工状态
     private Boolean orderByAsc;  //是否为升序排序
+    private List<Integer> employeeIds;
+    private TimeRange submitDate;
+    private TimeRange payDate;
+
+    public List<Integer> getEmployeeIds() {
+        return employeeIds;
+    }
+
+    public void setEmployeeIds(List<Integer> employeeIds) {
+        this.employeeIds = employeeIds;
+    }
 
     public Integer getGroupId() {
         return groupId;
@@ -41,5 +54,21 @@ public class FinanceFilter extends SearchFilter {
 
     public void setOrderByAsc(Boolean orderByAsc) {
         this.orderByAsc = orderByAsc;
+    }
+
+    public TimeRange getSubmitDate() {
+        return submitDate;
+    }
+
+    public void setSubmitDate(TimeRange submitDate) {
+        this.submitDate = submitDate;
+    }
+
+    public TimeRange getPayDate() {
+        return payDate;
+    }
+
+    public void setPayDate(TimeRange payDate) {
+        this.payDate = payDate;
     }
 }
